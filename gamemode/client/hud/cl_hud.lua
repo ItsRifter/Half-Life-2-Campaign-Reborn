@@ -104,12 +104,6 @@ hook.Add("HUDPaint", "HL2CR_HUD", function()
 	
 end)
 
-hook.Add("HUDPaint", "HL2CR_EndMapResults", function()
-	if mapCountdown then
-		
-	end
-end)
-
 local CLIENT_FRIENDLY_NPCS = {
 	["npc_kleiner"] = true,
 	["npc_dog"] = true,

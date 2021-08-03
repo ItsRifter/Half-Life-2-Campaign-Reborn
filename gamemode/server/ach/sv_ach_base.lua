@@ -43,7 +43,7 @@ function UpdateAchievement(ply, baseList, achName)
 	if not list then return print("ERROR: bad update list") end
 	local ach = list[achName]
 	if not ach then return print("ERROR: bad update achievement name") end
-	
+	--[[
 	if not table.HasValue(ply.hl2cr.ProgressAch, ach) then
 		table.insert(ply.hl2cr.ProgressAch, ach)
 	end
@@ -98,7 +98,7 @@ function UpdateAchievement(ply, baseList, achName)
 		end
 		
 	end
-
+	--]]
 end
 
 hook.Add("ShutDown", "HL2CR_CheckAchStatus", function()

@@ -1,7 +1,7 @@
 "Gamemode"
 {
 	"base" 			"base"
-	"title" 		"Half-Life 2: Campaign - Reconstructed"
+	"title" 		"Half-Life 2: Campaign - Reborn"
 	"maps" 			""
 	"category"		"pve"
 	"menusystem" 		"0"

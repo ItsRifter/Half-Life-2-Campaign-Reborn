@@ -20,6 +20,8 @@ include("server/maps/sv_hl2.lua")
 include("server/maps/sv_lobby.lua")
 include("server/maps/sv_map_manager.lua")
 
+----Resources
+include("server/sv_resource.lua")
 
 ----Data Saving
 include("server/filesaving/sv_data_filebased.lua")
@@ -40,7 +42,6 @@ AddCSLuaFile("client/menus/cl_scoreboard_menu.lua")
 AddCSLuaFile("client/menus/cl_end_results.lua")
 AddCSLuaFile("client/menus/cl_ach_menu.lua")
 AddCSLuaFile("client/menus/cl_help_menu.lua")
-
 
 --Shared
 ----Voting

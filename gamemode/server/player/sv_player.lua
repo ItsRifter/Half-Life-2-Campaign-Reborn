@@ -298,6 +298,9 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 		for k, p in ipairs(player.GetAll()) do
 			p:SetWalkSpeed(200)
 			p:SetRunSpeed(350)
+			if game.GetMap() == "d1_trainstation_05" then
+				p:Give("admire_hands")
+			end
 		end
 	end
 
