@@ -32,8 +32,36 @@ function meta:IsFriendly()
 end
 
 function SetNPCTraits(npc)
-	--TODO: NPC Traits
+	if GetConVar("hl2cr_difficulty"):GetInt() == 1 then
+		npc.level = math.random(1, 3)
+	elseif GetConVar("hl2cr_difficulty"):GetInt() == 2 then
+		npc.level = math.random(3, 7)
+	elseif GetConVar("hl2cr_difficulty"):GetInt() == 3 then
+		npc.level = math.random(6, 15)
+	elseif GetConVar("hl2cr_difficulty"):GetInt() == 4 then
+		npc.level = math.random(15, 25)
+	elseif GetConVar("hl2cr_difficulty"):GetInt() == 5 then
+		npc.level = 30
+	end
+	
+	npc:SetNWInt("HL2CR_NPC_Level", npc.level)
+	
+	--npc:SetNWBool("HL2CR_Special", true)
+	--npc:SetNWString("HL2CR_NPC_Name", "Riot Shield Cop")
 end
+
+--[[
+	["npc_metropolice"] = "Riot Shield Cop",
+	["npc_combine_assassin"] = "Assassin",
+	["npc_combine_medic"] = "Field Medic",
+	["npc_combine_commander"] = "Commander",
+	["npc_combine_engineer"] = "Field Engineer",
+	["npc_combine_veteran"] = "Veteran",
+	["npc_combine_support"] = "Field Supporter",
+	["npc_combine_burner"] = "Flamethrower",
+	["npc_combine_grenadier"] = "Grenadier",
+	["npc_combine_synth"] = "Synth",
+--]]
 
 hook.Add("EntityTakeDamage", "HL2CR_SharedXPDmg", function(ent, dmgInfo)
 	local dmg = dmgInfo:GetDamage()

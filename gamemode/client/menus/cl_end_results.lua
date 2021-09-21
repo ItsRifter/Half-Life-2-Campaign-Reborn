@@ -4,7 +4,7 @@ function ResultScreen(tblResults)
 	local randMusic = math.random(1, 3)
 	local startLerp = SysTime()
 	
-	--surface.PlaySound("hl2cr/endrewards_" .. randMusic .. ".wav")
+	surface.PlaySound("hl2cr/endrewards_" .. randMusic .. ".wav")
 	local endFrame = vgui.Create("DFrame")
 	endFrame:SetSize(ScrW(), ScrH())
 	endFrame:SetTitle("")
@@ -78,10 +78,11 @@ function ResultScreen(tblResults)
 	
 	closeBtn.DoClick = function()
 		endFrame:Close()
+		StartClientSpectate(true)
 	end
 end
 
 net.Receive("HL2CR_ClientMapResults", function() 
 	local resultTbl = net.ReadTable()
-	ResultScreen(resultTbl) 
+	ResultScreen(resultTbl)
 end)

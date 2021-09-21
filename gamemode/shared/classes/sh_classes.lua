@@ -4,10 +4,11 @@ GM.PlayerClasses = GM.PlayerClasses or {}
 
 local function InsertClassInGame(newClass)
 	table.insert(GAMEMODE.PlayerClasses, newClass)
-	PrintTable(GAMEMODE.PlayerClasses)
 end
 
 local function ClearClasses()
+	if table.IsEmpty(GM.PlayerClasses) then return end
+	
 	table.Empty(GAMEMODE.PlayerClasses)
 end
 
@@ -16,8 +17,6 @@ function CreateClass(name, desc)
 		["name"] = name,
 		["desc"] = desc,
 	}
-	
-	print("WORKS")
 	InsertClassInGame(class)
 end
 

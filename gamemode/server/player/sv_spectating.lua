@@ -2,6 +2,8 @@ local alivePlayers = team.GetPlayers(TEAM_ALIVE)
 local specEnt = 1
 local specMode = 4
 local backupEnt = ents.GetAll()
+local playerName = "NIL"
+
 
 hook.Add("Tick", "AliveTick", function()
 	alivePlayers = team.GetPlayers(TEAM_ALIVE)
@@ -18,7 +20,7 @@ function EnableSpectate(ply)
 			if backupEnt:IsNPC() then
 				ply:SpectateEntity(backupEnt)
 			end
-		end
+		end	
 	end
 end
 function EnableSpectateAFK(ply)
@@ -32,12 +34,22 @@ function EnableSpectateAFK(ply)
 		end
 		ply:Spectate(5)
 		ply.afk = true
+		
+		net.Start("HL2CR_ShouldClientSpectate")
+		net.WriteBool(true)
+		net.Send(ply)
+		
 	end
 end
+
 function DisableSpectate(ply)
 	ply:SetNoTarget(false)
 	ply:UnSpectate()
 	ply.afk = false
+	
+	net.Start("HL2CR_ShouldClientSpectate")
+	net.WriteBool(false)
+	net.Send(ply)
 end
 
 hook.Add("KeyPress", "SpecKey", function(ply, key)
@@ -67,4 +79,11 @@ hook.Add("KeyPress", "SpecKey", function(ply, key)
 		end
 		ply:Spectate(specMode)
 	end
+	
+	net.Start("HL2CR_UpdatePlayerName")
+		net.WriteString(alivePlayers[specEnt]:Nick())
+	net.Send(ply)
+	
+	playerName = alivePlayers[specEnt]:Nick()
+	
 end)

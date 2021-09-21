@@ -1,7 +1,6 @@
 function CalculateXP(ply, XP)
 	
-	local multiplier = GetConVar("hl2cr_difficulty"):GetInt()
-	local calculation = math.Clamp(XP * multiplier, 1, ply.hl2cr.ReqExp)
+	local calculation = math.Clamp(XP, 1, ply.hl2cr.ReqExp)
 		
 	return calculation
 end
@@ -23,9 +22,9 @@ function AddXP(ply, XP)
 	end
 		
 	if notifyLevelUp then	
-		--ply:SetNWInt("HL2CR_SP", 	ply.hl2cr.SkillPoints)
+		ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)
 		ply:SetNWInt("stat_level", ply.hl2cr.Level)
-		--ply:SetNWInt("HL2CR_ReqXP", ply.hl2cr.ExpReq)
+		ply:SetNWInt("stat_reqexp", ply.hl2cr.ReqExp)
 		net.Start("HL2CR_LevelUpSound")
 		net.Send(ply)
 	end
@@ -39,8 +38,13 @@ function SetLevel(ply, lvlToSet)
 end
 
 function ShowMapResults(ply)
-	if NO_REWARDS_MAPS[game.GetMap()] then return end
-		
+	if NO_REWARDS_MAPS[game.GetMap()] then 
+		net.Start("HL2CR_ShouldClientSpectate")
+		net.WriteBool(true)
+		net.Send(ply)
+		return 
+	end
+	
 	net.Start("HL2CR_ClientMapResults")
 		net.WriteTable(ply.rewards)
 	net.Send(ply)

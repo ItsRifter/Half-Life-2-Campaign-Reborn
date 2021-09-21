@@ -23,8 +23,7 @@ SUPERGRAVGUN_MAPS = {
 }
 
 function GM:ShowHelp(ply)
-	ShowMapResults(ply)
-	--HL2CR_Voting:PlayerVote(ply, true)
+	HL2CR_Voting:PlayerVote(ply, true)
 end
 
 function GM:ShowTeam(ply)
@@ -308,11 +307,12 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 	end
 
 	if item:GetClass() == "item_suit" then
-		for k, p in ipairs(player.GetAll()) do
+		for _, p in ipairs(player.GetAll()) do
 			p:SetWalkSpeed(200)
 			p:SetRunSpeed(350)
 			if game.GetMap() == "d1_trainstation_05" then
 				p:Give("admire_hands")
+				p:SelectWeapon("admire_hands")
 			end
 		end
 	end
@@ -356,6 +356,7 @@ local RANDOM_XP_BASED_NPC = {
 	["npc_poisonzombie"] = {xpMin = 40, xpMax = 90},
 	["npc_metropolice"] = {xpMin = 30, xpMax = 80},
 	["npc_combine_s"] = {xpMin = 40, xpMax = 135},
+	["npc_barnacle"] = {xpMin = 5, xpMax = 25},
 }
 
 local RESTRICT_MAPS_ANTLIONS = {
@@ -364,7 +365,7 @@ local RESTRICT_MAPS_ANTLIONS = {
 
 hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 	if attacker:IsPlayer() then
-		local totalXP = CalculateXP(attacker, math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax))
+		local totalXP = CalculateXP(attacker, math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin * npc.level, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax * npc.level))
 		
 		if totalXP <= 0 then return end
 		

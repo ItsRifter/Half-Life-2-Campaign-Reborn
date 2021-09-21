@@ -124,23 +124,35 @@ local CLIENT_FRIENDLY_NPCS = {
 	["npc_seagull"] = true
 }
 
-local CONVERT_TO_NAME = {
+local CONVERT_TO_NAME_STANDARD = {
 	["npc_headcrab"] = "Headcrab",
 	["npc_headcrab_fast"] = "Fast Headcrab",
 	["npc_headcrab_black"] = "Poison Headcrab",
 	["npc_zombie_torso"] = "Torso Zombie",
+	["npc_fastzombie_torso"] = "Fast Torso Zombie",
+	["npc_zombine"] = "Zombine",
 	["npc_zombie"] = "Zombie",
 	["npc_fastzombie"] = "Fast Zombie",
 	["npc_poisonzombie"] = "Poison Zombie",
 	["npc_metropolice"] = "Cop",
 	["npc_combine_s"] = "Soldier",
+	["npc_manhack"] = "Manhack",
+	["npc_cscanner"] = "City Scanner",
+	["npc_clawscanner"] = "Shield Scanner",
+	["npc_hunter"] = "Hunter",
+	["npc_rollermine"] = "Rollermine",
+	["npc_strider"] = "Strider",
+	["npc_combinegunship"] = "Gunship",
+	["npc_antlion"] = "Antlion",
+	["npc_antlion_worker"] = "Antlion Worker",
+	["npc_antlionguard"] = "Antlion Guard",
+	["npc_antlionguardian"] = "Antlion Guardian",
 }
 
 hook.Add( "HUDDrawTargetID", "HidePlayerInfo", function()
 
-	
 	for k, pl in ipairs(player.GetAll()) do
-		if LocalPlayer() == pl or LocalPlayer():Team() ~= TEAM_ALIVE then 
+		if LocalPlayer() == pl or LocalPlayer():Team() == TEAM_ALIVE then 
 			continue 
 		end
 		
@@ -217,12 +229,17 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 				local levelColour = Color(255, 255, 255, 255)
 				if ent:GetNWInt("HL2CR_NPC_Level") <= 7 then
 					levelColour = Color(0, 255, 0, 255)
-				elseif ent:GetNWInt("HL2CR_NPC_Level") > 7 and ent:GetNWInt("HL2CR_NPC_Level") <= 15 then
+				elseif ent:GetNWInt("HL2CR_NPC_Level") > 7 and ent:GetNWInt("HL2CR_NPC_Level") <= 18 then
 					levelColour = Color(255, 255, 0, 255)
 				else
 					levelColour = Color(255, 0, 0, 255)
 				end
-				draw.SimpleText(CONVERT_TO_NAME[ent:GetClass()], "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				
+				if not ent:GetNWBool("HL2CR_Special") then
+					draw.SimpleText(CONVERT_TO_NAME_STANDARD[ent:GetClass()], "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				else
+					draw.SimpleText(ent:GetNWString("HL2CR_NPC_Name"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
 				draw.SimpleText("LEVEL " .. ent:GetNWInt("HL2CR_NPC_Level"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y + 30, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end

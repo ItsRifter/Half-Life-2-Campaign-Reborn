@@ -35,6 +35,7 @@ include("server/ach/sv_ach_base.lua")
 --Client
 AddCSLuaFile("client/hud/cl_hud.lua")
 AddCSLuaFile("client/hud/cl_ach.lua")
+AddCSLuaFile("client/hud/cl_spectate.lua")
 AddCSLuaFile("client/ui/cl_ui_elements.lua")
 AddCSLuaFile("client/ui/cl_ui_fonts.lua")
 AddCSLuaFile("client/menus/cl_voting_menu.lua")
@@ -42,6 +43,7 @@ AddCSLuaFile("client/menus/cl_scoreboard_menu.lua")
 AddCSLuaFile("client/menus/cl_end_results.lua")
 AddCSLuaFile("client/menus/cl_ach_menu.lua")
 AddCSLuaFile("client/menus/cl_help_menu.lua")
+AddCSLuaFile("client/menus/cl_inventory.lua")
 
 --Shared
 ----Voting
@@ -75,3 +77,5 @@ util.AddNetworkString("HL2CR_Vote")
 util.AddNetworkString("HL2CR_VoteEnd")
 util.AddNetworkString("HL2CR_HelpMenu")
 util.AddNetworkString("HL2CR_SpawnIndicators")
+util.AddNetworkString("HL2CR_ShouldClientSpectate")
+util.AddNetworkString("HL2CR_UpdatePlayerName")
