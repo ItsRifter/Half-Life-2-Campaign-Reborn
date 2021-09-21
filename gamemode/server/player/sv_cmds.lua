@@ -26,6 +26,11 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		return ""
 	end
 	
+	if text == "!testxp" then
+		AddXP(ply, 5)
+		return ""
+	end
+	
 	--If the player votes to return to lobby...
 	if text == "!lobby" then
 		--If the timer isn't expired, return how long is left

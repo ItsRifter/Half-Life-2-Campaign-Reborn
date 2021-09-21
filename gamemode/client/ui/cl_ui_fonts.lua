@@ -71,9 +71,45 @@ surface.CreateFont( "HL2CR_Stats", {
 } )
 
 surface.CreateFont( "HL2CR_NPCStats", {
-	font = "DermaLarge",
+	font = "Roboto",
 	extended = false,
 	size = 36,
+	weight = 450,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
+surface.CreateFont( "HL2CR_Rewards", {
+	font = "Roboto",
+	extended = false,
+	size = 24,
+	weight = 450,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
+surface.CreateFont( "HL2CR_HoverPlayer", {
+	font = "Roboto",
+	extended = false,
+	size = 32,
 	weight = 450,
 	blursize = 0,
 	scanlines = 0,
@@ -179,7 +215,7 @@ surface.CreateFont( "HL2CR_VoteFont", {
 } )
 
 surface.CreateFont( "HL2CR_GamemodeTitle", {
-	font = "Roboto",
+	font = "DermaLarge",
 	extended = false,
 	size = 48,
 	weight = 500,

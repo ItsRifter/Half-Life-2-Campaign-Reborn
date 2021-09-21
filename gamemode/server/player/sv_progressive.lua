@@ -1,17 +1,21 @@
-function AddXP(ply, xpToAdd)
-	if not ply.hl2cr then return end
-	local adjustedXP = math.Clamp(xpToAdd, 1, 1 * math.Round(xpToAdd / (ply.hl2cr.Level / ply.hl2cr.Level)))
+function CalculateXP(ply, XP)
 	
-	ply.hl2cr.Exp = ply.hl2cr.Exp + adjustedXP
-	
-	ply:SetNWInt("HL2CR_XP", ply.hl2cr.Exp)
+	local multiplier = GetConVar("hl2cr_difficulty"):GetInt()
+	local calculation = math.Clamp(XP * multiplier, 1, ply.hl2cr.ReqExp)
+		
+	return calculation
+end
+
+function AddXP(ply, XP)
+
+	ply.hl2cr.Exp = ply.hl2cr.Exp + XP
 	
 	local notifyLevelUp = false
 	
-	while ply.hl2cr.Exp >= ply.hl2cr.ExpReq and ply.hl2cr.ExpReq > 0 do
+	while ply.hl2cr.Exp >= ply.hl2cr.ReqExp do
 			
-		ply.hl2cr.Exp = ply.hl2cr.Exp - ply.hl2cr.ExpReq
-		ply.hl2cr.ExpReq = math.Round(ply.hl2cr.ExpReq * 1.65)
+		ply.hl2cr.Exp = ply.hl2cr.Exp - ply.hl2cr.ReqExp
+		ply.hl2cr.ReqExp = math.Round(ply.hl2cr.ReqExp * 2.5)
 		ply.hl2cr.Level = ply.hl2cr.Level + 1
 		ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints + 1
 		
@@ -19,13 +23,14 @@ function AddXP(ply, xpToAdd)
 	end
 		
 	if notifyLevelUp then	
-		ply:SetNWInt("HL2CR_SP", 	ply.hl2cr.SkillPoints)
-		ply:SetNWInt("HL2CR_Level", ply.hl2cr.Level)
-		ply:SetNWInt("HL2CR_XP",	ply.hl2cr.Exp)
-		ply:SetNWInt("HL2CR_ReqXP", ply.hl2cr.ExpReq)
+		--ply:SetNWInt("HL2CR_SP", 	ply.hl2cr.SkillPoints)
+		ply:SetNWInt("stat_level", ply.hl2cr.Level)
+		--ply:SetNWInt("HL2CR_ReqXP", ply.hl2cr.ExpReq)
 		net.Start("HL2CR_LevelUpSound")
 		net.Send(ply)
 	end
+	
+	ply:SetNWInt("stat_exp", ply.hl2cr.Exp)
 end
 
 function SetLevel(ply, lvlToSet)
@@ -34,9 +39,9 @@ function SetLevel(ply, lvlToSet)
 end
 
 function ShowMapResults(ply)
-	--if NO_REWARDS_MAPS[game.GetMap()] then return end
+	if NO_REWARDS_MAPS[game.GetMap()] then return end
 		
 	net.Start("HL2CR_ClientMapResults")
-		net.WriteTable(ply.Rewards)
+		net.WriteTable(ply.rewards)
 	net.Send(ply)
 end

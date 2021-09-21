@@ -15,7 +15,7 @@ function ShowHelpMenu()
 	end
 	
 	local helpScreenPnl = vgui.Create("DPanel", helpFrame)
-	helpScreenPnl:SetPos(0, 56)
+	helpScreenPnl:SetPos(0, 55)
 	helpScreenPnl:SetSize(850, 0)
 	helpScreenPnl:SizeTo(850, 500, 0.35, 0.2, -1, function() reveal = true end)
 	

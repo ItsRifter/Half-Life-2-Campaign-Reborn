@@ -14,6 +14,21 @@ AddCSLuaFile()
 	--Update = Every time the value is met, send an update notification to the player E.G (every 5 values of progress = notify player)
 	--Max = Maximum value for progress achievements, will be given when max is met
 
+--EXAMPLE
+--[[
+	HL2 = {
+		Breens_Benefactors = {
+			Name = "Breens Benefactors",
+			Mat = "vgui/achievements/hl2_get_crowbar.png",
+			Desc = "Become loyal to Dr. Breen"
+			Rewards = {
+				XP = 1,
+				Item = nil
+			}
+			IsRare = true,
+		}
+	}
+--]]
 
 Achievements = {
 

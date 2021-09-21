@@ -1005,6 +1005,8 @@ local function SetUpMisc()
 			"weapon_frag",
 			"item_suit",
 		}
+		
+		ents.FindByClass("item_suit")[1]:SetPos(Vector(-3763, -36, -3439))
 	end
 	
 	if game.GetMap() == "d1_town_02a" and file.Exists("hl2cr_data/ravenholmcheck.txt", "DATA") then

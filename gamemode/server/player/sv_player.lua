@@ -11,7 +11,7 @@ RESTRICTED_WEAPONS = {
 NO_SPAWNING_WEAPONS = {
 	["weapon_frag"] = true,
 	["weapon_medkit"] = true,
-	["hlashotty"] = true
+	["weapon_controllable_manhack"] = true
 }
 
 --Super gravity gun maps
@@ -43,7 +43,7 @@ hook.Add("PlayerSwitchFlashlight", "HL2CR_DisableFlashlight", function(ply, enab
 end)
 
 hook.Add("PlayerInitialSpawn", "HL2CR_InitialPlayerSpawn", function(ply, transition)
-	ply.Rewards = {
+	ply.rewards = {
 		["kills"] = 0,
 		["stats"] = {
 			["level"] = ply.hl2cr.Level,
@@ -170,12 +170,21 @@ function StoreWeapons(newWeapon)
 	end
 end
 
+hook.Add("GravGunPunt", "HL2CR_PreventPunting", function(ply, ent)
+	if ent and ent:GetClass() == "sent_controllable_manhack" then
+		return false
+	end
+end)
+
 hook.Add("EntityTakeDamage", "HL2CR_PVPOff", function(ent, dmgInfo)
 	local att = dmgInfo:GetAttacker()
 	
 	--If the attacker is a player (dead or alive) and attacker isn't the player themselves, return 0
 	if ent:IsPlayer() and att:IsPlayer() and (att:Team() == TEAM_ALIVE or att:Team() == TEAM_DEAD) and ent:Team() == TEAM_ALIVE and ent ~= att then
 		dmgInfo:SetDamage(0)
+		if ent:Armor() > 0 then
+			ent:SetArmor( ent:Armor() + 1)
+		end
 	end
 	
 	if att:IsNPC() and att:GetClass() == "npc_rollermine" and att:GetName("ball") then
@@ -183,6 +192,10 @@ hook.Add("EntityTakeDamage", "HL2CR_PVPOff", function(ent, dmgInfo)
 	end
 	
 	if ent:IsPlayer() and att:IsFriendly() then
+		dmgInfo:SetDamage(0)
+	end
+	
+	if ent:GetClass() == "sent_controllable_manhack" and att:IsPlayer() then
 		dmgInfo:SetDamage(0)
 	end
 end)
@@ -305,4 +318,58 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 	end
 
 	return true
+end)
+
+hook.Add( "CanPlayerSuicide", "HL2CR_CanSuicide", function( ply )
+	if NO_SUICIDE_MAPS[game.GetMap()] then 
+		ply:ChatPrint("Suiciding is currently disabled")
+		return false 
+	end
+	
+	return true
+end)
+
+
+local function createIndicator(rewardAmount, position, player)
+	
+	net.Start("HL2CR_SpawnIndicators")
+	
+	net.WriteInt(rewardAmount, 32)
+	
+	net.WriteVector(position)
+	
+	if player == nil then
+		net.Broadcast()
+	else
+		net.Send(player)
+	end
+	
+end
+
+local RANDOM_XP_BASED_NPC = {
+	["npc_headcrab"] = {xpMin = 5, xpMax = 15},
+	["npc_headcrab_fast"] = {xpMin = 12, xpMax = 27},
+	["npc_headcrab_black"] = {xpMin = 13, xpMax = 28},
+	["npc_zombie_torso"] = {xpMin = 10, xpMax = 35},
+	["npc_zombie"] = {xpMin = 25, xpMax = 65},
+	["npc_fastzombie"] = {xpMin = 32, xpMax = 75},
+	["npc_poisonzombie"] = {xpMin = 40, xpMax = 90},
+	["npc_metropolice"] = {xpMin = 30, xpMax = 80},
+	["npc_combine_s"] = {xpMin = 40, xpMax = 135},
+}
+
+local RESTRICT_MAPS_ANTLIONS = {
+	
+}
+
+hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
+	if attacker:IsPlayer() then
+		local totalXP = CalculateXP(attacker, math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax))
+		
+		if totalXP <= 0 then return end
+		
+		AddXP(attacker, totalXP)
+		
+		createIndicator(totalXP, npc:GetPos(), attacker)
+	end
 end)

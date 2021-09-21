@@ -6,12 +6,17 @@ local function InitData(ply)
 	
 	--Player's name
 	ply.hl2cr.Name = ply.hl2cr.Name or ply:Nick()
+	
 	--Level
 	ply.hl2cr.Level = ply.hl2cr.Level or 0
+	
 	--Money/Experience
 	ply.hl2cr.Money = ply.hl2cr.Money or 0
 	ply.hl2cr.Exp = ply.hl2cr.Exp or 0
-	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 5000
+	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 1000
+	
+	--Skills
+	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints or 0
 	
 	--Statistics
 	ply.hl2cr.Deaths = ply.hl2cr.Deaths or 0
@@ -23,6 +28,11 @@ local function InitData(ply)
 	--Achievement + Progress
 	ply.hl2cr.Achievements = ply.hl2cr.Achievements or {}
 	ply.hl2cr.ProgressAch = ply.hl2cr.ProgressAch or {}
+	
+	ply:SetNWInt("stat_level", ply.hl2cr.Level)
+	ply:SetNWInt("stat_exp", ply.hl2cr.Exp)
+	ply:SetNWInt("stat_reqexp", ply.hl2cr.ReqExp)
+	ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)
 
 end
 

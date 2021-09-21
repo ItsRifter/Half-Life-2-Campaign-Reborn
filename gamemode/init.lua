@@ -47,6 +47,9 @@ AddCSLuaFile("client/menus/cl_help_menu.lua")
 ----Voting
 include("shared/misc/sh_voting.lua")
 
+----Classes
+include("shared/classes/sh_classes.lua")
+
 ----Achievements
 include("shared/ach/sv_player_ach.lua")
 
@@ -71,3 +74,4 @@ util.AddNetworkString("HL2CR_EndCampaign")
 util.AddNetworkString("HL2CR_Vote")
 util.AddNetworkString("HL2CR_VoteEnd")
 util.AddNetworkString("HL2CR_HelpMenu")
+util.AddNetworkString("HL2CR_SpawnIndicators")

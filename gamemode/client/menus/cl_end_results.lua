@@ -74,7 +74,7 @@ function ResultScreen(tblResults)
 	closeBtn:SetText("Close")
 	closeBtn:SetFont("HL2CR_EndMapStats")
 	closeBtn:SetSize(175, 50)
-	closeBtn:SetPos(ScrW() / 2 - 100, 950)
+	closeBtn:SetPos(ScrW() / 2 - 80, ScrH() / 2 + 300)
 	
 	closeBtn.DoClick = function()
 		endFrame:Close()
