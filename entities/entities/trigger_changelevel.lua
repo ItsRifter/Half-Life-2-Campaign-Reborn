@@ -5,8 +5,6 @@ ENT.MapChange = false
 savedBaby = false
 savedRoller = false
 
-local playerCount = 0
-
 local MAPS_ONEPLAYER = {
 	["d1_eli_01"] = true,
 	["d1_town_05"] = true,
@@ -19,6 +17,7 @@ function ENT:Initialize()
 	if not TRIGGER_CHANGELEVEL then
 		return
 	end
+	
 	--Set width, length and height of the changelevel
 	local w = TRIGGER_CHANGELEVEL[2].x - TRIGGER_CHANGELEVEL[1].x
 	local l = TRIGGER_CHANGELEVEL[2].y - TRIGGER_CHANGELEVEL[1].y
@@ -35,9 +34,6 @@ function ENT:Initialize()
 end
 
 function ENT:StartTouch(ent)	
-	if playerCount > 4 then
-		playerCount = playerCount + 1
-	end
 	
 	if self.Func then
 		self.Func()
@@ -49,7 +45,7 @@ function ENT:StartTouch(ent)
 		savedBaby = true
 	end
 	
-	if ent:IsValid() and ent:GetModel() == "models/roller.mdl" and not game.GetMap() == "d1_town_04" then
+	if ent:IsValid() and ent:GetModel() == "models/roller.mdl" then
 		file.Write("hl2cr_data/ballcheck.txt", "rollermine check")
 		ent:Remove()
 		savedRoller = true
@@ -61,14 +57,31 @@ function ENT:StartTouch(ent)
 	end
 
 	if ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
+		
 		ent:SetTeam(TEAM_COMPLETED_MAP)
+		
 		if ent:InVehicle() then
 			ent:ExitVehicle()
+			if ent.vehicle then
+				ent.vehicle:Remove()
+			end
 		end
+		
 		EnableSpectate(ent)
-		for k, p in pairs(player.GetAll()) do
-			p:ChatPrint(ent:Nick() .. " has completed the map in " .. string.FormattedTime(CurTime(), "%02i:%02i") .. " (" .. team.NumPlayers(TEAM_COMPLETED_MAP) .. "/" .. playerCount ..")")
-		end
+		
+		net.Start("HL2CR_ShouldClientSpectate")
+			net.WriteBool(true)
+			net.WriteBool(false)
+			net.WriteInt(0, 8)
+		net.Send(ent)
+			
+		local PLAYER_FINISHED = {
+			["Colour"] = Color(230, 190, 0),
+			["Message"] = ent:Nick() .. " has completed the map in " .. string.FormattedTime(CurTime(), "%02i:%02i") .. " (" .. team.NumPlayers(TEAM_COMPLETED_MAP) .. "/" .. #player.GetAll() ..")"
+		}
+		
+		BroadcastMessage(PLAYER_FINISHED)
+	
 		ShowMapResults(ent)
 	end
 end
@@ -82,10 +95,16 @@ function ENT:Think()
 	--If the player count is over 4, check if completers is greater than total players divided
 	if playerCount >= 4 and team.NumPlayers(TEAM_COMPLETED_MAP) >= math.ceil(team.NumPlayers(TEAM_ALIVE) / 2) then
 		StartMapCountdown()
+		net.Start("HL2CR_MapCountdown")
+		net.Broadcast()
+		
 		self.MapChange = true
 	--else just check if completers is greater than alive players
 	elseif playerCount < 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > team.NumPlayers(TEAM_ALIVE) then
 		StartMapCountdown()
+		net.Start("HL2CR_MapCountdown")
+		net.Broadcast()
+		
 		self.MapChange = true
 	end
 	

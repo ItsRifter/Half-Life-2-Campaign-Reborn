@@ -1,26 +1,31 @@
 local mapCountdown = false
 
+local NOTIFY_MESSAGES = {
+	[5] = "Classes Unlocked",
+	[15] = "Grenadier/Cop Dropout Class Unlocked",
+}
+
 net.Receive("HL2CR_LevelUpSound", function()
 	surface.PlaySound("hl2cr/levelup.wav")
+	local level = net.ReadInt(16)
+	
+	chat.AddText(Color(240, 175, 0), "User Level is now '" .. level .. "'")
+	
+	if NOTIFY_MESSAGES[level] then
+		chat.AddText(Color(240, 175, 0), NOTIFY_MESSAGES[level])
+	end
 end)
 
 net.Receive("HL2CR_MapCountdown", function()
-	surface.PlaySound("npc/overwatch/radiovoice/allunitsapplyforwardpressure.wav")
 	
+	surface.PlaySound("npc/overwatch/radiovoice/allunitsapplyforwardpressure.wav")
+
 	mapCountdown = true
+	TimerScreen()
 end)
 
 net.Receive("HL2CR_EndCampaign", function()
 	surface.PlaySound("hl2cr/ending_triumph.mp3")
-end)
-
-net.Receive("HL2CR_AdminJoin", function()
-	local adminName = net.ReadString()
-	
-	if adminName == "SuperSponer" then
-		surface.PlaySound("hl2cr/admin/supersponer_join.wav")
-		chat.AddText(Color(240, 175, 0), "The Creator - " .. adminName .. " - has joined the server")
-	end
 end)
 
 gameevent.Listen("player_disconnect")
@@ -32,6 +37,26 @@ hook.Add( "player_disconnect", "HL2CR_PlayerDisconnect", function( data )
 	local reason = data.reason
 	
 	chat.AddText(Color(240, 175, 0), steamid .. ": " .. name .. " has left the server REASON: " .. reason)
+end)
+
+gameevent.Listen("player_connect_client")
+hook.Add( "player_connect_client", "HL2CR_PlayerConnect", function( data )
+	local id = data.userid
+		
+	if id == "STEAM_0:0:6009886" then
+		surface.PlaySound("hl2cr/admin/supersponer_join.wav")
+		chat.AddText(Color(240, 175, 0), "The Creator - ".. name .. " - has joined the server")
+	end
+	
+	if id == "STEAM_0:1:7832469" then
+		surface.PlaySound("hl2cr/admin/birdman_join.wav")
+		chat.AddText(Color(240, 175, 0), "An admin - ".. name .. " - has joined the server")
+	end
+	
+	if id == "STEAM_0:0:97860967" then
+		surface.PlaySound("hl2cr/admin/sarin_join.wav")
+		chat.AddText(Color(240, 175, 0), "An admin - ".. name .. " - has joined the server")
+	end
 end)
 
 net.Receive("HL2CR_AchievementNotifyAll", function()
@@ -153,9 +178,9 @@ hook.Add( "HUDDrawTargetID", "HidePlayerInfo", function()
 
 	for k, pl in ipairs(player.GetAll()) do
 		if LocalPlayer() == pl or LocalPlayer():Team() == TEAM_ALIVE then 
-			continue 
+			continue
 		end
-		
+			
 		local dist = LocalPlayer():GetPos():Distance(pl:GetPos())
 		local pos = pl:GetPos()
 			pos.z = pl:GetPos().z + 45 + (dist * 0.0325)
@@ -196,7 +221,7 @@ hook.Add( "HUDDrawTargetID", "HidePlayerInfo", function()
 			hpColour = Color(220, 0, 0)
 			hpSpacing = 50
 		end
-		
+	
 		if dist <= 250 then
 			--Name
 			draw.SimpleText(pl:Nick(), "HL2CR_HoverPlayer", ScrPos.x, ScrPos.y, GAMEMODE.Colours.Standard, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -204,15 +229,42 @@ hook.Add( "HUDDrawTargetID", "HidePlayerInfo", function()
 			--Level
 			draw.SimpleText("Level: " .. pl:GetNWInt("stat_level", -1), "HL2CR_HoverPlayer", ScrPos.x, ScrPos.y + 30, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			
-			--Health Status
+			--Status
 			draw.SimpleText("Status: ", "HL2CR_HoverPlayer", ScrPos.x - 35, ScrPos.y + 60, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			draw.SimpleText(hpStatus, "HL2CR_HoverPlayer", ScrPos.x + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			
+			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_medic.jpg" then
+				draw.SimpleText("HP: " .. pl:Health(), "HL2CR_HoverPlayer", ScrPos.x + 55, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			else
+				draw.SimpleText(hpStatus, "HL2CR_HoverPlayer", ScrPos.x + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+			
+			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/weapon_toolbox.jpg" then
+				draw.SimpleText(" / Armor: " .. pl:Armor(), "HL2CR_HoverPlayer", ScrPos.x + 115 + hpSpacing, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+			--Classes
+			if pl:GetNWString("class_icon") ~= "" then
+				local icon = Material(pl:GetNWString("class_icon"))
+				surface.SetMaterial( icon )
+				surface.SetDrawColor( 255, 255, 255 )
+				surface.DrawTexturedRect(ScrPos.x - 20, ScrPos.y + 75, 48, 48)
+			end
 		end
 	end
 	
 	return false
 end )
+
+
+local meta = FindMetaTable( "Entity" )
+if not meta then return end
+
+function meta:IsClientPet()
+	if self:IsValid() and self:IsNextBot() and self:GetOwner() then
+		return true
+	else
+		return false
+	end
+end
 
 hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 	for k, ent in pairs(ents.FindByClass("npc_*")) do
@@ -241,6 +293,19 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 					draw.SimpleText(ent:GetNWString("HL2CR_NPC_Name"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 				draw.SimpleText("LEVEL " .. ent:GetNWInt("HL2CR_NPC_Level"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y + 30, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+		end
+	end
+	
+	for k, entPet in pairs(ents.FindByClass("hl2cr_pet_*")) do
+		if entPet:IsNextBot() and entPet:IsClientPet() then
+			local dist = LocalPlayer():GetPos():Distance(entPet:GetPos())
+			local pos = entPet:GetPos()
+				pos.z = entPet:GetPos().z + 20 + (dist * 0.0325)
+				
+			local ScrPos = pos:ToScreen()
+			if entPet:GetOwner() and dist <= 250 then
+				draw.SimpleText(entPet:GetOwner():Nick() .. "'s Pet", "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 	end
@@ -343,4 +408,10 @@ hook.Add( "PostDrawTranslucentRenderables", "HL2CR_DrawRewards", function()
 			surface_DrawText(ind.amount)
 		cam_End3D2D()
 	end
+end)
+
+net.Receive("HL2CR_Message", function()
+	local messages = net.ReadTable()
+	
+	chat.AddText(messages["Colour"], messages["Message"])
 end)

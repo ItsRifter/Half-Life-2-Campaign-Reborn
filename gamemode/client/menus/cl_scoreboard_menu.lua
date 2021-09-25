@@ -2,11 +2,7 @@ function ToggleBoard(toggle)
 	if toggle then
 		scoreboard = vgui.Create("HL2CR_Tab")
 		scoreboard:SetSize(1000, 650)
-		if ScrW() == 1920 and ScrH() == 1080 then
-			scoreboard:SetPos(ScrW() / 2 * .5, ScrH() / 2 * 0.1)
-		else
-			scoreboard:SetPos(ScrW() / 2 * .12, ScrH() / 2 * 0.1)
-		end
+		scoreboard:SetPos(ScrW() / 2 - 500, ScrH() / 2 - 500)
 		scoreboard:SetVisible(true)
 		
 		scoreboard:SetAlpha(0)
@@ -45,8 +41,29 @@ function ToggleBoard(toggle)
 		playerList:SetSpaceX( 15 )
 		
 		for _, pl in pairs(player.GetAll()) do
+			local statusColours = Color(255, 255, 255)
+			
+			if pl:Team() == 1 then
+				--Alive
+				statusColours = Color(90, 255, 105) 
+			elseif pl:Team() == 2 then
+				--Completed Map
+				statusColours = Color(250, 220, 0) 
+			elseif pl:Team() == 3 then
+				--Dead
+				statusColours = Color(185, 0, 0) 
+			elseif pl:Team() == 4 then
+				--Loyal
+				statusColours = Color(0, 255, 245) 
+			elseif pl:Team() == 5 then
+				--AFK
+				statusColours = Color(120, 120, 120) 
+			end
+			
 			local panel = playerList:Add("DPanel")
 			panel:SetSize(225, 75)
+			panel:SetBackgroundColor(statusColours)
+			
 			
 			local avatar = vgui.Create( "AvatarImage", panel )
 			avatar:SetSize(75, 75)
@@ -74,34 +91,31 @@ function ToggleBoard(toggle)
 			playerStats:SetTextColor( Color( 0, 0, 0) )
 			playerStats:SizeToContents()
 			
-			
-			local muteBtn = vgui.Create("DImageButton", panel)
-			muteBtn:SetSize(16, 16)
-			muteBtn:SetPos(panel:GetWide() - 20, 60)
-			
-			if pl:IsMuted() then
-				muteBtn:SetImage("icon16/sound_mute.png")
-			else
-				muteBtn:SetImage("icon16/sound.png")
-			end
-			
-			muteBtn.DoClick = function()
-				if !pl:IsMuted() then
-					pl:SetMuted( true )
+			if LocalPlayer() != pl then
+				local muteBtn = vgui.Create("DImageButton", panel)
+				muteBtn:SetSize(16, 16)
+				muteBtn:SetPos(panel:GetWide() - 20, 60)
+				
+				if pl:IsMuted() then
 					muteBtn:SetImage("icon16/sound_mute.png")
 				else
-					pl:SetMuted( false )
 					muteBtn:SetImage("icon16/sound.png")
 				end
+				
+				muteBtn.DoClick = function()
+					if !pl:IsMuted() then
+						pl:SetMuted( true )
+						muteBtn:SetImage("icon16/sound_mute.png")
+					else
+						pl:SetMuted( false )
+						muteBtn:SetImage("icon16/sound.png")
+					end
+				end
 			end
-			
 		end
-		
 	elseif not toggle and scoreboard:IsValid() then
 		scoreboard:Remove()
 	end
-	
-	
 end
 
 hook.Add("ScoreboardShow", "HL2CR_ScoreboardShow", function()

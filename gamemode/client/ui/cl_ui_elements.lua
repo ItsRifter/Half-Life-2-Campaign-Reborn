@@ -57,6 +57,7 @@ function NAVBAR:AddTab(name, panel)
 	
 	btn:Dock(LEFT)
 	btn:DockMargin(0, 2, 0, 0)
+	btn:DockPadding(40, 30, 20, 10)
 	btn:SetText(name)
 	btn:SetFont("HL2CR_ButtonText")
 	btn:SetTextColor(btns)
@@ -67,21 +68,15 @@ function NAVBAR:AddTab(name, panel)
 			surface.DrawRect(0, h - 2, w, 2)
 		end
 	end
+	
 	btn:SizeToContentsX(32)
+	
 	btn.DoClick = function(pnl)
-		if not self.waitNextTab or self.active == pnl.id then return end
-		self.waitNextTab = false
-		self.panels[self.active]:AlphaTo(0, 0.10, 0, nil)
-		
-		timer.Simple(0.3, function()
-			self.panels[self.active]:AlphaTo(255, 0.30, 0, nil)
-			self:SetActive(pnl.id)
-			self.waitNextTab = true
-		end)
-
+		if self.active == pnl.id then return end
+		self:SetActive(pnl.id)
 		surface.PlaySound("buttons/combine_button7.wav")
 	end
-	
+
 	self.panels[i] = self:GetBody():Add(panel or "DPanel")
 	panel = self.panels[i]
 	panel:Dock(FILL)

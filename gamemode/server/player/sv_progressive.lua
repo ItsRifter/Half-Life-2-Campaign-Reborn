@@ -14,9 +14,9 @@ function AddXP(ply, XP)
 	while ply.hl2cr.Exp >= ply.hl2cr.ReqExp do
 			
 		ply.hl2cr.Exp = ply.hl2cr.Exp - ply.hl2cr.ReqExp
-		ply.hl2cr.ReqExp = math.Round(ply.hl2cr.ReqExp * 2.5)
 		ply.hl2cr.Level = ply.hl2cr.Level + 1
 		ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints + 1
+		ply.hl2cr.ReqExp = math.Round(ply.hl2cr.ReqExp * 1.60)
 		
 		notifyLevelUp = true
 	end
@@ -26,6 +26,7 @@ function AddXP(ply, XP)
 		ply:SetNWInt("stat_level", ply.hl2cr.Level)
 		ply:SetNWInt("stat_reqexp", ply.hl2cr.ReqExp)
 		net.Start("HL2CR_LevelUpSound")
+			net.WriteInt(ply.hl2cr.Level, 16)
 		net.Send(ply)
 	end
 	
@@ -40,7 +41,9 @@ end
 function ShowMapResults(ply)
 	if NO_REWARDS_MAPS[game.GetMap()] then 
 		net.Start("HL2CR_ShouldClientSpectate")
-		net.WriteBool(true)
+			net.WriteBool(true)
+			net.WriteBool(false)
+			net.WriteInt(0, 8)
 		net.Send(ply)
 		return 
 	end

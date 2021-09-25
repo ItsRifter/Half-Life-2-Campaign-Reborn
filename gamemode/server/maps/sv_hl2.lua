@@ -24,13 +24,22 @@ AIRBOAT_MAPS = {
 	["d1_canals_10"] = true
 }
 
+NO_PETS_MAPS = {
+	["d1_trainstation_01"] = true,
+	["d1_trainstation_02"] = true,
+	["d1_trainstation_03"] = true,
+	["d1_trainstation_04"] = true,
+	["d1_trainstation_05"] = true,
+	["d3_breen_01"] = true
+}
+
 AIRBOAT_GUN_MAPS = {
 	["d1_canals_12"] = true,
 	["d1_canals_13"] = true
 }
 
 JEEP_MAPS = {
-	["d2_coast_01"] = true,
+	--["d2_coast_01"] = true,
 	["d2_coast_03"] = true,
 	["d2_coast_04"] = true,
 	["d2_coast_05"] = true,
@@ -65,6 +74,19 @@ NO_REWARD_XP_MAPS_ANTLIONS = {
 	["d2_prison_05"] = true,
 }
 
+local IMPORTANT_MAPS = {
+	["d1_trainstation_01"] = true,
+	["d1_trainstation_02"] = true,
+	["d1_trainstation_03"] = true,
+	["d1_trainstation_04"] = true,
+	["d1_trainstation_05"] = true,
+	["d1_eli_01"] = true,
+	["d1_eli_02"] = true,
+	["d3_c17_01"] = true,
+	["d3_citadel_05"] = true,
+	["d3_breen_01"] = true,
+}
+
 EXISTING_CHECKPOINTS = {}
 
 local function SetCheckpoints()
@@ -92,6 +114,14 @@ local function SetCheckpoints()
 			Vector(-9294, -2445, 26),		Vector(-5400, -2070, -18),	
 			Vector(-3419, -224, -21), 		Vector(-3549, -10, -19)		
 		}
+		
+		CHECKPOINT_FUNC_1 = function()
+			timer.Simple(2, function()
+				for _, v in ipairs(player.GetAll()) do
+					v:SetFOV(0, 1, v)
+				end
+			end)
+		end
 	elseif game.GetMap() == "d1_trainstation_02" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(-5293, -4599, 1),		Vector(-5364, -4504, 130)
@@ -219,7 +249,7 @@ local function SetCheckpoints()
 		
 	elseif game.GetMap() == "d1_canals_08" then
 		TRIGGER_CHANGELEVEL = {
-			Vector(-1782, -7391, -427), 	Vector(-1382, -7600, -140)
+			Vector(-9138, 9429, -582), 	Vector(-8882, 8961, -216)
 		}
 		
 		TRIGGER_CHECKPOINT = {
@@ -253,6 +283,32 @@ local function SetCheckpoints()
 			Vector(6356, 5366, -889),	Vector(5703, 4901, -931),
 			Vector(1852, -7389, -919)
 		}
+		
+		CHECKPOINT_FUNC_1 = function()
+			disableAirboatGlobal = true
+			for _, v in ipairs(player.GetAll()) do
+				if v.vehicle and v.vehicle:IsValid() then
+					v.vehicle:Remove()
+					v.vehicle = nil
+				end
+			end
+		end
+		
+		CHECKPOINT_FUNC_2 = function()
+			canSpawnGlobalGun = true
+			local ENABLED_AIRBOAT_GUN_1 = {
+				["Colour"] = Color(50, 215, 50),
+				["Message"] = "Airboat with Gun is now spawnable"
+			}
+			
+			local ENABLED_AIRBOAT_GUN_2 = {
+				["Colour"] = Color(50, 215, 50),
+				["Message"] = "Use F3 and F4"
+			}
+			
+			BroadcastMessage(ENABLED_AIRBOAT_GUN_1)
+			BroadcastMessage(ENABLED_AIRBOAT_GUN_2)
+		end
 	elseif game.GetMap() == "d1_canals_12" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(2623, -8575, 97), 	Vector(2263, -8499, 361)
@@ -326,6 +382,15 @@ local function SetCheckpoints()
 		TRIGGER_CHANGELEVEL = {
 			Vector(-5286, 2102, -3260),		Vector(-5092, 1863, -3041)
 		}
+		
+		TRIGGER_CHECKPOINT = {
+			Vector(-4516, 800, -3061),		Vector(-4722, 982, -2954)
+		}
+		
+		CHECKPOINT_POS = {
+			Vector(-4809, 589, -3246)
+		}
+		
 	elseif game.GetMap() == "d1_town_02a" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(-6531, -641, -3140),		Vector(-6638, -722, -3261)
@@ -822,6 +887,8 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:ResetSequence("idle")
 			Checkpoint.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_blue")
 			
+			Checkpoint.Func = CHECKPOINT_FUNC_2
+			
 			table.insert(EXISTING_CHECKPOINTS, Checkpoint)
 		end
 		
@@ -842,6 +909,8 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:ResetSequence("idle")
 			Checkpoint.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_blue")
 			
+			Checkpoint.Func = CHECKPOINT_FUNC_3
+			
 			table.insert(EXISTING_CHECKPOINTS, Checkpoint)
 		end
 		
@@ -861,6 +930,8 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:Spawn()
 			Checkpoint.lambdaModel:ResetSequence("idle")
 			Checkpoint.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_blue")
+			
+			Checkpoint.Func = CHECKPOINT_FUNC_4
 			
 			table.insert(EXISTING_CHECKPOINTS, Checkpoint)
 		end
@@ -887,12 +958,1676 @@ local function SetCheckpoints()
 	end
 end
 
+local HL2_WEAPONS = {
+	["d1_canals_01"] = {
+		[1] = "weapon_crowbar",
+	},
+	
+	["d1_canals_01a"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol"
+	},
+	
+	["d1_canals_02"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol"
+	},
+	
+	["d1_canals_03"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol"
+	},
+	
+	["d1_canals_05"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1"
+	},
+	
+	["d1_canals_06"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1"
+	},
+	
+	["d1_canals_07"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1"
+	},
+	
+	["d1_canals_08"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1"
+	},
+	
+	["d1_canals_09"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357"
+	},
+	
+	["d1_canals_10"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357"
+	},
+	
+	["d1_canals_11"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357"
+	},
+	
+	["d1_canals_12"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357"
+	},
+	
+	["d1_canals_13"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357"
+	},
+	
+	["d1_eli_01"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357"
+	},
+	
+	["d1_eli_02"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357"
+	},
+	
+	["d1_town_01"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon"
+	},
+	
+	["d1_town_01a"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon"
+	},
+	
+	["d1_town_02"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon"
+	},
+	
+	["d1_town_03"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun"
+	},
+	
+	["d1_town_04"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun"
+	},
+	
+	["d1_town_05"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun"
+	},
+	
+	["d2_coast_01"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2"
+	},
+	
+	["d2_coast_03"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg"
+	},
+	
+	["d2_coast_04"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg"
+	},
+	
+	["d2_coast_05"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg"
+	},
+	
+	["d2_coast_07"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow"
+	},
+	
+	["d2_coast_08"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow"
+	},
+	
+	["d2_coast_09"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow"
+	},
+	
+	["d2_coast_10"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow"
+	},
+	
+	["d2_coast_11"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow"
+	},
+	
+	["d2_coast_12"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow",
+		[10] = "weapon_bugbait"
+	},
+	
+	["d2_prison_01"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow",
+		[10] = "weapon_bugbait"
+	},
+	
+	["d2_prison_02"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow",
+		[10] = "weapon_bugbait"
+	},
+	
+	["d2_prison_03"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow",
+		[10] = "weapon_bugbait"
+	},
+	
+	["d2_prison_04"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow",
+		[10] = "weapon_bugbait"
+	},
+	
+	["d2_prison_05"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow",
+		[10] = "weapon_bugbait"
+	},
+	
+	["d2_prison_06"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow"
+	},
+	
+	["d2_prison_07"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow"
+	},
+	
+	["d2_prison_08"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow"
+	},
+	
+	["d3_c17_01"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow"
+	},
+}
+
+local HL2_EQUIPMENT = {
+	["d1_trainstation_06"] = {
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["d1_canals_01"] = {
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["d1_canals_01a"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["d1_canals_02"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["d1_canals_03"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["d1_canals_05"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["d1_canals_06"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 72,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "Armor",
+			["Amount"] = 45,
+		}
+	},
+	
+	["d1_canals_07"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[4] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[5] = {
+			["Type"] = "Armor",
+			["Amount"] = 45,
+		}
+	},
+	
+	["d1_canals_08"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[4] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[5] = {
+			["Type"] = "Armor",
+			["Amount"] = 45,
+		}
+	},
+	
+	["d1_canals_09"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[6] = {
+			["Type"] = "Armor",
+			["Amount"] = 45,
+		}
+	},
+	
+	["d1_canals_10"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[6] = {
+			["Type"] = "Armor",
+			["Amount"] = 45,
+		}
+	},
+	
+	["d1_canals_11"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[6] = {
+			["Type"] = "Armor",
+			["Amount"] = 45,
+		}
+	},
+	
+	["d1_canals_12"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[6] = {
+			["Type"] = "Armor",
+			["Amount"] = 45,
+		}
+	},
+	
+	["d1_canals_13"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[6] = {
+			["Type"] = "Armor",
+			["Amount"] = 45,
+		}
+	},
+	
+	["d1_eli_01"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[6] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d1_eli_02"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[6] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d1_town_01"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 3,
+		},
+		
+		[4] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["d1_town_01a"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 3,
+		},
+		
+		[4] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["d1_town_02"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 3,
+		},
+		
+		[4] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["d1_town_03"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 3,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 6,
+		},
+		
+		[5] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["d1_town_04"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 3,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 6,
+		},
+		
+		[5] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["d1_town_05"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "Armor",
+			["Amount"] = 45,
+		}
+	},
+	
+	["d2_coast_01"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_coast_03"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_coast_04"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_coast_05"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_coast_07"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_coast_08"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_coast_09"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "XBowBolt",
+			["Amount"] = 5,
+		},
+		
+		[10] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_coast_10"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_coast_11"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_coast_12"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_prison_01"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_prison_02"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_prison_03"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_prison_04"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_prison_05"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+	
+	["d2_prison_06"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[5] = {
+			["Type"] = "Grenade",
+			["Amount"] = 6,
+		},
+		
+		[6] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1,
+		},
+		
+		[9] = {
+			["Type"] = "Armor",
+			["Amount"] = 60,
+		}
+	},
+}
+
+local VEHICLES = {
+	["prop_vehicle_airboat"] = true,
+	["pro_vehicle_jeep_old"] = true,
+	["pro_vehicle_jeep"] = true
+}
+
 local function SetUpMisc()
 	local MapLua = ents.Create("lua_run")
 	MapLua:SetName("triggerhook")
 	MapLua:Spawn()
 	
+	timer.Simple(0.1, function()
+		for _, ent in ipairs(ents.GetAll()) do
+			if string.find(ent:GetName(), "global_newgame_") and not VEHICLES[ent:GetClass()] then
+				ent:Remove()
+			end
+		end
+	end)
+	
+	if HL2_WEAPONS[game.GetMap()] then
+		for i, wep in pairs(HL2_WEAPONS[game.GetMap()]) do 
+			table.insert(SPAWNING_WEAPONS, wep)
+		end
+	end
+	
+	if HL2_EQUIPMENT[game.GetMap()] then
+		table.insert(SPAWNING_ITEMS, HL2_EQUIPMENT[game.GetMap()])
+	end
 	HOSTILE_VORTS = false
+	
+	for _, portal in ipairs(ents.FindByClass("func_areaportal")) do
+		portal:SetKeyValue("StartOpen", "1")
+	end
 	
 	if game.GetMap() == "d1_trainstation_01" then
 		game.SetGlobalState("gordon_precriminal", 1)
@@ -916,6 +2651,13 @@ local function SetUpMisc()
 	
 	if game.GetMap() == "d1_trainstation_06" then
 		ents.FindByClass("info_player_start")[1]:SetPos(Vector(-9939, -3672, 333))
+	end
+	
+	if game.GetMap() == "d1_canals_07" then
+		local blocker = ents.Create("prop_dynamic")
+		blocker:SetModel("models/props_lab/blastdoor001b.mdl")
+		blocker:SetPos(Vector(7672, 1374, -265))
+		blocker:Spawn()
 	end
 	
 	if game.GetMap() == "d1_canals_10" then
@@ -947,6 +2689,8 @@ local function SetUpMisc()
 		RunConsoleCommand("sv_auxpow_sprint_enabled", 1)
 	end
 	
+	
+
 	if game.GetMap() == "d1_eli_02" then
 		for k, g in ipairs( ents.FindByName( "trigger_Get_physgun" )) do
 			g:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:hook.Run( 'GiveGravgun' ):0:-1" )
@@ -955,8 +2699,6 @@ local function SetUpMisc()
 		for k, basket in ipairs(ents.FindByName("trigger_BBall_score_top")) do
 			basket:Fire("AddOutput", "OnEndTouch triggerhook:RunPassedCode:hook.Run( 'GiveBallAch' ):0:-1" )
 		end
-		
-
 	end
 	
 	if game.GetMap() == "d1_town_02a" then
@@ -1006,7 +2748,6 @@ local function SetUpMisc()
 			"item_suit",
 		}
 		
-		ents.FindByClass("item_suit")[1]:SetPos(Vector(-3763, -36, -3439))
 	end
 	
 	if game.GetMap() == "d1_town_02a" and file.Exists("hl2cr_data/ravenholmcheck.txt", "DATA") then
@@ -1061,6 +2802,8 @@ local function SetUpMisc()
 		ents.FindByClass("npc_combinedropship")[1]:Remove()
 		ents.FindByClass("info_player_start")[1]:SetPos(Vector(3148, 5263, 1540))
 		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, 180, 0))
+		ents.FindByClass("func_brush")[1]:Remove()
+		
 		
 		SPAWNING_WEAPONS = {
 			"weapon_crowbar",
@@ -1102,7 +2845,7 @@ local function SetUpMisc()
 			"weapon_shotgun",
 			"weapon_crossbow",
 			"weapon_frag",
-			"weapon_frag",
+			"weapon_rpg",
 			"item_suit",
 		}
 		

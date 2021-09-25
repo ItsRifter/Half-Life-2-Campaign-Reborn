@@ -1,4 +1,7 @@
+ENT_VOTE_HL2 = nil
+
 function StartLobby()
+	
 	--Set each global state to 0
 	game.SetGlobalState("gordon_invulnerable", 0)
 	game.SetGlobalState("suit_no_sprint", 0)
@@ -17,6 +20,8 @@ function StartLobby()
 		"weapon_physcannon"
 	}
 	
+	ENT_VOTE_HL2 = ents.FindByName("hl2_lambda_play_break")[1]
+	print(ENT_VOTE_HL2)
 	--Same as above but for the bridge maps
 	if file.Exists("hl2cr_data/bridgecheck.txt", "DATA") then
 		file.Delete("hl2cr_data/bridgecheck.txt", "DATA")

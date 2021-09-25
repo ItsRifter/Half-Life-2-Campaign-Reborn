@@ -2,7 +2,7 @@ function GrantAchievement(ply, baseList, achName)
 	if not ply or ply:IsBot() then return end
 
 	--Grab the list from the achievements unless its an invalid list
-	local list = Achievements[baseList]
+	local list = GAMEMODE.Achievements[baseList]
 	if not list then return print("ERROR: bad list") end
 	
 	--Grab the achievement from the list unless its an invalid name
@@ -20,7 +20,7 @@ function GrantAchievement(ply, baseList, achName)
 		net.WriteString(ach.Name)
 		net.WriteString(ach.Desc)
 		net.WriteString(ach.Mat)
-		net.WriteInt(ach.Rewards.XP, 32)
+		net.WriteInt(ach.Rewards.XP, 64)
 		net.WriteBool(ach.IsRare)
 	net.Send(ply)
 
@@ -34,12 +34,14 @@ function GrantAchievement(ply, baseList, achName)
 	if ach.Rewards.XP > 0 then
 		AddXP(ply, ach.Rewards.XP)
 	end
+	
+	ply:SetNWInt("stat_totalachs", #ply.hl2cr.Achievements)
 end
 
 function UpdateAchievement(ply, baseList, achName)
 	if not ply then return end
 
-	local list = Achievements[baseList]
+	local list = GAMEMODE.Achievements[baseList]
 	if not list then return print("ERROR: bad update list") end
 	local ach = list[achName]
 	if not ach then return print("ERROR: bad update achievement name") end

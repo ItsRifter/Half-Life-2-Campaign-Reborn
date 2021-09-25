@@ -1,6 +1,7 @@
 MAPS_LOBBY = {
 	--Future maps will go here
-	["hl2cr_lobby_v2"] = true
+	["hl2cr_lobby_v2"] = true,
+	["hl2cr_lobby_v3"] = true
 }
 
 MAPS_HL2 = {
@@ -72,23 +73,27 @@ MAPS_HL2 = {
 	"d3_citadel_04",
 	"d3_citadel_05",
 	"d3_breen_01",
-	"hl2cr_lobby_v2"
+	"hl2cr_lobby_v3"
 }
 
 function StartMapCountdown()
-	for k, p in pairs(player.GetAll()) do
-		net.Start("HL2CR_MapCountdown")
-		net.Send(p)
-	end
-	
+		
 	timer.Create("HL2CR_Countdown", 20, 1, function()
 		if game.GetMap() == "d2_lostcoast" then
-			RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+			RunConsoleCommand("changelevel", "hl2cr_lobby_v3")
 			return
 		end
 		
 		if game.GetMap() == "d1_town_02" and not file.Exists("hl2cr_data/ravenholmcheck.txt", "DATA") then
 			RunConsoleCommand("changelevel", "d1_town_03")
+			table.insert(SPAWNING_WEAPONS, "weapon_shotgun")
+			
+			local addBuckshot = {
+				["Type"] = "Buckshot",
+				["Amount"] = 6,
+			}
+			
+			table.insert(SPAWNING_ITEMS, addBuckshot)
 			return
 		elseif file.Exists("hl2cr_data/ravenholmcheck.txt", "DATA") then
 			RunConsoleCommand("changelevel", "d1_town_02a")

@@ -10,4 +10,5 @@ GM.Version = "ALPHA"
 
 GM.Colours = {
 	["Standard"] = Color(240, 168, 0),
+	["QMenu"] = Color(215, 130, 45),
 }

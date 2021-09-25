@@ -1,5 +1,4 @@
 AddCSLuaFile()
-
 --When creating an achievement, the following must in place
 --List = Where does this be listed in?
 --Achievement = The achievement, must be named accordingly E.G Test_Ach
@@ -30,7 +29,7 @@ AddCSLuaFile()
 	}
 --]]
 
-Achievements = {
+GM.Achievements = {
 
 	HL2 = {
 		Trusty_Hardware = {
@@ -49,7 +48,7 @@ Achievements = {
 			Mat = "vgui/achievements/hl2_beat_game.png", 
 			Desc = "Take the baby from the\nplayground to Dr.Kleiner's lab",
 			Rewards = {
-				XP = 2500,
+				XP = 3750,
 				Item = nil
 				--Replace with baby hat
 			},
@@ -61,7 +60,7 @@ Achievements = {
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
 			Desc = "Acquire the Gravity Gun\nin Black Mesa East",
 			Rewards = {
-				XP = 500,
+				XP = 1000,
 				Item = nil
 			},
 			IsRare = false
@@ -72,7 +71,7 @@ Achievements = {
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
 			Desc = "Use DOG's ball to make a basket",
 			Rewards = {
-				XP = 500,
+				XP = 5000,
 				Item = nil
 			},
 			IsRare = false
@@ -83,7 +82,7 @@ Achievements = {
 			Mat = "vgui/achievements/hl2_beat_cemetery.png", 
 			Desc = "Escort Gregori safely\nthrough the church cemetery",
 			Rewards = {
-				XP = 500,
+				XP = 1250,
 				Item = nil
 			},
 			IsRare = false
@@ -94,7 +93,7 @@ Achievements = {
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
 			Desc = "Escort DOG's ball to\nthe end of Ravenholm's mine",
 			Rewards = {
-				XP = 3500,
+				XP = 12500,
 				Item = nil
 			},
 			IsRare = false
@@ -105,7 +104,7 @@ Achievements = {
 			Mat = "vgui/achievements/hl2_beat_game.png", 
 			Desc = "Break Dr.Kleiner's mini-teleporter",
 			Rewards = {
-				XP = 1000,
+				XP = 2500,
 				Item = nil
 			},
 			IsRare = false
@@ -115,7 +114,7 @@ Achievements = {
 			Mat = "vgui/achievements/hl2_find_hevfaceplate.png", 
 			Desc = "Find the old H.E.V suit charger",
 			Rewards = {
-				XP = 1000,
+				XP = 1750,
 				Item = nil
 			},
 			IsRare = false
@@ -126,7 +125,7 @@ Achievements = {
 			Mat = "vgui/achievements/hl2_find_alllambdas.png", 
 			Desc = "Find all Lambda Caches",
 			Rewards = {
-				XP = 10000,
+				XP = 17500,
 				Item = nil
 			},
 			IsRare = false,
@@ -154,7 +153,7 @@ Achievements = {
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
 			Desc = "Craft an item for\nthe first time",
 			Rewards = {
-				XP = 1000,
+				XP = 2500,
 				Item = nil
 			},
 			IsRare = false

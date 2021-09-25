@@ -37,7 +37,7 @@ function ShowAchievements(unlocked, progressing)
 	hl2AchList:SetSpaceY(15)
 	hl2AchList:SetSpaceX(50)
 	
-	for k, v in pairs(Achievements["HL2"]) do
+	for k, v in pairs(GAMEMODE.Achievements["HL2"]) do
 		local ach = v.Name
 		local desc = v.Desc
 		local achPnl = hl2AchList:Add("DPanel")
@@ -98,7 +98,7 @@ function ShowAchievements(unlocked, progressing)
 	miscAchList:SetSpaceY(15)
 	miscAchList:SetSpaceX(50)
 	
-	for k, v in pairs(Achievements["Misc"]) do
+	for k, v in pairs(GAMEMODE.Achievements["Misc"]) do
 		local ach = v.Name
 		local desc = v.Desc
 		local achPnl = miscAchList:Add("DPanel")

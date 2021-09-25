@@ -39,25 +39,43 @@ function ENT:StartTouch(ent)
 			self.Func()
 		end
 		
+		local CHECKPOINT_HIT = {
+			["Colour"] = Color(50, 215, 50),
+			["Message"] = "Checkpoint Reached"
+		}
+		
+		BroadcastMessage(CHECKPOINT_HIT)
+		
 		for k, p in pairs(player.GetAll()) do
 			if not table.IsEmpty(AchTrigger) then
 				GrantAchievement(p, AchTrigger[1], AchTrigger[2])
 			end
-			
-			p:ChatPrint("Checkpoint Reached")
-			if p:Team() == TEAM_DEAD then
-				p:UnSpectate()
-				p:Spawn()
-			end
-			
-			if ent:InVehicle() and p.vehicle:IsValid() then
-				if p:InVehicle() and ent ~= p then
+						
+			if p:Team() == TEAM_COMPLETED_MAP then break end
+						
+			if ent ~= p then 
+				if p:Team() == TEAM_DEAD then
+					p:UnSpectate()
+					p:Spawn()
+					net.Start("HL2CR_ShouldClientSpectate")
+						net.WriteBool(false)
+						net.WriteBool(false)
+						net.WriteInt(0, 8)
+					net.Send(p)
+				end
+				
+				if p:InVehicle() then
 					p:ExitVehicle()
-					p.vehicle:Remove()
+					if p.vehicle and p.vehicle:IsValid() then
+						p.vehicle:Remove()
+						p.vehicle.owner = nil
+					end
+					p.vehicle = nil
+					p.HasSeat = false
 				end
 				p.vehicleSpawnable = true
 			end
-		
+			
 			for l, spawn in pairs(ents.FindByClass("info_player_start")) do
 				spawn:SetPos(self:GetPointPos(self:GetPointIndex()))
 				p:SetPos(self:GetPointPos(self:GetPointIndex()))

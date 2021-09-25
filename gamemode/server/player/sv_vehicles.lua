@@ -47,20 +47,30 @@ Jalopy = {
 
 list.Set( "Vehicles", "Jalopy", jalopy )
 
+canSpawnAirboatGlobal = false
+canSpawnGlobalGun = false
+canSpawnJeepGlobal = false
+disableAirboatGlobal = false
+
 local nextSpawn = 0
+local antiExploit = 0
 
 function GM:ShowSpare1(ply)
-	if nextSpawn > CurTime() then return end
+	if ply:Team() == TEAM_DEAD or ply:Team() == TEAM_COMPLETED_MAP then return end
+
+	if ply.nextSpawn and ply.nextSpawn > CurTime() then return end
+	
+	if ply:InVehicle() or not ply:Alive() then return end
 	
 	if ply.vehicle then
-		ply:ChatPrint("Your vehicle already exists")
+		BroadcastMessage(ERROR_VEHICLE_EXISTS, ply)
 		return
 	end
 	
-	nextSpawn = CurTime() + 5
+	ply.nextSpawn = CurTime() + 5
+	ply.antiExploit = CurTime() + 3
 	
-	if AIRBOAT_MAPS[game.GetMap()] then
-
+	if (AIRBOAT_MAPS[game.GetMap()] or canSpawnAirboatGlobal) or (game.GetMap() == "d1_canals_11" and not disableAirboatGlobal) then
 		local boat = ents.Create(Airboat.Class)
 		boat:SetModel(Airboat.Model)
 		boat:SetPos(ply:GetPos() + Vector(0, 0, 25) )
@@ -75,23 +85,72 @@ function GM:ShowSpare1(ply)
 		boat:SetAngles(ply:EyeAngles() - Angle(0, 90, 0))
 		boat:SetCustomCollisionCheck( true )
 		
+		boat:SetOwner(ply)
+		
 		ply.vehicle = boat
 		
-	elseif AIRBOAT_GUN_MAPS[game.GetMap()] then
-	
-	elseif JEEP_MAPS[game.GetMap()] then
+	elseif AIRBOAT_GUN_MAPS[game.GetMap()] or canSpawnGlobalGun then
+		local gunboat = ents.Create(AirboatGun.Class)
+		gunboat:SetModel(Airboat.Model)
+		gunboat:SetPos(ply:GetPos() + Vector(0, 0, 25) )
 		
+		for i, key in pairs(AirboatGun.KeyValues) do
+			gunboat:SetKeyValue(i, key)
+		end
+		gunboat:Activate()
+		gunboat:Fire( "addoutput", "targetname airboat" );
+		gunboat:Spawn()
+				
+		gunboat:SetAngles(ply:EyeAngles() - Angle(0, 90, 0))
+		gunboat:SetCustomCollisionCheck( true )
+		
+		gunboat:SetOwner(ply)
+		ply.vehicle = gunboat
+		
+	elseif JEEP_MAPS[game.GetMap()] or canSpawnJeepGlobal then
+		local jeep = ents.Create(Jeep.Class)
+		jeep:SetModel(Jeep.Model)
+		jeep:SetPos(ply:GetPos() + Vector(0, 0, 65)	 )
+		jeep:SetAngles(ply:EyeAngles() - Angle(0, 90, 0))
+		
+		for i, key in pairs(Jeep.KeyValues) do
+			jeep:SetKeyValue(i, key)
+		end
+		jeep:Activate()
+		jeep:Fire( "addoutput", "targetname jeep" );
+		jeep:Spawn()
+				
+		jeep:SetCustomCollisionCheck( true )
+		
+		jeep:SetOwner(ply)
+		
+		ply.vehicle = jeep
 	else
-		ply:ChatPrint("Vehicles are disabled in this map")
-	end
-end
-
-function GM:ShowSpare2(ply)
-	if not ply.vehicle then
-		ply:ChatPrint("Your vehicle doesn't exist")
+		BroadcastMessage(ERROR_VEHICLE_MAP, ply)
 		return
 	end
 	
-	ply.vehicle:Remove()
+	ply:EnterVehicle(ply.vehicle)
+end
+
+function GM:ShowSpare2(ply)
+	if ply.antiExploit and ply.antiExploit > CurTime() then return end
+	
+	if not ply.vehicle then
+		BroadcastMessage(ERROR_VEHICLE_INVALID, ply)
+		return
+	end
+	
+	ply.HasSeat = false
+	if ply.vehicle:IsValid() then
+		ply.vehicle:Remove()
+	end
 	ply.vehicle = nil
+
+end
+
+function GM:CanExitVehicle(veh, ply)
+	if ply.antiExploit and ply.antiExploit > CurTime() then return false end
+	
+	return true
 end

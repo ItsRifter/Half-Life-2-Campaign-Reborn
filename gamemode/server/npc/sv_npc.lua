@@ -1,14 +1,6 @@
 local meta = FindMetaTable( "Entity" )
 if not meta then return end
 
-function meta:IsPlayerPet()
-	if self:IsValid() and self:IsNextBot() and self.Pet then
-		return true
-	else
-		return false
-	end
-end
-
 local FRIENDLY_NPCS = {
 	["npc_kleiner"] = true,
 	["npc_dog"] = true,
@@ -16,6 +8,7 @@ local FRIENDLY_NPCS = {
 	["npc_monk"] = true,
 	["npc_alyx"] = true,
 	["npc_barney"] = true,
+	--["npc_citizen"] = true,
 	--["npc_vortigaunt"] = true,
 	["npc_fisherman"] = true,
 	["npc_mossman"] = true,
@@ -25,6 +18,14 @@ local FRIENDLY_NPCS = {
 
 function meta:IsFriendly()
 	if self:IsValid() and self:IsNPC() and FRIENDLY_NPCS[self:GetClass()] then
+		return true
+	else
+		return false
+	end
+end
+
+function meta:IsPet()
+	if self:IsValid() and self:IsNextBot() and self:GetOwner() then
 		return true
 	else
 		return false
@@ -67,7 +68,7 @@ hook.Add("EntityTakeDamage", "HL2CR_SharedXPDmg", function(ent, dmgInfo)
 	local dmg = dmgInfo:GetDamage()
 	local att = dmgInfo:GetAttacker()
 	
-	if ent:IsNPC() and not (ent:IsFriendly() or ent:IsPlayerPet() or ent:GetClass() == "npc_citizen") then
+	if ent:IsNPC() and not (ent:IsFriendly() or ent:IsPet() or ent:GetClass() == "npc_citizen") then
 		ent.attacker = ent.attacker or {}
 		ent.totalDMG = ent.totalDMG or 0
 		if not table.HasValue(ent.attacker, att) then
@@ -95,7 +96,7 @@ hook.Add("EntityTakeDamage", "HL2CR_FriendlyOrHostile", function(ent, dmgInfo)
 		ent:Remove()
 	end
 	
-	if ent:IsFriendly() or (att:IsPlayer() and ent:GetClass() == "npc_citizen") then
+	if ent:IsFriendly() or (ent:GetClass() == "npc_citizen" and att:IsPlayer()) then
 		dmgInfo:SetDamage(0)
 	end
 	
@@ -111,4 +112,14 @@ end)
 
 hook.Add("OnEntityCreated", "HL2CR_NPCCreated", function(ent)
 	SetNPCTraits(ent)
+end)
+
+
+hook.Add("HL2CR_NextbotDMG", "HL2CR_ScaleNPCDMG", function( npc, hitgroup, attacker )
+		
+	if attacker:IsNextBot() then
+		--TODO: make it do stuff
+	end
+	
+	
 end)

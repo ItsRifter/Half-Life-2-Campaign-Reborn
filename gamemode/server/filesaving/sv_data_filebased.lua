@@ -4,8 +4,9 @@ local function InitData(ply)
 
 	-- Set some default settings
 	
-	--Player's name
+	--Player's name and model
 	ply.hl2cr.Name = ply.hl2cr.Name or ply:Nick()
+	ply.hl2cr.Model = ply.hl2cr.Model or "models/player/Group01/male_07.mdl"
 	
 	--Level
 	ply.hl2cr.Level = ply.hl2cr.Level or 0
@@ -19,21 +20,44 @@ local function InitData(ply)
 	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints or 0
 	
 	--Statistics
-	ply.hl2cr.Deaths = ply.hl2cr.Deaths or 0
 	ply.hl2cr.Kills = ply.hl2cr.Kills or 0
+	ply.hl2cr.Deaths = ply.hl2cr.Deaths or 0
 	
-	--Misc
-	ply.hl2cr.Model = ply.hl2cr.Model or "models/player/Group01/male_07.mdl"
+	--Inventory
+	ply.hl2cr.Inventory = ply.hl2cr.Inventory or {}
+	ply.hl2cr.Inventory.Slots = ply.hl2cr.Inventory.Slots or {}
+	--ply.hl2cr.Inventory.Weight = ply.hl2cr.Inventory.Weight = 0
 	
 	--Achievement + Progress
 	ply.hl2cr.Achievements = ply.hl2cr.Achievements or {}
 	ply.hl2cr.ProgressAch = ply.hl2cr.ProgressAch or {}
 	
+	--Classes
+	ply.hl2cr.CurClass = ply.hl2cr.CurClass or {}
+	ply.hl2cr.ClassCount = ply.hl2cr.ClassCount or 0
+
+	--Quests
+	ply.hl2cr.Quests = ply.hl2cr.Quests or {}
+	ply.hl2cr.Quests.Completed = ply.hl2cr.Quests.Completed or 0
+	
+	--Miscellanous
+	ply.hl2cr.Misc = ply.hl2cr.Misc or {}
+	
 	ply:SetNWInt("stat_level", ply.hl2cr.Level)
 	ply:SetNWInt("stat_exp", ply.hl2cr.Exp)
 	ply:SetNWInt("stat_reqexp", ply.hl2cr.ReqExp)
 	ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)
-
+	ply:SetNWInt("stat_curclasses", ply.hl2cr.ClassCount)
+	
+	ply:SetNWInt("stat_kills", ply.hl2cr.Kills)
+	ply:SetNWInt("stat_deaths", ply.hl2cr.Deaths)
+	
+	ply:SetNWInt("stat_quests_completed", ply.hl2cr.Quests.Completed)
+	
+	ply:SetNWString("inv_slots", table.concat(ply.hl2cr.Inventory.Slots, " "))
+	ply:SetNWInt("stat_totalachs", #ply.hl2cr.Achievements)
+	
+	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
 end
 
 local function CreateData(ply)
@@ -82,7 +106,11 @@ end)
 
 --When the player disconnects, save their data
 hook.Add("PlayerDisconnected", "HL2CR_SaveDataDisconnect", function(ply) 
-	SaveData(ply)	
+	SaveData(ply)
+
+	if ply.pet and ply.pet:IsValid() then
+		ply.pet:Remove()
+	end
 end)
 
 --Upon a map change or server shutdown, save everyones progress
@@ -104,6 +132,7 @@ hook.Add("PlayerInitialSpawn", "HL2CR_NewPlayerCheck", function(ply)
 		CreateData(ply)
 		return
 	end
+	
 	--If its a returning player, load their save file
 	LoadData(ply)
 end)

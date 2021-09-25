@@ -1,5 +1,6 @@
---Weapons that the map start with upon player connected
+--Weapons/Items that the map start with upon player connected
 SPAWNING_WEAPONS = SPAWNING_WEAPONS or {}
+SPAWNING_ITEMS = SPAWNING_ITEMS or {}
 
 --Restrict these weapons from being picked up/used
 RESTRICTED_WEAPONS = {
@@ -10,7 +11,9 @@ RESTRICTED_WEAPONS = {
 --Weapons that shouldn't be given on player spawn
 NO_SPAWNING_WEAPONS = {
 	["weapon_frag"] = true,
-	["weapon_medkit"] = true,
+	["weapon_medkit_hl2cr"] = true,
+	["weapon_armorkit_hl2cr"] = true,
+	["weapon_ammogiver"] = true,
 	["weapon_controllable_manhack"] = true
 }
 
@@ -41,7 +44,52 @@ hook.Add("PlayerSwitchFlashlight", "HL2CR_DisableFlashlight", function(ply, enab
 	return true
 end)
 
+hook.Add("PlayerDeathThink", "HL2CR_PlayerDeathThink", function(ply)
+	if ply.waitForRespawn and ply.waitForRespawn <= CurTime() and ply:Team() == TEAM_DEAD then
+		DisableSpectate(ply)
+		ply:Spawn()
+	end
+	return false
+end)
+
+local waitForRespawn = 0
+local waitDeath = 0
+
+hook.Add("PostPlayerDeath", "HL2CR_HandlePlayerDeath", function(victim)
+	victim:SetTeam(TEAM_DEAD)
+	victim.hl2cr.Deaths = victim.hl2cr.Deaths + 1
+	victim:SetNWInt("stat_deaths", victim.hl2cr.Deaths)
+	
+	net.Start("HL2CR_ShouldClientSpectate")
+		net.WriteBool(true)
+		net.WriteBool(true)
+		net.WriteInt(GetConVar("hl2cr_difficulty"):GetInt(), 8)
+	net.Send(victim)
+	
+	victim.waitForRespawn = CurTime() + GetConVar("hl2cr_difficulty"):GetInt() * 10
+	victim.waitDeath = CurTime() + 5
+end)
+
+
+
+hook.Add("Think", "HL2CR_DeathTick", function()
+	for _, v in ipairs(player.GetAll()) do 
+		
+		if not v.waitDeath or v:Team() == TEAM_ALIVE then break end
+		
+		if v.waitDeath <= CurTime() and not v.IsSpectating then
+			EnableSpectate(v)
+		end
+		
+		if v.waitForRespawn and v.waitForRespawn <= CurTime() and v:Team() == TEAM_DEAD then
+			DisableSpectate(v)
+			v:Spawn()
+		end
+	end
+end)
+
 hook.Add("PlayerInitialSpawn", "HL2CR_InitialPlayerSpawn", function(ply, transition)
+	
 	ply.rewards = {
 		["kills"] = 0,
 		["stats"] = {
@@ -56,6 +104,13 @@ end)
 
 --Player spawning
 hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
+
+	net.Start("HL2CR_ShouldClientSpectate")
+		net.WriteBool(false)
+		net.WriteBool(false)
+		net.WriteInt(0, 8)
+	net.Send(ply)
+
 	ply:SetModel(ply.hl2cr.Model)
 	ply:SetupHands()
 	ply:SetTeam(TEAM_ALIVE)
@@ -67,16 +122,36 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 		ply:Give("weapon_physgun")
 	end
 	
+	if NOSUIT_MAPS[game.GetMap()] then
+		ply:SetWalkSpeed(125)
+		ply:SetRunSpeed(125)
+	elseif game.GetMap() == "d1_trainstation_05" and ents.FindByClass("item_suit")[1] then
+		ply:SetWalkSpeed(125)
+		ply:SetRunSpeed(125)
+	else
+		local suit = ents.Create("item_suit")
+		suit:SetPos(ply:GetPos())
+		suit:Spawn()
+	end
+	
 	for k, wep in pairs(SPAWNING_WEAPONS) do
 		ply:Give(wep)
 	end
 	
-	if NOSUIT_MAPS[game.GetMap()] then
-		ply:SetWalkSpeed(125)
-		ply:SetRunSpeed(200)
-	elseif game.GetMap() == "d1_trainstation_05" and ents.FindByClass("item_suit")[1] then
-		ply:SetWalkSpeed(100)
-		ply:SetRunSpeed(200)
+	for i, items in pairs(SPAWNING_ITEMS) do
+		for k, _ in pairs(items) do		
+			if SPAWNING_ITEMS[i][k].Type == "Armor" then
+				ply:SetArmor(SPAWNING_ITEMS[i][k].Amount)
+			else
+				ply:GiveAmmo(SPAWNING_ITEMS[i][k].Amount, SPAWNING_ITEMS[i][k].Type, false)
+			end
+		end
+	end
+	
+	if not table.IsEmpty(ply.hl2cr.CurClass) and not ( NOSUIT_MAPS[game.GetMap()] or game.GetMap() == "d1_trainstation_05") and not MAPS_LOBBY[game.GetMap()] then
+		for _, classWep in ipairs(ply.hl2cr.CurClass.Weapons) do
+			ply:Give(classWep)
+		end
 	end
 end)
 
@@ -111,6 +186,8 @@ hook.Add("EntityFireBullets", "HL2CR_NoBulletPlayer", function(ent, data)
 end)
 
 function GM:PlayerCanPickupWeapon(ply, weapon)
+	if ply:Team() ~= TEAM_ALIVE then return end
+	
 	if weapon:GetClass() == "weapon_physgun" and ply:IsAdmin() then
 		return true
 	end
@@ -186,7 +263,7 @@ hook.Add("EntityTakeDamage", "HL2CR_PVPOff", function(ent, dmgInfo)
 		end
 	end
 	
-	if att:IsNPC() and att:GetClass() == "npc_rollermine" and att:GetName("ball") then
+	if att:IsNPC() and att:GetClass() == "npc_rollermine" and game.GetMap() == "d1_eli_02" then
 		dmgInfo:SetDamage(0)
 	end
 	
@@ -313,7 +390,14 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 			if game.GetMap() == "d1_trainstation_05" then
 				p:Give("admire_hands")
 				p:SelectWeapon("admire_hands")
-			end
+				timer.Simple(5, function()
+					p:StripWeapon("admire_hands")
+					
+					for _, classWep in ipairs(p.hl2cr.CurClass.Weapons) do
+						p:Give(classWep)
+					end
+				end)
+			end	
 		end
 	end
 
@@ -321,6 +405,8 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 end)
 
 hook.Add( "CanPlayerSuicide", "HL2CR_CanSuicide", function( ply )
+	if ply:Team() ~= TEAM_ALIVE then return false end
+	
 	if NO_SUICIDE_MAPS[game.GetMap()] then 
 		ply:ChatPrint("Suiciding is currently disabled")
 		return false 
@@ -354,7 +440,9 @@ local RANDOM_XP_BASED_NPC = {
 	["npc_zombie"] = {xpMin = 25, xpMax = 65},
 	["npc_fastzombie"] = {xpMin = 32, xpMax = 75},
 	["npc_poisonzombie"] = {xpMin = 40, xpMax = 90},
+	["npc_cscanner"] = {xpMin = 15, xpMax = 30},
 	["npc_metropolice"] = {xpMin = 30, xpMax = 80},
+	["npc_manhack"] = {xpMin = 25, xpMax = 70},
 	["npc_combine_s"] = {xpMin = 40, xpMax = 135},
 	["npc_barnacle"] = {xpMin = 5, xpMax = 25},
 }
@@ -365,12 +453,126 @@ local RESTRICT_MAPS_ANTLIONS = {
 
 hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 	if attacker:IsPlayer() then
+		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
+		
 		local totalXP = CalculateXP(attacker, math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin * npc.level, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax * npc.level))
 		
 		if totalXP <= 0 then return end
 		
 		AddXP(attacker, totalXP)
-		
+
 		createIndicator(totalXP, npc:GetPos(), attacker)
+		
+		attacker.rewards["kills"] = attacker.rewards["kills"] + 1
+		attacker.rewards["stats"]["exp"] = attacker.rewards["stats"]["exp"] + totalXP
+		attacker.hl2cr.Kills = attacker.hl2cr.Kills + 1
+		attacker:SetNWInt("stat_kills", attacker.hl2cr.Kills)
+	elseif attacker:GetOwner():IsPlayer() then
+		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
+		
+		local totalXP = CalculateXP(attacker:GetOwner(), math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin * npc.level, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax * npc.level))
+		
+		if totalXP <= 0 then return end
+		
+		AddXP(attacker:GetOwner(), totalXP)
+
+		createIndicator(totalXP, npc:GetPos(), attacker:GetOwner())
+		
+		attacker:GetOwner().rewards["kills"] = attacker:GetOwner():GetOwner().rewards["kills"] + 1
+		attacker:GetOwner().rewards["stats"]["exp"] = attacker:GetOwner().rewards["stats"]["exp"] + totalXP
+		attacker:GetOwner().hl2cr.Kills = attacker:GetOwner().hl2cr.Kills + 1
+		attacker:GetOwner():SetNWInt("stat_kills", attacker:GetOwner().hl2cr.Kills)
 	end
 end)
+
+hook.Add("PlayerEnteredVehicle", "HL2CR_EnableVehicleOnEnter", function(ply, veh, role)
+	if game.GetMap() == "d1_canals_05" and not canSpawnAirboatGlobal then
+		canSpawnAirboatGlobal = true
+		local ENABLED_AIRBOAT_1 = {
+			["Colour"] = Color(50, 215, 50),
+			["Message"] = "Airboat is now spawnable"
+		}
+		
+		local ENABLED_AIRBOAT_2 = {
+			["Colour"] = Color(50, 215, 50),
+			["Message"] = "Use F3 and F4"
+		}
+		
+		BroadcastMessage(ENABLED_AIRBOAT_1)
+		BroadcastMessage(ENABLED_AIRBOAT_2)
+	end
+	
+	if game.GetMap() == "d2_coast_01" and not canSpawnJeepGlobal then
+		canSpawnJeepGlobal = true
+		local ENABLED_JEEP_1 = {
+			["Colour"] = Color(50, 215, 50),
+			["Message"] = "Jeep is now spawnable"
+		}
+		
+		local ENABLED_JEEP_2 = {
+			["Colour"] = Color(50, 215, 50),
+			["Message"] = "Use F3 and F4"
+		}
+		
+		BroadcastMessage(ENABLED_JEEP_1)
+		BroadcastMessage(ENABLED_JEEP_2)
+	end
+	
+	if not veh:GetOwner() then
+		veh:SetOwner(ply)
+		ply.veh = veh
+	end
+	
+end)
+
+function GM:ShouldCollide( ply, pet )
+	if ply:IsPlayer() and (pet:IsNextBot() and pet:IsPet()) then
+		return false
+	end
+	
+	return true
+end
+
+hook.Add("EntityTakeDamage", "HL2CR_VehicleFix", function( target, dmgInfo )
+	local att = dmgInfo:GetAttacker()
+	
+	if target:IsPlayer() then
+
+		if dmgInfo:GetDamageType() == 17 or dmgInfo:GetDamageType() == 1 then 
+			dmgInfo:SetDamage(0) 
+			return
+		end
+	end
+end)
+
+hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup, dmgInfo )
+	
+	local hitMulti = GetConVar("hl2cr_difficulty"):GetInt()
+	
+	if hitgroup == HITGROUP_HEAD then
+		hitMulti = hitMulti * 2.5
+	elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
+		hitMulti = hitMulti * 2
+	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+		hitMulti = hitMulti * 1.5
+	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+		hitMulti = hitMulti * 1.25	
+	else
+		hitMulti = GetConVar("hl2cr_difficulty"):GetInt()
+	end
+	
+	dmgInfo:ScaleDamage(hitMulti)
+	
+end)
+
+function BroadcastMessage(msgTbl, player)
+	if player == nil then
+		net.Start("HL2CR_Message")
+			net.WriteTable(msgTbl)
+		net.Broadcast()
+	else
+		net.Start("HL2CR_Message")
+			net.WriteTable(msgTbl)
+		net.Send(player)
+	end
+end

@@ -1,0 +1,3 @@
+AddCSLuaFile()
+
+GM.Skills = {}

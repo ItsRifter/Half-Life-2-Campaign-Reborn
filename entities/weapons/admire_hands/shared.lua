@@ -50,11 +50,7 @@ end
 
 function SWEP:Deploy()
 	self:SetHoldType("normal")
-	self:SetAnimation(0)
-	timer.Simple(5, function()
-		self.Owner:StripWeapon("admire_hands")
-	end)
-	
+	self:SetAnimation(0)	
 end
 
 function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
