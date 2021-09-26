@@ -286,7 +286,7 @@ concommand.Add("hl2cr_petsummon", function(ply, cmd, args)
 		endpos = ply:GetShootPos() + ( ply:GetAimVector() * 150 ),
 		filter = ply,		
 	} )
-		
+	
 	local pet = ents.Create("hl2cr_pet_headcrab")
 	pet:SetPos(tr.HitPos)
 	pet:Spawn()

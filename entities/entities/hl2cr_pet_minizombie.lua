@@ -16,7 +16,7 @@ function ENT:Initialize()
 	self.followOwner = false
 	
 	self:SetHealth(50)
-	self:SetScale(0.5)
+	self:SetModelScale(0.5)
 	
 	self:AddFlags(FL_NPC)
 	self:AddFlags(FL_OBJECT)

@@ -525,7 +525,7 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 	
 	if attacker:IsPlayer() then
 		player = attacker
-	elseif attacker.Owner:IsPlayer() then
+	elseif attacker.Owner and attacker.Owner:IsPlayer() then
 		player = attacker.Owner
 	elseif npc.Attacker then
 		player = npc.Attacker
