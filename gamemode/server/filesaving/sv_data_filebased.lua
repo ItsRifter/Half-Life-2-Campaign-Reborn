@@ -12,11 +12,13 @@ local function InitData(ply)
 	ply.hl2cr.Level = ply.hl2cr.Level or 0
 	
 	--Money/Experience
-	ply.hl2cr.Money = ply.hl2cr.Money or 0
+	ply.hl2cr.Resin = ply.hl2cr.Resin or 0
+	ply.hl2cr.Essence = ply.hl2cr.Essence or 0
 	ply.hl2cr.Exp = ply.hl2cr.Exp or 0
-	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 1000
+	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 3000
 	
 	--Skills
+	ply.hl2cr.Skills = ply.hl2cr.Skills or {}
 	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints or 0
 	
 	--Statistics
@@ -26,6 +28,8 @@ local function InitData(ply)
 	--Inventory
 	ply.hl2cr.Inventory = ply.hl2cr.Inventory or {}
 	ply.hl2cr.Inventory.Slots = ply.hl2cr.Inventory.Slots or {}
+	ply.hl2cr.Inventory.TotalSlots = ply.hl2cr.Inventory.TotalSlots or 15
+	ply.hl2cr.Inventory.CurWeaponSlot = ply.hl2cr.Inventory.CurWeaponSlot or ""
 	--ply.hl2cr.Inventory.Weight = ply.hl2cr.Inventory.Weight = 0
 	
 	--Achievement + Progress
@@ -54,8 +58,16 @@ local function InitData(ply)
 	
 	ply:SetNWInt("stat_quests_completed", ply.hl2cr.Quests.Completed)
 	
+	ply:SetNWInt("currency_resin", ply.hl2cr.Resin)
+	ply:SetNWInt("currency_essence", ply.hl2cr.Essence)
+	
 	ply:SetNWString("inv_slots", table.concat(ply.hl2cr.Inventory.Slots, " "))
+	ply:SetNWString("inv_weaponslot", ply.hl2cr.Inventory.CurWeaponSlot)
+	
 	ply:SetNWInt("stat_totalachs", #ply.hl2cr.Achievements)
+	ply:SetNWInt("inv_totalslots", ply.hl2cr.Inventory.TotalSlots)
+	
+	ply:SetNWString("stat_curskills", table.concat(ply.hl2cr.Skills, " "))
 	
 	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
 end

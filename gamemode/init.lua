@@ -56,6 +56,9 @@ include("shared/playerclass/sh_player_skills.lua")
 ----Achievements
 include("shared/ach/sh_player_ach.lua")
 
+----Shops
+include("shared/shop/sh_shop_items.lua")
+
 --Networks
 util.AddNetworkString("HL2CR_HelpMenu")
 util.AddNetworkString("HL2CR_LevelUpSound")
@@ -82,7 +85,11 @@ util.AddNetworkString("HL2CR_SpawnIndicators")
 util.AddNetworkString("HL2CR_ShouldClientSpectate")
 util.AddNetworkString("HL2CR_UpdatePlayerName")
 util.AddNetworkString("HL2CR_SelectClass")
+util.AddNetworkString("HL2CR_SkillObtain")
+util.AddNetworkString("HL2CR_PurchaseItem")
 util.AddNetworkString("HL2CR_Message")
+util.AddNetworkString("HL2CR_MsgSound")
+util.AddNetworkString("HL2CR_UpdateSlot")
 
 hook.Add("PrePACConfigApply", "HL2CR_DisablePac3Autoload", function(ply, outfit_data)
 	return false
@@ -139,9 +146,19 @@ ERROR_PET_NONEXISTS = {
 	["Message"] = "Your pet doesn't exist"
 }
 
+ERROR_PET_BRINGING = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "Your pet will be brought to you soon..."
+}
+
 VOTE_SUCCESS_MAP = {
 	["Colour"] = Color(50, 215, 50),
 	["Message"] = "Vote Successful, Restarting map"
+}
+
+ERROR_CLASS_ALREADY_ASSIGNED = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "You are already assigned to this class!"
 }
 
 VOTE_SUCCESS_HL2 = {
@@ -150,7 +167,7 @@ VOTE_SUCCESS_HL2 = {
 }
 
 VOTE_FAILED = {
-	["Colour"] = Color(50, 215, 50),
+	["Colour"] = Color(215, 50, 50),
 	["Message"] = "Vote Failed"
 }
 

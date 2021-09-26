@@ -16,8 +16,7 @@ function AddXP(ply, XP)
 		ply.hl2cr.Exp = ply.hl2cr.Exp - ply.hl2cr.ReqExp
 		ply.hl2cr.Level = ply.hl2cr.Level + 1
 		ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints + 1
-		ply.hl2cr.ReqExp = math.Round(ply.hl2cr.ReqExp * 1.60)
-		
+		ply.hl2cr.ReqExp = math.ceil(ply.hl2cr.ReqExp + (1500 * ply.hl2cr.Level))
 		notifyLevelUp = true
 	end
 		
@@ -45,8 +44,14 @@ function ShowMapResults(ply)
 			net.WriteBool(false)
 			net.WriteInt(0, 8)
 		net.Send(ply)
-		return 
+		return
 	end
+	
+	local randStart = math.random(1, 25)
+	
+	ply.hl2cr.Resin = ply.hl2cr.Resin + (randStart * ply.rewards["kills"] * GetConVar("hl2cr_difficulty"):GetInt())
+	
+	ply.rewards["resin"] = (randStart * ply.rewards["kills"] * GetConVar("hl2cr_difficulty"):GetInt())
 	
 	net.Start("HL2CR_ClientMapResults")
 		net.WriteTable(ply.rewards)

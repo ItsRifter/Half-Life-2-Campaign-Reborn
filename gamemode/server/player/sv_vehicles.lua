@@ -84,9 +84,7 @@ function GM:ShowSpare1(ply)
 				
 		boat:SetAngles(ply:EyeAngles() - Angle(0, 90, 0))
 		boat:SetCustomCollisionCheck( true )
-		
-		boat:SetOwner(ply)
-		
+	
 		ply.vehicle = boat
 		
 	elseif AIRBOAT_GUN_MAPS[game.GetMap()] or canSpawnGlobalGun then
@@ -103,8 +101,7 @@ function GM:ShowSpare1(ply)
 				
 		gunboat:SetAngles(ply:EyeAngles() - Angle(0, 90, 0))
 		gunboat:SetCustomCollisionCheck( true )
-		
-		gunboat:SetOwner(ply)
+
 		ply.vehicle = gunboat
 		
 	elseif JEEP_MAPS[game.GetMap()] or canSpawnJeepGlobal then
@@ -121,8 +118,6 @@ function GM:ShowSpare1(ply)
 		jeep:Spawn()
 				
 		jeep:SetCustomCollisionCheck( true )
-		
-		jeep:SetOwner(ply)
 		
 		ply.vehicle = jeep
 	else

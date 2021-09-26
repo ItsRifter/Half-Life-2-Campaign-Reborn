@@ -2,7 +2,7 @@ local mapCountdown = false
 
 local NOTIFY_MESSAGES = {
 	[5] = "Classes Unlocked",
-	[15] = "Grenadier/Cop Dropout Class Unlocked",
+	[10] = "Mechanic | Grenadier | Cop Dropout Class Unlocked",
 }
 
 net.Receive("HL2CR_LevelUpSound", function()
@@ -41,7 +41,8 @@ end)
 
 gameevent.Listen("player_connect_client")
 hook.Add( "player_connect_client", "HL2CR_PlayerConnect", function( data )
-	local id = data.userid
+	local name = data.name
+	local id = data.networkid
 		
 	if id == "STEAM_0:0:6009886" then
 		surface.PlaySound("hl2cr/admin/supersponer_join.wav")
@@ -153,6 +154,7 @@ local CONVERT_TO_NAME_STANDARD = {
 	["npc_headcrab"] = "Headcrab",
 	["npc_headcrab_fast"] = "Fast Headcrab",
 	["npc_headcrab_black"] = "Poison Headcrab",
+	["npc_headcrab_poison"] = "Poison Headcrab",
 	["npc_zombie_torso"] = "Torso Zombie",
 	["npc_fastzombie_torso"] = "Fast Torso Zombie",
 	["npc_zombine"] = "Zombine",
@@ -191,7 +193,7 @@ hook.Add( "HUDDrawTargetID", "HidePlayerInfo", function()
 		local hpColour = Color(255, 255, 255)
 		local hpSpacing = 0
 		
-		if pl:Health() == pl:GetMaxHealth() then
+		if pl:Health() >= pl:GetMaxHealth() then
 			hpStatus = "Perfect"
 			hpColour = Color(10, 210, 0)
 			hpSpacing = 50
@@ -224,7 +226,7 @@ hook.Add( "HUDDrawTargetID", "HidePlayerInfo", function()
 	
 		if dist <= 250 then
 			--Name
-			draw.SimpleText(pl:Nick(), "HL2CR_HoverPlayer", ScrPos.x, ScrPos.y, GAMEMODE.Colours.Standard, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(pl:Nick(), "HL2CR_HoverPlayer", ScrPos.x, ScrPos.y, HL2CR.Theme.standard, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			
 			--Level
 			draw.SimpleText("Level: " .. pl:GetNWInt("stat_level", -1), "HL2CR_HoverPlayer", ScrPos.x, ScrPos.y + 30, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -343,7 +345,7 @@ net.Receive( "HL2CR_SpawnIndicators", function()
 	local reward = net.ReadInt(32)
 	local pos = net.ReadVector()
 	
-	spawnIndicator("XP: " .. reward, GAMEMODE.Colours.Standard, pos, Vector(math.Rand(-0.5, 0.5), math.Rand(-0.5, 0.5), math.Rand(0.75, 1) * 1.5), 2)
+	spawnIndicator("XP: " .. reward, HL2CR.Theme.standard, pos, Vector(math.Rand(-0.5, 0.5), math.Rand(-0.5, 0.5), math.Rand(0.75, 1) * 1.5), 2)
 	
 end)
 
@@ -414,4 +416,10 @@ net.Receive("HL2CR_Message", function()
 	local messages = net.ReadTable()
 	
 	chat.AddText(messages["Colour"], messages["Message"])
+end)
+
+net.Receive("HL2CR_MsgSound", function()
+	local sound = net.ReadTable()
+	
+	surface.PlaySound(sound)
 end)

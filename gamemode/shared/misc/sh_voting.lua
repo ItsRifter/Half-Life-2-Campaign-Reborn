@@ -78,6 +78,7 @@ votingTypes["BeginHL2"] = {
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
 		if positive > negative then
 			BroadcastMessage(VOTE_SUCCESS_HL2)
+			BroadcastSound("hl2cr/ach_unlock.wav")
 			timer.Simple(5, function()
 				RunConsoleCommand("ChangeLevel", "d1_trainstation_01")
 			end)
@@ -286,12 +287,14 @@ end
 if CLIENT then
 
 	HL2CR_ClientVoter = HL2CR_ClientVoter or {}
+	
+	local totalVotes = {
+		["yes"] = 0,
+		["no"] = 0
+	}
+	
 	function HL2CR_ClientVoter:StartOrUpdate(state)
 		self:End()
-
-		timer.Create("HL2CR_ClientVoteTimer", timer.TimeLeft("HL2CR_ClientVoteTimer") or 30, 1, function()
-			timer.Remove("HL2CR_ClientVoteTimer")
-		end)
 
 		-- Get the vote type object.
 		local voteType = votingTypes[state.VoteTypeKey]
@@ -308,7 +311,7 @@ if CLIENT then
 		self.VoteFrame:ShowCloseButton(false)
 		self.VoteFrame:SetTitle("")
 		self.VoteFrame:SetDraggable(false)
-		self.VoteFrame:SetSize(350, 400)
+		self.VoteFrame:SetSize(350, 300)
 		self.VoteFrame:SetPos(20, ScrH() / 2 - 200)
 		self.VoteFrame.Paint = function(pnl, w, h)
 			surface.SetDrawColor(0, 0, 0, 185)
@@ -316,57 +319,61 @@ if CLIENT then
 		end
 
 		self.Title = vgui.Create("DLabel", self.VoteFrame)
-		self.Title:SetText("VOTE")
+		self.Title:SetText(voteType.Description)
 		self.Title:SetFont("HL2CR_VoteTitle")
-		self.Title:SetPos(self.VoteFrame:GetWide() / 2.75, 0)
+		self.Title:SetPos(0, 0)
 		self.Title:SizeToContents()
 
 		self.Instructions = vgui.Create("DLabel", self.VoteFrame)
-		self.Instructions:SetText("F1 = Yes\nF2 = No")
-		self.Instructions:SetPos(0, 50)
+		self.Instructions:SetText("F1 = Yes | F2 = No")
+		self.Instructions:SetPos(75, 50)
 		self.Instructions:SetFont("HL2CR_VoteFont")
 		self.Instructions:SizeToContents()
-
-		self.VoteType = vgui.Create("DLabel", self.VoteFrame)
-		self.VoteType:SetText(voteType.Description)
-		self.VoteType:SetPos(self.VoteFrame:GetWide() / 2 - 85, 125)
-		self.VoteType:SetFont("HL2CR_VoteFont")
-		self.VoteType:SizeToContents()
-
+		
+		self.VoterPnl = vgui.Create("DPanel", self.VoteFrame)
+		self.VoterPnl:SetSize(250, 125)
+		self.VoterPnl:SetPos(50, 100)
+		self.VoterPnl.Paint = function(pnl, w, h)
+			surface.SetDrawColor(130, 130, 130, 200)
+			surface.DrawRect(0, 0, w, h)
+		end
+		
+		self.VoterLabel = vgui.Create("DLabel", self.VoteFrame)
+		self.VoterLabel:SetFont("HL2CR_VoteFont")
+		self.VoterLabel:SetText("YES: " .. totalVotes["yes"] .. " | NO: " .. totalVotes["no"])
+		self.VoterLabel:SetPos(100, 250)
+		self.VoterLabel:SizeToContents()
+		
+		self.VoterLabel.Think = function(pnl)
+			self.VoterLabel:SetText("YES: " .. totalVotes["yes"] .. " | NO: " .. totalVotes["no"])
+			self.VoterLabel:SizeToContents()
+		end
+		
 		for k, voter in pairs(state.Voters) do	
-			self.Voter = vgui.Create("AvatarImage", self.VoteFrame)
+			self.Voter = vgui.Create("AvatarImage", self.VoterPnl)
 			self.Voter:SetSize(32, 32)
-			self.Voter:SetPlayer(voter.Player)
-			self.Voter:SetPos((k * 35), 175)
+			self.Voter:SetPlayer(voter.Player, 64)
+			self.Voter:SetPos(( (k-1) * 35), 0)
 
 			self.VoteStat = vgui.Create("DImage", self.Voter)
 
 			if voter.Status == true then
+				totalVotes["yes"] = totalVotes["yes"] + 1
 				self.VoteStat:SetImage("icon16/tick.png")
+				surface.PlaySound("buttons/button15.wav")
 			else
+				totalVotes["no"] = totalVotes["no"] + 1
 				self.VoteStat:SetImage("icon16/cross.png")
+				surface.PlaySound("buttons/button16.wav")
 			end
 
 			self.VoteStat:SetSize(16, 16)
 		end
-		
-		self.VoteTimer = vgui.Create("DLabel", self.VoteFrame)
-		self.VoteTimer:SetPos(self.VoteFrame:GetWide() / 4.5, 350)
-		self.VoteTimer:SetFont("HL2CR_VoteTitle")
-		self.VoteTimer.Think = function()
-					
-			self.VoteTimer:SetText("Time Left: " .. math.Round(timer.TimeLeft("HL2CR_ClientVoteTimer")))
-			self.VoteTimer:SizeToContents()
-		end
-		
 	end
 
 	function HL2CR_ClientVoter:End()
 		if self.VoteFrame and IsValid(self.VoteFrame) then
 			self.VoteFrame:Close()
-		end
-		if timer.Exists("HL2CR_ClientVoteTimer") then
-			timer.Remove("HL2CR_ClientVoteTimer")
 		end
 	end
 
@@ -376,12 +383,14 @@ if CLIENT then
 			Voters = net.ReadTable(),
 			CustomDesc = net.ReadString(),
 		}
-					
+		
 		HL2CR_ClientVoter:StartOrUpdate(state)
 	end)
 
 	net.Receive("HL2CR_EndVote", function(len)
 		HL2CR_ClientVoter:End()
+		totalVotes["yes"] = 0
+		totalVotes["no"] = 0
 	end)
 	
 end

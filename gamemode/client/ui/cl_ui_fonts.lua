@@ -70,10 +70,28 @@ surface.CreateFont( "HL2CR_Stats", {
 	outline = false,
 } )
 
-surface.CreateFont( "HL2CR_Menu_Stats", {
+surface.CreateFont( "HL2CR_ShopResin", {
 	font = "Roboto",
 	extended = false,
 	size = 48,
+	weight = 450,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
+surface.CreateFont( "HL2CR_Menu_Stats", {
+	font = "Roboto",
+	extended = false,
+	size = 34,
 	weight = 450,
 	blursize = 0,
 	scanlines = 0,
@@ -235,7 +253,7 @@ surface.CreateFont( "HL2CR_AchDesc", {
 surface.CreateFont( "HL2CR_VoteTitle", {
 	font = "DermaLarge",
 	extended = false,
-	size = 36,
+	size = 32,
 	weight = 450,
 	blursize = 0,
 	scanlines = 0,
@@ -307,7 +325,7 @@ surface.CreateFont( "HL2CR_GamemodeHelp", {
 surface.CreateFont( "HL2CR_Class_TitleFont", {
 	font = "Roboto",
 	extended = false,
-	size = 32,
+	size = 28,
 	weight = 500,
 	blursize = 0,
 	scanlines = 0,

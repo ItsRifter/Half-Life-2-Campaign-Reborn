@@ -48,7 +48,7 @@ GM.Achievements = {
 			Mat = "vgui/achievements/hl2_beat_game.png", 
 			Desc = "Take the baby from the\nplayground to Dr.Kleiner's lab",
 			Rewards = {
-				XP = 3750,
+				XP = 2250,
 				Item = nil
 				--Replace with baby hat
 			},
@@ -83,6 +83,18 @@ GM.Achievements = {
 			Desc = "Escort Gregori safely\nthrough the church cemetery",
 			Rewards = {
 				XP = 1250,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		
+		Barnacle_Bowling = {
+			Name = "Barnacle Bowling", 
+			Mat = "vgui/achievements/hl2_kill_barnacleswithbarrel.png", 
+			Desc = "Kill five barnacles with one barrel",
+			Rewards = {
+				XP = 3500,
 				Item = nil
 			},
 			IsRare = false

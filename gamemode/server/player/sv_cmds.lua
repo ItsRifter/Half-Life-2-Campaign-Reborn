@@ -38,10 +38,6 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 			ply:ChatPrint("You need to be in a Jeep to use this")
 			return ""
 		
-		elseif ply:GetVehicle():GetOwner() != ply then
-			ply:ChatPrint("This jeep doesn't belong to you, you can't use this command")
-			return ""
-		
 		elseif ply.HasSeat then
 			ply:ChatPrint("You already have a passenger seat")
 			return""
@@ -173,8 +169,13 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 			return ""
 		end	
 		
-		ply.pet.teleport = true
-		ply.bringCooldown = 6 + CurTime()
+		if not ply.pet.teleport then
+			ply.pet.teleport = true
+		else
+			BroadcastMessage(ERROR_PET_BRINGING, ply)
+			return ""
+		end
+		
 		return ""
 	end
 	
@@ -227,8 +228,13 @@ concommand.Add("hl2cr_petbring", function(ply, cmd, args)
 		return
 	end
 	
-	ply.pet.teleport = true
-	ply.bringCooldown = 6 + CurTime()
+	if not ply.pet.teleport then
+		ply.pet.teleport = true
+	else
+		BroadcastMessage(ERROR_PET_BRINGING, ply)
+		return
+	end
+	
 end)
 
 concommand.Add("hl2cr_petremove", function(ply, cmd, args)
@@ -315,4 +321,12 @@ concommand.Add("hl2cr_addxp", function(ply, cmd, args)
 	if not ply:IsAdmin() then return end
 	
 	AddXP(ply, args[1])
+end)
+
+concommand.Add("hl2cr_addresin", function(ply, cmd, args)
+	if not ply:IsAdmin() then return end
+	
+	ply.hl2cr.Resin = ply.hl2cr.Resin + args[1]
+
+	ply:SetNWInt("currency_resin", ply.hl2cr.Resin)
 end)

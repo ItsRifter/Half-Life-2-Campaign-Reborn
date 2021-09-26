@@ -10,7 +10,11 @@ HL2CR.Theme = {
 	text = {
 		h1 = Color(60, 60, 40, 255),
 		h2 = Color(200, 175, 0, 255)
-	}
+	},
+	
+	standard = Color(240, 168, 0, 255),
+	qMenu = Color(215, 130, 45, 255),
+	qMenu2 = Color(138, 87, 43, 255),
 }
 
 HL2CR.UISizes = {

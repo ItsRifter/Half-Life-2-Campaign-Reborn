@@ -5,7 +5,6 @@ SPAWNING_ITEMS = SPAWNING_ITEMS or {}
 --Restrict these weapons from being picked up/used
 RESTRICTED_WEAPONS = {
 	["weapon_physgun"] = true,
-	["weapon_stunstick"] = true
 }
 
 --Weapons that shouldn't be given on player spawn
@@ -14,7 +13,21 @@ NO_SPAWNING_WEAPONS = {
 	["weapon_medkit_hl2cr"] = true,
 	["weapon_armorkit_hl2cr"] = true,
 	["weapon_ammogiver"] = true,
-	["weapon_controllable_manhack"] = true
+	["weapon_controllable_manhack"] = true,
+	["the_anti_rifle"] = true,
+	["the_secret_carbine"] = true,
+	["the_bfhmg"] = true,
+	["the_fire_hazard"] = true,
+	["bakkers_blaster"] = true,
+	["the_lobotomizer"] = true,
+	["weapon_stunstick"] = true
+}
+
+--Takes the name in CurWeaponSlot into a entity weapon
+local CONVERT_NAME_TO_ENT = {
+	["Flare_gun"] = "the_fire_hazard",
+	["Multi-Grenade_Launcher"] = "bakkers_blaster",
+	[".50_BMG_Heavy_Sniper"] = "the_anti_rifle",
 }
 
 --Super gravity gun maps
@@ -92,15 +105,35 @@ hook.Add("PlayerInitialSpawn", "HL2CR_InitialPlayerSpawn", function(ply, transit
 	
 	ply.rewards = {
 		["kills"] = 0,
+		["resin"] = 0,
 		["stats"] = {
-			["level"] = ply.hl2cr.Level,
-			["exp"] = ply.hl2cr.Exp,
-			["expReq"] = ply.hl2cr.ReqExp
+			["exp"] = 0,
 		},
 		["items"] = {},
 		["achs"] = {},
 	}
 end)
+
+--Applies the skill that the player has on spawn
+local APPLY_SKILLS_HEALTH = {
+	["Health Boost"] = 5,
+	["Health Boost II"] = 10,
+	["Health Boost III"] = 25
+}
+
+local APPLY_SKILLS_CLASS_MEDIC = {
+	["Healing Efficiency"] = 10,
+	["Healing Efficiency II"] = 20,
+	["Healing Efficiency III"] = 40,
+}
+
+local APPLY_SKILLS_CLASS_MEDIC_RECHARGE = {
+	["Heal Recharge"] = 5,
+	["Heal Recharge II"] = 15,
+	["Heal Recharge III"] = 30,
+}
+
+--Adds the passive abilities of specific classes
 
 --Player spawning
 hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
@@ -117,6 +150,40 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	
 	ply:SetCustomCollisionCheck(true)
 	ply:SetNoCollideWithTeammates(true)
+	
+	local newMaxHP = 100
+	local healing = 0
+	local recharge = 0
+	
+	for _, skill in ipairs(ply.hl2cr.Skills) do
+		if APPLY_SKILLS_HEALTH[skill] then
+			newMaxHP = newMaxHP + APPLY_SKILLS_HEALTH[skill]
+		elseif APPLY_SKILLS_CLASS_MEDIC[skill] then
+			healing = healing + APPLY_SKILLS_CLASS_MEDIC[skill]
+		elseif APPLY_SKILLS_CLASS_MEDIC_RECHARGE[skill] then
+			recharge = recharge + APPLY_SKILLS_CLASS_MEDIC_RECHARGE[skill]
+		end
+	end
+	
+	ply.hl2cr.AmmoGrenade = 0
+	ply.hl2cr.StunDamage = 0
+	
+	if ply.hl2cr.CurClass.Name == "Grenadier" then
+		ply.hl2cr.AmmoGrenade = ply.hl2cr.AmmoGrenade + 5
+	elseif ply.hl2cr.CurClass.Name == "Combine Dropout" then
+		ply.hl2cr.StunDamage = ply.hl2cr.StunDamage + 10
+	end
+	
+
+	ply:SetNWInt("skill_healing", healing)
+	ply:SetNWInt("skill_recharge", recharge)
+	
+	ply:SetMaxHealth(newMaxHP)
+	ply:SetHealth(newMaxHP)
+
+	if CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot] then
+		ply:Give(CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot])
+	end
 	
 	if MAPS_LOBBY[game.GetMap()] and ply:IsAdmin() then	
 		ply:Give("weapon_physgun")
@@ -185,30 +252,23 @@ hook.Add("EntityFireBullets", "HL2CR_NoBulletPlayer", function(ent, data)
 	return true
 end)
 
-function GM:PlayerCanPickupWeapon(ply, weapon)
+hook.Add("PlayerCanPickupWeapon", "HL2CR_WeaponPickup", function(ply, weapon)
 	if ply:Team() ~= TEAM_ALIVE then return end
 	
 	if weapon:GetClass() == "weapon_physgun" and ply:IsAdmin() then
 		return true
 	end
 	
-	--If its a restricted weapon, don't pick it up
-	if RESTRICTED_WEAPONS[weapon:GetClass()] then 
-		weapon:Remove()
+	--If its a stunstick, give them armor
+	if weapon:GetClass() == "weapon_stunstick" and game.GetMap() == "d1_canals_01" then
 		
-		--If its a stunstick, give them armor
-		if weapon:GetClass() == "weapon_stunstick" then
-			
-			ply:SetArmor(ply:Armor() + 5)
-			
-			if ply:Armor() > 100 then
-				ply:SetArmor(100)
-			end
+		ply:SetArmor(ply:Armor() + 5)
+		
+		if ply:Armor() > 100 then
+			ply:SetArmor(100)
 		end
-		
-		return false
 	end
-	
+
 	--if its on a map where super gravgun is enabled, (excluding the gravgun) remove and don't pick up
 	if SUPERGRAVGUN_MAPS[game.GetMap()] and weapon:GetClass() ~= "weapon_physcannon" then weapon:Remove() return false end
 	
@@ -218,7 +278,7 @@ function GM:PlayerCanPickupWeapon(ply, weapon)
 	end
 	
 	return true
-end
+end)
 
 --Force the spawnpoint to be suitable making players not spawn into eachother
 function GM:IsSpawnpointSuitable(ply, spawnpoint, makeSuitable)
@@ -261,6 +321,11 @@ hook.Add("EntityTakeDamage", "HL2CR_PVPOff", function(ent, dmgInfo)
 		if ent:Armor() > 0 then
 			ent:SetArmor( ent:Armor() + 1)
 		end
+	elseif ent:IsPlayer() and att.Owner and att.Owner:IsPlayer() then
+		dmgInfo:SetDamage(0)
+		if ent:Armor() > 0 then
+			ent:SetArmor( ent:Armor() + 1)
+		end
 	end
 	
 	if att:IsNPC() and att:GetClass() == "npc_rollermine" and game.GetMap() == "d1_eli_02" then
@@ -298,10 +363,7 @@ hook.Add("Tick", "HL2CR_AmmoLimiter", function()
 			p:RemoveAmmo( p:GetAmmoCount("XBowBolt") -GetConVar("hl2cr_max_crossbowbolt"):GetInt(), "XBowBolt" )
 		end
 		
-		if p:GetAmmoCount("Grenade") > GetConVar("hl2cr_max_grenade"):GetInt() then		
-			p:RemoveAmmo( p:GetAmmoCount("Grenade") -GetConVar("hl2cr_max_grenade"):GetInt(), "Grenade" )
-		end
-			if p:GetAmmoCount("slam") > GetConVar("hl2cr_max_slam"):GetInt() then		
+		if p:GetAmmoCount("slam") > GetConVar("hl2cr_max_slam"):GetInt() then		
 			p:RemoveAmmo( p:GetAmmoCount("slam") -GetConVar("hl2cr_max_slam"):GetInt(), "slam" )
 		end
 
@@ -321,8 +383,8 @@ hook.Add("Tick", "HL2CR_AmmoLimiter", function()
 			p:RemoveAmmo( p:GetAmmoCount("SMG1_Grenade") - GetConVar("hl2cr_max_SMG1_Grenade"):GetInt(), "SMG1_Grenade" )
 		end
 		
-		if p:GetAmmoCount("Grenade") > GetConVar("hl2cr_max_frags"):GetInt() then
-			p:RemoveAmmo( p:GetAmmoCount("Grenade") - GetConVar("hl2cr_max_frags"):GetInt(), "Grenade" )
+		if p:GetAmmoCount("Grenade") > (GetConVar("hl2cr_max_frags"):GetInt() + p.hl2cr.AmmoGrenade) then
+			p:RemoveAmmo( p:GetAmmoCount("Grenade") - (GetConVar("hl2cr_max_frags"):GetInt() + p.hl2cr.AmmoGrenade), "Grenade" )
 		end
 	end
 end)
@@ -353,8 +415,7 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 		return false
 	end
 
-	if item:GetClass() == "weapon_frag" and ply:GetAmmoCount("Grenade") >= GetConVar("hl2cr_max_grenade"):GetInt() then		
-		ply:RemoveAmmo( ply:GetAmmoCount("Grenade") -GetConVar("hl2cr_max_grenade"):GetInt(), "Grenade" )
+	if item:GetClass() == "weapon_frag" and ply:GetAmmoCount("Grenade") >= (GetConVar("hl2cr_max_frags"):GetInt() + ply.hl2cr.AmmoGrenade) then		
 		return false
 	end
 
@@ -365,7 +426,7 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 	
 	if (item:GetClass() == "item_ammo_pistol" or item:GetClass() == "item_ammo_pistol_large") and ply:GetAmmoCount("Pistol") >= GetConVar("hl2cr_max_Pistol"):GetInt() then		
 		ply:RemoveAmmo( ply:GetAmmoCount("Pistol") -GetConVar("hl2cr_max_Pistol"):GetInt(), "Pistol" )
-		return false
+		return falset
 	end
 	
 	if item:GetClass() == "item_rpg_round" and ply:GetAmmoCount("RPG_Round") >= GetConVar("hl2cr_max_RPG_Round"):GetInt() then		
@@ -389,12 +450,17 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 			p:SetRunSpeed(350)
 			if game.GetMap() == "d1_trainstation_05" then
 				p:Give("admire_hands")
-				p:SelectWeapon("admire_hands")
+				timer.Simple(0.1, function()
+					p:SelectWeapon("admire_hands")
+				end)
+				
 				timer.Simple(5, function()
 					p:StripWeapon("admire_hands")
-					
+
 					for _, classWep in ipairs(p.hl2cr.CurClass.Weapons) do
-						p:Give(classWep)
+						if classWep then
+							p:Give(classWep)
+						end
 					end
 				end)
 			end	
@@ -444,6 +510,8 @@ local RANDOM_XP_BASED_NPC = {
 	["npc_metropolice"] = {xpMin = 30, xpMax = 80},
 	["npc_manhack"] = {xpMin = 25, xpMax = 70},
 	["npc_combine_s"] = {xpMin = 40, xpMax = 135},
+	["npc_antlionguard"] = {xpMin = 125, xpMax = 275},
+	["npc_antlionguardian"] = {xpMin = 125, xpMax = 275},
 	["npc_barnacle"] = {xpMin = 5, xpMax = 25},
 }
 
@@ -452,22 +520,48 @@ local RESTRICT_MAPS_ANTLIONS = {
 }
 
 hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
+	
+	local player
+	
 	if attacker:IsPlayer() then
+		player = attacker
+	elseif attacker.Owner:IsPlayer() then
+		player = attacker.Owner
+	elseif npc.Attacker then
+		player = npc.Attacker
+	end
+	
+	if player:IsPlayer() then
+		
 		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
 		
-		local totalXP = CalculateXP(attacker, math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin * npc.level, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax * npc.level))
+		local totalXP = CalculateXP(player, math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin * npc.level, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax * npc.level))
 		
 		if totalXP <= 0 then return end
 		
-		AddXP(attacker, totalXP)
+		AddXP(player, totalXP)
 
-		createIndicator(totalXP, npc:GetPos(), attacker)
+		createIndicator(totalXP, npc:GetPos(), player)
 		
-		attacker.rewards["kills"] = attacker.rewards["kills"] + 1
-		attacker.rewards["stats"]["exp"] = attacker.rewards["stats"]["exp"] + totalXP
-		attacker.hl2cr.Kills = attacker.hl2cr.Kills + 1
-		attacker:SetNWInt("stat_kills", attacker.hl2cr.Kills)
-	elseif attacker:GetOwner():IsPlayer() then
+		player.rewards["kills"] = player.rewards["kills"] + 1
+		player.rewards["stats"]["exp"] = player.rewards["stats"]["exp"] + totalXP
+		player.hl2cr.Kills = player.hl2cr.Kills + 1
+		player:SetNWInt("stat_kills", player.hl2cr.Kills)
+		
+		if game.GetMap() == "d1_canals_01a" and npc:GetClass() == "npc_barnacle" then
+			player.barnacleBowlCount = player.barnacleBowlCount or 0
+			
+			player.barnacleBowlCount = player.barnacleBowlCount + 1
+			
+			timer.Simple(0.5, function()
+				player.barnacleBowlCount = 0
+			end)
+			
+			if player.barnacleBowlCount >= 5 then
+				GrantAchievement(player, "HL2", "Barnacle_Bowling")
+			end		
+		end
+	elseif attacker:IsNextBot() and attacker:GetOwner():IsPlayer() and attacker:GetOwner().pet then
 		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
 		
 		local totalXP = CalculateXP(attacker:GetOwner(), math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin * npc.level, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax * npc.level))
@@ -482,6 +576,7 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 		attacker:GetOwner().rewards["stats"]["exp"] = attacker:GetOwner().rewards["stats"]["exp"] + totalXP
 		attacker:GetOwner().hl2cr.Kills = attacker:GetOwner().hl2cr.Kills + 1
 		attacker:GetOwner():SetNWInt("stat_kills", attacker:GetOwner().hl2cr.Kills)
+	
 	end
 end)
 
@@ -516,13 +611,7 @@ hook.Add("PlayerEnteredVehicle", "HL2CR_EnableVehicleOnEnter", function(ply, veh
 		
 		BroadcastMessage(ENABLED_JEEP_1)
 		BroadcastMessage(ENABLED_JEEP_2)
-	end
-	
-	if not veh:GetOwner() then
-		veh:SetOwner(ply)
-		ply.veh = veh
-	end
-	
+	end	
 end)
 
 function GM:ShouldCollide( ply, pet )
@@ -545,8 +634,21 @@ hook.Add("EntityTakeDamage", "HL2CR_VehicleFix", function( target, dmgInfo )
 	end
 end)
 
-hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup, dmgInfo )
+hook.Add("EntityTakeDamage", "HL2CR_SlashDMGBuff", function( target, dmgInfo )
+	local att = dmgInfo:GetAttacker()
+	local dmgType = dmgInfo:GetDamageType()
 	
+	if target:IsPlayer() and att:IsNPC() then
+		if dmgType == DMG_SLASH then
+			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * 1.25)
+		else
+			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * 1.5)
+		end
+	end
+end)
+
+hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup, dmgInfo )
+		
 	local hitMulti = GetConVar("hl2cr_difficulty"):GetInt()
 	
 	if hitgroup == HITGROUP_HEAD then
@@ -557,12 +659,7 @@ hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup
 		hitMulti = hitMulti * 1.5
 	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
 		hitMulti = hitMulti * 1.25	
-	else
-		hitMulti = GetConVar("hl2cr_difficulty"):GetInt()
 	end
-	
-	dmgInfo:ScaleDamage(hitMulti)
-	
 end)
 
 function BroadcastMessage(msgTbl, player)
@@ -573,6 +670,18 @@ function BroadcastMessage(msgTbl, player)
 	else
 		net.Start("HL2CR_Message")
 			net.WriteTable(msgTbl)
+		net.Send(player)
+	end
+end
+
+function BroadcastSound(soundPath, player)
+	if player == nil then
+		net.Start("HL2CR_MsgSound")
+			net.WriteString(soundPath)
+		net.Broadcast()
+	else
+		net.Start("HL2CR_MsgSound")
+			net.WriteString(soundPath)
 		net.Send(player)
 	end
 end

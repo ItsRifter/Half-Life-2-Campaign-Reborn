@@ -87,7 +87,7 @@ function ENT:RunBehaviour()
 			--self:PlaySequenceAndWait( "jumpattack_broadcast" )
 			self:EmitSound("npc/headcrab/alert1.wav")
 			self:StartActivity( ACT_IDLE )
-		elseif self.teleport then
+		elseif self.teleport and self:GetOwner():Alive() then
 			self:SetPos(self:GetOwner():GetPos())
 			self.teleport = false
 		elseif self.followOwner then
@@ -135,8 +135,6 @@ function ENT:ChaseEnemy( options )
 				self:GetEnemy():TakeDamage(self.AttackDMG, self:GetOwner(), self)
 				self:GetEnemy():AddEntityRelationship( self, D_HT, 99 )
 				self:GetEnemy():EmitSound("npc/headcrab/headbite.wav")
-				
-				hook.Call( "HL2CR_NextbotDMG", nil, self:GetEnemy(), nil, self )
 				
 				self.NextAttack = CurTime() + 5
 				self:StartActivity( ACT_RUN )

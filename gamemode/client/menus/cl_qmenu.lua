@@ -1,60 +1,16 @@
-local plymeta = FindMetaTable("Player")
+local CONVERT_NAME_TO_IMAGE = {
+	["Flare_gun"] = "materials/hl2cr/weapon_flaregun.jpg",
+	["Multi-Grenade_Launcher"] = "materials/hl2cr/weapon_grenadelauncher.jpg",
+	[".50_BMG_Heavy_Sniper"] = "materials/hl2cr/weapon_bmgsniper.jpg"
+}
 
-function plymeta:GetInvItem(x,y)
-	return self.Inv.Backpack[x][y]
-end
---[[
-local function ShowConfirmScreen(classIndex)
+local CONVERT_NAME_TO_DESC = {
+	["Flare_gun"] = "Used for emergencies...\nso it was",
+	["Multi-Grenade_Launcher"] = "A grenade launcher\nhandle with care",
+	[".50_BMG_Heavy_Sniper"] = "A rather heavy sniper\nwith devastating results"
+}
 
-	local confirmFrame = vgui.Create("DFrame")
-	confirmFrame:SetBackgroundBlur( true )
-	confirmFrame:SetSize(350, 250)
-	confirmFrame:Center()
-	confirmFrame:MakePopup()
-	confirmFrame:SetTitle("")
-	confirmFrame:ShowCloseButton(false)
-	
-	local confirmLabel = vgui.Create("DLabel", confirmFrame)
-	confirmLabel:SetText("Are you sure?")
-	confirmLabel:SetPos(confirmFrame:GetWide() / 4, 25)
-	confirmLabel:SetFont("HL2CR_Class_TitleFont")
-	confirmLabel:SizeToContents()
-	
-	local confirmDescLabel = vgui.Create("DLabel", confirmFrame)
-	confirmDescLabel:SetText("Once you have selected this class\nYou won't be able to select a different class\nuntil you prestige")
-	confirmDescLabel:SetPos(confirmFrame:GetWide() / 6 - 35, 75)
-	confirmDescLabel:SetFont("HL2CR_Class_DescFont")
-	confirmDescLabel:SizeToContents()
-	
-	local cancelBtn = vgui.Create("DButton", confirmFrame)
-	cancelBtn:SetSize(125, 50)
-	cancelBtn:SetPos(confirmFrame:GetWide() / 4 - 75, 150)
-	cancelBtn:SetText("Cancel")
-	cancelBtn.DoClick = function()
-		confirmFrame:Close()
-	end
-	
-	local acceptBtn = vgui.Create("DButton", confirmFrame)
-	acceptBtn:SetSize(125, 50)
-	acceptBtn:SetPos(confirmFrame:GetWide() / 2 + 35, 150)
-	acceptBtn:SetText("Confirm")
-	acceptBtn.DoClick = function()
-		confirmFrame:Close()
-		net.Start("HL2CR_SelectClass")
-			net.WriteInt(classIndex, 8)
-		net.SendToServer()
-	end
-end
---]]
 hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
-	local pl = LocalPlayer()
-	pl.Inv = {}
-	pl.Inv.Backpack = {}
-
-	for i = 1, 5 do
-		pl.Inv.Backpack[i] = {}
-	end
-
 	if LocalPlayer():Alive() then
 		menuFrame = vgui.Create("HL2CR_Tab")
 		menuFrame:SetSize(ScrW() / 2, ScrH() / 2)
@@ -69,15 +25,15 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 		invPnlBG:SetSize(invPnl:GetWide(), invPnl:GetTall())
 		
 		invPnlBG.Paint = function(self, w, h)
-			surface.SetDrawColor(GAMEMODE.Colours.QMenu)
+			surface.SetDrawColor(HL2CR.Theme.qMenu)
 			surface.DrawRect(0, 0, w, h)
 		end
 		
 		local invPnlPlayer = vgui.Create("DPanel", invPnl)
-		invPnlPlayer:SetPos(invPnl:GetWide() - 285, 5)
+		invPnlPlayer:SetPos(invPnl:GetWide() / 1.35 - 50, 5)
 		invPnlPlayer:SetSize(invPnl:GetWide() / 3.5, invPnl:GetTall() / 1.35)
 		invPnlPlayer.Paint = function(self, w, h)
-			surface.SetDrawColor(Color(138, 87, 43, 255))
+			surface.SetDrawColor(HL2CR.Theme.qMenu2)
 			surface.DrawRect(0, 0, w, h)
 		end
 		
@@ -87,32 +43,207 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 		invPnlPlayerModel:SetModel( LocalPlayer():GetModel() )
 		function invPnlPlayerModel:LayoutEntity( Entity ) return end
 		
-		--Sets the Width
-		for k, v in pairs(pl.Inv.Backpack)do
-			for i= 1, 4 do
-				pl.Inv.Backpack[k][i] = false
+		local invPnlSlotsPnl = vgui.Create("DPanel", invPnl)
+		invPnlSlotsPnl:SetSize(396, 250)
+		invPnlSlotsPnl:SetPos(25, 75)
+		invPnlSlotsPnl.Paint = function() end
+		
+		local invLayout = vgui.Create("DIconLayout", invPnlSlotsPnl)
+		invLayout:Dock(FILL)
+		invLayout:SetSpaceX(10)
+		invLayout:SetSpaceY(5)
+		
+		local weaponSlotPnl = vgui.Create("DPanel", invPnl)
+		weaponSlotPnl:SetPos(invPnl:GetWide() / 1.75, 50)
+		weaponSlotPnl:SetSize(64, 64)
+		
+		weaponSlotPnl.Paint = function(pnl, w, h)
+			surface.SetDrawColor(HL2CR.Theme.qMenu2)
+			surface.DrawRect(0, 0, w, h)
+		end
+		
+		weaponSlotImage = vgui.Create("DImage", weaponSlotPnl)
+		weaponSlotImage:SetSize(64, 64)
+		if CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")] then
+			weaponSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")])
+		end
+		
+		local slots = string.Explode(" ", LocalPlayer():GetNWString("inv_slots"))
+
+		local totalSlots = LocalPlayer():GetNWInt("inv_totalslots")
+		
+		local pl = LocalPlayer()
+		pl.Inv = {}
+		
+		for i = 1, totalSlots do
+			pl.Inv[i] = invLayout:Add("HL2CR_InvSlot")
+			pl.Inv[i]:SetSize(52, 52)
+			
+			if slots[i] and CONVERT_NAME_TO_IMAGE[slots[i]] then
+				pl.Inv[i].Icon = vgui.Create("DImageButton", pl.Inv[i])
+				pl.Inv[i].Icon:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
+				pl.Inv[i].Icon:SetToolTip(CONVERT_NAME_TO_DESC[slots[i]])
+				pl.Inv[i].Icon:SetSize(pl.Inv[i]:GetWide(), pl.Inv[i]:GetTall())
+				pl.Inv[i].Icon.DoClick = function()
+					net.Start("HL2CR_UpdateSlot")
+						net.WriteString(slots[i])
+					net.SendToServer()
+					
+					surface.PlaySound("hl2cr/standardbeep.wav")
+					
+					weaponSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
+				end
 			end
 		end
-		
-		--Sets the Height
-		for k, v in pairs(pl.Inv.Backpack)do
-			 for i = 1, 3 do
-				  pl.Inv.Backpack[k][i] = vgui.Create("HL2CR_InvSlot", invPnl)
-				  pl.Inv.Backpack[k][i]:SetPos((k*50)-25,(i*50)-25)
-				  pl.Inv.Backpack[k][i]:SetSize(48, 48)
-				  pl.Inv.Backpack[k][i]:SetCoords(k, i)
-			 end
-		end
-		
+			
 		local skillsPnl = vgui.Create("DPanel", menuFrame)
 		skillsPnl:SetSize(ScrW() / 1.45, ScrH() / 2)
 		skillsPnl:SetPos(0, 100)
 		
 		local skillsPnlBG = vgui.Create("DPanel", skillsPnl)
 		skillsPnlBG:SetSize(skillsPnl:GetWide(), skillsPnl:GetTall())
-		skillsPnlBG.Paint = function(self, w, h)
-			surface.SetDrawColor(GAMEMODE.Colours.QMenu)
+		
+		local skillsSelectionPnl = vgui.Create("HL2CR_Tab", skillsPnlBG)
+		skillsSelectionPnl:SetSize(skillsPnl:GetWide(), skillsPnl:GetTall())
+		skillsSelectionPnl:SetPos(0, -35)
+		skillsSelectionPnl.Paint = function(pnl, w, h)
+			surface.SetDrawColor(HL2CR.Theme.qMenu)
 			surface.DrawRect(0, 0, w, h)
+		end
+		
+		local passiveSkillsPnl = vgui.Create("DPanel", skillsPnl)
+		passiveSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
+		
+		local medicSkillsPnl = vgui.Create("DPanel", skillsPnl)
+		medicSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
+		
+		local repairSkillsPnl = vgui.Create("DPanel", skillsPnl)
+		repairSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
+		
+		for i, skill in pairs(GAMEMODE.PlayerSkills) do
+			
+			local skillBtn
+			
+			if skill.Class == "Passive" then
+				skillBtn = vgui.Create("DImageButton", passiveSkillsPnl)
+			elseif skill.Class == "Medic" then
+				skillBtn = vgui.Create("DImageButton", medicSkillsPnl)
+			elseif skill.Class == "Repair" then
+				skillBtn = vgui.Create("DImageButton", repairSkillsPnl)
+			end
+			
+			skillBtn:SetSize(64, 64)
+			skillBtn:SetPos(skill["Pos"][1], skill["Pos"][2])
+			
+			
+			if LocalPlayer():GetNWInt("stat_level") < skill.Level then
+				skillBtn:SetToolTip("LOCKED\nREACH LEVEL " .. skill.Level)
+				skillBtn:SetImage("vgui/hud/icon_locked.png")
+				break
+			end
+			
+			skillBtn:SetImage(skill.Icon)
+			
+			if skill.Requirements == "" then
+				skillBtn:SetToolTip(skill.Name .. "\n" .. skill.Desc)
+			else
+				skillBtn:SetToolTip(skill.Name .. "\n" .. skill.Desc .. "\nREQUIRES: " .. skill.Requirements)
+			end
+			
+			skillBtn.DoClick = function()
+				if string.find(LocalPlayer():GetNWString("stat_curskills"), skill.Name) then
+					surface.PlaySound("buttons/button16.wav")
+					return
+				end
+				
+				if skill.Requirements then
+					if not string.find(LocalPlayer():GetNWString("stat_curskills"), skill.Requirements) then
+						surface.PlaySound("buttons/button16.wav")
+						return
+					end
+				end
+				
+				if LocalPlayer():GetNWInt("stat_skillpoints") <= 0 then
+					surface.PlaySound("buttons/button16.wav")
+					return
+				end
+				
+				net.Start("HL2CR_SkillObtain")
+					net.WriteString(skill.Name)
+				net.SendToServer()
+				
+				surface.PlaySound("buttons/button5.wav")
+			end
+			
+			if string.find(LocalPlayer():GetNWString("stat_curskills"), skill.Name) then
+				local skillTick = vgui.Create("DImage", skillBtn)
+				skillTick:SetImage("icon16/tick.png")
+				skillTick:SetPos(0, 32)
+				skillTick:SetSize(32, 32)
+			end
+		end
+			
+		skillsSelectionPnl.navbar:AddTab("Passive", passiveSkillsPnl)
+		skillsSelectionPnl.navbar:AddTab("Field Medic", medicSkillsPnl)
+		skillsSelectionPnl.navbar:AddTab("Repairman", repairSkillsPnl)
+		skillsSelectionPnl.navbar:SetActive(1)
+		
+		local shopPnl = vgui.Create("DPanel", menuFrame)
+		shopPnl:SetSize(ScrW() / 1.45, ScrH() / 2)
+		shopPnl:SetPos(0, 100)
+		
+		local shopPnlBG = vgui.Create("DPanel", shopPnl)
+		shopPnlBG:SetSize(shopPnl:GetWide(), shopPnl:GetTall())
+		shopPnlBG.Paint = function(self, w, h)
+			surface.SetDrawColor(HL2CR.Theme.qMenu)
+			surface.DrawRect(0, 0, w, h)
+		end
+		
+		local shopWeaponsPnl = vgui.Create("DPanel", shopPnlBG)
+		shopWeaponsPnl:SetSize(225, 125)
+		shopWeaponsPnl:SetPos(25, 50)
+		shopWeaponsPnl.Paint = function(self, w, h)
+			surface.SetDrawColor(HL2CR.Theme.qMenu2)
+			surface.DrawRect(0, 0, w, h)
+		end
+				
+		local shopWeaponsScroll = vgui.Create("DScrollPanel", shopWeaponsPnl)
+		shopWeaponsScroll:Dock(FILL)
+		
+		local weaponsLayout = vgui.Create("DIconLayout", shopWeaponsScroll)
+		weaponsLayout:Dock(FILL)
+		
+		local curResinLabel = vgui.Create("DLabel", shopPnl)
+		curResinLabel:SetText("Resin: " .. LocalPlayer():GetNWInt("currency_resin"))
+		curResinLabel:SetFont("HL2CR_ShopResin")
+		curResinLabel:SizeToContents()
+		curResinLabel:SetPos(0, 0)
+		curResinLabel:SetTextColor(Color(0, 0, 0))
+		
+		for i, item in pairs(GAMEMODE.ShopItems) do
+			if item.Name == slots[i] then continue end
+			
+			local itemBtn = weaponsLayout:Add("DImageButton")
+			itemBtn:SetSize(64, 64)
+			itemBtn:SetImage(item.Icon)
+			itemBtn:SetToolTip(item.Name .. "\n\n" .. item.Desc .. "\n\nCOST: " .. item.Cost .. " Resin")
+			
+			itemBtn.DoClick = function(pnl)			
+
+				if LocalPlayer():GetNWInt("currency_resin") <= item.Cost then
+					surface.PlaySound("buttons/button16.wav")
+					return
+				end
+				
+				net.Start("HL2CR_PurchaseItem")
+					net.WriteString(item.Name)
+				net.SendToServer()
+				
+				pnl:Remove()
+				
+				surface.PlaySound("buttons/button5.wav")
+				curResinLabel:SetText("Resin: " .. LocalPlayer():GetNWInt("currency_resin") - item.Cost)
+			end
 		end
 		
 		local petsPnl = vgui.Create("DPanel", menuFrame)
@@ -122,7 +253,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 		local petsPnlBG = vgui.Create("DPanel", petsPnl)
 		petsPnlBG:SetSize(petsPnl:GetWide(), petsPnl:GetTall())
 		petsPnlBG.Paint = function(self, w, h)
-			surface.SetDrawColor(GAMEMODE.Colours.QMenu)
+			surface.SetDrawColor(HL2CR.Theme.qMenu)
 			surface.DrawRect(0, 0, w, h)
 		end
 		
@@ -133,13 +264,19 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 		local classPnlBG = vgui.Create("DPanel", classPnl)
 		classPnlBG:SetSize(classPnl:GetWide(), classPnl:GetTall())
 		classPnlBG.Paint = function(self, w, h)
-			surface.SetDrawColor(GAMEMODE.Colours.QMenu)
+			surface.SetDrawColor(HL2CR.Theme.qMenu)
 			surface.DrawRect(0, 0, w, h)
 		end
 	
+		local classHorizontalScroll = vgui.Create("DHorizontalScroller", classPnlBG)
+		classHorizontalScroll:Dock(FILL)
+		classHorizontalScroll:SetOverlap( -40 )
+	
 		if LocalPlayer():GetNWInt("stat_level") >= 5 then
 			for i, class in pairs(GAMEMODE.PlayStyleClass) do
-				local classShowPanel = vgui.Create("DPanel", classPnl)
+				if LocalPlayer():GetNWInt("stat_level") < class.LevelReq then break end
+				
+				local classShowPanel = vgui.Create("DPanel", classHorizontalScroll)
 				classShowPanel:SetSize(250, classPnl:GetTall())
 				classShowPanel:DockMargin(25, 0, 0, 0)
 				classShowPanel:DockPadding(50, 0, 0, 0)
@@ -178,8 +315,11 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 					net.Start("HL2CR_SelectClass")
 						net.WriteInt(i, 8)
 					net.SendToServer()
+					surface.PlaySound("hl2cr/standardbeep.wav")
 					menuFrame:Remove()
 				end
+				
+				classHorizontalScroll:AddPanel(classShowPanel)
 			end
 		else
 			local classPnlLocked = vgui.Create("DLabel", classPnl)
@@ -191,13 +331,13 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 		end
 		
 		local statsPnl = vgui.Create("DPanel", menuFrame)
-		statsPnl:SetSize(ScrW() / 2.5, ScrH() / 2)
+		statsPnl:SetSize(ScrW() / 3, ScrH() / 2)
 		statsPnl:SetPos(0, 100)
 		
 		local statsPnlBG = vgui.Create("DPanel", statsPnl)
 		statsPnlBG:SetSize(statsPnl:GetWide(), statsPnl:GetTall())
 		statsPnlBG.Paint = function(self, w, h)
-			surface.SetDrawColor(GAMEMODE.Colours.QMenu)
+			surface.SetDrawColor(HL2CR.Theme.qMenu)
 			surface.DrawRect(0, 0, w, h)
 		end
 		
@@ -210,27 +350,29 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 		local averageStat = LocalPlayer():GetNWInt("stat_kills") / (LocalPlayer():GetNWInt("stat_deaths") + fixInf)
 		
 		statsPnlLabelBasic = vgui.Create("DLabel", statsPnl)
-		statsPnlLabelBasic:SetText("            Kills: " .. LocalPlayer():GetNWInt("stat_kills") .. "     Deaths: " .. LocalPlayer():GetNWInt("stat_deaths") .. "     Avg: " .. math.Round(averageStat, 2))
+		statsPnlLabelBasic:SetText("Kills: " .. LocalPlayer():GetNWInt("stat_kills") .. " | Deaths: " .. LocalPlayer():GetNWInt("stat_deaths") .. " | Avg: " .. math.Round(averageStat, 2))
 		statsPnlLabelBasic:SetFont("HL2CR_Menu_Stats")
+		statsPnlLabelBasic:SetPos(0, 25)
 		statsPnlLabelBasic:SizeToContents()
 		
 		local totalAchs = table.Count(GAMEMODE.Achievements["HL2"]) + table.Count(GAMEMODE.Achievements["Misc"])
 		
 		statsPnlLabelAch = vgui.Create("DLabel", statsPnl)
-		statsPnlLabelAch:SetPos(statsPnl:GetWide() / 5, 75)
+		statsPnlLabelAch:SetPos(0, 75)
 		statsPnlLabelAch:SetText("Total Achievements: " .. LocalPlayer():GetNWInt("stat_totalachs", -1) .. "/" .. totalAchs)
 		statsPnlLabelAch:SetFont("HL2CR_Menu_Stats")
 		statsPnlLabelAch:SizeToContents()
 		
 		
 		statsPnlLabelQuest = vgui.Create("DLabel", statsPnl)
-		statsPnlLabelQuest:SetPos(statsPnl:GetWide() / 5, 125)
-		statsPnlLabelQuest:SetText("     Quests completed: " .. LocalPlayer():GetNWInt("stat_quests_completed", -1))
+		statsPnlLabelQuest:SetPos(0, 125)
+		statsPnlLabelQuest:SetText("Quests completed: " .. LocalPlayer():GetNWInt("stat_quests_completed", -1))
 		statsPnlLabelQuest:SetFont("HL2CR_Menu_Stats")
 		statsPnlLabelQuest:SizeToContents()
 		
 		menuFrame.navbar:AddTab("Inv", invPnl)
 		menuFrame.navbar:AddTab("Skills", skillsPnl)
+		menuFrame.navbar:AddTab("Shop", shopPnl)
 		menuFrame.navbar:AddTab("Pets", petsPnl)
 		menuFrame.navbar:AddTab("Class", classPnl)
 		menuFrame.navbar:AddTab("Statistics", statsPnl)
@@ -242,9 +384,14 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 				pnl:SetSize(ScrW() / 2, pnl:GetTall())
 				pnl:Center()
 			end
-			
+				
 			if pnl.navbar:GetActive() == skillsPnl then
 				pnl:SetSize(ScrW() / 1.45, pnl:GetTall())
+				pnl:Center()
+			end
+			
+			if pnl.navbar:GetActive() == shopPnl then
+				pnl:SetSize(ScrW() / 2, pnl:GetTall())
 				pnl:Center()
 			end
 			
@@ -258,7 +405,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 			end
 			
 			if pnl.navbar:GetActive() == statsPnl then
-				pnl:SetSize(ScrW() / 2.5, pnl:GetTall())
+				pnl:SetSize(ScrW() / 3, pnl:GetTall())
 				pnl:Center()
 			end
 		end
@@ -270,52 +417,3 @@ hook.Add("OnSpawnMenuClose", "HL2CR_InventoryClose", function()
 		menuFrame:Remove()
 	end
 end)
-
-function IsRoomFor(item)
-	for k,v in ipairs(LocalPlayer().Inv.Backpack) do
-		for k2, pnl in ipairs(LocalPlayer().Inv.Backpack[k]) do
-			if not pnl:GetItemPanel() then
-				local x,y = pnl:GetCoords()
-				local itmw, itmh = item:GetSize()
-				local full = false
-				for i1=x, (x+itmw)-1 do
-					if full then break end
-					for i2=y, (y+itmh)-1 do
-						if LocalPlayer():GetInvItem(i1,i2):GetItemPanel() then
-							full = true
-							break
-						end
-					end
-				end
-				if full then
-					return pnl
-				end
-			end
-		end
-	end
-	return false
-end
-
-function PickupItem(item)
-	local place = IsRoomFor(item)
-	if place then
-		
-		local itm = vgui.Create("InvItem") --create a new item panel.
-		itm:SetItem(item)
-		itm:SetRoot(place)
-		itm:SetPos(place:GetPos())
-		
-		local x,y = place:GetCoords()
-		local itmw, itmh = item:GetSize() --GetSize needs to be a function in your items system.
-		for i1=x, (x+itmw)-1 do
-			for i2=y, (y+itmh)-1 do
-				LocalPlayer():GetInvItem(i1,i2):SetItemPanel(itm) -- Tell all the things below it that they are now full of this item.
-			end
-		end
-		
-		return true --successfully picked item up.
-		
-	else
-		return false --no room.
-	end
-end

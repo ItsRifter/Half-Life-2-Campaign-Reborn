@@ -45,7 +45,7 @@ function ENT:StartTouch(ent)
 		savedBaby = true
 	end
 	
-	if ent:IsValid() and ent:GetModel() == "models/roller.mdl" then
+	if ent:IsValid() and ent:GetModel() == "models/roller.mdl" and not game.GetMap() == "d1_town_04" then
 		file.Write("hl2cr_data/ballcheck.txt", "rollermine check")
 		ent:Remove()
 		savedRoller = true
@@ -54,6 +54,7 @@ function ENT:StartTouch(ent)
 			GrantAchievement(v, "HL2", "Raven_Ball")
 		end
 		ent:Remove()
+		file.Delete("hl2cr_data/ballcheck.txt")
 	end
 
 	if ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_ALIVE then

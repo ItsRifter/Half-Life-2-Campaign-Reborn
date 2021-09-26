@@ -16,7 +16,7 @@ SWEP.ViewModelFOV = 54
 SWEP.UseHands = true
 
 SWEP.Primary.ClipSize = 100
-SWEP.Primary.DefaultClip = 100
+SWEP.Primary.DefaultClip = 50
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "none"
 
@@ -25,7 +25,7 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.HealAmount = 20
+SWEP.HealAmount = 10
 SWEP.MaxAmmo = 100
 
 local HealSound = Sound( "HealthKit.Touch" )
@@ -36,11 +36,13 @@ function SWEP:Initialize()
 	self:SetHoldType( "slam" )
 
 	if ( CLIENT ) then return end
-
-	timer.Create( "medkit_ammo" .. self:EntIndex(), 1, 0, function()
-		if ( self:Clip1() < self.MaxAmmo ) then self:SetClip1( math.min( self:Clip1() + 2, self.MaxAmmo ) ) end
-	end )
-
+	timer.Simple(0.1, function()
+		local healer = self.Owner
+		
+		timer.Create( "medkit_ammo" .. self:EntIndex(), 20, 0, function()
+			if ( self:Clip1() < self.MaxAmmo ) then self:SetClip1( math.min( self:Clip1() + (5 + healer:GetNWInt("skill_recharge")), self.MaxAmmo ) ) end
+		end )
+	end)
 end
 
 function SWEP:PrimaryAttack()
@@ -62,21 +64,24 @@ function SWEP:PrimaryAttack()
 	end
 
 	local ent = tr.Entity
-
+	
+	local healer = self.Owner
+	
 	local need = self.HealAmount
+	
 	if ( IsValid( ent ) ) then need = math.min( ent:GetMaxHealth() - ent:Health(), self.HealAmount ) end
 
 	if ( IsValid( ent ) && self:Clip1() >= need && ( ent:IsPlayer() or ent:IsNPC() ) && ent:Health() < ent:GetMaxHealth() ) then
 
 		self:TakePrimaryAmmo( need )
 
-		ent:SetHealth( math.min( ent:GetMaxHealth(), ent:Health() + need ) )
+		ent:SetHealth( math.min( ent:GetMaxHealth(), ent:Health() + (need + healer:GetNWInt("skill_healing") )) )
 		ent:EmitSound( HealSound )
 		
-		AddXP(self.Owner, need * 2)
+		AddXP(self.Owner, need + self.Owner:GetNWInt("skill_healing") * 2)
 			
 		net.Start("HL2CR_SpawnIndicators")
-			net.WriteInt(need * 2, 32)
+			net.WriteInt((need + self.Owner:GetNWInt("skill_healing")) * 2, 32)
 			net.WriteVector(tr.Entity:GetPos())
 		net.Send(self.Owner)
 		

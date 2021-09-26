@@ -42,7 +42,7 @@ function SetNPCTraits(npc)
 	elseif GetConVar("hl2cr_difficulty"):GetInt() == 4 then
 		npc.level = math.random(15, 25)
 	elseif GetConVar("hl2cr_difficulty"):GetInt() == 5 then
-		npc.level = 30
+		npc.level = math.random(30, 50)
 	end
 	
 	npc:SetNWInt("HL2CR_NPC_Level", npc.level)
@@ -67,6 +67,10 @@ end
 hook.Add("EntityTakeDamage", "HL2CR_SharedXPDmg", function(ent, dmgInfo)
 	local dmg = dmgInfo:GetDamage()
 	local att = dmgInfo:GetAttacker()
+	
+	if att:IsPlayer() and att:GetActiveWeapon():GetClass() == "weapon_stunstick" then
+		dmgInfo:SetDamage(dmg + att.hl2cr.StunDamage)
+	end
 	
 	if ent:IsNPC() and not (ent:IsFriendly() or ent:IsPet() or ent:GetClass() == "npc_citizen") then
 		ent.attacker = ent.attacker or {}
@@ -115,11 +119,19 @@ hook.Add("OnEntityCreated", "HL2CR_NPCCreated", function(ent)
 end)
 
 
-hook.Add("HL2CR_NextbotDMG", "HL2CR_ScaleNPCDMG", function( npc, hitgroup, attacker )
-		
-	if attacker:IsNextBot() then
-		--TODO: make it do stuff
+hook.Add( "ScaleNPCDamage", "HL2CR_ScaleNPCDMG", function( npc, hitgroup, dmgInfo )
+	
+	local hitDivide = GetConVar("hl2cr_difficulty"):GetInt()
+	
+	if hitgroup == HITGROUP_HEAD then
+		hitDivide = hitDivide * 1.25
+	elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
+		hitDivide = hitDivide * 1.5
+	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+		hitDivide = hitDivide * 2
+	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+		hitDivide = hitDivide * 2.5	
 	end
 	
-	
+	dmgInfo:ScaleDamage(1.75 / hitDivide)
 end)

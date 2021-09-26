@@ -83,6 +83,39 @@ function ResultScreen(tblResults)
 	xpLabel:AlphaTo(255, 2, 0, nil)
 	xpLabel:MoveTo(ScrW() / 2 - 150, 200, 1, 0, 0.5, nil)
 	
+	local totalAchNames = ""
+	
+	for _, name in ipairs(tblResults["achs"]) do
+		totalAchNames = name .. "\n"
+	end
+	
+	local resinLabel = vgui.Create("DLabel", endFrame)
+	resinLabel:SetPos(ScrW() / 2 - 135, 100)
+	resinLabel:SetAlpha(0)
+	resinLabel:SetText("Resins Earned: ...")
+	resinLabel:SetFont("HL2CR_EndMapStats")
+	resinLabel:SizeToContents()
+	resinLabel.Think = function(pnl)
+		pnl:SetText("Resins Earned: " .. math.Round(Lerp( (SysTime() - startLerp) / animTime - 5, 0, tblResults["resin"])))
+		pnl:SizeToContents()
+	end
+	
+	resinLabel:AlphaTo(255, 2, 0, nil)
+	resinLabel:MoveTo(ScrW() / 2 - 135, 250, 1, 0, 0.5, nil)
+	
+	
+	if totalAchNames != "" then
+		local achsLabel = vgui.Create("DLabel", endFrame)
+		achsLabel:SetPos(ScrW() / 2 - 225, 100)
+		achsLabel:SetAlpha(0)
+		achsLabel:SetText("Achievements Earned: " .. totalAchNames)
+		achsLabel:SetFont("HL2CR_EndMapStats")
+		achsLabel:SizeToContents()
+		
+		achsLabel:AlphaTo(255, 2, 0, nil)
+		achsLabel:MoveTo(ScrW() / 2 - 225, 500, 1, 0, 0.5, nil)
+	end
+	
 	local closeBtn = vgui.Create("DButton", endFrame)
 	closeBtn:SetText("Close")
 	closeBtn:SetFont("HL2CR_EndMapStats")
@@ -91,7 +124,7 @@ function ResultScreen(tblResults)
 	
 	closeBtn.DoClick = function()
 		endFrame:Close()
-		StartClientSpectate(true)
+		--StartClientSpectate(true)
 	end
 end
 

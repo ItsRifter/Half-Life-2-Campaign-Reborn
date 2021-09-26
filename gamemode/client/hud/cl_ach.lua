@@ -113,7 +113,7 @@ net.Receive("HL2CR_AchievementEarned", function()
 	local achDesc = net.ReadString()
 	local achImg = net.ReadString()
 	local achRare = net.ReadBool()
-	local achXP = net.ReadInt(16)
+	local achXP = net.ReadInt(32)
 	AchNotice(achTitle, achDesc, achImg, achRare, achXP)
 end)
 
