@@ -60,6 +60,9 @@ include("shared/ach/sh_player_ach.lua")
 ----Shops
 include("shared/shop/sh_shop_items.lua")
 
+----Misc
+include("shared/sh_translate.lua")
+
 --Networks
 util.AddNetworkString("HL2CR_HelpMenu")
 util.AddNetworkString("HL2CR_SettingsMenu")
@@ -107,145 +110,183 @@ end)
 
 ENABLE_AFK = {
 	["Colour"] = Color(125, 125, 125),
-	["Message"] = "You are now AFK"
+	["Message"] = "ENABLE_AFK"
 }
 
 DISABLE_AFK = {
 	["Colour"] = Color(125, 125, 125),
-	["Message"] = "You are no longer AFK"
+	["Message"] = "DISABLE_AFK"
 }
 
 ERROR_PET_LONGNAME = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "That name is too long!"
+	["Message"] = "ERROR_PET_LONGNAME"
 }
 
 ERROR_AFK_DEAD = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "You cannot go into AFK mode while you are dead!"
+	["Message"] = "ERROR_AFK_DEAD"
 }
 
 ERROR_VEHICLE_MAP = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "Spawning vehicles are currently disabled"
+	["Message"] = "ERROR_VEHICLE_MAP"
 }
 
 ERROR_VEHICLE_INVALID = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "Your vehicle doesn't exist"
+	["Message"] = "ERROR_VEHICLE_INVALID"
 }
 
 ERROR_VEHICLE_EXISTS = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "Your vehicle already exists"
+	["Message"] = "ERROR_VEHICLE_EXISTS"
 }
 
 ERROR_AFK_FINISHED = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "You cannot go into AFK mode while you have completed the map!"
+	["Message"] = "ERROR_AFK_FINISHED"
 }
 
 ERROR_PET_EXISTS = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "Your pet already exists!"
+	["Message"] = "ERROR_PET_EXISTS"
 }
 
 ERROR_PET_NOPET = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "You need to set your current pet before summoning"
+	["Message"] = "ERROR_PET_NOPET"
 }
 
 ERROR_PET_UNAVAILABLE = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "You need to own a pet first before you can summon"
+	["Message"] = "ERROR_PET_UNAVAILABLE"
 }
 
 ERROR_PET_NONEXISTS = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "Your pet doesn't exist"
+	["Message"] = "ERROR_PET_NONEXISTS"
 }
 
 ERROR_PET_BRINGING = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "Your pet will be brought to you soon..."
+	["Message"] = "ERROR_PET_BRINGING"
 }
 
 VOTE_SUCCESS_MAP = {
 	["Colour"] = Color(50, 215, 50),
-	["Message"] = "Vote Successful, Restarting map"
+	["Message"] = "VOTE_SUCCESS_MAP"
 }
 
 VOTE_SUCCESS_KICK = {
 	["Colour"] = Color(50, 215, 50),
-	["Message"] = "Vote Successful, Kicking player"
+	["Message"] = "VOTE_SUCCESS_KICK"
 }
 
 MAPS_HL2_FINISHED = {
 	["Colour"] = Color(250, 230, 45),
-	["Message"] = "Congratulations on finishing HL2, Returning to lobby in 40 seconds"
+	["Message"] = "MAPS_HL2_FINISHED"
 }
 
 ERROR_CLASS_ALREADY_ASSIGNED = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "You are already assigned to this class!"
+	["Message"] = "ERROR_CLASS_ALREADY_ASSIGNED"
 }
 
 VOTE_SUCCESS_HL2 = {
 	["Colour"] = Color(50, 215, 50),
-	["Message"] = "Vote Successful, Starting Half-Life 2"
+	["Message"] = "VOTE_SUCCESS_HL2"
 }
 
 VOTE_FAILED = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "Vote Failed"
+	["Message"] = "VOTE_FAILED"
 }
 
 VOTE_FAILED_ADMIN = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "Vote was stopped by admin"
+	["Message"] = "VOTE_FAILED_ADMIN"
 }
 
 VOTE_SUCCESS_LOBBY = {
 	["Colour"] = Color(50, 215, 50),
-	["Message"] = "Vote Successful, Returning to lobby"
+	["Message"] = "VOTE_SUCCESS_LOBBY"
 }
 
 ERROR_PET_INVALIDMAP = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "Pets are disabled on this map"
+	["Message"] = "ERROR_PET_INVALIDMAP"
 }
 
 ERROR_PET_INVALID = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "Your pet doesn't exist!"
+	["Message"] = "ERROR_PET_INVALID"
 }
 
 ERROR_VOTEKICK_MULTINAME = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "There are multiple targets with that name, be more specific"
+	["Message"] = "ERROR_VOTEKICK_MULTINAME"
 }
 
 ERROR_VOTEKICK_NONAME = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "There is no target with that name"
+	["Message"] = "ERROR_VOTEKICK_NONAME"
 }
 
 ERROR_VOTEKICK_INVALID = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "You need to specify a target"
+	["Message"] = "ERROR_VOTEKICK_INVALID"
 }
 
 ERROR_VOTEKICK_ADMIN = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "That target is an admin"
+	["Message"] = "ERROR_VOTEKICK_ADMIN"
 }
 
 ERROR_VOTEKICK_SELF = {
 	["Colour"] = Color(215, 50, 50),
-	["Message"] = "You cannot votekick yourself"
+	["Message"] = "ERROR_VOTEKICK_SELF"
 }
 
 CHECKPOINT_HIT = {
 	["Colour"] = Color(235, 135, 55),
-	["Message"] = "Checkpoint Reached"
+	["Message"] = "CHECKPOINT_HIT"
+}
+
+ENABLED_AIRBOAT = {
+	["Colour"] = Color(50, 215, 50),
+	["Message"] = "ENABLED_AIRBOAT"
+}
+ENABLED_AIRBOAT_GUN = {
+	["Colour"] = Color(50, 215, 50),
+	["Message"] = "ENABLED_AIRBOAT_GUN"
+}
+
+ENABLED_JEEP = {
+	["Colour"] = Color(50, 215, 50),
+	["Message"] = "ENABLED_JEEP"
+}
+
+ERROR_JEEP_OWNER = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "ERROR_JEEP_OWNER"
+}
+
+ERROR_JEEP_INVALID = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "ERROR_JEEP_INVALID"
+}
+
+ERROR_JEEP_OWNER = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "ERROR_JEEP_OWNER"
+}
+ERROR_NO_JEEP = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "ERROR_NO_JEEP"
+}
+
+ERROR_VOTE_COOLDOWN = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "ERROR_VOTE_COOLDOWN"
 }

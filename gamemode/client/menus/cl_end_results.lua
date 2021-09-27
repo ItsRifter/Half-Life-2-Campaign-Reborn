@@ -29,13 +29,13 @@ function TimerScreen()
 		end)
 	end
 	specTimeLabel = vgui.Create("DLabel", timerPanel)
-	specTimeLabel:SetText("Time left: " .. math.Round(timer.TimeLeft("HL2CR_Client_Timeleft") ) )
+	specTimeLabel:SetText(translate.Get("TimeLeft") .. math.Round(timer.TimeLeft("HL2CR_Client_Timeleft") ) )
 	specTimeLabel:SetFont("HL2CR_SpectatePlayer")
 	specTimeLabel:SizeToContents()
 	specTimeLabel:SetPos(timerPanel:GetWide() / 2 - 150, 30)
 	
 	specTimeLabel.Think = function(pnl)
-		pnl:SetText("Time left: " .. math.Round(timer.TimeLeft("HL2CR_Client_Timeleft") ) )
+		pnl:SetText(translate.Get("TimeLeft") .. math.Round(timer.TimeLeft("HL2CR_Client_Timeleft") ) )
 	end
 end
 
@@ -57,14 +57,7 @@ function ResultScreen(tblResults)
 		surface.SetDrawColor(0, 0, 0, 215)
 		surface.DrawRect(0, 0, w, h)
 	end
-	
-	levelUpDisplay = vgui.Create("DLabel", endFrame)
-	levelUpDisplay:SetPos(ScrW() / 2 - 75, 725)
-	levelUpDisplay:SetAlpha(0)
-	levelUpDisplay:SetText("Level Up!")
-	levelUpDisplay:SetFont("HL2CR_EndMapStats")
-	levelUpDisplay:SizeToContents()
-	
+
 	local killLabel = vgui.Create("DLabel", endFrame)
 	killLabel:SetPos(ScrW() / 2 - 100, 25)
 	killLabel:SetAlpha(0)
@@ -82,11 +75,11 @@ function ResultScreen(tblResults)
 	local xpLabel = vgui.Create("DLabel", endFrame)
 	xpLabel:SetPos(ScrW() / 2 - 150, 100)
 	xpLabel:SetAlpha(0)
-	xpLabel:SetText("Total XP Gained: ...")
+	xpLabel:SetText(translate.Get("StatXP"))
 	xpLabel:SetFont("HL2CR_EndMapStats")
 	xpLabel:SizeToContents()
 	xpLabel.Think = function(pnl)
-		pnl:SetText("Total XP Gained: " .. math.Round(Lerp( (SysTime() - startLerp) / animTime - 3, 0, tblResults["stats"]["exp"])))
+		pnl:SetText(translate.Get("StatXP") .. math.Round(Lerp( (SysTime() - startLerp) / animTime - 3, 0, tblResults["stats"]["exp"])))
 		pnl:SizeToContents()
 	end
 	
@@ -110,11 +103,11 @@ function ResultScreen(tblResults)
 	local resinLabel = vgui.Create("DLabel", endFrame)
 	resinLabel:SetPos(ScrW() / 2 - 135, 100)
 	resinLabel:SetAlpha(0)
-	resinLabel:SetText("Resins Earned: ...")
+	resinLabel:SetText(translate.Get("StatResin"))
 	resinLabel:SetFont("HL2CR_EndMapStats")
 	resinLabel:SizeToContents()
 	resinLabel.Think = function(pnl)
-		pnl:SetText("Resins Earned: " .. math.Round(Lerp( (SysTime() - startLerp) / animTime - 5, 0, tblResults["resin"])))
+		pnl:SetText(translate.Get("StatResin") .. math.Round(Lerp( (SysTime() - startLerp) / animTime - 5, 0, tblResults["resin"])))
 		pnl:SizeToContents()
 	end
 	
@@ -153,7 +146,7 @@ function ResultScreen(tblResults)
 	
 	closeBtn.DoClick = function()
 		endFrame:Close()
-		--StartClientSpectate(true)
+		StartClientSpectate(true)
 	end
 end
 

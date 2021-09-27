@@ -159,15 +159,18 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	
 	if text == "!seat" then
 		if not ply:InVehicle() then
-			ply:ChatPrint("You aren't in a vehicle")
+			BroadcastMessage(ERROR_NO_JEEP, ply)
 			return ""
-
+		
+		elseif ply:GetVehicle():GetOwner() != ply then
+			BroadcastMessage(ERROR_JEEP_OWNER, ply)
+			return ""
 		elseif ply:GetVehicle():GetClass() != "prop_vehicle_jeep" then 
-			ply:ChatPrint("You need to be in a Jeep to use this")
+			BroadcastMessage(ERROR_JEEP_INVALID, ply)
 			return ""
 		
 		elseif ply.HasSeat then
-			ply:ChatPrint("You already have a passenger seat")
+			BroadcastMessage(ERROR_JEEP_SEAT_EXIST, ply)
 			return""
 			
 		else
@@ -192,7 +195,13 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		if HL2CR_Voting.nextVoteTime > CurTime() then
 			local ERROR_VOTE_COOLDOWN = {
 				["Colour"] = Color(215, 50, 50),
-				["Message"] = "You must wait " .. string.FormattedTime(HL2CR_Voting.nextVoteTime - CurTime(), "%02i:%02i") .. " before calling this vote"
+				["Message"] = "ERROR_VOTE_COOLDOWN1",
+				["Other"] = {
+					["Player"] = "",
+					["Time"] = string.FormattedTime(HL2CR_Voting.nextVoteTime - CurTime(), "%02i:%02i"),
+					["CurCompleted"] = "ERROR_VOTE_COOLDOWN2"
+				}
+					
 			}
 			BroadcastMessage(ERROR_VOTE_COOLDOWN, ply)
 			return ""
@@ -206,9 +215,16 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	if text == "!lobby" then
 		--If the timer isn't expired, return how long is left
 		if HL2CR_Voting.nextVoteTime > CurTime() then
+			
 			local ERROR_VOTE_COOLDOWN = {
 				["Colour"] = Color(215, 50, 50),
-				["Message"] = "You must wait " .. string.FormattedTime(HL2CR_Voting.nextVoteTime - CurTime(), "%02i:%02i") .. " before calling this vote"
+				["Message"] = "ERROR_VOTE_COOLDOWN1",
+				["Other"] = {
+					["Player"] = "",
+					["Time"] = string.FormattedTime(HL2CR_Voting.nextVoteTime - CurTime(), "%02i:%02i"),
+					["CurCompleted"] = "ERROR_VOTE_COOLDOWN2"
+				}
+					
 			}
 			BroadcastMessage(ERROR_VOTE_COOLDOWN, ply)
 			

@@ -65,7 +65,7 @@ net.Receive("HL2CR_AchievementNotifyAll", function()
 	local achName = net.ReadString()
 	local isRareAch = net.ReadBool()
 	if not isRareAch then
-		chat.AddText(Color(240, 175, 0), achiever .. " has earned the achievement: " .. achName)
+		chat.AddText(Color(240, 175, 0), achiever .. translate.Get("EarnedAchievement") .. achName)
 	else
 		chat.AddText(Color(240, 175, 0), achiever .. " has earned a ", Color(255, 238, 0), "RARE ", Color(240, 175, 0), "achievement: " .. achName)
 	end
@@ -236,8 +236,8 @@ hook.Add( "HUDDrawTargetID", "HidePlayerInfo", function()
 			local font = "HL2CR_HoverPlayer"
 			local fixFontSpacing = FIX_FONT_SPACING[font]
 			
-			if string.find(LocalPlayer():GetNWInt("config_playerfont"), "default") then
-				font = "HL2CR_" .. LocalPlayer():GetNWInt("config_playerfont")
+			if not string.find(LocalPlayer():GetNWString("config_playerfont"), "Default") then
+				font = "HL2CR_" .. LocalPlayer():GetNWString("config_playerfont")
 				fixFontSpacing = FIX_FONT_SPACING[font]
 			end
 			
@@ -441,7 +441,19 @@ end)
 net.Receive("HL2CR_Message", function()
 	local messages = net.ReadTable()
 	
-	chat.AddText(messages["Colour"], messages["Message"])
+	
+	if not string.find(translate.Get(messages["Message"]), "@") and not messages["Other"] then
+		chat.AddText(messages["Colour"], translate.Get(messages["Message"]))
+	elseif messages["Other"] then
+		if translate.Get(messages["Other"]["CurCompleted"]) then
+			chat.AddText(messages["Colour"], messages["Other"]["Player"] .. translate.Get(messages["Message"]) .. messages["Other"]["Time"] .. translate.Get(messages["Other"]["CurCompleted"]))
+			
+		elseif not translate.Get(messages["Other"]["CurCompleted"]) then
+			chat.AddText(messages["Colour"], messages["Other"]["Player"] .. translate.Get(messages["Message"]) .. messages["Other"]["Time"] .. messages["Other"]["CurCompleted"])
+		end
+	else
+		chat.AddText(messages["Colour"], messages["Message"])
+	end
 end)
 
 net.Receive("HL2CR_MsgSound", function()

@@ -50,6 +50,7 @@ list.Set( "Vehicles", "Jalopy", jalopy )
 canSpawnAirboatGlobal = false
 canSpawnGlobalGun = false
 canSpawnJeepGlobal = false
+disableJeepGlobal = false
 disableAirboatGlobal = false
 
 local nextSpawn = 0
@@ -84,7 +85,7 @@ function GM:ShowSpare1(ply)
 				
 		boat:SetAngles(ply:EyeAngles() - Angle(0, 90, 0))
 		boat:SetCustomCollisionCheck( true )
-	
+		
 		ply.vehicle = boat
 		
 	elseif AIRBOAT_GUN_MAPS[game.GetMap()] or canSpawnGlobalGun then
@@ -104,7 +105,7 @@ function GM:ShowSpare1(ply)
 
 		ply.vehicle = gunboat
 		
-	elseif JEEP_MAPS[game.GetMap()] or canSpawnJeepGlobal then
+	elseif (JEEP_MAPS[game.GetMap()] or canSpawnJeepGlobal) and not disableJeepGlobal then
 		local jeep = ents.Create(Jeep.Class)
 		jeep:SetModel(Jeep.Model)
 		jeep:SetPos(ply:GetPos() + Vector(0, 0, 65)	 )
@@ -113,6 +114,7 @@ function GM:ShowSpare1(ply)
 		for i, key in pairs(Jeep.KeyValues) do
 			jeep:SetKeyValue(i, key)
 		end
+		
 		jeep:Activate()
 		jeep:Fire( "addoutput", "targetname jeep" );
 		jeep:Spawn()
@@ -125,6 +127,7 @@ function GM:ShowSpare1(ply)
 		return
 	end
 	
+	ply.vehicle:SetOwner(ply)
 	ply:EnterVehicle(ply.vehicle)
 end
 
@@ -146,8 +149,8 @@ end
 
 function GM:CanExitVehicle(veh, ply)
 	if ply.antiExploit and ply.antiExploit > CurTime() then return false end
-	print(veh:GetClass())
-	--if veh:GetClass() == 
+
+	if veh:GetClass() == "prop_vehicle_prisoner_pod" and not veh:GetOwner() then return false end
 	
 	return true
 end

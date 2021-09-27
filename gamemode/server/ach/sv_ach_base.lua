@@ -17,11 +17,7 @@ function GrantAchievement(ply, baseList, achName)
 	
 	--Show the popup achievement similar to steam's achievements
 	net.Start("HL2CR_AchievementEarned")
-		net.WriteString(ach.Name)
-		net.WriteString(ach.Desc)
-		net.WriteString(ach.Mat)
-		net.WriteInt(ach.Rewards.XP, 32)
-		net.WriteBool(ach.IsRare)
+		net.WriteTable(ach)
 	net.Send(ply)
 
 	--Notify everyone of the achiever

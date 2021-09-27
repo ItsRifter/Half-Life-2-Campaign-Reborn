@@ -16,8 +16,8 @@ function ShowHelpMenu()
 	local welcomePnl = vgui.Create("DPanel", helpScreenPnl)
 	
 	local welcomeLabel = vgui.Create("DLabel", welcomePnl)
-	welcomeLabel:SetPos(helpFrame:GetWide() / 4 - 25, -5)
-	welcomeLabel:SetText("        Welcome to\nHalf-Life 2 - Campaign\n      Reconstructed")
+	welcomeLabel:SetPos(helpFrame:GetWide() / 4, -5)
+	welcomeLabel:SetText(translate.Get("Welcome"))
 	welcomeLabel:SetFont("HL2CR_GamemodeTitle")
 	welcomeLabel:SizeToContents()
 	
@@ -31,7 +31,7 @@ function ShowHelpMenu()
 	
 	local helpfulLabel = vgui.Create("DLabel", usefulCmdsPnl)
 	helpfulLabel:SetPos(usefulCmdsPnl:GetWide() * 1.5, 0)
-	helpfulLabel:SetText("In events of map breaking, use !vrm / !restartmap\nTo get this menu back, use !help\nGoing afk? don't get kicked with !afk\nGive your buddy a ride in your jeep with !seat\nBind important commands with the prefix hl2cr_ \n(ask staff for full commands)\nWanna go back to the lobby? use !lobby\nUse the Q 'spawnmenu key' to access inventory etc.\nDon't like how things look/sound? try !config / !settings\nSomeone causing problems? use !kickuser [name]")
+	helpfulLabel:SetText(language.Get("UsefulInfo"))
 	helpfulLabel:SetFont("HL2CR_Help_Useful")
 	helpfulLabel:SizeToContents()
 	
@@ -39,7 +39,7 @@ function ShowHelpMenu()
 	
 	local creditsLabel = vgui.Create("DLabel", exitPnl)
 	creditsLabel:SetPos(helpFrame:GetWide() / 3.25, 25)
-	creditsLabel:SetText("            Credits\n  Creator: SuperSponer\n\n    Special Thanks to:\nD3, Nick, Birdman, Niik,\nThe Supreme Combine")
+	creditsLabel:SetText("Credits\nCreator: SuperSponer\n\nSpecial Thanks to:\nD3, Nick, Birdman, Niik,\nThe Supreme Combine")
 	creditsLabel:SetFont("HL2CR_GamemodeHelp")
 	creditsLabel:SizeToContents()
 	

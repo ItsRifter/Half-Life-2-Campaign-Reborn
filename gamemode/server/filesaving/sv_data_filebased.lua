@@ -94,7 +94,7 @@ local function InitData(ply)
 	
 	ply:SetNWInt("config_playerdrawdist", ply.hl2cr.Config.PlayerSettings["PlayerDrawDistance"])
 	ply:SetNWBool("config_shouldendmusicplay", ply.hl2cr.Config.PlayerSettings["ShouldPlayEndMusic"])
-	ply:SetNWBool("config_playerfont", ply.hl2cr.Config.PlayerSettings["PlayerFont"])
+	ply:SetNWString("config_playerfont", ply.hl2cr.Config.PlayerSettings["PlayerFont"])
 	
 	ply:SetNWInt("config_npcdrawdist", ply.hl2cr.Config.NPCSettings["NPCDrawDistance"])
 	ply:SetNWInt("config_npcfont", ply.hl2cr.Config.NPCSettings["NPCFont"])

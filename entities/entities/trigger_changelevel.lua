@@ -59,6 +59,10 @@ function ENT:StartTouch(ent)
 		end
 		ent:Remove()
 		file.Delete("hl2cr_data/ballcheck.txt")
+	elseif ent:IsValid() and ent:GetModel() == "models/roller.mdl" then
+		file.Write("hl2cr_data/ballcheck.txt", "rollermine check")
+		ent:Remove()
+		savedRoller = true
 	end
 
 	if ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
@@ -82,7 +86,12 @@ function ENT:StartTouch(ent)
 			
 		local PLAYER_FINISHED = {
 			["Colour"] = Color(230, 190, 0),
-			["Message"] = ent:Nick() .. " has completed the map in " .. string.FormattedTime(CurTime(), "%02i:%02i") .. " (" .. team.NumPlayers(TEAM_COMPLETED_MAP) .. "/" .. #player.GetAll() ..")"
+			["Message"] = "PLAYER_FINISHED",
+			["Other"] = {
+				["Player"] = ply:Nick(),
+				["Time"] = string.FormattedTime(CurTime(), "%02i:%02i"),
+				["CurCompleted"] = "PLAYER_FINISHED2"
+			}
 		}
 		
 		BroadcastMessage(PLAYER_FINISHED)

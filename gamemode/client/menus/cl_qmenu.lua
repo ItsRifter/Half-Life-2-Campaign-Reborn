@@ -62,6 +62,7 @@ function StartQMenu(shouldOpen)
 		qMenuTabs:SetSize(ScrW() / 2, ScrH() / 2)
 		qMenuTabs:Center()
 		qMenuTabs:MakePopup()
+		qMenuTabs:SetKeyboardInputEnabled(false)
 		
 		local invPnl = vgui.Create("DPanel", qMenuTabs)
 		invPnl:SetSize(ScrW() / 2, ScrH() / 2)
@@ -388,8 +389,8 @@ function StartQMenu(shouldOpen)
 				
 				local classIcon = vgui.Create("DImage", classShowPanel)
 				classIcon:SetImage(class.Icon)
-				classIcon:SetSize(128, 128)
-				classIcon:SetPos(classShowPanel:GetWide() / 4, classShowPanel:GetTall() / 3)
+				classIcon:SetSize(ScrW() / 15, ScrW() / 15)
+				classIcon:SetPos(classShowPanel:GetWide() / 4, ScrH() / 6)
 				
 				local classBtn = vgui.Create("DButton", classShowPanel)
 				classBtn:SetText("Pick Class")

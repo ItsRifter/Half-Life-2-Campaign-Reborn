@@ -14,6 +14,7 @@ function SpectateRandomNPC(ply)
 			table.insert(backupEnt, npc)
 		end
 	end
+	
 	ply:SpectateEntity(backupEnt[math.random(#backupEnt)])
 end
 

@@ -37,7 +37,7 @@ SUPERGRAVGUN_MAPS = {
 	["d3_citadel_05"] = true
 }
 
-function GM:ShowHelp(ply)		
+function GM:ShowHelp(ply)	
 	HL2CR_Voting:PlayerVote(ply, true)
 end
 
@@ -341,14 +341,11 @@ hook.Add("EntityTakeDamage", "HL2CR_PVPOff", function(ent, dmgInfo)
 	--If the attacker is a player (dead or alive) and attacker isn't the player themselves, return 0
 	if ent:IsPlayer() and att:IsPlayer() and (att:Team() == TEAM_ALIVE or att:Team() == TEAM_DEAD) and ent:Team() == TEAM_ALIVE and ent ~= att then
 		dmgInfo:SetDamage(0)
-		if ent:Armor() > 0 then
-			ent:SetArmor( ent:Armor() + 1)
+		if ent:Armor() < 100 then
+			ent:SetArmor(ent:Armor() + 1)
 		end
 	elseif ent:IsPlayer() and att.Owner and att.Owner:IsPlayer() then
 		dmgInfo:SetDamage(0)
-		if ent:Armor() > 0 then
-			ent:SetArmor( ent:Armor() + 1)
-		end
 	end
 	
 	if att:IsNPC() and att:GetClass() == "npc_rollermine" and game.GetMap() == "d1_eli_02" then
@@ -625,35 +622,15 @@ end)
 
 hook.Add("PlayerEnteredVehicle", "HL2CR_EnableVehicleOnEnter", function(ply, veh, role)
 	if game.GetMap() == "d1_canals_05" and not canSpawnAirboatGlobal then
-		canSpawnAirboatGlobal = true
-		local ENABLED_AIRBOAT_1 = {
-			["Colour"] = Color(50, 215, 50),
-			["Message"] = "Airboat is now spawnable"
-		}
+		canSpawnAirboatGlobal = true	
 		
-		local ENABLED_AIRBOAT_2 = {
-			["Colour"] = Color(50, 215, 50),
-			["Message"] = "Use F3 and F4"
-		}
-		
-		BroadcastMessage(ENABLED_AIRBOAT_1)
-		BroadcastMessage(ENABLED_AIRBOAT_2)
+		BroadcastMessage(ENABLED_AIRBOAT)
 	end
 	
 	if game.GetMap() == "d2_coast_01" and not canSpawnJeepGlobal then
 		canSpawnJeepGlobal = true
-		local ENABLED_JEEP_1 = {
-			["Colour"] = Color(50, 215, 50),
-			["Message"] = "Jeep is now spawnable"
-		}
 		
-		local ENABLED_JEEP_2 = {
-			["Colour"] = Color(50, 215, 50),
-			["Message"] = "Use F3 and F4"
-		}
-		
-		BroadcastMessage(ENABLED_JEEP_1)
-		BroadcastMessage(ENABLED_JEEP_2)
+		BroadcastMessage(ENABLED_JEEP)
 	end	
 end)
 
@@ -682,7 +659,7 @@ hook.Add("EntityTakeDamage", "HL2CR_SlashDMGBuff", function( target, dmgInfo )
 	local dmgType = dmgInfo:GetDamageType()
 	
 	if target:IsPlayer() and att:IsNPC() then
-		if dmgType == DMG_SLASH then
+		if dmgType == DMG_SLASH and (att:GetClass() ~= "npc_headcrab_black" or att:GetClass() ~= "npc_headcrab_poison") then
 			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * 1.25)
 		else
 			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * 1.5)
@@ -761,7 +738,7 @@ net.Receive("HL2CR_ApplySettings", function(len, ply)
 	ply.hl2cr.Config.PlayerSettings["PlayerDrawDistance"] = playerDraw
 	ply.hl2cr.Config.PlayerSettings["ShouldPlayEndMusic"] = endMusicToggle
 	ply.hl2cr.Config.PlayerSettings["PlayerFont"] = playerFont
-	
+
 	--Update NPC Config	
 	ply.hl2cr.Config.NPCSettings["NPCDrawDistance"] = npcDraw
 	ply.hl2cr.Config.NPCSettings["NPCFont"] = npcFont
@@ -769,7 +746,7 @@ net.Receive("HL2CR_ApplySettings", function(len, ply)
 	--Set Player Config
 	ply:SetNWInt("config_playerdrawdist", ply.hl2cr.Config.PlayerSettings["PlayerDrawDistance"])
 	ply:SetNWBool("config_shouldendmusicplay", ply.hl2cr.Config.PlayerSettings["ShouldPlayEndMusic"])
-	ply:SetNWBool("config_playerfont", ply.hl2cr.Config.PlayerSettings["PlayerFont"])
+	ply:SetNWString("config_playerfont", ply.hl2cr.Config.PlayerSettings["PlayerFont"])
 
 	--SET NPC Config	
 	ply:SetNWInt("config_npcdrawdist", ply.hl2cr.Config.NPCSettings["NPCDrawDistance"])

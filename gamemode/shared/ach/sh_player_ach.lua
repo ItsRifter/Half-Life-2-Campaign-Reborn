@@ -32,12 +32,78 @@ AddCSLuaFile()
 GM.Achievements = {
 
 	HL2 = {
+		Malcontent = {
+			Name = "Malcontent", 
+			Mat = "vgui/achievements/hl2_escape_apartmentraid.png", 
+			Desc = "Escape the apartment block raid",
+			Rewards = {
+				XP = 500,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
 		Trusty_Hardware = {
 			Name = "Trusty Hardware", 
 			Mat = "vgui/achievements/hl2_get_crowbar.png", 
 			Desc = "Acquire the crowbar",
 			Rewards = {
 				XP = 500,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Keep_Off_Sand = {
+			Name = "Keep off the Sand", 
+			Mat = "vgui/achievements/hl2_beat_donttouchsand.png", 
+			Desc = "Cross the antlion beach\nwithout touching the sand",
+			Rewards = {
+				XP = 5000,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Warden_Freeman = {
+			Name = "Warden Freeman", 
+			Mat = "vgui/achievements/hl2_beat_turretstandoff2.png", 
+			Desc = "Survive the second turret\nstandoff in Nova Prospekt",
+			Rewards = {
+				XP = 1500,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Follow_Freeman = {
+			Name = "Follow Freeman", 
+			Mat = "vgui/achievements/hl2_followfreeman.png", 
+			Desc = "Gain command of a squad\nof rebels in the uprising",
+			Rewards = {
+				XP = 1500,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Cubbage = {
+			Name = "Where Cubbage Fears to Tread", 
+			Mat = "vgui/achievements/hl2_kill_odessagunship.png", 
+			Desc = "Defend Little Odessa\nfrom the gunship attack",
+			Rewards = {
+				XP = 2500,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Radiation_Levels = {
+			Name = "Radiation Levels Detected", 
+			Mat = "vgui/achievements/hl2_beat_toxictunnel.png", 
+			Desc = "Get through thetoxic tunnel\nunder City 17 in Half-Life 2",
+			Rewards = {
+				XP = 1500,
 				Item = nil
 			},
 			IsRare = false
@@ -71,7 +137,7 @@ GM.Achievements = {
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
 			Desc = "Use DOG's ball to make a basket",
 			Rewards = {
-				XP = 5000,
+				XP = 2500,
 				Item = nil
 			},
 			IsRare = false
@@ -143,12 +209,35 @@ GM.Achievements = {
 			},
 			IsRare = false
 		},
+		
 		Blast_From_The_Past = {
 			Name = "Blast from the past", 
 			Mat = "vgui/achievements/hl2_find_hevfaceplate.png", 
 			Desc = "Find the old H.E.V suit charger",
 			Rewards = {
 				XP = 1750,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Beat_HL2 = {
+			Name = "Singularity Collapse", 
+			Mat = "vgui/achievements/hl2_beat_game.png", 
+			Desc = "Destroy the Citadel's reactor core",
+			Rewards = {
+				XP = 5000,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Giant_Killer = {
+			Name = "Giant Killer", 
+			Mat = "vgui/achievements/hl2_beat_c1713striderstandoff.png", 
+			Desc = "Survive the rooftop strider battle\nin the ruins of City 17",
+			Rewards = {
+				XP = 2500,
 				Item = nil
 			},
 			IsRare = false
@@ -183,7 +272,7 @@ GM.Achievements = {
 		},
 		
 		Unpleasant_Secret = {
-			Name = "Unpleasant Secret", 
+			Name = "Unpleasant Secret",
 			Mat = "materials/hl2cr/ach_gimmeasecret.jpg", 
 			Desc = "Plot twist:\nYou get nothing!",
 			Rewards = {

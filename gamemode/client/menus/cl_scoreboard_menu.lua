@@ -2,7 +2,7 @@ function ToggleBoard(toggle)
 	if toggle then
 		scoreboard = vgui.Create("HL2CR_Tab")
 		scoreboard:SetSize(1000, 650)
-		scoreboard:SetPos(ScrW() / 2 - 500, ScrH() / 2 - 500)
+		scoreboard:SetPos(ScrW() / 2 - 500, ScrH() / 15)
 		scoreboard:SetVisible(true)
 		
 		scoreboard:SetAlpha(0)

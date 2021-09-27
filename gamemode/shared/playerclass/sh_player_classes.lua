@@ -92,7 +92,12 @@ if SERVER then
 			
 		local ASSIGNED_MESSAGE = {
 			["Colour"] = Color(50, 215, 50),
-			["Message"] = "You have been assigned as '" .. ply.hl2cr.CurClass.Name .. "'\nYou will obtain your equipment next respawn"
+			["Message"] = "ASSIGNED_MESSAGE1",
+			["Other"] = {
+				["Player"] = "",
+				["Time"] = ply.hl2cr.CurClass.Name,
+				["CurCompleted"] = "ASSIGNED_MESSAGE2",
+			}
 		}
 		
 		BroadcastMessage(ASSIGNED_MESSAGE, ply)

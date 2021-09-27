@@ -87,6 +87,9 @@ local IMPORTANT_MAPS = {
 	["d3_breen_01"] = true,
 }
 
+local keepOffSand = false
+local StayedOffSand = false
+
 EXISTING_CHECKPOINTS = {}
 
 local function SetCheckpoints()
@@ -152,6 +155,13 @@ local function SetCheckpoints()
 			Vector(-4148, -3457, 524),		Vector(-7063, -4036, 522),
 			Vector(-7872, -4126, -246)
 		}
+		
+		CHANGELEVEL_FUNC = function()
+			for _, v in ipairs(player.GetAll()) do
+				GrantAchievement(v, "HL2", "Malcontent")
+			end
+		end
+		
 	elseif game.GetMap() == "d1_trainstation_05" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(-10685, -3639, 475),		Vector(-10498, -3628, 321)
@@ -296,18 +306,8 @@ local function SetCheckpoints()
 		
 		CHECKPOINT_FUNC_2 = function()
 			canSpawnGlobalGun = true
-			local ENABLED_AIRBOAT_GUN_1 = {
-				["Colour"] = Color(50, 215, 50),
-				["Message"] = "Airboat with Gun is now spawnable"
-			}
-			
-			local ENABLED_AIRBOAT_GUN_2 = {
-				["Colour"] = Color(50, 215, 50),
-				["Message"] = "Use F3 and F4"
-			}
-			
-			BroadcastMessage(ENABLED_AIRBOAT_GUN_1)
-			BroadcastMessage(ENABLED_AIRBOAT_GUN_2)
+						
+			BroadcastMessage(ENABLED_AIRBOAT_GUN)
 		end
 	elseif game.GetMap() == "d1_canals_12" then
 		TRIGGER_CHANGELEVEL = {
@@ -489,12 +489,18 @@ local function SetCheckpoints()
 		}
 		
 		TRIGGER_CHECKPOINT = {
+			Vector(4773, -330, 1048),		Vector(4932, -131, 916),
 			Vector(8317, 1815, 962),		Vector(8128, 1868, 1088)
 		}
 		
 		CHECKPOINT_POS = {
-			Vector(8223, 1839, 966)
+			Vector(4838, -415, 928),		Vector(8223, 1839, 966)
 		}
+		
+		CHECKPOINT_FUNC_1 = function()
+			disableJeepGlobal = true
+		end
+		
 	elseif game.GetMap() == "d2_coast_11" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(-3288, 13717, 590),		Vector(-3419, 13176, 300)
@@ -508,6 +514,21 @@ local function SetCheckpoints()
 		CHECKPOINT_POS = {
 			Vector(4412, 6692, 588),		Vector(591, 11602, 473)
 		}
+		
+		CHECKPOINT_FUNC_1 = function()
+			if keepOffSand then
+				for k, sand in ipairs(ents.FindByClass("env_player_surface_trigger")) do
+					sand:Remove()
+				end
+				
+				for _, v in ipairs(player.GetAll()) do
+					GrantAchievement(v, "HL2", "Keep_Off_Sand")
+				end
+				
+				StayedOffSand = true
+			end
+		end
+		
 	elseif game.GetMap() == "d2_coast_12" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(9214, 8471, 2206),		Vector(9338, 8463, 2085)
@@ -594,6 +615,13 @@ local function SetCheckpoints()
 			Vector(-440, -2915, -237),		Vector(1505, -3317, -672),
 			Vector(4152, -3989, -536)
 		}
+		
+		CHANGELEVEL_FUNC = function()
+			for _, v in ipairs(player.GetAll()) do
+				GrantAchievement(v, "HL2", "Warden_Freeman")
+			end
+		end
+		
 	elseif game.GetMap() == "d2_prison_08" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(-958, -962, 914),		Vector(-865, -1084, 1067)
@@ -636,6 +664,13 @@ local function SetCheckpoints()
 		TRIGGER_CHANGELEVEL = {
 			Vector(-1084, -3490, 251),		Vector(-960, -3583, 128)
 		}
+		
+		CHANGELEVEL_FUNC = function()
+			for _, v in ipairs(player.GetAll()) do
+				GrantAchievement(v, "HL2", "Follow_Freeman")
+			end
+		end
+		
 	elseif game.GetMap() == "d3_c17_04" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(42, -5817, 247),		Vector(141, -5879, 130)
@@ -662,6 +697,13 @@ local function SetCheckpoints()
 		CHECKPOINT_POS = {
 			Vector(2963, 2255, -312)
 		}
+		
+		CHANGELEVEL_FUNC = function()
+			for _, v in ipairs(player.GetAll()) do
+				GrantAchievement(v, "HL2", "Radiation_Levels")
+			end
+		end
+		
 	elseif game.GetMap() == "d3_c17_06b" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(5374, 1774, 257),		Vector(5280, 1679, 374)
@@ -757,6 +799,13 @@ local function SetCheckpoints()
 		CHECKPOINT_POS = {
 			Vector(-8669, -912, -222)
 		}
+		
+		CHANGELEVEL_FUNC = function()
+			for _, v in ipairs(player.GetAll()) do
+				GrantAchievement(v, "HL2", "Giant_Killer")
+			end
+		end
+		
 	elseif game.GetMap() == "d3_c17_13" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(8301, 1796, -281),		Vector(8455, 1978, -428)
@@ -3906,6 +3955,7 @@ local VEHICLES = {
 	["pro_vehicle_jeep"] = true
 }
 
+
 local function SetUpMisc()
 	local MapLua = ents.Create("lua_run")
 	MapLua:SetName("triggerhook")
@@ -4014,21 +4064,25 @@ local function SetUpMisc()
 			ball:SetModel("models/roller.mdl")
 			ball:SetPos(Vector(-3745, 64, -3395))
 			ball:Spawn()
-			return
 		elseif game.GetMap() == "d1_town_04" then
 			spawnpoint = ents.FindByClass("info_player_start")[2]
 		else
 			spawnpoint = ents.FindByClass("info_player_start")[1]
 		end
-		local ball = ents.Create("prop_physics")
-		ball:SetModel("models/roller.mdl")
-		ball:SetPos(spawnpoint:GetPos() + Vector(30, 30, 0))
-		ball:Spawn()
+		if not ball and spawnpoint then
+			local ball = ents.Create("prop_physics")
+			ball:SetModel("models/roller.mdl")
+			ball:SetPos(spawnpoint:GetPos() + Vector(30, 30, 0))
+			ball:Spawn()
+		end
 	end
 	
 	if file.Exists("hl2cr_data/ravenholmcheck.txt", "DATA") and game.GetMap() == "d1_town_02" then
-		ents.FindByClass("info_player_start")[1]:SetPos(Vector(-3763, -36, -3439))
-		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, 90, 0))
+		for i, s in ipairs(ents.FindByClass("info_player_start")) do
+			s:SetPos(Vector(-3763, -36, -3439))
+			s:SetAngles(Angle(0, 90, 0))
+		end
+		
 		table.insert(SPAWNING_WEAPONS, "weapon_shotgun")
 	end
 	
@@ -4084,7 +4138,11 @@ local function SetUpMisc()
 		ents.FindByClass("npc_combinedropship")[1]:Remove()
 		ents.FindByClass("info_player_start")[1]:SetPos(Vector(3148, 5263, 1540))
 		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, 180, 0))
-		ents.FindByName("bridge_field_02")[1]:Remove()
+		timer.Simple(0.1, function()
+			if ents.FindByName("bridge_field_02")[1] then
+				ents.FindByName("bridge_field_02")[1]:Remove()
+			end
+		end)
 	end
 	
 	if game.GetMap() == "d2_coast_08" then
@@ -4116,6 +4174,10 @@ local function SetUpMisc()
 				spawn:Remove()
 			end
 		end
+	end
+	
+	if game.GetMap() == "d2_coast_11" then
+		keepOffSand = true
 	end
 	
 	if game.GetMap() == "d2_prison_03" then
@@ -4336,6 +4398,10 @@ hook.Add("OpenGateCoast", "HL2CR_OpenGate", function()
 	for k, v in ipairs(ents.FindByName("village_gate")) do
 		v:Fire("Open")
 	end
+	
+	for k, v in ipairs(player.GetAll()) do
+		GrantAchievement(v, "HL2", "Cubbage")
+	end
 end)
 
 hook.Add("GiveHallow", "HL2CR_GiveHallowGround", function()
@@ -4374,9 +4440,28 @@ hook.Add("GravGunOnPickedUp", "HL2CR_BlastAch", function(ply, ent)
 	
 end)
 
+local faultPlayer = nil
+
+hook.Add( "PlayerFootstep", "CustomFootstep", function( ply, pos, foot, sound, volume, rf )
+	if game.GetMap() == "d2_coast_11" then
+		if string.find(sound, "sand") and keepOffSand and not StayedOffSand then
+			FailSandAchievement(ply)
+		end
+	end
+	return false 
+end)
+
+function FailSandAchievement(ply)		
+	for k, v in ipairs(player.GetAll()) do
+		v:ChatPrint(ply:Nick() .. " stepped on the sand\nAchievement Failed")
+	end
+	keepOffSand = false
+end
+
 hook.Add("FinishHL2", "HL2CR_CompleteHL2", function(ply, ent)
 	for k, v in ipairs(player.GetAll()) do
 		v:SetTeam(TEAM_COMPLETED_MAP)
+		GrantAchievement(v, "HL2", "Beat_HL2")
 	end
 	BroadcastMessage(MAPS_HL2_FINISHED)
 	net.Start("HL2CR_EndCampaign")

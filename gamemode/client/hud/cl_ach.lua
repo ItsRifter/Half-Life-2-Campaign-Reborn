@@ -1,10 +1,10 @@
 --Achievement Popup
-function AchNotice(achTitle, achDesc, achImg, achRare, achXP)
+function AchNotice(achTbl)
 	
-	if not achTitle then achTitle = "BUG" end
-	if not achDesc then achDesc = "MISSING DESCRIPTION" end
-	if not achImg then achImg = "entities/npc_kleiner.png" end
-	if not achRare then achRare = false end
+	local achTitle = achTbl.Name or "BUG"
+	local achDesc = achTbl.Desc or "MISSING DESCRIPTION"
+	local achIcon = achTbl.Mat or "entities/npc_kleiner.png"
+	local achRare = achTbl.IsRare or false
 	
 	local achPopUp = vgui.Create("DNotify")
 	achPopUp:SetSize(340, 100)
@@ -23,7 +23,7 @@ function AchNotice(achTitle, achDesc, achImg, achRare, achXP)
 	local icon = vgui.Create("DImage", FGPnl)
 	icon:SetPos(5, 10)
 	icon:SetSize(64, 64)
-	icon:SetImage(achImg)
+	icon:SetImage(achIcon)
 	
 	local text = vgui.Create("DLabel", FGPnl)
 	text:SetPos(75, 5)
@@ -41,8 +41,8 @@ function AchNotice(achTitle, achDesc, achImg, achRare, achXP)
 	
 	achPopUp:Add(BGPnl)
 	
-	if achXP > 0 then
-		chat.AddText(Color(240, 175, 0), "XP Gained: " .. achXP)
+	if achTbl.Rewards.XP > 0 then
+		chat.AddText(Color(240, 175, 0), "XP Gained: " .. achTbl.Rewards.XP)
 	end
 	
 	achPopUp:MoveTo(ScrW() - 280, ScrH() - 100, 2, 0, -1, function()
@@ -109,12 +109,8 @@ function AchUpdateNotice(achTitle, achImg, achProgress, achMaxValue)
 end
 
 net.Receive("HL2CR_AchievementEarned", function()
-	local achTitle = net.ReadString()
-	local achDesc = net.ReadString()
-	local achImg = net.ReadString()
-	local achRare = net.ReadBool()
-	local achXP = net.ReadInt(32)
-	AchNotice(achTitle, achDesc, achImg, achRare, achXP)
+	local achTbl = net.ReadTable()
+	AchNotice(achTbl)
 end)
 
 net.Receive("HL2CR_AchievementUpdate", function()
