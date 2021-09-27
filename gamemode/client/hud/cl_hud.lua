@@ -25,7 +25,7 @@ net.Receive("HL2CR_MapCountdown", function()
 end)
 
 net.Receive("HL2CR_EndCampaign", function()
-	surface.PlaySound("hl2cr/ending_triumph.mp3")
+	surface.PlaySound("hl2cr/end_game.wav")
 end)
 
 gameevent.Listen("player_disconnect")
@@ -236,7 +236,7 @@ hook.Add( "HUDDrawTargetID", "HidePlayerInfo", function()
 			local font = "HL2CR_HoverPlayer"
 			local fixFontSpacing = FIX_FONT_SPACING[font]
 			
-			if LocalPlayer():GetNWInt("config_playerfont") ~= "Default" then
+			if string.find(LocalPlayer():GetNWInt("config_playerfont"), "default") then
 				font = "HL2CR_" .. LocalPlayer():GetNWInt("config_playerfont")
 				fixFontSpacing = FIX_FONT_SPACING[font]
 			end
@@ -307,10 +307,12 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 				end
 			
 				local font = "HL2CR_NPCStats"
-				
-				if LocalPlayer():GetNWString("config_npcfont") ~= "Default" then
+				if not string.find(LocalPlayer():GetNWString("config_npcfont"), "default") then
 					font = "HL2CR_" .. LocalPlayer():GetNWString("config_npcfont")
 				end
+				
+				--For strange reasons, this gets set to default despite above string.find
+				if font == "HL2CR_Default" then font = "HL2CR_NPCStats" end
 				
 				if not ent:GetNWBool("HL2CR_Special") then
 					draw.SimpleText(CONVERT_TO_NAME_STANDARD[ent:GetClass()], font or "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)

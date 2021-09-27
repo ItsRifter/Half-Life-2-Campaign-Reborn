@@ -150,6 +150,16 @@ ERROR_PET_EXISTS = {
 	["Message"] = "Your pet already exists!"
 }
 
+ERROR_PET_NOPET = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "You need to set your current pet before summoning"
+}
+
+ERROR_PET_UNAVAILABLE = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "You need to own a pet first before you can summon"
+}
+
 ERROR_PET_NONEXISTS = {
 	["Colour"] = Color(215, 50, 50),
 	["Message"] = "Your pet doesn't exist"
@@ -190,6 +200,11 @@ VOTE_FAILED = {
 	["Message"] = "Vote Failed"
 }
 
+VOTE_FAILED_ADMIN = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "Vote was stopped by admin"
+}
+
 VOTE_SUCCESS_LOBBY = {
 	["Colour"] = Color(50, 215, 50),
 	["Message"] = "Vote Successful, Returning to lobby"
@@ -228,4 +243,9 @@ ERROR_VOTEKICK_ADMIN = {
 ERROR_VOTEKICK_SELF = {
 	["Colour"] = Color(215, 50, 50),
 	["Message"] = "You cannot votekick yourself"
+}
+
+CHECKPOINT_HIT = {
+	["Colour"] = Color(235, 135, 55),
+	["Message"] = "Checkpoint Reached"
 }

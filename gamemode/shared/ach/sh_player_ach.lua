@@ -111,6 +111,28 @@ GM.Achievements = {
 			IsRare = false
 		},
 		
+		Flushed = {
+			Name = "Flushed", 
+			Mat = "vgui/achievements/hl2_kill_enemy_withtoilet.png", 
+			Desc = "Kill an enemy with a toilet",
+			Rewards = {
+				XP = 2500,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Hack_Attack = {
+			Name = "Hack Attack!", 
+			Mat = "vgui/achievements/hlx_kill_enemies_withmanhack.png", 
+			Desc = "Kill five enemies with a Manhack",
+			Rewards = {
+				XP = 3500,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
 		What_Cat = {
 			Name = "What Cat?", 
 			Mat = "vgui/achievements/hl2_beat_game.png", 

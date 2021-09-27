@@ -190,14 +190,17 @@ function PANEL:GetCoords()
 end
 
 local col
+local texture = Material( "materials/hl2cr/empty.jpg")
+
 function PANEL:Paint(w,h)
-     draw.NoTexture()
-     col = self:GetColor()
-     surface.SetDrawColor(col.r,col.g,col.b,255)
-     surface.DrawRect(0,0,w-2,h-2) --main square
-     surface.SetDrawColor(70,70,70,255)
-     surface.DrawRect(w-2,0,2,h) --borders
-     surface.DrawRect(0,h-2,w,2) -- ^
+	col = self:GetColor()
+	surface.SetDrawColor(col.r,col.g,col.b,255)
+	surface.DrawRect(0,0,w-2,h-2) --main square
+	surface.SetDrawColor(70, 70, 70, 255)
+	surface.DrawRect(w-2,0,2,h) --borders
+	surface.DrawRect(0,h-2,w,2) -- ^
+	surface.SetMaterial(texture)
+	surface.DrawTexturedRect(0, 0, w, h)
 end
 
 vgui.Register("HL2CR_InvSlot", PANEL, "DPanel")

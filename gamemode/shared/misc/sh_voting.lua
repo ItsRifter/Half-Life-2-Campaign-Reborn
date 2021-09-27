@@ -54,7 +54,7 @@ votingTypes["Restart"] = {
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
 		if positive > negative then
 			BroadcastMessage(VOTE_SUCCESS_MAP)
-			BroadcastSound("hl2cr/ach_unlock.wav")
+			BroadcastSound("music/hl2_song23_suitsong3.mp3")
 			timer.Simple(5, function()
 				RunConsoleCommand("ChangeLevel", game.GetMap())
 			end)
@@ -93,8 +93,8 @@ votingTypes["BeginHL2"] = {
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
 		if positive > negative then
 			BroadcastMessage(VOTE_SUCCESS_HL2)
-			BroadcastSound("hl2cr/ach_unlock.wav")
-			timer.Simple(5, function()
+			BroadcastSound("hl2cr/begin_game.wav")
+			timer.Simple(10, function()
 				RunConsoleCommand("ChangeLevel", "d1_trainstation_01")
 			end)
 		else
@@ -287,6 +287,7 @@ if SERVER then
 
 	---Stop the vote prematurely, discarding any result.
 	function HL2CR_Voting:StopVote()
+		if self.State == nil then return end
 		self.State = nil
 
 		-- Broadcast closed vote to all players. This will not send the result of the vote.
@@ -295,6 +296,8 @@ if SERVER then
 		if timer.Exists("HL2CR_ServerVoteTimer") then
 			timer.Remove("HL2CR_ServerVoteTimer")
 		end
+		
+		BroadcastMessage(VOTE_FAILED_ADMIN)
 	end
 	
 	---End the vote in a normal way.

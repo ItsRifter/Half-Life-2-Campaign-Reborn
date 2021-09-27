@@ -142,6 +142,10 @@ local APPLY_SKILLS_CLASS_MEDIC_RECHARGE = {
 	["Heal Recharge III"] = 30,
 }
 
+local APPLY_SKILLS_DEPLOYABLE = {
+	["Controllable Drone"] = "weapon_controllable_drone"
+}
+
 --Adds the passive abilities of specific classes
 
 --Player spawning
@@ -171,6 +175,8 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 			healing = healing + APPLY_SKILLS_CLASS_MEDIC[skill]
 		elseif APPLY_SKILLS_CLASS_MEDIC_RECHARGE[skill] then
 			recharge = recharge + APPLY_SKILLS_CLASS_MEDIC_RECHARGE[skill]
+		elseif APPLY_SKILLS_DEPLOYABLE[skill] then
+			ply:Give(APPLY_SKILLS_DEPLOYABLE[skill])
 		end
 	end
 	
@@ -584,6 +590,19 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 		if player:GetActiveWeapon():GetClass() ~= "weapon_crowbar" then
 			player.rewards.bonus["Crowbar Only"] = false
 		end
+		
+		if inflictor:GetClass() == "npc_manhack" and npc:GetClass() ~= "npc_manhack" then
+			player.hackCount = (player.hackCount or 0) + 1
+			
+			if player.hackCount >= 5 then
+				GrantAchievement(player, "HL2", "Hack_Attack")
+			end
+		end
+		
+		if inflictor:GetModel() == "models/props_wasteland/prison_toilet01.mdl" then
+			GrantAchievement(player, "HL2", "Flushed")
+		end
+		
 		
 	elseif attacker:IsNextBot() and attacker:GetOwner():IsPlayer() and attacker:GetOwner().pet then
 		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end

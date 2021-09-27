@@ -98,20 +98,28 @@ hook.Add("EntityTakeDamage", "HL2CR_FriendlyOrHostile", function(ent, dmgInfo)
 			file.Delete("hl2cr_data/babycheck.txt")
 		end
 		ent:Remove()
-	end
+	end	
 	
 	if ent:IsFriendly() or (ent:GetClass() == "npc_citizen" and att:IsPlayer()) then
 		dmgInfo:SetDamage(0)
+		return
 	end
 	
 	if ent:GetClass() == "npc_citizen" and att:GetClass() == "prop_vehicle_jeep" then
 		dmgInfo:SetDamage(0)
+		return
 	end
 	
 	if ent:GetClass() == "npc_vortigaunt" and HOSTILE_VORTS == false then
 		dmgInfo:SetDamage(0)
+		return
 	end
 	
+	if att:GetClass() == "sent_controllable_drone" or att:GetClass() == "sent_controllable_manhack" then
+		if ent:Disposition(att) ~= D_HT then
+			ent:AddEntityRelationship(att, D_HT, 99)
+		end
+	end	
 end)
 
 hook.Add("OnEntityCreated", "HL2CR_NPCCreated", function(ent)

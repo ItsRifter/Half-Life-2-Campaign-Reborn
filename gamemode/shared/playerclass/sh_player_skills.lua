@@ -21,8 +21,8 @@ function CreateSkill(name, desc, class, level, icon, requirement, pos1, pos2)
 end
 
 local passive_health_mk1 = CreateSkill("Health Boost", "Increase life expectancy", "Passive", 1, "materials/hl2cr/skill_health_mk1.jpg", "", 25, 150)
-local passive_health_mk2 = CreateSkill("Health Boost II", "Increase life expectancy", "Passive", 1, "materials/hl2cr/skill_health_mk2.jpg", "Health Boost", 125, 150)
-local passive_health_mk3 = CreateSkill("Health Boost III", "Increase life expectancy", "Passive", 1, "materials/hl2cr/skill_health_mk3.jpg", "Health Boost II", 225, 150)
+local passive_health_mk2 = CreateSkill("Health Boost II", "Increase life expectancy", "Passive", 2, "materials/hl2cr/skill_health_mk2.jpg", "Health Boost", 125, 150)
+local passive_health_mk3 = CreateSkill("Health Boost III", "Increase life expectancy", "Passive", 3, "materials/hl2cr/skill_health_mk3.jpg", "Health Boost II", 225, 150)
 
 local efficient_medic_mk1 = CreateSkill("Healing Efficiency", "Heal people more effectively", "Medic", 6, "materials/hl2cr/skill_healing_mk1.jpg", "", 25, 50)
 local efficient_medic_mk2 = CreateSkill("Healing Efficiency II", "Heal people more effectively", "Medic", 6, "materials/hl2cr/skill_healing_mk2.jpg", "Healing Efficiency", 125, 50)
@@ -40,7 +40,7 @@ local recharge_repairman_mk1 = CreateSkill("Repair Recharge", "Repair Kit rechar
 local recharge_repairman_mk2 = CreateSkill("Repair Recharge II", "Repair Kit recharges faster", "Repair", 8, "materials/hl2cr/skill_recharge_mk2.jpg", "Repair Recharge", 125, 150)
 local recharge_repairman_mk3 = CreateSkill("Repair Recharge III", "Repair Kit recharges faster", "Repair", 10, "materials/hl2cr/skill_recharge_mk3.jpg", "Repair Recharge II", 225, 150)
 
-local access_drone_mechanic = CreateSkill("Controllable Drone", "A drone you can control\nwith a built-in gun", "Mechanic", 11, "materials/hl2cr/skill_recharge_mk3.jpg", "", 225, 150)
+local access_drone_mechanic = CreateSkill("Controllable Drone", "A drone you can control\nwith a built-in gun", "Mechanic", 11, "materials/hl2cr/skill_drone.jpg", "", 25, 150)
 
 
 
@@ -61,6 +61,8 @@ table.insert(GM.PlayerSkills, efficient_repairman_mk3)
 table.insert(GM.PlayerSkills, recharge_repairman_mk1)
 table.insert(GM.PlayerSkills, recharge_repairman_mk2)
 table.insert(GM.PlayerSkills, recharge_repairman_mk3)
+
+table.insert(GM.PlayerSkills, access_drone_mechanic)
 
 
 if SERVER then

@@ -227,6 +227,16 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	end
 	
 	if text == "!petsummon" or text == "!summonpet" then
+		if ply.hl2cr.Level < 15 then
+			BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
+			return
+		end
+		
+		if table.IsEmpty(ply.hl2cr.Pets.CurrentPet) then
+			BroadcastMessage(ERROR_PET_NOPET, ply)
+			return ""
+		end
+	
 	
 		if ply.pet then
 			BroadcastMessage(ERROR_PET_EXISTS, ply)
@@ -360,6 +370,23 @@ concommand.Add("hl2cr_stopvote", function(ply, cmd, args)
 	HL2CR_Voting:StopVote()
 end)
 
+concommand.Add("hl2cr_admin_message", function(ply, cmd, args)
+	if not ply:IsAdmin() then return end
+	
+	local ADMIN_MESSAGE = {
+		["Colour"] = string.ToColor(args[2]),
+		["Message"] = args[1]
+	}
+	
+	BroadcastMessage(ADMIN_MESSAGE)
+end)
+
+concommand.Add("hl2cr_admin_sound", function(ply, cmd, args)
+	if not ply:IsAdmin() then return end
+	
+	BroadcastSound(args[1])
+end)
+
 concommand.Add("hl2cr_petbring", function(ply, cmd, args)
 	if ply:Team() == TEAM_COMPLETED_MAP or ply:Team() == TEAM_DEAD then return end
 		
@@ -411,6 +438,16 @@ concommand.Add("hl2cr_petremove", function(ply, cmd, args)
 end)
 
 concommand.Add("hl2cr_petsummon", function(ply, cmd, args)
+	if ply.hl2cr.Level < 15 then
+		BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
+		return
+	end
+	
+	if table.IsEmpty(ply.hl2cr.Pets.CurrentPet) then
+		BroadcastMessage(ERROR_PET_NOPET, ply)
+		return
+	end
+	
 	if ply.pet then
 		BroadcastMessage(ERROR_PET_EXISTS, ply)
 		return

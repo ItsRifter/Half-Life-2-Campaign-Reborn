@@ -897,7 +897,7 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetPos(Checkpoint.Pos)
 			Checkpoint.lambdaModel:Spawn()
 			Checkpoint.lambdaModel:ResetSequence("idle")
-			Checkpoint.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_blue")
+			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_1
 			
@@ -919,7 +919,7 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetPos(Checkpoint.Pos)
 			Checkpoint.lambdaModel:Spawn()
 			Checkpoint.lambdaModel:ResetSequence("idle")
-			Checkpoint.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_blue")
+			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_2
 			
@@ -941,7 +941,7 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetPos(Checkpoint.Pos)
 			Checkpoint.lambdaModel:Spawn()
 			Checkpoint.lambdaModel:ResetSequence("idle")
-			Checkpoint.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_blue")
+			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_3
 			
@@ -963,7 +963,7 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetPos(Checkpoint.Pos)
 			Checkpoint.lambdaModel:Spawn()
 			Checkpoint.lambdaModel:ResetSequence("idle")
-			Checkpoint.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_blue")
+			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_4
 			

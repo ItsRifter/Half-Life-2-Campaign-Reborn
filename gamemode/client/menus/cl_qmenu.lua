@@ -4,6 +4,12 @@ local CONVERT_NAME_TO_IMAGE = {
 	[".50_BMG_Heavy_Sniper"] = "materials/hl2cr/weapon_bmgsniper.jpg"
 }
 
+local CONVERT_NAME_TO_PROPER = {
+	["Flare_gun"] = "Flare gun",
+	["Multi_Grenade_Launcher"] = "Multiple Grenade Launcher",
+	[".50_BMG_Heavy_Sniper"] = ".50 BMG Heavy Sniper"
+}
+
 local CONVERT_NAME_TO_DESC = {
 	["Flare_gun"] = "Used for emergencies...\nso it was",
 	["Multi_Grenade_Launcher"] = "A grenade launcher\nhandle with care",
@@ -89,8 +95,6 @@ function StartQMenu(shouldOpen)
 			
 			for i, p in ipairs(v) do
 				if LocalPlayer():GetNWInt("stat_level") >= level then
-					print(v[i])
-					print(i)
 					local playermodelBtn = vgui.Create("SpawnIcon", modelHorizontalScroll)
 					playermodelBtn:SetModel(v[i])
 					playermodelBtn:SetSize(64, 64)
@@ -146,7 +150,7 @@ function StartQMenu(shouldOpen)
 			if slots[i] and CONVERT_NAME_TO_IMAGE[slots[i]] then
 				pl.Inv[i].Icon = vgui.Create("DImageButton", pl.Inv[i])
 				pl.Inv[i].Icon:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
-				pl.Inv[i].Icon:SetToolTip(CONVERT_NAME_TO_DESC[slots[i]])
+				pl.Inv[i].Icon:SetToolTip(CONVERT_NAME_TO_PROPER[slots[i]] .. "\n\n" .. CONVERT_NAME_TO_DESC[slots[i]])
 				pl.Inv[i].Icon:SetSize(pl.Inv[i]:GetWide(), pl.Inv[i]:GetTall())
 				pl.Inv[i].Icon.DoClick = function()
 					net.Start("HL2CR_UpdateSlot")
@@ -186,6 +190,9 @@ function StartQMenu(shouldOpen)
 		local repairSkillsPnl = vgui.Create("DPanel", skillsPnl)
 		repairSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
 		
+		local mechSkillsPnl = vgui.Create("DPanel", skillsPnl)
+		mechSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
+		
 		for i, skill in pairs(GAMEMODE.PlayerSkills) do
 			
 			local skillBtn
@@ -196,6 +203,8 @@ function StartQMenu(shouldOpen)
 				skillBtn = vgui.Create("DImageButton", medicSkillsPnl)
 			elseif skill.Class == "Repair" then
 				skillBtn = vgui.Create("DImageButton", repairSkillsPnl)
+			elseif skill.Class == "Mechanic" then
+				skillBtn = vgui.Create("DImageButton", mechSkillsPnl)
 			end
 			
 			skillBtn:SetSize(64, 64)
@@ -204,7 +213,7 @@ function StartQMenu(shouldOpen)
 			if LocalPlayer():GetNWInt("stat_level") < skill.Level then
 				skillBtn:SetToolTip("LOCKED\nREACH LEVEL " .. skill.Level)
 				skillBtn:SetImage("vgui/hud/icon_locked.png")
-				break
+				continue
 			end
 			
 			skillBtn:SetImage(skill.Icon)
@@ -260,6 +269,7 @@ function StartQMenu(shouldOpen)
 		skillsSelectionPnl.navbar:AddTab("Passive", passiveSkillsPnl)
 		skillsSelectionPnl.navbar:AddTab("Field Medic", medicSkillsPnl)
 		skillsSelectionPnl.navbar:AddTab("Repairman", repairSkillsPnl)
+		skillsSelectionPnl.navbar:AddTab("Mechanic", mechSkillsPnl)
 		skillsSelectionPnl.navbar:SetActive(1)
 		
 		local shopPnl = vgui.Create("DPanel", qMenuTabs)
@@ -302,7 +312,7 @@ function StartQMenu(shouldOpen)
 			local itemBtn = weaponsLayout:Add("DImageButton")
 			itemBtn:SetSize(64, 64)
 			itemBtn:SetImage(item.Icon)
-			itemBtn:SetToolTip(item.Name .. "\n\n" .. item.Desc .. "\n\nCOST: " .. item.Cost .. " Resin")
+			itemBtn:SetToolTip(CONVERT_NAME_TO_PROPER[item.Name] .. "\n\n" .. item.Desc .. "\n\nCOST: " .. item.Cost .. " Resin")
 			
 			itemBtn.DoClick = function(pnl)			
 

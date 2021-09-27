@@ -52,9 +52,9 @@ function AchNotice(achTitle, achDesc, achImg, achRare, achXP)
 	end)
 	
 	if not achRare then
-		surface.PlaySound("hl2cr/ach_unlock.wav")
+		surface.PlaySound("hl2cr/ach_unlock_new.wav")
 	else
-		surface.PlaySound("hl2cr/rare_ach_unlock.wav")
+		surface.PlaySound("hl2cr/rare_ach_unlock_new.wav")
 	end
 end
 

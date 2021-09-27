@@ -3,6 +3,8 @@ ENT.Type = "brush"
 
 ENT.PointIndex = -1
 
+ENT.Mat = "hl2cr/models/checkpoint.vtf"
+
 local AchTrigger = {}
 function ENT:Initialize()
 	
@@ -27,7 +29,7 @@ function ENT:Initialize()
 	self:SetMoveType(0)
 	self:SetTrigger(true)
 	
-	self:SetMaterial("squad/orangebox")
+	self:SetMaterial(self.Mat)
 end
 
 --When the player touches the entity
@@ -38,11 +40,6 @@ function ENT:StartTouch(ent)
 		if self.Func then
 			self.Func()
 		end
-		
-		local CHECKPOINT_HIT = {
-			["Colour"] = Color(50, 215, 50),
-			["Message"] = "Checkpoint Reached"
-		}
 		
 		BroadcastMessage(CHECKPOINT_HIT)
 		BroadcastSound("hl2cr/standardbeep.wav")
