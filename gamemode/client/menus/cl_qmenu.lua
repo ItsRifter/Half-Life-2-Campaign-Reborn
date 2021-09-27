@@ -60,7 +60,8 @@ function StartQMenu(shouldOpen)
 	if shouldOpen then 
 		qMenuTabs = vgui.Create("HL2CR_Tab")
 		qMenuTabs:SetSize(ScrW() / 2, ScrH() / 2)
-		qMenuTabs:SetKeyboardInputEnabled(false)
+		qMenuTabs:Center()
+		qMenuTabs:MakePopup()
 		
 		local invPnl = vgui.Create("DPanel", qMenuTabs)
 		invPnl:SetSize(ScrW() / 2, ScrH() / 2)
@@ -75,55 +76,53 @@ function StartQMenu(shouldOpen)
 		end
 		
 		local invPnlPlayer = vgui.Create("DPanel", invPnl)
-		invPnlPlayer:SetPos(invPnl:GetWide() / 1.35 - 50, 5)
-		invPnlPlayer:SetSize(invPnl:GetWide() / 3.5, invPnl:GetTall() / 1.35)
+		invPnlPlayer:SetPos(invPnl:GetWide() / 1.37, 10)
+		invPnlPlayer:SetSize(invPnl:GetWide() / 4, ScrH() / 2.6)
 		invPnlPlayer.Paint = function(self, w, h)
 			surface.SetDrawColor(HL2CR.Theme.qMenu2)
 			surface.DrawRect(0, 0, w, h)
 		end
 		
 		local invPnlPlayerModel = vgui.Create( "DModelPanel", invPnlPlayer )
-		invPnlPlayerModel:SetSize(invPnlPlayer:GetWide() * 2.75, invPnlPlayer:GetTall() * 2.25)
-		invPnlPlayerModel:SetPos(-invPnlPlayer:GetWide() / 1.15, -invPnlPlayer:GetTall() / 2.5)
+		invPnlPlayerModel:SetSize(ScrW() / 2.905, ScrH() / 1.3)
+		invPnlPlayerModel:SetPos(-ScrW() / 9, -ScrH() / 6.505)
+		invPnlPlayerModel:SetDirectionalLight(BOX_RIGHT, Color(255, 160, 80, 255))
+		invPnlPlayerModel:SetDirectionalLight(BOX_LEFT, Color(80, 160, 255, 255))
+		invPnlPlayerModel:SetAmbientLight(Vector(-64, -64, -64))
 		invPnlPlayerModel:SetModel( LocalPlayer():GetModel() )
-		function invPnlPlayerModel:LayoutEntity( Entity ) return end
-		
-		local modelHorizontalScroll = vgui.Create("DHorizontalScroller", invPnl)
-		modelHorizontalScroll:SetSize(512, 64)
-		modelHorizontalScroll:SetPos(0, 372)
-		for level, v in pairs(PLAYERMODELS) do
-			
-			for i, p in ipairs(v) do
-				if LocalPlayer():GetNWInt("stat_level") >= level then
-					local playermodelBtn = vgui.Create("SpawnIcon", modelHorizontalScroll)
-					playermodelBtn:SetModel(v[i])
-					playermodelBtn:SetSize(64, 64)
-					modelHorizontalScroll:AddPanel(playermodelBtn)
-					
-					playermodelBtn.DoClick = function(pnl)
-						net.Start("HL2CR_UpdateModel")
-							net.WriteString(v[i])
-						net.SendToServer()
-						
-						invPnlPlayerModel:SetModel( v[i] )
-					end
-				end
+		invPnlPlayerModel:SetAnimated(false)
+		invPnlPlayerModel.Angles = Angle(0, 0, 0)
+		function invPnlPlayerModel:DragMousePress()
+			self.PressX, self.PressY = gui.MousePos()
+			self.Pressed = true
+		end
+		function invPnlPlayerModel:DragMouseRelease() self.Pressed = false end
+		function invPnlPlayerModel:LayoutEntity(ent)
+			if (self.bAnimated) then self:RunAnimation() end
+
+			if (self.Pressed) then
+				local mx, my = gui.MousePos()
+				self.Angles = self.Angles - Angle(0,((self.PressX or mx) - mx) / 2, 0)
+
+				self.PressX, self.PressY = gui.MousePos()
 			end
+
+			ent:SetAngles(self.Angles)
 		end
 		
 		local invPnlSlotsPnl = vgui.Create("DPanel", invPnl)
-		invPnlSlotsPnl:SetSize(396, 250)
-		invPnlSlotsPnl:SetPos(25, 75)
+		invPnlSlotsPnl:SetSize(ScrW() * 0.302, 250)
+		invPnlSlotsPnl:SetPos(ScrW() * 0.015, ScrH() * 0.015)
 		invPnlSlotsPnl.Paint = function() end
 		
 		local invLayout = vgui.Create("DIconLayout", invPnlSlotsPnl)
 		invLayout:Dock(FILL)
 		invLayout:SetSpaceX(10)
 		invLayout:SetSpaceY(5)
-	
+		
 		local weaponSlotPnl = vgui.Create("DPanel", invPnl)
-		weaponSlotPnl:SetPos(invPnl:GetWide() / 1.75, 50)
-		weaponSlotPnl:SetSize(64, 64)
+		weaponSlotPnl:SetPos(invPnl:GetWide() / 1.6, 50)
+		weaponSlotPnl:SetSize(invPnl:GetWide() / 10, invPnl:GetWide() / 10)
 		
 		weaponSlotPnl.Paint = function(pnl, w, h)
 			surface.SetDrawColor(HL2CR.Theme.qMenu2)
@@ -131,7 +130,7 @@ function StartQMenu(shouldOpen)
 		end
 		
 		weaponSlotImage = vgui.Create("DImage", weaponSlotPnl)
-		weaponSlotImage:SetSize(64, 64)
+		weaponSlotImage:SetSize(invPnl:GetWide() / 10, invPnl:GetWide() / 10)
 		if CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")] then
 			weaponSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")])
 		end
@@ -150,7 +149,7 @@ function StartQMenu(shouldOpen)
 			if slots[i] and CONVERT_NAME_TO_IMAGE[slots[i]] then
 				pl.Inv[i].Icon = vgui.Create("DImageButton", pl.Inv[i])
 				pl.Inv[i].Icon:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
-				pl.Inv[i].Icon:SetToolTip(CONVERT_NAME_TO_PROPER[slots[i]] .. "\n\n" .. CONVERT_NAME_TO_DESC[slots[i]])
+				pl.Inv[i].Icon:SetToolTip(CONVERT_NAME_TO_DESC[slots[i]])
 				pl.Inv[i].Icon:SetSize(pl.Inv[i]:GetWide(), pl.Inv[i]:GetTall())
 				pl.Inv[i].Icon.DoClick = function()
 					net.Start("HL2CR_UpdateSlot")
