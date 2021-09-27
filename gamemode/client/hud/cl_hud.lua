@@ -159,6 +159,7 @@ local CONVERT_TO_NAME_STANDARD = {
 	["npc_fastzombie_torso"] = "Fast Torso Zombie",
 	["npc_zombine"] = "Zombine",
 	["npc_zombie"] = "Zombie",
+	["npc_barnacle"] = "Barnacle",
 	["npc_fastzombie"] = "Fast Zombie",
 	["npc_poisonzombie"] = "Poison Zombie",
 	["npc_metropolice"] = "Cop",
@@ -184,7 +185,7 @@ local FIX_FONT_SPACING = {
 	["HL2CR_FancyShmancy"] = 45,
 }
 
-hook.Add( "HUDDrawTargetID", "HidePlayerInfo", function()
+hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 
 	for k, pl in ipairs(player.GetAll()) do
 		if LocalPlayer() == pl or LocalPlayer():Team() == TEAM_ALIVE then 
@@ -239,6 +240,10 @@ hook.Add( "HUDDrawTargetID", "HidePlayerInfo", function()
 			if not string.find(LocalPlayer():GetNWString("config_playerfont"), "Default") then
 				font = "HL2CR_" .. LocalPlayer():GetNWString("config_playerfont")
 				fixFontSpacing = FIX_FONT_SPACING[font]
+			end
+			
+			if pl:GetNWString("hl2cr_request") then
+				draw.SimpleText(pl:GetNWString("hl2cr_request"), font, ScrPos.x, ScrPos.y - 65, HL2CR.Theme.standard, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			
 			--Name
@@ -445,11 +450,18 @@ net.Receive("HL2CR_Message", function()
 	if not string.find(translate.Get(messages["Message"]), "@") and not messages["Other"] then
 		chat.AddText(messages["Colour"], translate.Get(messages["Message"]))
 	elseif messages["Other"] then
-		if translate.Get(messages["Other"]["CurCompleted"]) then
+		if messages["Other"]["CurCompleted"] and translate.Get(messages["Other"]["CurCompleted"]) then
+			if messages["Other"]["CurCompleted"]["Total"] then
+			
+				chat.AddText(messages["Colour"], messages["Other"]["Player"] .. translate.Get(messages["Message"]) .. messages["Other"]["Time"] .. translate.Get(messages["Other"]["CurCompleted"]))
+				return
+			end
+			
+			
 			chat.AddText(messages["Colour"], messages["Other"]["Player"] .. translate.Get(messages["Message"]) .. messages["Other"]["Time"] .. translate.Get(messages["Other"]["CurCompleted"]))
 			
-		elseif not translate.Get(messages["Other"]["CurCompleted"]) then
-			chat.AddText(messages["Colour"], messages["Other"]["Player"] .. translate.Get(messages["Message"]) .. messages["Other"]["Time"] .. messages["Other"]["CurCompleted"])
+		elseif messages["Other"]["Total"] then
+			chat.AddText(messages["Colour"], messages["Other"]["Player"] .. translate.Get(messages["Message"]) .. messages["Other"]["Time"] .. messages["Other"]["Total"])
 		end
 	else
 		chat.AddText(messages["Colour"], messages["Message"])

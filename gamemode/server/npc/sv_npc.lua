@@ -116,8 +116,18 @@ hook.Add("EntityTakeDamage", "HL2CR_FriendlyOrHostile", function(ent, dmgInfo)
 	end
 	
 	if att:GetClass() == "sent_controllable_drone" or att:GetClass() == "sent_controllable_manhack" then
-		if ent:Disposition(att) ~= D_HT then
-			ent:AddEntityRelationship(att, D_HT, 99)
+		if ent:IsPlayer() then
+			dmgInfo:SetDamage(0)
+			return
+		elseif ent:IsNPC() then
+			if not (ent:IsFriendly() or ent:GetClass() == "npc_citizen") then
+				if ent:Disposition(att) ~= D_HT then
+					ent:AddEntityRelationship(att, D_HT, 99)
+				end
+			else
+				dmgInfo:SetDamage(0)
+				return
+			end
 		end
 	end	
 end)

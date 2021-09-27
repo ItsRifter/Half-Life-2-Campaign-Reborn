@@ -33,7 +33,8 @@ GM.Achievements = {
 
 	HL2 = {
 		Malcontent = {
-			Name = "Malcontent", 
+			Name = "Malcontent",
+			NameServer = "Malcontent",
 			Mat = "vgui/achievements/hl2_escape_apartmentraid.png", 
 			Desc = "Escape the apartment block raid",
 			Rewards = {
@@ -43,8 +44,21 @@ GM.Achievements = {
 			IsRare = false
 		},
 		
+		Barney_Wish = {
+			Name = "Wish Granted", 
+			NameServer = "Barney_Wish",
+			Mat = "vgui/achievements/hl2_beat_game.png", 
+			Desc = "Fulfil Barney's request",
+			Rewards = {
+				XP = 500,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
 		Trusty_Hardware = {
 			Name = "Trusty Hardware", 
+			NameServer = "Trusty_Hardware",
 			Mat = "vgui/achievements/hl2_get_crowbar.png", 
 			Desc = "Acquire the crowbar",
 			Rewards = {
@@ -56,6 +70,7 @@ GM.Achievements = {
 		
 		Keep_Off_Sand = {
 			Name = "Keep off the Sand", 
+			NameServer = "Keep_Off_Sand",
 			Mat = "vgui/achievements/hl2_beat_donttouchsand.png", 
 			Desc = "Cross the antlion beach\nwithout touching the sand",
 			Rewards = {
@@ -67,6 +82,7 @@ GM.Achievements = {
 		
 		Warden_Freeman = {
 			Name = "Warden Freeman", 
+			NameServer = "Warden_Freeman",
 			Mat = "vgui/achievements/hl2_beat_turretstandoff2.png", 
 			Desc = "Survive the second turret\nstandoff in Nova Prospekt",
 			Rewards = {
@@ -78,6 +94,7 @@ GM.Achievements = {
 		
 		Follow_Freeman = {
 			Name = "Follow Freeman", 
+			NameServer = "Follow_Freeman",
 			Mat = "vgui/achievements/hl2_followfreeman.png", 
 			Desc = "Gain command of a squad\nof rebels in the uprising",
 			Rewards = {
@@ -89,6 +106,7 @@ GM.Achievements = {
 		
 		Cubbage = {
 			Name = "Where Cubbage Fears to Tread", 
+			NameServer = "Cubbage",
 			Mat = "vgui/achievements/hl2_kill_odessagunship.png", 
 			Desc = "Defend Little Odessa\nfrom the gunship attack",
 			Rewards = {
@@ -99,7 +117,8 @@ GM.Achievements = {
 		},
 		
 		Radiation_Levels = {
-			Name = "Radiation Levels Detected", 
+			Name = "Radiation Levels Detected",
+			NameServer = "Radiation_Levels",
 			Mat = "vgui/achievements/hl2_beat_toxictunnel.png", 
 			Desc = "Get through thetoxic tunnel\nunder City 17 in Half-Life 2",
 			Rewards = {
@@ -110,7 +129,8 @@ GM.Achievements = {
 		},
 		
 		Red_Letter_Baby = {
-			Name = "Red Letter... Baby?", 
+			Name = "Red Letter... Baby?",
+			NameServer = "Red_Letter_Baby",			
 			Mat = "vgui/achievements/hl2_beat_game.png", 
 			Desc = "Take the baby from the\nplayground to Dr.Kleiner's lab",
 			Rewards = {
@@ -123,6 +143,7 @@ GM.Achievements = {
 		
 		Zero_Point_Energy = {
 			Name = "Zero Point Energy", 
+			NameServer = "Zero_Point_Energy",
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
 			Desc = "Acquire the Gravity Gun\nin Black Mesa East",
 			Rewards = {
@@ -134,6 +155,7 @@ GM.Achievements = {
 		
 		Two_Points = {
 			Name = "Two Points", 
+			NameServer = "Two_Points",
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
 			Desc = "Use DOG's ball to make a basket",
 			Rewards = {
@@ -145,6 +167,7 @@ GM.Achievements = {
 		
 		Hallowed_Ground = {
 			Name = "Hallowed Ground", 
+			NameServer = "Hallowed_Ground",
 			Mat = "vgui/achievements/hl2_beat_cemetery.png", 
 			Desc = "Escort Gregori safely\nthrough the church cemetery",
 			Rewards = {
@@ -157,6 +180,7 @@ GM.Achievements = {
 		
 		Barnacle_Bowling = {
 			Name = "Barnacle Bowling", 
+			NameServer = "Barnacle_Bowling",
 			Mat = "vgui/achievements/hl2_kill_barnacleswithbarrel.png", 
 			Desc = "Kill five barnacles with one barrel",
 			Rewards = {
@@ -167,7 +191,8 @@ GM.Achievements = {
 		},
 		
 		Raven_Ball = {
-			Name = "Raven Ball", 
+			Name = "Raven Ball",
+			NameServer = "Raven_Ball",
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
 			Desc = "Escort DOG's ball to\nthe end of Ravenholm's mine",
 			Rewards = {
@@ -179,6 +204,7 @@ GM.Achievements = {
 		
 		Flushed = {
 			Name = "Flushed", 
+			NameServer = "Flushed",
 			Mat = "vgui/achievements/hl2_kill_enemy_withtoilet.png", 
 			Desc = "Kill an enemy with a toilet",
 			Rewards = {
@@ -190,6 +216,7 @@ GM.Achievements = {
 		
 		Hack_Attack = {
 			Name = "Hack Attack!", 
+			NameServer = "Hack_Attack",
 			Mat = "vgui/achievements/hlx_kill_enemies_withmanhack.png", 
 			Desc = "Kill five enemies with a Manhack",
 			Rewards = {
@@ -201,6 +228,7 @@ GM.Achievements = {
 		
 		What_Cat = {
 			Name = "What Cat?", 
+			NameServer = "What_Cat",
 			Mat = "vgui/achievements/hl2_beat_game.png", 
 			Desc = "Break Dr.Kleiner's mini-teleporter",
 			Rewards = {
@@ -211,7 +239,8 @@ GM.Achievements = {
 		},
 		
 		Blast_From_The_Past = {
-			Name = "Blast from the past", 
+			Name = "Blast from the past",
+			NameServer = "Blast_From_The_Past",
 			Mat = "vgui/achievements/hl2_find_hevfaceplate.png", 
 			Desc = "Find the old H.E.V suit charger",
 			Rewards = {
@@ -223,6 +252,7 @@ GM.Achievements = {
 		
 		Beat_HL2 = {
 			Name = "Singularity Collapse", 
+			NameServer = "Beat_HL2",
 			Mat = "vgui/achievements/hl2_beat_game.png", 
 			Desc = "Destroy the Citadel's reactor core",
 			Rewards = {
@@ -234,6 +264,7 @@ GM.Achievements = {
 		
 		Giant_Killer = {
 			Name = "Giant Killer", 
+			NameServer = "Giant_Killer",
 			Mat = "vgui/achievements/hl2_beat_c1713striderstandoff.png", 
 			Desc = "Survive the rooftop strider battle\nin the ruins of City 17",
 			Rewards = {
@@ -245,6 +276,7 @@ GM.Achievements = {
 		
 		Lambda_Locator = {
 			Name = "Lambda Locator", 
+			NameServer = "Lambda_Locator",
 			Mat = "vgui/achievements/hl2_find_alllambdas.png", 
 			Desc = "Find all Lambda Caches",
 			Rewards = {
@@ -262,6 +294,7 @@ GM.Achievements = {
 	Misc = {
 		New_Arrival = {
 			Name = "New Arrival", 
+			NameServer = "New_Arrival",
 			Mat = "materials/hl2cr/ach_arrival.jpg", 
 			Desc = "Play the gamemode\nfor the first time",
 			Rewards = {
@@ -273,6 +306,7 @@ GM.Achievements = {
 		
 		Unpleasant_Secret = {
 			Name = "Unpleasant Secret",
+			NameServer = "Unpleasant_Secret",
 			Mat = "materials/hl2cr/ach_gimmeasecret.jpg", 
 			Desc = "Plot twist:\nYou get nothing!",
 			Rewards = {
@@ -284,6 +318,7 @@ GM.Achievements = {
 		
 		Craft_1 = {
 			Name = "Crafted it yourself!", 
+			NameServer = "Craft_1",
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
 			Desc = "Craft an item for\nthe first time",
 			Rewards = {

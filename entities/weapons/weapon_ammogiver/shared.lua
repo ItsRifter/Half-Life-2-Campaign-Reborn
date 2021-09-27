@@ -129,7 +129,6 @@ function SWEP:PrimaryAttack()
 					nextRestock = CurTime() + 30
 				end	
 				
-				self.Owner.rewards.bonus["Teamplayer"] = true
 				
 				player:EmitSound("items/ammo_pickup.wav")
 				
@@ -140,6 +139,10 @@ function SWEP:PrimaryAttack()
 						net.WriteInt(30, 32)
 						net.WriteVector(player:GetPos())
 					net.Send(self.Owner)
+				end
+				
+				if self.Owner.rewards then
+					self.Owner.rewards.bonus["Teamplayer"] = true
 				end
 			else
 				return

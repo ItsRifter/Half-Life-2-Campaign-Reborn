@@ -146,8 +146,6 @@ local APPLY_SKILLS_DEPLOYABLE = {
 	["Controllable Drone"] = "weapon_controllable_drone"
 }
 
---Adds the passive abilities of specific classes
-
 --Player spawning
 hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 
@@ -156,13 +154,14 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 		net.WriteBool(false)
 		net.WriteInt(0, 8)
 	net.Send(ply)
-
+	
 	ply:SetModel(ply.hl2cr.Model)
 	ply:SetupHands()
 	ply:SetTeam(TEAM_ALIVE)
 	
 	ply:SetCustomCollisionCheck(true)
 	ply:SetNoCollideWithTeammates(true)
+	
 	
 	local newMaxHP = 100
 	local healing = 0
@@ -178,6 +177,15 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 		elseif APPLY_SKILLS_DEPLOYABLE[skill] then
 			ply:Give(APPLY_SKILLS_DEPLOYABLE[skill])
 		end
+	end
+	
+	if game.GetMap() == "d3_citadel_03" and not ON_CITADEL_MAPS then		
+		if player.GetAll()[1] == ply then
+			for k, wep in pairs(SPAWNING_WEAPONS) do
+				ply:Give(wep)
+			end
+		end
+		return
 	end
 	
 	ply.hl2cr.AmmoGrenade = 0
@@ -705,6 +713,19 @@ function BroadcastSound(soundPath, player)
 		net.Send(player)
 	end
 end
+
+local NO_GRAV_PICKUPS = {
+	["sent_controllable_manhack"] = true,
+	["sent_controllable_drone"] = true,
+}
+
+hook.Add("GravGunPickupAllowed", "HL2CR_AllowGravPickup", function(ply, ent)
+	if NO_GRAV_PICKUPS[ent:GetClass()] then
+		return false
+	end
+	
+	return true
+end)
 
 net.Receive("HL2CR_UpdateModel", function(len, ply)
 	if not ply then return end

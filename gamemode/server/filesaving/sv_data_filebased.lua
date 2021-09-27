@@ -77,6 +77,7 @@ local function InitData(ply)
 	ply:SetNWInt("stat_kills", ply.hl2cr.Kills)
 	ply:SetNWInt("stat_deaths", ply.hl2cr.Deaths)
 	ply:SetNWInt("stat_quests_completed", ply.hl2cr.Quests.Completed)
+	ply:SetNWString("stat_achievements", table.concat(ply.hl2cr.Achievements, " "))
 	
 	ply:SetNWString("stat_model", ply.hl2cr.Model)
 	

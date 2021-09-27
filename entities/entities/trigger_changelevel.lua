@@ -88,9 +88,9 @@ function ENT:StartTouch(ent)
 			["Colour"] = Color(230, 190, 0),
 			["Message"] = "PLAYER_FINISHED",
 			["Other"] = {
-				["Player"] = ply:Nick(),
+				["Player"] = ent:Nick(),
 				["Time"] = string.FormattedTime(CurTime(), "%02i:%02i"),
-				["CurCompleted"] = "PLAYER_FINISHED2"
+				["Total"] = " (" .. team.NumPlayers(TEAM_COMPLETED_MAP) .. "/" .. #player.GetAll() .. ")"
 			}
 		}
 		

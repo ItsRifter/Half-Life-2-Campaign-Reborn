@@ -31,7 +31,7 @@ function ShowHelpMenu()
 	
 	local helpfulLabel = vgui.Create("DLabel", usefulCmdsPnl)
 	helpfulLabel:SetPos(usefulCmdsPnl:GetWide() * 1.5, 0)
-	helpfulLabel:SetText(language.Get("UsefulInfo"))
+	helpfulLabel:SetText(translate.Get("UsefulInfo"))
 	helpfulLabel:SetFont("HL2CR_Help_Useful")
 	helpfulLabel:SizeToContents()
 	

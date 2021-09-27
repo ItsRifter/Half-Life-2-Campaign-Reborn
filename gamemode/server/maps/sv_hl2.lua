@@ -4180,6 +4180,14 @@ local function SetUpMisc()
 		keepOffSand = true
 	end
 	
+	if game.GetMap() == "d2_prison_01" then
+		for k, spawn in ipairs(ents.FindByClass("info_player_start")) do 
+			if k ~= 1 then
+				spawn:Remove()
+			end
+		end
+	end
+	
 	if game.GetMap() == "d2_prison_03" then
 		for k, spawn in ipairs(ents.FindByClass("info_player_start")) do 
 			if k ~= 1 then

@@ -25,12 +25,12 @@ local passive_health_mk2 = CreateSkill("Health Boost II", "Increase life expecta
 local passive_health_mk3 = CreateSkill("Health Boost III", "Increase life expectancy", "Passive", 3, "materials/hl2cr/skill_health_mk3.jpg", "Health Boost II", 225, 150)
 
 local efficient_medic_mk1 = CreateSkill("Healing Efficiency", "Heal people more effectively", "Medic", 6, "materials/hl2cr/skill_healing_mk1.jpg", "", 25, 50)
-local efficient_medic_mk2 = CreateSkill("Healing Efficiency II", "Heal people more effectively", "Medic", 6, "materials/hl2cr/skill_healing_mk2.jpg", "Healing Efficiency", 125, 50)
-local efficient_medic_mk3 = CreateSkill("Healing Efficiency III", "Heal people more effectively", "Medic", 6, "materials/hl2cr/skill_healing_mk3.jpg", "Healing Efficiency II", 225, 50)
+local efficient_medic_mk2 = CreateSkill("Healing Efficiency II", "Heal people more effectively", "Medic", 7, "materials/hl2cr/skill_healing_mk2.jpg", "Healing Efficiency", 125, 50)
+local efficient_medic_mk3 = CreateSkill("Healing Efficiency III", "Heal people more effectively", "Medic", 8, "materials/hl2cr/skill_healing_mk3.jpg", "Healing Efficiency II", 225, 50)
 
-local recharge_medic_mk1 = CreateSkill("Heal Recharge", "Medkit recharges faster", "Medic", 7, "materials/hl2cr/skill_healing_mk1.jpg", "", 25, 150)
-local recharge_medic_mk2 = CreateSkill("Heal Recharge II", "Medkit recharges faster", "Medic", 8, "materials/hl2cr/skill_healing_mk1.jpg", "Heal Recharge", 125, 150)
-local recharge_medic_mk3 = CreateSkill("Heal Recharge III", "Medkit recharges faster", "Medic", 10, "materials/hl2cr/skill_healing_mk1.jpg", "Heal Recharge II", 225, 150)
+local recharge_medic_mk1 = CreateSkill("Heal Recharge", "Medkit recharges faster", "Medic", 6, "materials/hl2cr/skill_healing_mk1.jpg", "", 25, 150)
+local recharge_medic_mk2 = CreateSkill("Heal Recharge II", "Medkit recharges faster", "Medic", 7, "materials/hl2cr/skill_healing_mk1.jpg", "Heal Recharge", 125, 150)
+local recharge_medic_mk3 = CreateSkill("Heal Recharge III", "Medkit recharges faster", "Medic", 8, "materials/hl2cr/skill_healing_mk1.jpg", "Heal Recharge II", 225, 150)
 
 local efficient_repairman_mk1 = CreateSkill("Repair Efficiency", "Repair armor more effectively", "Repair", 7, "materials/hl2cr/skill_healing_mk1.jpg", "", 25, 150)
 local efficient_repairman_mk2 = CreateSkill("Repair Efficiency II", "Repair armor more effectively", "Repair", 8, "materials/hl2cr/skill_healing_mk1.jpg", "Repair Efficiency", 125, 150)

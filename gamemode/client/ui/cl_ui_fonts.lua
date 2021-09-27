@@ -217,7 +217,7 @@ surface.CreateFont( "HL2CR_EndMapStats", {
 surface.CreateFont( "HL2CR_AchTitle", {
 	font = "Roboto",
 	extended = false,
-	size = 22,
+	size = 12,
 	weight = 450,
 	blursize = 0,
 	scanlines = 0,
@@ -394,6 +394,43 @@ surface.CreateFont( "HL2CR_Config_Option", {
 	outline = false,
 } )
 
+
+
+surface.CreateFont( "HL2CR_Voices", {
+	font = "Roboto",
+	extended = false,
+	size = 48,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
+surface.CreateFont( "HL2CR_VoicesHelp", {
+	font = "Roboto",
+	extended = false,
+	size = 28,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
 
 surface.CreateFont( "HL2CR_Alive in a Science-Fiction", {
 	font = "Alive in a Science Fiction",

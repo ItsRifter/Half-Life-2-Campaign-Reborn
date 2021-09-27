@@ -1,4 +1,4 @@
-GIMME_A_SECRET = {
+local GIMME_A_SECRET = {
 	[1] = {
 		["Colour"] = Color(255, 255, 255),
 		["Message"] = "No"
@@ -53,6 +53,21 @@ GIMME_A_SECRET = {
 		["Colour"] = Color(255, 0, 0),
 		["Message"] = "YOU'RE STILL ASKING?"
 	}
+}
+
+local MODEL_GENDER = {
+	["models/player/Group01/male_07.mdl"] = true,
+}
+
+local REQUEST_AMMO_LIMITS = {
+	[1] = 60,
+	[3] = 150,
+	[4] = 225,
+	[5] = 12,
+	[6] = 10,
+	[7] = 30,
+	[8] = 3,
+	[10] = 5
 }
 
 hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
@@ -242,10 +257,73 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		return ""
 	end
 	
+	if text == "!requestmedic" or text == "!medic" then
+		if ply.requestcooldown and ply.requestcooldown >= CurTime() then
+			return ""
+		end
+
+		if ply:Health() == ply:GetMaxHealth() then
+			return ""
+		end
+
+		if string.find(ply:GetModel(), "male") then
+			ply:EmitSound("hl2cr/request/medic/male_request_medic_" .. math.random(1, 2) .. ".wav")
+			
+		elseif string.find(ply:GetModel(), "female") then
+			ply:EmitSound("hl2cr/request/medic/female_request_medic_" .. math.random(1, 2) .. ".wav")
+		end
+
+		ply:SetNWString("hl2cr_request", "Needs a medic")
+		
+		if timer.Exists(ply:Nick() .. "_time") then return "" end 
+		
+		timer.Create(ply:Nick() .. "_time", 6, 1, function()
+			ply:SetNWString("hl2cr_request", "")
+		end)
+		
+		ply.requestcooldown = 5	+ CurTime()
+		return ""
+	end
+	
+	if text == "!requestammo" or text == "!ammo" then
+		if ply.requestcooldown and ply.requestcooldown >= CurTime() then
+			return ""
+		end
+		
+		if ply:GetAmmoCount(ply:GetActiveWeapon():GetPrimaryAmmoType()) >= REQUEST_AMMO_LIMITS[ply:GetActiveWeapon():GetPrimaryAmmoType()] then
+			return ""
+		end
+
+		if string.find(ply:GetModel(), "male") then
+			ply:EmitSound("hl2cr/request/ammo/male_request_ammo_" .. math.random(1, 3) .. ".wav")
+		elseif string.find(ply:GetModel(), "female") then
+			ply:EmitSound("hl2cr/request/ammo/female_request_ammo_" .. math.random(1, 3) .. ".wav")
+		end
+
+		ply:SetNWString("hl2cr_request", "Needs a medic")
+		
+		if timer.Exists(ply:Nick() .. "_time") then return "" end 
+		
+		timer.Create(ply:Nick() .. "_time", 6, 1, function()
+			ply:SetNWString("hl2cr_request", "")
+		end)
+		
+		ply:SetNWString("hl2cr_request", "Needs Ammo")
+		
+		if timer.Exists(ply:Nick() .. "_time") then return "" end 
+		
+		timer.Create(ply:Nick() .. "_time", 6, 1, function()
+			ply:SetNWString("hl2cr_request", "")
+		end)
+		
+		ply.requestcooldown = 5 + CurTime()
+		return ""
+	end
+	
 	if text == "!petsummon" or text == "!summonpet" then
 		if ply.hl2cr.Level < 15 then
 			BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
-			return
+			return ""
 		end
 		
 		if table.IsEmpty(ply.hl2cr.Pets.CurrentPet) then
@@ -377,7 +455,23 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		end
 		ply.pet = nil
 		return ""
-	end	
+	end
+		
+	if text == "barney says fuck you" or text == "barney said fuck you" then
+		GrantAchievement(ply, "HL2", "Barney_Wish")
+	end
+end)
+
+local VOICES = {
+	["Medic"] = "Needs a medic",
+	["Armor"] = "Needs armor",
+	["Ammo"] = "Needs ammo"
+}
+
+net.Receive("HL2CR_HelpNotify", function()
+	local helpNeeded = net.ReadString()
+	
+	
 end)
 
 concommand.Add("hl2cr_stopvote", function(ply, cmd, args)
