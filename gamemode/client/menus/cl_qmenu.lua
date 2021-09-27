@@ -1,23 +1,62 @@
 local CONVERT_NAME_TO_IMAGE = {
 	["Flare_gun"] = "materials/hl2cr/weapon_flaregun.jpg",
-	["Multi-Grenade_Launcher"] = "materials/hl2cr/weapon_grenadelauncher.jpg",
+	["Multi_Grenade_Launcher"] = "materials/hl2cr/weapon_grenadelauncher.jpg",
 	[".50_BMG_Heavy_Sniper"] = "materials/hl2cr/weapon_bmgsniper.jpg"
 }
 
 local CONVERT_NAME_TO_DESC = {
 	["Flare_gun"] = "Used for emergencies...\nso it was",
-	["Multi-Grenade_Launcher"] = "A grenade launcher\nhandle with care",
+	["Multi_Grenade_Launcher"] = "A grenade launcher\nhandle with care",
 	[".50_BMG_Heavy_Sniper"] = "A rather heavy sniper\nwith devastating results"
 }
 
-hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
-	if LocalPlayer():Alive() then
-		menuFrame = vgui.Create("HL2CR_Tab")
-		menuFrame:SetSize(ScrW() / 2, ScrH() / 2)
-		menuFrame:Center()
-		menuFrame:MakePopup()
+local PLAYERMODELS = {
+	[0] = {
+		[1] = "models/player/Group01/male_01.mdl",
+		[2] = "models/player/Group01/male_02.mdl",
+		[3] = "models/player/Group01/male_03.mdl",
+		[4] = "models/player/Group01/male_04.mdl",
+		[5] = "models/player/Group01/male_05.mdl",
+		[6] = "models/player/Group01/male_06.mdl",
+		[7] = "models/player/Group01/male_07.mdl",
+		[8] = "models/player/Group01/male_08.mdl",
+		[9] = "models/player/Group01/female_01.mdl",
+		[10] = "models/player/Group01/female_02.mdl",
+		[11] = "models/player/Group01/female_03.mdl",
+		[12] = "models/player/Group01/female_04.mdl",
+		[13] = "models/player/Group01/female_05.mdl",
+		[14] = "models/player/Group01/female_06.mdl"
+	},
+	
+	[5] = {
+		[1] = "models/player/Group03m/male_01.mdl",
+		[2] = "models/player/Group03m/male_02.mdl",
+		[3] = "models/player/Group03m/male_03.mdl",
+		[4] = "models/player/Group03m/male_04.mdl",
+		[5] = "models/player/Group03m/male_05.mdl",
+		[6] = "models/player/Group03m/male_06.mdl",
+		[7] = "models/player/Group03m/male_07.mdl",
+		[8] = "models/player/Group03m/female_01.mdl",
+		[9] = "models/player/Group03m/female_02.mdl",
+		[10] = "models/player/Group03m/female_03.mdl",
+		[11] = "models/player/Group03m/female_04.mdl",
+		[12] = "models/player/Group03m/female_05.mdl",
+		[13] = "models/player/Group03m/female_06.mdl",
+	},
+	
+	[10] = {
+		[1] = "models/player/police.mdl",
+		[2] = "models/player/police_fem.mdl"
+	}
+}
+
+function StartQMenu(shouldOpen)
+	if shouldOpen then 
+		qMenuTabs = vgui.Create("HL2CR_Tab")
+		qMenuTabs:SetSize(ScrW() / 2, ScrH() / 2)
+		qMenuTabs:SetKeyboardInputEnabled(false)
 		
-		local invPnl = vgui.Create("DPanel", menuFrame)
+		local invPnl = vgui.Create("DPanel", qMenuTabs)
 		invPnl:SetSize(ScrW() / 2, ScrH() / 2)
 		invPnl:SetPos(0, 100)
 		
@@ -43,6 +82,31 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 		invPnlPlayerModel:SetModel( LocalPlayer():GetModel() )
 		function invPnlPlayerModel:LayoutEntity( Entity ) return end
 		
+		local modelHorizontalScroll = vgui.Create("DHorizontalScroller", invPnl)
+		modelHorizontalScroll:SetSize(512, 64)
+		modelHorizontalScroll:SetPos(0, 372)
+		for level, v in pairs(PLAYERMODELS) do
+			
+			for i, p in ipairs(v) do
+				if LocalPlayer():GetNWInt("stat_level") >= level then
+					print(v[i])
+					print(i)
+					local playermodelBtn = vgui.Create("SpawnIcon", modelHorizontalScroll)
+					playermodelBtn:SetModel(v[i])
+					playermodelBtn:SetSize(64, 64)
+					modelHorizontalScroll:AddPanel(playermodelBtn)
+					
+					playermodelBtn.DoClick = function(pnl)
+						net.Start("HL2CR_UpdateModel")
+							net.WriteString(v[i])
+						net.SendToServer()
+						
+						invPnlPlayerModel:SetModel( v[i] )
+					end
+				end
+			end
+		end
+		
 		local invPnlSlotsPnl = vgui.Create("DPanel", invPnl)
 		invPnlSlotsPnl:SetSize(396, 250)
 		invPnlSlotsPnl:SetPos(25, 75)
@@ -52,7 +116,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 		invLayout:Dock(FILL)
 		invLayout:SetSpaceX(10)
 		invLayout:SetSpaceY(5)
-		
+	
 		local weaponSlotPnl = vgui.Create("DPanel", invPnl)
 		weaponSlotPnl:SetPos(invPnl:GetWide() / 1.75, 50)
 		weaponSlotPnl:SetSize(64, 64)
@@ -96,7 +160,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 			end
 		end
 			
-		local skillsPnl = vgui.Create("DPanel", menuFrame)
+		local skillsPnl = vgui.Create("DPanel", qMenuTabs)
 		skillsPnl:SetSize(ScrW() / 1.45, ScrH() / 2)
 		skillsPnl:SetPos(0, 100)
 		
@@ -106,6 +170,8 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 		local skillsSelectionPnl = vgui.Create("HL2CR_Tab", skillsPnlBG)
 		skillsSelectionPnl:SetSize(skillsPnl:GetWide(), skillsPnl:GetTall())
 		skillsSelectionPnl:SetPos(0, -35)
+		skillsSelectionPnl:SetKeyboardInputEnabled(false)
+
 		skillsSelectionPnl.Paint = function(pnl, w, h)
 			surface.SetDrawColor(HL2CR.Theme.qMenu)
 			surface.DrawRect(0, 0, w, h)
@@ -134,8 +200,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 			
 			skillBtn:SetSize(64, 64)
 			skillBtn:SetPos(skill["Pos"][1], skill["Pos"][2])
-			
-			
+		
 			if LocalPlayer():GetNWInt("stat_level") < skill.Level then
 				skillBtn:SetToolTip("LOCKED\nREACH LEVEL " .. skill.Level)
 				skillBtn:SetImage("vgui/hud/icon_locked.png")
@@ -150,7 +215,9 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 				skillBtn:SetToolTip(skill.Name .. "\n" .. skill.Desc .. "\nREQUIRES: " .. skill.Requirements)
 			end
 			
-			skillBtn.DoClick = function()
+			local skillPoints = LocalPlayer():GetNWInt("stat_skillpoints")
+			
+			skillBtn.DoClick = function(pnl)
 				if string.find(LocalPlayer():GetNWString("stat_curskills"), skill.Name) then
 					surface.PlaySound("buttons/button16.wav")
 					return
@@ -163,7 +230,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 					end
 				end
 				
-				if LocalPlayer():GetNWInt("stat_skillpoints") <= 0 then
+				if skillPoints <= 0 then
 					surface.PlaySound("buttons/button16.wav")
 					return
 				end
@@ -171,6 +238,13 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 				net.Start("HL2CR_SkillObtain")
 					net.WriteString(skill.Name)
 				net.SendToServer()
+				
+				skillPoints = skillPoints - 1
+				
+				local skillTick = vgui.Create("DImage", pnl)
+				skillTick:SetImage("icon16/tick.png")
+				skillTick:SetPos(0, 32)
+				skillTick:SetSize(32, 32)
 				
 				surface.PlaySound("buttons/button5.wav")
 			end
@@ -188,7 +262,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 		skillsSelectionPnl.navbar:AddTab("Repairman", repairSkillsPnl)
 		skillsSelectionPnl.navbar:SetActive(1)
 		
-		local shopPnl = vgui.Create("DPanel", menuFrame)
+		local shopPnl = vgui.Create("DPanel", qMenuTabs)
 		shopPnl:SetSize(ScrW() / 1.45, ScrH() / 2)
 		shopPnl:SetPos(0, 100)
 		
@@ -220,8 +294,10 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 		curResinLabel:SetPos(0, 0)
 		curResinLabel:SetTextColor(Color(0, 0, 0))
 		
-		for i, item in pairs(GAMEMODE.ShopItems) do
-			if item.Name == slots[i] then continue end
+		for k, item in pairs(GAMEMODE.ShopItems) do
+
+			if string.find(LocalPlayer():GetNWString("inv_slots"), item.Name) then continue end
+			
 			
 			local itemBtn = weaponsLayout:Add("DImageButton")
 			itemBtn:SetSize(64, 64)
@@ -230,7 +306,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 			
 			itemBtn.DoClick = function(pnl)			
 
-				if LocalPlayer():GetNWInt("currency_resin") <= item.Cost then
+				if LocalPlayer():GetNWInt("currency_resin") < item.Cost then
 					surface.PlaySound("buttons/button16.wav")
 					return
 				end
@@ -246,7 +322,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 			end
 		end
 		
-		local petsPnl = vgui.Create("DPanel", menuFrame)
+		local petsPnl = vgui.Create("DPanel", qMenuTabs)
 		petsPnl:SetSize(ScrW() / 1.45, ScrH() / 2)
 		petsPnl:SetPos(0, 100)
 		
@@ -257,7 +333,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 			surface.DrawRect(0, 0, w, h)
 		end
 		
-		local classPnl = vgui.Create("DPanel", menuFrame)
+		local classPnl = vgui.Create("DPanel", qMenuTabs)
 		classPnl:SetSize(ScrW() / 2.15, ScrH() / 2)
 		classPnl:SetPos(0, 100)
 		
@@ -267,11 +343,11 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 			surface.SetDrawColor(HL2CR.Theme.qMenu)
 			surface.DrawRect(0, 0, w, h)
 		end
-	
+
 		local classHorizontalScroll = vgui.Create("DHorizontalScroller", classPnlBG)
 		classHorizontalScroll:Dock(FILL)
 		classHorizontalScroll:SetOverlap( -40 )
-	
+
 		if LocalPlayer():GetNWInt("stat_level") >= 5 then
 			for i, class in pairs(GAMEMODE.PlayStyleClass) do
 				if LocalPlayer():GetNWInt("stat_level") < class.LevelReq then break end
@@ -316,7 +392,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 						net.WriteInt(i, 8)
 					net.SendToServer()
 					surface.PlaySound("hl2cr/standardbeep.wav")
-					menuFrame:Remove()
+					qMenuTabs:Remove()
 				end
 				
 				classHorizontalScroll:AddPanel(classShowPanel)
@@ -330,7 +406,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 			classPnlLocked:SetTextColor(Color(0, 0, 0, 255))
 		end
 		
-		local statsPnl = vgui.Create("DPanel", menuFrame)
+		local statsPnl = vgui.Create("DPanel", qMenuTabs)
 		statsPnl:SetSize(ScrW() / 3, ScrH() / 2)
 		statsPnl:SetPos(0, 100)
 		
@@ -370,23 +446,23 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 		statsPnlLabelQuest:SetFont("HL2CR_Menu_Stats")
 		statsPnlLabelQuest:SizeToContents()
 		
-		menuFrame.navbar:AddTab("Inv", invPnl)
-		menuFrame.navbar:AddTab("Skills", skillsPnl)
-		menuFrame.navbar:AddTab("Shop", shopPnl)
-		menuFrame.navbar:AddTab("Pets", petsPnl)
-		menuFrame.navbar:AddTab("Class", classPnl)
-		menuFrame.navbar:AddTab("Statistics", statsPnl)
+		qMenuTabs.navbar:AddTab("Inv", invPnl)
+		qMenuTabs.navbar:AddTab("Skills", skillsPnl)
+		qMenuTabs.navbar:AddTab("Shop", shopPnl)
+		qMenuTabs.navbar:AddTab("Pets", petsPnl)
+		qMenuTabs.navbar:AddTab("Class", classPnl)
+		qMenuTabs.navbar:AddTab("Statistics", statsPnl)
 		
-		menuFrame.navbar:SetActive(1)
+		qMenuTabs.navbar:SetActive(1)
 		
-		menuFrame.Think = function(pnl)
+		qMenuTabs.Think = function(pnl)
 			if pnl.navbar:GetActive() == invPnl then
 				pnl:SetSize(ScrW() / 2, pnl:GetTall())
 				pnl:Center()
 			end
 				
 			if pnl.navbar:GetActive() == skillsPnl then
-				pnl:SetSize(ScrW() / 1.45, pnl:GetTall())
+				pnl:SetSize(ScrW() / 2, pnl:GetTall())
 				pnl:Center()
 			end
 			
@@ -396,7 +472,7 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 			end
 			
 			if pnl.navbar:GetActive() == petsPnl then
-				pnl:SetSize(ScrW() / 1.45, pnl:GetTall())
+				pnl:SetSize(ScrW() / 2, pnl:GetTall())
 				pnl:Center()
 			end
 			if pnl.navbar:GetActive() == classPnl then
@@ -409,11 +485,18 @@ hook.Add("OnSpawnMenuOpen", "HL2CR_InventoryOpen", function()
 				pnl:Center()
 			end
 		end
+	
+	else
+		if qMenuTabs and qMenuTabs:IsValid() then
+			qMenuTabs:Remove()
+		end
 	end
+end
+
+hook.Add("OnSpawnMenuOpen", "HL2CR_QMenuOpen", function()
+	StartQMenu(true)
 end)
 
-hook.Add("OnSpawnMenuClose", "HL2CR_InventoryClose", function()
-	if menuFrame and menuFrame:IsValid() then
-		menuFrame:Remove()
-	end
+hook.Add("OnSpawnMenuClose", "HL2CR_QMenuClose", function()
+	StartQMenu(false)
 end)

@@ -120,6 +120,8 @@ function SWEP:PrimaryAttack()
 				net.WriteInt(need * 2, 32)
 				net.WriteVector(tr.Entity:GetPos())
 			net.Send(self.Owner)
+			
+			self.Owner.rewards.bonus["Teamplayer"] = true
 		end
 	elseif SERVER then
 		self.Owner:EmitSound("items/suitchargeno1.wav")

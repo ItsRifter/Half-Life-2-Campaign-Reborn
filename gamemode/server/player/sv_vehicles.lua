@@ -146,6 +146,8 @@ end
 
 function GM:CanExitVehicle(veh, ply)
 	if ply.antiExploit and ply.antiExploit > CurTime() then return false end
+	print(veh:GetClass())
+	--if veh:GetClass() == 
 	
 	return true
 end

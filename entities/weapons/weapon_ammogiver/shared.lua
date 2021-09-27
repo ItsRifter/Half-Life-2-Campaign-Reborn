@@ -128,6 +128,9 @@ function SWEP:PrimaryAttack()
 				if nextRestock < CurTime() then
 					nextRestock = CurTime() + 30
 				end	
+				
+				self.Owner.rewards.bonus["Teamplayer"] = true
+				
 				player:EmitSound("items/ammo_pickup.wav")
 				
 				if SERVER then

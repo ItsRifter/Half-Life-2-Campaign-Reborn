@@ -36,6 +36,14 @@ local efficient_repairman_mk1 = CreateSkill("Repair Efficiency", "Repair armor m
 local efficient_repairman_mk2 = CreateSkill("Repair Efficiency II", "Repair armor more effectively", "Repair", 8, "materials/hl2cr/skill_healing_mk1.jpg", "Repair Efficiency", 125, 150)
 local efficient_repairman_mk3 = CreateSkill("Repair Efficiency III", "Repair armor more effectively", "Repair", 10, "materials/hl2cr/skill_healing_mk1.jpg", "Repair Efficiency II", 225, 150)
 
+local recharge_repairman_mk1 = CreateSkill("Repair Recharge", "Repair Kit recharges faster", "Repair", 7, "materials/hl2cr/skill_recharge_mk1.jpg", "", 25, 150)
+local recharge_repairman_mk2 = CreateSkill("Repair Recharge II", "Repair Kit recharges faster", "Repair", 8, "materials/hl2cr/skill_recharge_mk2.jpg", "Repair Recharge", 125, 150)
+local recharge_repairman_mk3 = CreateSkill("Repair Recharge III", "Repair Kit recharges faster", "Repair", 10, "materials/hl2cr/skill_recharge_mk3.jpg", "Repair Recharge II", 225, 150)
+
+local access_drone_mechanic = CreateSkill("Controllable Drone", "A drone you can control\nwith a built-in gun", "Mechanic", 11, "materials/hl2cr/skill_recharge_mk3.jpg", "", 225, 150)
+
+
+
 table.insert(GM.PlayerSkills, passive_health_mk1)
 table.insert(GM.PlayerSkills, passive_health_mk2)
 table.insert(GM.PlayerSkills, passive_health_mk3)
@@ -50,6 +58,9 @@ table.insert(GM.PlayerSkills, recharge_medic_mk3)
 table.insert(GM.PlayerSkills, efficient_repairman_mk1)
 table.insert(GM.PlayerSkills, efficient_repairman_mk2)
 table.insert(GM.PlayerSkills, efficient_repairman_mk3)
+table.insert(GM.PlayerSkills, recharge_repairman_mk1)
+table.insert(GM.PlayerSkills, recharge_repairman_mk2)
+table.insert(GM.PlayerSkills, recharge_repairman_mk3)
 
 
 if SERVER then

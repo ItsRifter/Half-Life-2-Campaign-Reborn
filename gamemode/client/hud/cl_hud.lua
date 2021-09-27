@@ -168,12 +168,20 @@ local CONVERT_TO_NAME_STANDARD = {
 	["npc_clawscanner"] = "Shield Scanner",
 	["npc_hunter"] = "Hunter",
 	["npc_rollermine"] = "Rollermine",
+	["npc_turret_floor"] = "Turret",
+	["npc_turret_ground"] = "Ground Turret",
 	["npc_strider"] = "Strider",
 	["npc_combinegunship"] = "Gunship",
 	["npc_antlion"] = "Antlion",
 	["npc_antlion_worker"] = "Antlion Worker",
 	["npc_antlionguard"] = "Antlion Guard",
 	["npc_antlionguardian"] = "Antlion Guardian",
+}
+
+local FIX_FONT_SPACING = {
+	["HL2CR_HoverPlayer"] = 0,
+	["HL2CR_EasyHorror"] = 5,
+	["HL2CR_FancyShmancy"] = 45,
 }
 
 hook.Add( "HUDDrawTargetID", "HidePlayerInfo", function()
@@ -224,24 +232,32 @@ hook.Add( "HUDDrawTargetID", "HidePlayerInfo", function()
 			hpSpacing = 50
 		end
 	
-		if dist <= 250 then
-			--Name
-			draw.SimpleText(pl:Nick(), "HL2CR_HoverPlayer", ScrPos.x, ScrPos.y, HL2CR.Theme.standard, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		if dist <= LocalPlayer():GetNWInt("config_playerdrawdist", 250) then
+			local font = "HL2CR_HoverPlayer"
+			local fixFontSpacing = FIX_FONT_SPACING[font]
 			
-			--Level
-			draw.SimpleText("Level: " .. pl:GetNWInt("stat_level", -1), "HL2CR_HoverPlayer", ScrPos.x, ScrPos.y + 30, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			
-			--Status
-			draw.SimpleText("Status: ", "HL2CR_HoverPlayer", ScrPos.x - 35, ScrPos.y + 60, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			
-			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_medic.jpg" then
-				draw.SimpleText("HP: " .. pl:Health(), "HL2CR_HoverPlayer", ScrPos.x + 55, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			else
-				draw.SimpleText(hpStatus, "HL2CR_HoverPlayer", ScrPos.x + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			if LocalPlayer():GetNWInt("config_playerfont") ~= "Default" then
+				font = "HL2CR_" .. LocalPlayer():GetNWInt("config_playerfont")
+				fixFontSpacing = FIX_FONT_SPACING[font]
 			end
 			
-			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/weapon_toolbox.jpg" then
-				draw.SimpleText(" / Armor: " .. pl:Armor(), "HL2CR_HoverPlayer", ScrPos.x + 115 + hpSpacing, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			--Name
+			draw.SimpleText(pl:Nick(), font, ScrPos.x, ScrPos.y, HL2CR.Theme.standard, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			
+			--Level
+			draw.SimpleText("Level: " .. pl:GetNWInt("stat_level", -1), font, ScrPos.x, ScrPos.y + 30, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			
+			--Status
+			draw.SimpleText("Status: ", font, ScrPos.x - 35, ScrPos.y + 60, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			
+			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_medic.jpg" then
+				draw.SimpleText("HP: " .. pl:Health(), font, ScrPos.x + 55, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			else
+				draw.SimpleText(hpStatus, font, ScrPos.x + hpSpacing + fixFontSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+			
+			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_repairman.jpg" then
+				draw.SimpleText(" / Armor: " .. pl:Armor(), font, ScrPos.x + 115 + hpSpacing + fixFontSpacing, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			--Classes
 			if pl:GetNWString("class_icon") ~= "" then
@@ -279,22 +295,29 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 				pos.z = ent:GetPos().z + 70 + (dist * 0.0325)
 			end
 			local ScrPos = pos:ToScreen()
-			if ent:GetOwner() and dist <= 150 then
-				local levelColour = Color(255, 255, 255, 255)
+			if ent:GetOwner() and dist <= LocalPlayer():GetNWInt("config_npcdrawdist", 150) then
+				local levelColour = Color(255, 255, 255)
+				
 				if ent:GetNWInt("HL2CR_NPC_Level") <= 7 then
-					levelColour = Color(0, 255, 0, 255)
+					levelColour = string.ToColor(LocalPlayer():GetNWString("config_npccolours_easy"))
 				elseif ent:GetNWInt("HL2CR_NPC_Level") > 7 and ent:GetNWInt("HL2CR_NPC_Level") <= 18 then
-					levelColour = Color(255, 255, 0, 255)
+					levelColour = string.ToColor(LocalPlayer():GetNWString("config_npccolours_medium"))
 				else
-					levelColour = Color(255, 0, 0, 255)
+					levelColour = string.ToColor(LocalPlayer():GetNWString("config_npccolours_hard"))
+				end
+			
+				local font = "HL2CR_NPCStats"
+				
+				if LocalPlayer():GetNWString("config_npcfont") ~= "Default" then
+					font = "HL2CR_" .. LocalPlayer():GetNWString("config_npcfont")
 				end
 				
 				if not ent:GetNWBool("HL2CR_Special") then
-					draw.SimpleText(CONVERT_TO_NAME_STANDARD[ent:GetClass()], "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(CONVERT_TO_NAME_STANDARD[ent:GetClass()], font or "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				else
-					draw.SimpleText(ent:GetNWString("HL2CR_NPC_Name"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(ent:GetNWString("HL2CR_NPC_Name"), font, ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
-				draw.SimpleText("LEVEL " .. ent:GetNWInt("HL2CR_NPC_Level"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y + 30, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText("LEVEL " .. ent:GetNWInt("HL2CR_NPC_Level"), font, ScrPos.x, ScrPos.y + 30, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 	end
@@ -308,6 +331,7 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 			local ScrPos = pos:ToScreen()
 			if entPet:GetOwner() and dist <= 250 then
 				draw.SimpleText(entPet:GetOwner():Nick() .. "'s Pet", "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(entPet:GetOwner():GetNWString("pet_name"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y + 35, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 	end
@@ -419,7 +443,7 @@ net.Receive("HL2CR_Message", function()
 end)
 
 net.Receive("HL2CR_MsgSound", function()
-	local sound = net.ReadTable()
+	local sound = net.ReadString()
 	
 	surface.PlaySound(sound)
 end)

@@ -16,7 +16,7 @@ function CreateShopItem(name, desc, cost, icon, typeItem)
 end
 
 local flaregun = CreateShopItem("Flare_gun", "Used for emergencies...\nso it was", 7500, "materials/hl2cr/weapon_flaregun.jpg", "Weapon")
-local grenade_launcher = CreateShopItem("Multi-Grenade_Launcher", "A grenade launcher\nhandle with care", 30000, "materials/hl2cr/weapon_grenadelauncher.jpg", "Weapon")
+local grenade_launcher = CreateShopItem("Multi_Grenade_Launcher", "A grenade launcher\nhandle with care", 30000, "materials/hl2cr/weapon_grenadelauncher.jpg", "Weapon")
 local heavy_sniper = CreateShopItem(".50_BMG_Heavy_Sniper", "A rather heavy sniper\nwith devastating results", 75000, "materials/hl2cr/weapon_bmgsniper.jpg", "Weapon")
 
 table.insert(GM.ShopItems, flaregun)

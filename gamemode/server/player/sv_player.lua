@@ -14,6 +14,7 @@ NO_SPAWNING_WEAPONS = {
 	["weapon_armorkit_hl2cr"] = true,
 	["weapon_ammogiver"] = true,
 	["weapon_controllable_manhack"] = true,
+	["weapon_controllable_drone"] = true,
 	["the_anti_rifle"] = true,
 	["the_secret_carbine"] = true,
 	["the_bfhmg"] = true,
@@ -26,19 +27,17 @@ NO_SPAWNING_WEAPONS = {
 --Takes the name in CurWeaponSlot into a entity weapon
 local CONVERT_NAME_TO_ENT = {
 	["Flare_gun"] = "the_fire_hazard",
-	["Multi-Grenade_Launcher"] = "bakkers_blaster",
+	["Multi_Grenade_Launcher"] = "bakkers_blaster",
 	[".50_BMG_Heavy_Sniper"] = "the_anti_rifle",
 }
 
 --Super gravity gun maps
 SUPERGRAVGUN_MAPS = {
-	["d3_citadel_03"] = true,
 	["d3_citadel_04"] = true,
-	["d3_citadel_05"] = true,
-	["d3_breen_01"] = true
+	["d3_citadel_05"] = true
 }
 
-function GM:ShowHelp(ply)
+function GM:ShowHelp(ply)		
 	HL2CR_Voting:PlayerVote(ply, true)
 end
 
@@ -72,6 +71,8 @@ hook.Add("PostPlayerDeath", "HL2CR_HandlePlayerDeath", function(victim)
 	victim:SetTeam(TEAM_DEAD)
 	victim.hl2cr.Deaths = victim.hl2cr.Deaths + 1
 	victim:SetNWInt("stat_deaths", victim.hl2cr.Deaths)
+	
+	victim.rewards.bonus["No Deaths"] = false
 	
 	net.Start("HL2CR_ShouldClientSpectate")
 		net.WriteBool(true)
@@ -109,6 +110,14 @@ hook.Add("PlayerInitialSpawn", "HL2CR_InitialPlayerSpawn", function(ply, transit
 		["stats"] = {
 			["exp"] = 0,
 		},
+		
+		["bonus"] = {
+			["No Deaths"] = true,
+			["Crowbar Only"] = true,
+			["Pacifist"] = true,
+			["Teamplayer"] = false
+		},
+		
 		["items"] = {},
 		["achs"] = {},
 	}
@@ -181,8 +190,10 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	ply:SetMaxHealth(newMaxHP)
 	ply:SetHealth(newMaxHP)
 
-	if CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot] then
+	if CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot] and not (NOSUIT_MAPS[game.GetMap()] or SUPERGRAVGUN_MAPS[game.GetMap()] or game.GetMap() == "d1_trainstation_05") and not ON_CITADEL_MAPS then
 		ply:Give(CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot])
+	elseif SUPERGRAVGUN_MAPS[game.GetMap()] then
+		ply:Give("weapon_physcannon")
 	end
 	
 	if MAPS_LOBBY[game.GetMap()] and ply:IsAdmin() then	
@@ -201,6 +212,7 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 		suit:Spawn()
 	end
 	
+
 	for k, wep in pairs(SPAWNING_WEAPONS) do
 		ply:Give(wep)
 	end
@@ -215,7 +227,7 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 		end
 	end
 	
-	if not table.IsEmpty(ply.hl2cr.CurClass) and not ( NOSUIT_MAPS[game.GetMap()] or game.GetMap() == "d1_trainstation_05") and not MAPS_LOBBY[game.GetMap()] then
+	if not table.IsEmpty(ply.hl2cr.CurClass) and not ( NOSUIT_MAPS[game.GetMap()] or SUPERGRAVGUN_MAPS[game.GetMap()] or game.GetMap() == "d1_trainstation_05") and not MAPS_LOBBY[game.GetMap()] then
 		for _, classWep in ipairs(ply.hl2cr.CurClass.Weapons) do
 			ply:Give(classWep)
 		end
@@ -260,17 +272,22 @@ hook.Add("PlayerCanPickupWeapon", "HL2CR_WeaponPickup", function(ply, weapon)
 	end
 	
 	--If its a stunstick, give them armor
-	if weapon:GetClass() == "weapon_stunstick" and game.GetMap() == "d1_canals_01" then
+	if weapon:GetClass() == "weapon_stunstick" and ply.hl2cr.CurClass.Name ~= "Combine Dropout" and game.GetMap() == "d1_canals_01" then
+		weapon:Remove()
 		
 		ply:SetArmor(ply:Armor() + 5)
 		
 		if ply:Armor() > 100 then
 			ply:SetArmor(100)
 		end
+		
+		return false
+	elseif weapon:GetClass() == "weapon_stunstick" and ply.hl2cr.CurClass.Name == "Combine Dropout" then
+		return true
 	end
 
 	--if its on a map where super gravgun is enabled, (excluding the gravgun) remove and don't pick up
-	if SUPERGRAVGUN_MAPS[game.GetMap()] and weapon:GetClass() ~= "weapon_physcannon" then weapon:Remove() return false end
+	if (SUPERGRAVGUN_MAPS[game.GetMap()] or game.GetMap() == "d3_breen_01") and weapon:GetClass() ~= "weapon_physcannon" then weapon:Remove() return false end
 	
 	--Store the weapon
 	if weapon:GetClass() then
@@ -462,6 +479,7 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 							p:Give(classWep)
 						end
 					end
+					p:Give(CONVERT_NAME_TO_ENT[p.hl2cr.Inventory.CurWeaponSlot])
 				end)
 			end	
 		end
@@ -513,6 +531,7 @@ local RANDOM_XP_BASED_NPC = {
 	["npc_antlionguard"] = {xpMin = 125, xpMax = 275},
 	["npc_antlionguardian"] = {xpMin = 125, xpMax = 275},
 	["npc_barnacle"] = {xpMin = 5, xpMax = 25},
+	["npc_turret_ground"] = {xpMin = 5, xpMax = 25},
 }
 
 local RESTRICT_MAPS_ANTLIONS = {
@@ -521,17 +540,15 @@ local RESTRICT_MAPS_ANTLIONS = {
 
 hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 	
-	local player
+	local player = nil
 	
 	if attacker:IsPlayer() then
 		player = attacker
-	elseif attacker.Owner and attacker.Owner:IsPlayer() then
-		player = attacker.Owner
 	elseif npc.Attacker then
 		player = npc.Attacker
 	end
 	
-	if player:IsPlayer() then
+	if player then
 		
 		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
 		
@@ -540,7 +557,7 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 		if totalXP <= 0 then return end
 		
 		AddXP(player, totalXP)
-
+		
 		createIndicator(totalXP, npc:GetPos(), player)
 		
 		player.rewards["kills"] = player.rewards["kills"] + 1
@@ -561,6 +578,13 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 				GrantAchievement(player, "HL2", "Barnacle_Bowling")
 			end		
 		end
+		
+		player.rewards.bonus["Pacifist"] = false
+		
+		if player:GetActiveWeapon():GetClass() ~= "weapon_crowbar" then
+			player.rewards.bonus["Crowbar Only"] = false
+		end
+		
 	elseif attacker:IsNextBot() and attacker:GetOwner():IsPlayer() and attacker:GetOwner().pet then
 		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
 		
@@ -685,3 +709,69 @@ function BroadcastSound(soundPath, player)
 		net.Send(player)
 	end
 end
+
+net.Receive("HL2CR_UpdateModel", function(len, ply)
+	if not ply then return end
+	
+	local model = net.ReadString()
+	
+	ply.hl2cr.Model = model
+	
+	ply:SetModel(ply.hl2cr.Model)
+	ply:SetNWString("stat_model", ply.hl2cr.Model)
+end)
+
+net.Receive("HL2CR_ApplySettings", function(len, ply)
+	if not ply then return end
+	
+	local playerDraw = net.ReadInt(32)
+	local endMusicToggle = net.ReadBool()
+	local playerFont = net.ReadString()
+	
+	local npcDraw = net.ReadInt(32)
+	local npcFont = net.ReadString()
+	local npcColoursEasy = net.ReadString()
+	local npcColoursMedium = net.ReadString()
+	local npcColoursHard = net.ReadString()
+	
+	local fixColourEasy = string.ToColor(npcColoursEasy)
+	local fixColourMedium = string.ToColor(npcColoursMedium)
+	local fixColourHard = string.ToColor(npcColoursHard)
+	
+	--Update Player Config
+	ply.hl2cr.Config.PlayerSettings["PlayerDrawDistance"] = playerDraw
+	ply.hl2cr.Config.PlayerSettings["ShouldPlayEndMusic"] = endMusicToggle
+	ply.hl2cr.Config.PlayerSettings["PlayerFont"] = playerFont
+	
+	--Update NPC Config	
+	ply.hl2cr.Config.NPCSettings["NPCDrawDistance"] = npcDraw
+	ply.hl2cr.Config.NPCSettings["NPCFont"] = npcFont
+	
+	--Set Player Config
+	ply:SetNWInt("config_playerdrawdist", ply.hl2cr.Config.PlayerSettings["PlayerDrawDistance"])
+	ply:SetNWBool("config_shouldendmusicplay", ply.hl2cr.Config.PlayerSettings["ShouldPlayEndMusic"])
+	ply:SetNWBool("config_playerfont", ply.hl2cr.Config.PlayerSettings["PlayerFont"])
+
+	--SET NPC Config	
+	ply:SetNWInt("config_npcdrawdist", ply.hl2cr.Config.NPCSettings["NPCDrawDistance"])
+	ply:SetNWInt("config_npcfont", ply.hl2cr.Config.NPCSettings["NPCFont"])
+	
+	ply.hl2cr.Config.NPCSettings["Colours"][1].r = fixColourEasy.r
+	ply.hl2cr.Config.NPCSettings["Colours"][1].g = fixColourEasy.g
+	ply.hl2cr.Config.NPCSettings["Colours"][1].b = fixColourEasy.b
+
+	ply:SetNWString("config_npccolours_easy", ply.hl2cr.Config.NPCSettings["Colours"][1].r .. " ".. ply.hl2cr.Config.NPCSettings["Colours"][1].g .. " " ..  ply.hl2cr.Config.NPCSettings["Colours"][1].b .. " 255")
+	
+	ply.hl2cr.Config.NPCSettings["Colours"][2].r = fixColourMedium.r
+	ply.hl2cr.Config.NPCSettings["Colours"][2].g = fixColourMedium.g
+	ply.hl2cr.Config.NPCSettings["Colours"][2].b = fixColourMedium.b
+
+	ply:SetNWString("config_npccolours_medium", ply.hl2cr.Config.NPCSettings["Colours"][2].r .. " ".. ply.hl2cr.Config.NPCSettings["Colours"][2].g .. " " ..  ply.hl2cr.Config.NPCSettings["Colours"][2].b .. " 255")
+	
+	ply.hl2cr.Config.NPCSettings["Colours"][3].r = fixColourHard.r
+	ply.hl2cr.Config.NPCSettings["Colours"][3].g = fixColourHard.g
+	ply.hl2cr.Config.NPCSettings["Colours"][3].b = fixColourHard.b
+
+	ply:SetNWString("config_npccolours_hard", ply.hl2cr.Config.NPCSettings["Colours"][3].r .. " ".. ply.hl2cr.Config.NPCSettings["Colours"][3].g .. " " ..  ply.hl2cr.Config.NPCSettings["Colours"][3].b .. " 255")
+	
+end)

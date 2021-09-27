@@ -85,6 +85,8 @@ function SWEP:PrimaryAttack()
 			net.WriteVector(tr.Entity:GetPos())
 		net.Send(self.Owner)
 		
+		self.Owner.rewards.bonus["Teamplayer"] = true
+		
 		self:SendWeaponAnim( ACT_VM_PRIMARYATTACK )
 
 		self:SetNextPrimaryFire( CurTime() + self:SequenceDuration() + 0.5 )

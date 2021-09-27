@@ -1,3 +1,7 @@
+local FINAL_MAPS = {
+	["d3_breen_01"] = true
+}
+
 function TimerScreen()
 	
 	local timerFrame = vgui.Create("DFrame")
@@ -15,10 +19,15 @@ function TimerScreen()
 	
 	timerPanel:MoveTo(ScrW() / 2 - 200, ScrH() / 2 - 550, 1.5, 0, -1, nil )
 	
-	timer.Create("HL2CR_Client_Timeleft", 20, 1, function() 
-		timerFrame:Close()
-	end)
-	
+	if FINAL_MAPS[game.GetMap()] then
+		timer.Create("HL2CR_Client_Timeleft", 40, 1, function() 
+			timerFrame:Close()
+		end)
+	else
+		timer.Create("HL2CR_Client_Timeleft", 20, 1, function() 
+			timerFrame:Close()
+		end)
+	end
 	specTimeLabel = vgui.Create("DLabel", timerPanel)
 	specTimeLabel:SetText("Time left: " .. math.Round(timer.TimeLeft("HL2CR_Client_Timeleft") ) )
 	specTimeLabel:SetFont("HL2CR_SpectatePlayer")
@@ -35,8 +44,9 @@ local animTime = 1.4
 function ResultScreen(tblResults)
 
 	local startLerp = SysTime()
-	
-	surface.PlaySound("hl2cr/endrewards_" .. math.random(1, 3) .. ".wav")
+	if LocalPlayer():GetNWBool("config_shouldendmusicplay") then
+		surface.PlaySound("hl2cr/endrewards_" .. math.random(1, 3) .. ".wav")
+	end
 	local endFrame = vgui.Create("DFrame")
 	endFrame:SetSize(ScrW(), ScrH())
 	endFrame:SetTitle("")
@@ -86,7 +96,15 @@ function ResultScreen(tblResults)
 	local totalAchNames = ""
 	
 	for _, name in ipairs(tblResults["achs"]) do
-		totalAchNames = name .. "\n"
+		totalAchNames = totalAchNames .. name .. "\n"
+	end
+	
+	local totalBonuses = "\n"
+	
+	for i, bonus in pairs(tblResults["bonus"]) do
+		if bonus then
+			totalBonuses = totalBonuses .. i .. "\n"
+		end
 	end
 	
 	local resinLabel = vgui.Create("DLabel", endFrame)
@@ -103,8 +121,7 @@ function ResultScreen(tblResults)
 	resinLabel:AlphaTo(255, 2, 0, nil)
 	resinLabel:MoveTo(ScrW() / 2 - 135, 250, 1, 0, 0.5, nil)
 	
-	
-	if totalAchNames != "" then
+	if totalAchNames != "\n" then
 		local achsLabel = vgui.Create("DLabel", endFrame)
 		achsLabel:SetPos(ScrW() / 2 - 225, 100)
 		achsLabel:SetAlpha(0)
@@ -114,6 +131,18 @@ function ResultScreen(tblResults)
 		
 		achsLabel:AlphaTo(255, 2, 0, nil)
 		achsLabel:MoveTo(ScrW() / 2 - 225, 500, 1, 0, 0.5, nil)
+	end
+	
+	if totalBonuses != "" then
+		local bonusesLabel = vgui.Create("DLabel", endFrame)
+		bonusesLabel:SetPos(ScrW() / 2 - 150, 100)
+		bonusesLabel:SetAlpha(0)
+		bonusesLabel:SetText("Bonuses Earned: " .. totalBonuses)
+		bonusesLabel:SetFont("HL2CR_EndMapStats")
+		bonusesLabel:SizeToContents()
+		
+		bonusesLabel:AlphaTo(255, 2, 0, nil)
+		bonusesLabel:MoveTo(ScrW() / 2 - 150, 600, 1, 0, 0.5, nil)
 	end
 	
 	local closeBtn = vgui.Create("DButton", endFrame)

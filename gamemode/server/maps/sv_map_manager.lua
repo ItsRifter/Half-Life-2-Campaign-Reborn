@@ -4,6 +4,8 @@ MAPS_LOBBY = {
 	["hl2cr_lobby_v3"] = true
 }
 
+ON_CITADEL_MAPS = false
+
 MAPS_HL2 = {
 	"d1_trainstation_01",
 	"d1_trainstation_02",
@@ -73,14 +75,14 @@ MAPS_HL2 = {
 	"d3_citadel_04",
 	"d3_citadel_05",
 	"d3_breen_01",
-	"hl2cr_lobby_v3"
+	"hl2cr_lobby_v2"
 }
 
 function StartMapCountdown()
 		
 	timer.Create("HL2CR_Countdown", 20, 1, function()
 		if game.GetMap() == "d2_lostcoast" then
-			RunConsoleCommand("changelevel", "hl2cr_lobby_v3")
+			RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
 			return
 		end
 		
@@ -128,6 +130,11 @@ function StartMapCountdown()
 	end)
 end
 
+function StartFinalMapCountdown()
+	timer.Create("HL2CR_Countdown", 40, 1, function()
+		RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+	end)
+end
 --On a cleanup or post map start, Initialize the map to support HL2-CR
 function GM:PostCleanupMap()
 	InitMap()

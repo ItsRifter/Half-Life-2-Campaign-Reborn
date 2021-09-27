@@ -42,6 +42,7 @@ AddCSLuaFile("client/menus/cl_scoreboard_menu.lua")
 AddCSLuaFile("client/menus/cl_end_results.lua")
 AddCSLuaFile("client/menus/cl_ach_menu.lua")
 AddCSLuaFile("client/menus/cl_help_menu.lua")
+AddCSLuaFile("client/menus/cl_settings_menu.lua")
 AddCSLuaFile("client/menus/cl_qmenu.lua")
 AddCSLuaFile("client/hud/cl_hitboxrender.lua")
 
@@ -61,6 +62,7 @@ include("shared/shop/sh_shop_items.lua")
 
 --Networks
 util.AddNetworkString("HL2CR_HelpMenu")
+util.AddNetworkString("HL2CR_SettingsMenu")
 util.AddNetworkString("HL2CR_LevelUpSound")
 util.AddNetworkString("HL2CR_MapCountdown")
 util.AddNetworkString("HL2CR_AchievementEarned")
@@ -90,6 +92,8 @@ util.AddNetworkString("HL2CR_PurchaseItem")
 util.AddNetworkString("HL2CR_Message")
 util.AddNetworkString("HL2CR_MsgSound")
 util.AddNetworkString("HL2CR_UpdateSlot")
+util.AddNetworkString("HL2CR_ApplySettings")
+util.AddNetworkString("HL2CR_UpdateModel")
 
 hook.Add("PrePACConfigApply", "HL2CR_DisablePac3Autoload", function(ply, outfit_data)
 	return false
@@ -109,6 +113,11 @@ ENABLE_AFK = {
 DISABLE_AFK = {
 	["Colour"] = Color(125, 125, 125),
 	["Message"] = "You are no longer AFK"
+}
+
+ERROR_PET_LONGNAME = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "That name is too long!"
 }
 
 ERROR_AFK_DEAD = {
@@ -156,6 +165,16 @@ VOTE_SUCCESS_MAP = {
 	["Message"] = "Vote Successful, Restarting map"
 }
 
+VOTE_SUCCESS_KICK = {
+	["Colour"] = Color(50, 215, 50),
+	["Message"] = "Vote Successful, Kicking player"
+}
+
+MAPS_HL2_FINISHED = {
+	["Colour"] = Color(250, 230, 45),
+	["Message"] = "Congratulations on finishing HL2, Returning to lobby in 40 seconds"
+}
+
 ERROR_CLASS_ALREADY_ASSIGNED = {
 	["Colour"] = Color(215, 50, 50),
 	["Message"] = "You are already assigned to this class!"
@@ -184,4 +203,29 @@ ERROR_PET_INVALIDMAP = {
 ERROR_PET_INVALID = {
 	["Colour"] = Color(215, 50, 50),
 	["Message"] = "Your pet doesn't exist!"
+}
+
+ERROR_VOTEKICK_MULTINAME = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "There are multiple targets with that name, be more specific"
+}
+
+ERROR_VOTEKICK_NONAME = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "There is no target with that name"
+}
+
+ERROR_VOTEKICK_INVALID = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "You need to specify a target"
+}
+
+ERROR_VOTEKICK_ADMIN = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "That target is an admin"
+}
+
+ERROR_VOTEKICK_SELF = {
+	["Colour"] = Color(215, 50, 50),
+	["Message"] = "You cannot votekick yourself"
 }

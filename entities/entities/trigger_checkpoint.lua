@@ -45,6 +45,7 @@ function ENT:StartTouch(ent)
 		}
 		
 		BroadcastMessage(CHECKPOINT_HIT)
+		BroadcastSound("hl2cr/standardbeep.wav")
 		
 		for k, p in pairs(player.GetAll()) do
 			if not table.IsEmpty(AchTrigger) then

@@ -602,7 +602,7 @@ local function SetCheckpoints()
 			Vector(-1069, 993, 961),		Vector(-705, 900, 1163),
 			Vector(-590, 526, 1086),		Vector(-289, 638, 929),
 			Vector(638, 128, 1152),			Vector(-254, 445, 961),
-			Vector(162, -25, 1200),			Vector(69, 50, 1228)
+			Vector(162, -25, 1200),			Vector(92, 50, 1228)
 		}
 		
 		CHECKPOINT_POS = {
@@ -720,22 +720,23 @@ local function SetCheckpoints()
 		CHECKPOINT_POS = {
 			Vector(-3023, 6760, 146)
 		}
+		
+		CHECKPOINT_FUNC_1 = function()
+			ents.FindByClass("npc_barney")[1]:SetPos(Vector(-3015, 6936, 140))
+		end
+		
 	elseif game.GetMap() == "d3_c17_10b" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(2817, 1138, 827),		Vector(2878, 1024, 705)
 		}
 		TRIGGER_CHECKPOINT = {
-			Vector(-2978, 6740, 129),		Vector(-3069, 6806, 247),
+			Vector(2318, -756, 501),		Vector(2909, -982, 257),
 			Vector(2657, 971, 393),		Vector(2719, 1085, 258)
 		}
 		
 		CHECKPOINT_POS = {
-			Vector(-3023, 6760, 146),		Vector(2690, 1029, 268)
+			Vector(2456, -862, 279),		Vector(2690, 1029, 268)
 		}
-		
-		CHECKPOINT_FUNC_1 = function()
-			ents.FindByClass("npc_barney")[1]:SetPos(Vector(-3028, 6825, 137))
-		end
 		
 	elseif game.GetMap() == "d3_c17_11" then
 		TRIGGER_CHANGELEVEL = {
@@ -778,7 +779,8 @@ local function SetCheckpoints()
 		CHANGELEVEL_FUNC = function()
 			local endPoint = Vector(TRIGGER_CHANGELEVEL[2]) - ( ( Vector(TRIGGER_CHANGELEVEL[2]) - Vector(TRIGGER_CHANGELEVEL[1])) / 2 )
 			for k, v in ipairs(player.GetAll()) do
-				v:SetPos(endPoint)
+				if v:InVehicle() then v:ExitVehicle() end
+				v:SetPos(Vector(11539, 5926, -1643))
 			end
 		end
 	elseif game.GetMap() == "d3_citadel_03" then
@@ -786,12 +788,25 @@ local function SetCheckpoints()
 			Vector(729, -382, 2497),		Vector(587, -257, 2370)
 		}
 		TRIGGER_CHECKPOINT = {
+			Vector(7742, -1050, 2113),		Vector(7617, -906, 2303),
 			Vector(3160, 254, 2369),		Vector(3072, 130, 2567)
 		}
 		
 		CHECKPOINT_POS = {
-			Vector(3156, 197, 2373)
+			Vector(7684, -995, 2138),	Vector(3156, 197, 2373)
 		}
+		
+		CHECKPOINT_FUNC_1 = function()
+			table.Empty(SPAWNING_WEAPONS)
+			table.insert(SPAWNING_WEAPONS, "weapon_physcannon")
+			
+			for _, v in ipairs(player.GetAll()) do
+				v:StripWeapons()
+				v:Give("weapon_physcannon")
+			end
+			
+			ON_CITADEL_MAPS = true
+		end
 		
 	elseif game.GetMap() == "d3_citadel_04" then
 		TRIGGER_CHANGELEVEL = {
@@ -805,6 +820,23 @@ local function SetCheckpoints()
 		CHECKPOINT_POS = {
 			Vector(271, 822, 2612),		Vector(260, 72, 6406)
 		}
+		
+		CHECKPOINT_FUNC_1 = function()
+			timer.Simple(0.1, function()
+				local lift = ents.FindByName("citadel_train_lift01_1")[1]
+				for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+					spawn:SetPos(lift:GetPos() + Vector(0, 0, 75))
+					spawn:SetParent(lift)
+				end
+			end)
+		end
+		
+		CHECKPOINT_FUNC_2 = function()
+			for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+				spawn:SetParent(nil)
+			end
+		end
+		
 	elseif game.GetMap() == "d3_citadel_05" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(14150, -9734, 8448),		Vector(14466, -10106, 8753)
@@ -812,9 +844,11 @@ local function SetCheckpoints()
 
 		CHANGELEVEL_FUNC = function()
 			for k, v in ipairs(player.GetAll()) do 
+				if v:InVehicle() then v:ExitVehicle() end
 				v:SetPos(Vector(14347, -9935, 8741))
 			end
 		end
+		
 	elseif game.GetMap() == "d3_breen_01" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(0, 0, 0),		Vector(0, 0, 0)
@@ -1523,7 +1557,15 @@ local HL2_WEAPONS = {
 	},
 	
 	["d3_citadel_03"] = {
-		[1] = "weapon_physcannon",
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_357",
+		[5] = "weapon_physcannon",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_ar2",
+		[8] = "weapon_rpg",
+		[9] = "weapon_crossbow"
 	},
 	
 	["d3_citadel_04"] = {
@@ -3905,7 +3947,7 @@ local function SetUpMisc()
 			end
 		end
 	end
-	
+		
 	if game.GetMap() == "d1_trainstation_05" then
 		for a, catTrigger in ipairs(ents.FindByName("kill_mtport_rl_1")) do
 			catTrigger:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:hook.Run( 'GiveWhatCat' ):2:-1" )
@@ -4084,7 +4126,7 @@ local function SetUpMisc()
 		end
 	end
 	
-	if game.GetMap() == "d2_prison_05" then
+	if game.GetMap() == "d2_prison_05" or game.GetMap() == "d3_c17_07" or game.GetMap() == "d3_c17_10a" then
 		for k, spawn in ipairs(ents.FindByClass("info_player_start")) do 
 			if k ~= 1 then
 				spawn:Remove()
@@ -4325,17 +4367,21 @@ hook.Add("GravGunOnPickedUp", "HL2CR_BlastAch", function(ply, ent)
 	if ent and ent:GetModel() == "models/props_lab/hevplate.mdl" then
 		GrantAchievement(ply, "HL2", "Blast_From_The_Past")
 	end
+	
+	if ent and ent:GetClass() == "shot_nade" then
+		ent.Owner = ply
+	end
+	
 end)
 
 hook.Add("FinishHL2", "HL2CR_CompleteHL2", function(ply, ent)
 	for k, v in ipairs(player.GetAll()) do
 		v:SetTeam(TEAM_COMPLETED_MAP)
-		v:ChatPrint("Congratulations on finishing HL2, Returning to lobby in 20 seconds")
 	end
-	
+	BroadcastMessage(MAPS_HL2_FINISHED)
 	net.Start("HL2CR_EndCampaign")
 	net.Broadcast()
-	StartMapCountdown()
+	StartFinalMapCountdown()
 end)
 
 hook.Add("ResetLaserTrap", "HL2CR_ResetTrap", function()

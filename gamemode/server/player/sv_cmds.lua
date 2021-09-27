@@ -1,3 +1,60 @@
+GIMME_A_SECRET = {
+	[1] = {
+		["Colour"] = Color(255, 255, 255),
+		["Message"] = "No"
+	},
+	
+	[2] = {
+		["Colour"] = Color(255, 255, 255),
+		["Message"] = "I said no"
+	},
+	
+	[3] = {
+		["Colour"] = Color(255, 255, 255),
+		["Message"] = "Again, I said no"
+	},
+	
+	[4] = {
+		["Colour"] = Color(255, 255, 255),
+		["Message"] = "Can you please stop asking?"
+	},
+	
+	[5] = {
+		["Colour"] = Color(255, 0, 0),
+		["Message"] = "STOP"
+	},
+	
+	[6] = {
+		["Colour"] = Color(255, 0, 0),
+		["Message"] = "FOR CHRIST SAKE"
+	},
+	
+	[7] = {
+		["Colour"] = Color(255, 0, 0),
+		["Message"] = "Do that one more time, I'll kick you"
+	},
+	
+	[8] = {
+		["Colour"] = Color(255, 255, 255),
+		["Message"] = "Okay I lied, but still please stop"
+	},
+	
+	[9] = {
+		["Colour"] = Color(255, 255, 255),
+		["Message"] = "..."
+	},
+	
+	[10] = {
+		["Colour"] = Color(255, 255, 255),
+		["Message"] = "Okay fine, you win, take this achievement"
+	},
+	
+	[11] = {
+		["Colour"] = Color(255, 0, 0),
+		["Message"] = "YOU'RE STILL ASKING?"
+	}
+}
+
 hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	text = string.lower(text)
 	
@@ -23,8 +80,79 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		return ""
 	end
 	
+	if text == "!gimmeasecret" then
+		ply.gimmeasecret = (ply.gimmeasecret or 0) + 1
+		
+		if ply.gimmeasecret == 10 then
+			BroadcastMessage(GIMME_A_SECRET[ply.gimmeasecret], ply)
+			GrantAchievement(ply, "Misc", "Unpleasant_Secret")
+			return "" 
+		end
+		
+		if ply.gimmeasecret > 11 then
+			return ""
+		end
+		
+		BroadcastMessage(GIMME_A_SECRET[ply.gimmeasecret], ply)
+
+		
+
+		return ""
+	end
+	
+	if string.find(text, "!kickuser ") then
+		local findName = string.sub(text, 11)
+		if not findName then
+			BroadcastMessage(ERROR_VOTEKICK_INVALID, ply)
+			return ""
+		end
+		local target = nil
+		
+		for _, v in ipairs(player.GetAll()) do
+			if target and string.find(target:Nick(), string.lower(string.sub(v:Nick(), 0, #findName))) then
+				BroadcastMessage(ERROR_VOTEKICK_MULTINAME, ply)
+				return ""
+			end
+				
+			if string.find(findName, string.lower(string.sub(v:Nick(), 0, #findName))) and not string.find(findName, string.lower(string.sub(ply:Nick(), 0, #findName))) then
+				target = v
+			elseif string.find(findName, string.lower(string.sub(ply:Nick(), 0, #findName))) then
+				BroadcastMessage(ERROR_VOTEKICK_SELF, ply)
+				return ""
+			end
+		end
+		
+		
+		if target then
+			if target:IsAdmin() then
+				BroadcastMessage(ERROR_VOTEKICK_ADMIN, ply)
+				
+				local WARN_VOTEKICK_ADMIN = {
+					["Colour"] = Color(250, 230, 0),
+					["Message"] = ply:Nick() .. " attempted to kick you but failed"
+				}
+				
+				BroadcastMessage(WARN_VOTEKICK_ADMIN, target)
+				
+				return ""
+			end
+			HL2CR_Voting:StartKickVote(ply, "KickPlayer", target)
+			HL2CR_Voting:PlayerVote(target, false)
+		else
+			BroadcastMessage(ERROR_VOTEKICK_NONAME, ply)
+		end
+		
+		return ""
+	end
+	
 	if text == "!help" then
 		net.Start("HL2CR_HelpMenu")
+		net.Send(ply)
+		return ""
+	end
+	
+	if text == "!config" or text == "!settings" then
+		net.Start("HL2CR_SettingsMenu")
 		net.Send(ply)
 		return ""
 	end
@@ -155,6 +283,28 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		
 		return ""
 	end	
+	
+	if string.find(text, "!petname ") or string.find(text, "!namepet ") then
+		local checkName = string.sub(text, 10)
+		
+		if string.len(checkName) > 16 then
+			BroadcastMessage(ERROR_PET_LONGNAME, ply)
+			return ""
+		end	
+		
+		ply.hl2cr.Pets.Name = checkName
+		
+		ply:SetNWString("pet_name", ply.hl2cr.Pets.Name)
+		
+		local SET_PET_NAME = {
+			["Colour"] = Color(50, 215, 50),
+			["Message"] = "Pet renamed to '" .. ply.hl2cr.Pets.Name .. "'"
+		}
+		
+		BroadcastMessage(SET_PET_NAME, ply)
+		
+		return ""
+	end
 	
 	if text == "!petbring" or text == "!bringpet" then
 		if ply:Team() == TEAM_COMPLETED_MAP or ply:Team() == TEAM_DEAD then return end
@@ -326,7 +476,5 @@ end)
 concommand.Add("hl2cr_addresin", function(ply, cmd, args)
 	if not ply:IsAdmin() then return end
 	
-	ply.hl2cr.Resin = ply.hl2cr.Resin + args[1]
-
-	ply:SetNWInt("currency_resin", ply.hl2cr.Resin)
+	AddResin(ply, args[1])
 end)

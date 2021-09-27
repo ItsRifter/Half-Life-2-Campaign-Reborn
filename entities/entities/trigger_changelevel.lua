@@ -12,6 +12,10 @@ local MAPS_ONEPLAYER = {
 	["d3_citadel_05"] = true
 }
 
+local FINAL_MAPS = {
+	["d3_breen_01"] = true
+}
+
 function ENT:Initialize()
 	
 	if not TRIGGER_CHANGELEVEL then
@@ -92,6 +96,8 @@ function ENT:Think()
 	
 	--If we're already gonna change map, don't update the counting of completers
 	if self.MapChange then return end
+	
+	if FINAL_MAPS[game.GetMap()] then self.MapChange = true return end
 	
 	--If the player count is over 4, check if completers is greater than total players divided
 	if playerCount >= 4 and team.NumPlayers(TEAM_COMPLETED_MAP) >= math.ceil(team.NumPlayers(TEAM_ALIVE) / 2) then

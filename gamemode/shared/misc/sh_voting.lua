@@ -54,9 +54,24 @@ votingTypes["Restart"] = {
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
 		if positive > negative then
 			BroadcastMessage(VOTE_SUCCESS_MAP)
+			BroadcastSound("hl2cr/ach_unlock.wav")
 			timer.Simple(5, function()
 				RunConsoleCommand("ChangeLevel", game.GetMap())
 			end)
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+
+votingTypes["KickPlayer"] = {
+	Description = "Kick ",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			BroadcastMessage(VOTE_SUCCESS_KICK)
+			HL2CR_Voting.ShouldKick = true
 		else
 			BroadcastMessage(VOTE_FAILED)
 		end
@@ -98,6 +113,51 @@ if SERVER then
 	---@param ply GPlayer
 	---@param voteTypeKey string
 	
+	HL2CR_Voting.KickUser = nil
+	HL2CR_Voting.ShouldKick = false
+	
+	function HL2CR_Voting:StartVote(ply, voteTypeKey)
+		-- If there is already a state, there is a vote in progress.
+		if self.State then
+			ply:ChatPrint("A vote is currently in progress!")
+			return
+		end
+
+		-- Get the vote type object.
+		local voteType = votingTypes[voteTypeKey]
+		
+		-- Check if type exists.
+		if not voteType then
+			ply:ChatPrint(string.format("Unknown vote type %q!", voteTypeKey))
+			return
+		end
+
+		-- (Re)set internal and global vote state.
+		self.State = {
+			Creator = ply,
+			VoteTypeKey = voteTypeKey,
+			Voters = {}, -- Table of players containing their votes and maybe some other data.
+			CustomDesc = voteType["Description"]
+		}
+
+		-- Broadcast new vote to all players.
+		self:SendToAll()
+
+		-- Issue a vote for the creator.
+		self:PlayerVote(ply, true)
+		
+		self.CurVote = voteType
+		
+		if not timer.Exists("HL2CR_ServerVoteTimer") then
+			timer.Create("HL2CR_ServerVoteTimer", 30, 1, function() 
+				net.Start("HL2CR_EndVote")
+				net.Broadcast()
+				self:EndVote()
+				self.nextVoteTime = 180 + CurTime()				
+			end)
+		end
+	end
+	
 	function HL2CR_Voting:ServerStartVote(voteTypeKey)
 		-- If there is already a state, there is a vote in progress.
 		if self.State then
@@ -137,7 +197,7 @@ if SERVER then
 		end
 	end
 	
-	function HL2CR_Voting:StartVote(ply, voteTypeKey)
+	function HL2CR_Voting:StartKickVote(ply, voteTypeKey, target)
 		-- If there is already a state, there is a vote in progress.
 		if self.State then
 			ply:ChatPrint("A vote is currently in progress!")
@@ -153,12 +213,14 @@ if SERVER then
 			return
 		end
 
+		HL2CR_Voting.KickUser = target
+
 		-- (Re)set internal and global vote state.
 		self.State = {
 			Creator = ply,
 			VoteTypeKey = voteTypeKey,
 			Voters = {}, -- Table of players containing their votes and maybe some other data.
-			CustomDesc = voteType["Description"]
+			CustomDesc = voteType["Description"] .. target:Nick() .. "?"
 		}
 
 		-- Broadcast new vote to all players.
@@ -175,6 +237,12 @@ if SERVER then
 				net.Broadcast()
 				self:EndVote()
 				self.nextVoteTime = 180 + CurTime()
+				
+				timer.Simple(1, function()
+					if HL2CR_Voting.ShouldKick then
+						target:Kick("You have been voted off")
+					end
+				end)
 			end)
 		end
 	end
@@ -338,17 +406,6 @@ if CLIENT then
 			surface.DrawRect(0, 0, w, h)
 		end
 		
-		self.VoterLabel = vgui.Create("DLabel", self.VoteFrame)
-		self.VoterLabel:SetFont("HL2CR_VoteFont")
-		self.VoterLabel:SetText("YES: " .. totalVotes["yes"] .. " | NO: " .. totalVotes["no"])
-		self.VoterLabel:SetPos(100, 250)
-		self.VoterLabel:SizeToContents()
-		
-		self.VoterLabel.Think = function(pnl)
-			self.VoterLabel:SetText("YES: " .. totalVotes["yes"] .. " | NO: " .. totalVotes["no"])
-			self.VoterLabel:SizeToContents()
-		end
-		
 		for k, voter in pairs(state.Voters) do	
 			self.Voter = vgui.Create("AvatarImage", self.VoterPnl)
 			self.Voter:SetSize(32, 32)
@@ -358,11 +415,9 @@ if CLIENT then
 			self.VoteStat = vgui.Create("DImage", self.Voter)
 
 			if voter.Status == true then
-				totalVotes["yes"] = totalVotes["yes"] + 1
 				self.VoteStat:SetImage("icon16/tick.png")
 				surface.PlaySound("buttons/button15.wav")
 			else
-				totalVotes["no"] = totalVotes["no"] + 1
 				self.VoteStat:SetImage("icon16/cross.png")
 				surface.PlaySound("buttons/button16.wav")
 			end

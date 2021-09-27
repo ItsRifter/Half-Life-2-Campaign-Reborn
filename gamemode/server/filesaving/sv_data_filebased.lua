@@ -21,9 +21,31 @@ local function InitData(ply)
 	ply.hl2cr.Skills = ply.hl2cr.Skills or {}
 	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints or 0
 	
+	--Pets
+	ply.hl2cr.Pets = ply.hl2cr.Pets or {}
+	ply.hl2cr.Pets.CurrentPet = ply.hl2cr.Pets.CurrentPet or {}
+	ply.hl2cr.Pets.Name = ply.hl2cr.Pets.Name or ""
+	
 	--Statistics
 	ply.hl2cr.Kills = ply.hl2cr.Kills or 0
 	ply.hl2cr.Deaths = ply.hl2cr.Deaths or 0
+	
+	--Config
+	ply.hl2cr.Config = ply.hl2cr.Config or {}
+	ply.hl2cr.Config.PlayerSettings = ply.hl2cr.Config.PlayerSettings or {
+		["PlayerDrawDistance"] = 250,
+		["ShouldPlayEndMusic"] = true,
+		["PlayerFont"] = "Default"
+	}
+	ply.hl2cr.Config.NPCSettings = ply.hl2cr.Config.NPCSettings or {
+		["NPCDrawDistance"] = 150,
+		["NPCFont"] = "Default",
+		["Colours"] = {
+			[1] = Color(0, 255, 0),
+			[2] = Color(255, 255, 0),
+			[3] = Color(255, 0, 0),
+		}
+	}
 	
 	--Inventory
 	ply.hl2cr.Inventory = ply.hl2cr.Inventory or {}
@@ -52,22 +74,36 @@ local function InitData(ply)
 	ply:SetNWInt("stat_reqexp", ply.hl2cr.ReqExp)
 	ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)
 	ply:SetNWInt("stat_curclasses", ply.hl2cr.ClassCount)
-	
 	ply:SetNWInt("stat_kills", ply.hl2cr.Kills)
 	ply:SetNWInt("stat_deaths", ply.hl2cr.Deaths)
-	
 	ply:SetNWInt("stat_quests_completed", ply.hl2cr.Quests.Completed)
+	
+	ply:SetNWString("stat_model", ply.hl2cr.Model)
+	
+	ply:SetNWString("pet_name", ply.hl2cr.Pets.Name)
 	
 	ply:SetNWInt("currency_resin", ply.hl2cr.Resin)
 	ply:SetNWInt("currency_essence", ply.hl2cr.Essence)
 	
 	ply:SetNWString("inv_slots", table.concat(ply.hl2cr.Inventory.Slots, " "))
 	ply:SetNWString("inv_weaponslot", ply.hl2cr.Inventory.CurWeaponSlot)
-	
-	ply:SetNWInt("stat_totalachs", #ply.hl2cr.Achievements)
 	ply:SetNWInt("inv_totalslots", ply.hl2cr.Inventory.TotalSlots)
 	
+	ply:SetNWInt("stat_totalachs", #ply.hl2cr.Achievements)
 	ply:SetNWString("stat_curskills", table.concat(ply.hl2cr.Skills, " "))
+	
+	ply:SetNWInt("config_playerdrawdist", ply.hl2cr.Config.PlayerSettings["PlayerDrawDistance"])
+	ply:SetNWBool("config_shouldendmusicplay", ply.hl2cr.Config.PlayerSettings["ShouldPlayEndMusic"])
+	ply:SetNWBool("config_playerfont", ply.hl2cr.Config.PlayerSettings["PlayerFont"])
+	
+	ply:SetNWInt("config_npcdrawdist", ply.hl2cr.Config.NPCSettings["NPCDrawDistance"])
+	ply:SetNWInt("config_npcfont", ply.hl2cr.Config.NPCSettings["NPCFont"])
+	
+	ply:SetNWString("config_npccolours_easy", ply.hl2cr.Config.NPCSettings["Colours"][1].r .. " " .. ply.hl2cr.Config.NPCSettings["Colours"][1].g .. " " ..  ply.hl2cr.Config.NPCSettings["Colours"][1].b .. " 255")
+	
+	ply:SetNWString("config_npccolours_medium", ply.hl2cr.Config.NPCSettings["Colours"][2].r .. " " .. ply.hl2cr.Config.NPCSettings["Colours"][2].g .. " " ..  ply.hl2cr.Config.NPCSettings["Colours"][2].b .. " 255")
+	
+	ply:SetNWString("config_npccolours_hard", ply.hl2cr.Config.NPCSettings["Colours"][3].r .. " " .. ply.hl2cr.Config.NPCSettings["Colours"][3].g .. " " ..  ply.hl2cr.Config.NPCSettings["Colours"][3].b .. " 255")
 	
 	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
 end
@@ -142,6 +178,13 @@ hook.Add("PlayerInitialSpawn", "HL2CR_NewPlayerCheck", function(ply)
 	--If its a new player, create a save file for saving
 	if not LoadData(ply) then
 		CreateData(ply)
+
+		timer.Simple(3, function()
+			GrantAchievement(ply, "Misc", "New_Arrival")
+			net.Start("HL2CR_HelpMenu")
+			net.Send(ply)
+		
+		end)
 		return
 	end
 	

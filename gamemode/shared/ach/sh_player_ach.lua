@@ -151,8 +151,19 @@ GM.Achievements = {
 	Misc = {
 		New_Arrival = {
 			Name = "New Arrival", 
-			Mat = "vgui/achievements/hl2_beat_cemetery.png", 
+			Mat = "materials/hl2cr/ach_arrival.jpg", 
 			Desc = "Play the gamemode\nfor the first time",
+			Rewards = {
+				XP = 0,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Unpleasant_Secret = {
+			Name = "Unpleasant Secret", 
+			Mat = "materials/hl2cr/ach_gimmeasecret.jpg", 
+			Desc = "Plot twist:\nYou get nothing!",
 			Rewards = {
 				XP = 0,
 				Item = nil

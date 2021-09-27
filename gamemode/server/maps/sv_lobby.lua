@@ -21,7 +21,6 @@ function StartLobby()
 	}
 	
 	ENT_VOTE_HL2 = ents.FindByName("hl2_lambda_play_break")[1]
-	print(ENT_VOTE_HL2)
 	--Same as above but for the bridge maps
 	if file.Exists("hl2cr_data/bridgecheck.txt", "DATA") then
 		file.Delete("hl2cr_data/bridgecheck.txt", "DATA")

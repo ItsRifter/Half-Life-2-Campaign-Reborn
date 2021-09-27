@@ -68,7 +68,7 @@ hook.Add("EntityTakeDamage", "HL2CR_SharedXPDmg", function(ent, dmgInfo)
 	local dmg = dmgInfo:GetDamage()
 	local att = dmgInfo:GetAttacker()
 	
-	if att:IsPlayer() and att:GetActiveWeapon():GetClass() == "weapon_stunstick" then
+	if att:IsPlayer() and (att:GetActiveWeapon():GetClass() == "weapon_stunstick" and att.hl2cr.StunDamage) and not ent:IsPlayer() then
 		dmgInfo:SetDamage(dmg + att.hl2cr.StunDamage)
 	end
 	
@@ -120,6 +120,8 @@ end)
 
 
 hook.Add( "ScaleNPCDamage", "HL2CR_ScaleNPCDMG", function( npc, hitgroup, dmgInfo )
+	
+	if npc:GetClass() == "npc_citizen" then return end
 	
 	local hitDivide = GetConVar("hl2cr_difficulty"):GetInt()
 	

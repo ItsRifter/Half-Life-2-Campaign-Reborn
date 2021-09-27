@@ -322,6 +322,24 @@ surface.CreateFont( "HL2CR_GamemodeHelp", {
 	outline = false,
 } )
 
+surface.CreateFont( "HL2CR_Help_Useful", {
+	font = "Arial",
+	extended = false,
+	size = 22,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
 surface.CreateFont( "HL2CR_Class_TitleFont", {
 	font = "Roboto",
 	extended = false,
@@ -345,6 +363,79 @@ surface.CreateFont( "HL2CR_Class_DescFont", {
 	extended = false,
 	size = 18,
 	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
+surface.CreateFont( "HL2CR_Config_Option", {
+	font = "Roboto",
+	extended = false,
+	size = 24,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
+
+surface.CreateFont( "HL2CR_Alive in a Science-Fiction", {
+	font = "Alive in a Science Fiction",
+	extended = false,
+	size = 36,
+	weight = 450,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
+surface.CreateFont( "HL2CR_EasyHorror", {
+	font = "easyhorror",
+	extended = false,
+	size = 36,
+	weight = 450,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
+surface.CreateFont( "HL2CR_FancyShmancy", {
+	font = "fancyshmancy",
+	extended = false,
+	size = 36,
+	weight = 450,
 	blursize = 0,
 	scanlines = 0,
 	antialias = true,

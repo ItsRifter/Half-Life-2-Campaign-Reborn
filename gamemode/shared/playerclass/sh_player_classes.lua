@@ -45,17 +45,17 @@ local dropoutWeps = {
 	"weapon_stunstick"
 }
 
-local fieldMedic = CreateClass("Field Medic", "A field medic here to help\nthe injured during combat", "EQUIPMENT:\nMedkit", 5, "materials/hl2cr/class_medic.jpg", medicWeps)
+local fieldMedic = CreateClass("Field Medic", "A field medic here to help\nthe injured during combat", "EQUIPMENT: Medkit", 5, "materials/hl2cr/class_medic.jpg", medicWeps)
 
-local repairMan = CreateClass("Repairman", "A repair-man who can restore\nlost armor points", "EQUIPMENT:\nArmorKit", 5, "materials/hl2cr/class_repairman.jpg", repairWeps)
+local repairMan = CreateClass("Repairman", "A repair-man who can restore\nlost armor points", "EQUIPMENT: ArmorKit", 5, "materials/hl2cr/class_repairman.jpg", repairWeps)
 
-local supplier = CreateClass("Supplier", "An ammo supplier that gives\nammo for the\ncurrent active weapon", "EQUIPMENT:\nAmmo Box", 5, "materials/hl2cr/class_supporter.jpg",supplierWeps)
+local supplier = CreateClass("Supplier", "An ammo supplier that gives\nammo for the\ncurrent active weapon", "EQUIPMENT: Ammo Box", 5, "materials/hl2cr/class_supporter.jpg",supplierWeps)
 
-local mechanic = CreateClass("Mechanic", "A mechanic filled with\ndesigns ideas\nincluding his weapon of choice", "EQUIPMENT:\nElectric Chain-Blade", 10,"materials/hl2cr/class_mechanic.jpg", mechanicWeps)
+local mechanic = CreateClass("Mechanic", "A mechanic filled with\ndesigns ideas\nincluding his weapon of choice", "EQUIPMENT: Electric\nChain-Blade", 10,"materials/hl2cr/class_mechanic.jpg", mechanicWeps)
 
-local grenadier = CreateClass("Grenadier", "Become more effective with\ngrenades", "EQUIPMENT:\nPack of grenades\nGrenade Belt", 10, "materials/hl2cr/class_grenadier.jpg", grenadierWeps)
+local grenadier = CreateClass("Grenadier", "Become more effective with\ngrenades", "EQUIPMENT: Pack of grenades\nGrenade Belt", 10, "materials/hl2cr/class_grenadier.jpg", grenadierWeps)
 
-local dropout = CreateClass("Combine Dropout", "After rethinking their\ncareer choices\nit was time to dropout\nand help the resistance", "EQUIPMENT:\nMan-Hack\nStunstick", 10, "materials/hl2cr/class_dropout.jpg", dropoutWeps)
+local dropout = CreateClass("Combine Dropout", "After rethinking their\ncareer choices\nit was time to dropout\nand help the resistance", "EQUIPMENT: Man-Hack\nStunstick", 10, "materials/hl2cr/class_dropout.jpg", dropoutWeps)
 
 table.insert(GM.PlayStyleClass, fieldMedic)
 table.insert(GM.PlayStyleClass, repairMan)
