@@ -58,6 +58,6 @@ if SERVER then
 				ply.hl2cr.Resin = ply.hl2cr.Resin - v.Cost
 				ply:SetNWInt("currency_resin", ply.hl2cr.Resin)
 			end
-		end	
+		end
 	end)
 end
