@@ -191,6 +191,10 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 		if LocalPlayer() == pl or LocalPlayer():Team() == TEAM_ALIVE then 
 			continue
 		end
+		
+		if pl:Team() == TEAM_ALIVE then
+			break
+		end
 			
 		local dist = LocalPlayer():GetPos():Distance(pl:GetPos())
 		local pos = pl:GetPos()
@@ -242,8 +246,8 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 				fixFontSpacing = FIX_FONT_SPACING[font]
 			end
 			
-			if pl:GetNWString("hl2cr_request") then
-				draw.SimpleText(pl:GetNWString("hl2cr_request"), font, ScrPos.x, ScrPos.y - 65, HL2CR.Theme.standard, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			if not string.find(translate.Get(pl:GetNWString("hl2cr_request")), "@") then
+				draw.SimpleText(translate.Get(pl:GetNWString("hl2cr_request")), font, ScrPos.x, ScrPos.y - 65, HL2CR.Theme.standard, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			
 			--Name

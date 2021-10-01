@@ -94,5 +94,3 @@ LANGUAGE.RequestMedic			= "Needs a medic"
 LANGUAGE.RequestArmor			= "Needs armor"
 LANGUAGE.RequestAmmo			= "Needs ammo"
 
-LANGUAGE.ACH_FAILED_SAND			= " stepped on the sand\nachievement failed"
-

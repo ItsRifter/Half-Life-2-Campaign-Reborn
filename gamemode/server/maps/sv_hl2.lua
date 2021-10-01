@@ -87,9 +87,6 @@ local IMPORTANT_MAPS = {
 	["d3_breen_01"] = true,
 }
 
-local keepOffSand = false
-local StayedOffSand = false
-
 EXISTING_CHECKPOINTS = {}
 
 local function SetCheckpoints()
@@ -3996,6 +3993,9 @@ local function SetUpMisc()
 				spawn:Remove()
 			end
 		end
+		ents.FindByName("trashcan_trigger")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:TrainSodaCan(true)")
+		ents.FindByName("cupcop_fail_relay")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:TrainSodaCan(false)")
+		ents.FindByName("player_escape_trigger")[1]:Remove()
 	end
 		
 	if game.GetMap() == "d1_trainstation_05" then
@@ -4130,7 +4130,7 @@ local function SetUpMisc()
 		fixLeap2:Spawn()
 	end
 	
-	for k, failer in ipairs(ents.FindByName("fall_trigger")) do
+	for _, failer in ipairs(ents.FindByName("fall_trigger")) do
 		failer:Remove()
 	end
 	
@@ -4138,9 +4138,9 @@ local function SetUpMisc()
 		ents.FindByClass("npc_combinedropship")[1]:Remove()
 		ents.FindByClass("info_player_start")[1]:SetPos(Vector(3148, 5263, 1540))
 		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, 180, 0))
-		timer.Simple(0.1, function()
-			if ents.FindByName("bridge_field_02")[1] then
-				ents.FindByName("bridge_field_02")[1]:Remove()
+		timer.Simple(10, function()
+			for _, forcefield in ipairs(ents.FindByName("bridge_field_02")) do
+				forcefield:Remove()
 			end
 		end)
 	end
@@ -4177,6 +4177,7 @@ local function SetUpMisc()
 	end
 	
 	if game.GetMap() == "d2_coast_11" then
+		StayedOffSand = false
 		keepOffSand = true
 	end
 	
@@ -4440,29 +4441,36 @@ end)
 hook.Add("GravGunOnPickedUp", "HL2CR_BlastAch", function(ply, ent)
 	if ent and ent:GetModel() == "models/props_lab/hevplate.mdl" then
 		GrantAchievement(ply, "HL2", "Blast_From_The_Past")
-	end
-	
-	if ent and ent:GetClass() == "shot_nade" then
-		ent.Owner = ply
-	end
-	
+	end	
 end)
-
-local faultPlayer = nil
 
 hook.Add( "PlayerFootstep", "CustomFootstep", function( ply, pos, foot, sound, volume, rf )
 	if game.GetMap() == "d2_coast_11" then
-		if string.find(sound, "sand") and keepOffSand and not StayedOffSand then
+		if string.find(sound, "sand") and (keepOffSand and not StayedOffSand) then
 			FailSandAchievement(ply)
 		end
 	end
 	return false 
 end)
 
-function FailSandAchievement(ply)		
-	for k, v in ipairs(player.GetAll()) do
-		v:ChatPrint(ply:Nick() .. " stepped on the sand\nAchievement Failed")
+function TrainSodaCan(hasSubmissive)
+	for _, v in ipairs(player.GetAll()) do
+		if hasSubmissive then
+			GrantAchievement(v, "HL2", "Submissive")
+		else
+			GrantAchievement(v, "HL2", "Defiant")
+		end
 	end
+end
+
+function FailSandAchievement(ply)		
+	local FAILER = {
+		["Colour"] = Color(215, 50, 50),
+		["Message"] = "ACH_FAILED_SAND",
+	}
+	
+	BroadcastMessage(FAILER)
+	
 	keepOffSand = false
 end
 
@@ -4471,7 +4479,9 @@ hook.Add("FinishHL2", "HL2CR_CompleteHL2", function(ply, ent)
 		v:SetTeam(TEAM_COMPLETED_MAP)
 		GrantAchievement(v, "HL2", "Beat_HL2")
 	end
+	
 	BroadcastMessage(MAPS_HL2_FINISHED)
+	
 	net.Start("HL2CR_EndCampaign")
 	net.Broadcast()
 	StartFinalMapCountdown()

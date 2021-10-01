@@ -70,6 +70,14 @@ local REQUEST_AMMO_LIMITS = {
 	[10] = 5
 }
 
+local DIFF_VOTES = {
+	[1] = "VoteVEasy",
+	[2] = "VoteEasy",
+	[3] = "VoteMedium",
+	[4] = "VoteHard",
+	[5] = "VoteVHard",
+}
+
 hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	text = string.lower(text)
 	
@@ -166,6 +174,31 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		return ""
 	end
 	
+	if string.find(text, "!diff ") then
+		local diffVote = string.sub(text, 7)
+	
+		if (HL2CR_Voting.nextVoteTime - 120) > CurTime() then
+			local ERROR_VOTE_COOLDOWN = {
+				["Colour"] = Color(215, 50, 50),
+				["Message"] = "ERROR_VOTE_COOLDOWN1",
+				["Other"] = {
+					["Player"] = "",
+					["Time"] = string.FormattedTime((HL2CR_Voting.nextVoteTime - 120) - CurTime(), "%02i:%02i"),
+					["CurCompleted"] = "ERROR_VOTE_COOLDOWN2"
+				}
+						
+			}
+			BroadcastMessage(ERROR_VOTE_COOLDOWN, ply)
+			return ""
+		end
+		
+		if DIFF_VOTES[tonumber(diffVote)] == GetConVar("hl2cr_difficulty"):GetInt() then return end
+		
+		HL2CR_Voting:StartVote(ply, DIFF_VOTES[tonumber(diffVote)])
+		
+		return ""
+	end
+	
 	if text == "!config" or text == "!settings" then
 		net.Start("HL2CR_SettingsMenu")
 		net.Send(ply)
@@ -254,69 +287,6 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		
 		--If all is passed, start a lobby vote
 		HL2CR_Voting:StartVote(ply, "Lobby")
-		return ""
-	end
-	
-	if text == "!requestmedic" or text == "!medic" then
-		if ply.requestcooldown and ply.requestcooldown >= CurTime() then
-			return ""
-		end
-
-		if ply:Health() == ply:GetMaxHealth() then
-			return ""
-		end
-
-		if string.find(ply:GetModel(), "male") then
-			ply:EmitSound("hl2cr/request/medic/male_request_medic_" .. math.random(1, 2) .. ".wav")
-			
-		elseif string.find(ply:GetModel(), "female") then
-			ply:EmitSound("hl2cr/request/medic/female_request_medic_" .. math.random(1, 2) .. ".wav")
-		end
-
-		ply:SetNWString("hl2cr_request", "Needs a medic")
-		
-		if timer.Exists(ply:Nick() .. "_time") then return "" end 
-		
-		timer.Create(ply:Nick() .. "_time", 6, 1, function()
-			ply:SetNWString("hl2cr_request", "")
-		end)
-		
-		ply.requestcooldown = 5	+ CurTime()
-		return ""
-	end
-	
-	if text == "!requestammo" or text == "!ammo" then
-		if ply.requestcooldown and ply.requestcooldown >= CurTime() then
-			return ""
-		end
-		
-		if ply:GetAmmoCount(ply:GetActiveWeapon():GetPrimaryAmmoType()) >= REQUEST_AMMO_LIMITS[ply:GetActiveWeapon():GetPrimaryAmmoType()] then
-			return ""
-		end
-
-		if string.find(ply:GetModel(), "male") then
-			ply:EmitSound("hl2cr/request/ammo/male_request_ammo_" .. math.random(1, 3) .. ".wav")
-		elseif string.find(ply:GetModel(), "female") then
-			ply:EmitSound("hl2cr/request/ammo/female_request_ammo_" .. math.random(1, 3) .. ".wav")
-		end
-
-		ply:SetNWString("hl2cr_request", "Needs a medic")
-		
-		if timer.Exists(ply:Nick() .. "_time") then return "" end 
-		
-		timer.Create(ply:Nick() .. "_time", 6, 1, function()
-			ply:SetNWString("hl2cr_request", "")
-		end)
-		
-		ply:SetNWString("hl2cr_request", "Needs Ammo")
-		
-		if timer.Exists(ply:Nick() .. "_time") then return "" end 
-		
-		timer.Create(ply:Nick() .. "_time", 6, 1, function()
-			ply:SetNWString("hl2cr_request", "")
-		end)
-		
-		ply.requestcooldown = 5 + CurTime()
 		return ""
 	end
 	
@@ -457,21 +427,47 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		return ""
 	end
 		
-	if text == "barney says fuck you" or text == "barney said fuck you" then
+	if (text == "barney says fuck you" or text == "barney said fuck you") and game.GetMap() == "d3_breen_01" then
 		GrantAchievement(ply, "HL2", "Barney_Wish")
 	end
 end)
 
 local VOICES = {
-	["Medic"] = "Needs a medic",
-	["Armor"] = "Needs armor",
-	["Ammo"] = "Needs ammo"
+	["Medic"] = "RequestMedic",
+	["Armor"] = "RequestArmor",
+	["Ammo"] = "RequestAmmo"
 }
 
-net.Receive("HL2CR_HelpNotify", function()
+net.Receive("HL2CR_HelpNotify", function(len, ply)
+	if not ply then return end 
+	
 	local helpNeeded = net.ReadString()
+		
+	if timer.Exists(ply:Nick() .. "_time") then return end
+
+	ply:SetNWString("hl2cr_request", VOICES[helpNeeded])
 	
+	timer.Create(ply:Nick() .. "_time", 6, 1, function()
+		ply:SetNWString("hl2cr_request", "")
+	end)
 	
+	if helpNeeded == "Medic" or helpNeeded == "Armor" then
+	
+		if string.find(ply:GetModel(), "female") then
+			ply:EmitSound("hl2cr/request/medic/female_request_medic_" .. math.random(1, 2) .. ".wav")
+		else
+			ply:EmitSound("hl2cr/request/medic/male_request_medic_" .. math.random(1, 2) .. ".wav")
+		end
+		
+	elseif helpNeeded == "Ammo" then
+		
+		if string.find(ply:GetModel(), "female") then
+			ply:EmitSound("hl2cr/request/ammo/female_request_ammo_" .. math.random(1, 3) .. ".wav")
+		else
+			ply:EmitSound("hl2cr/request/ammo/male_request_ammo_" .. math.random(1, 3) .. ".wav")
+		end
+		
+	end
 end)
 
 concommand.Add("hl2cr_stopvote", function(ply, cmd, args)

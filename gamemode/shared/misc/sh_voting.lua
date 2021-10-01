@@ -78,6 +78,67 @@ votingTypes["KickPlayer"] = {
 	end
 }
 
+votingTypes["VoteVEasy"] = {
+	Description = "Set Difficulty to 'Very Easy'?",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			GetConVar("hl2cr_difficulty"):SetInt(1)
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+votingTypes["VoteEasy"] = {
+	Description = "Set Difficulty to 'Easy'?",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			GetConVar("hl2cr_difficulty"):SetInt(2)
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+votingTypes["VoteMedium"] = {
+	Description = "Set Difficulty to 'Medium'?",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			GetConVar("hl2cr_difficulty"):SetInt(3)
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+votingTypes["VoteHard"] = {
+	Description = "Set Difficulty to 'Hard'?",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			GetConVar("hl2cr_difficulty"):SetInt(4)
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+votingTypes["VoteVHard"] = {
+	Description = "Set Difficulty to 'Very Hard'?",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			GetConVar("hl2cr_difficulty"):SetInt(5)
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+
 votingTypes["Custom"] = {
 	Description = "[Custom text should be here]",
 	Callback = function(state)

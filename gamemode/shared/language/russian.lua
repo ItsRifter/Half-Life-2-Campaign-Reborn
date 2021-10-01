@@ -7,9 +7,10 @@ LANGUAGE.UsefulInfo 				= "Если карта сломалась, напиши�
 
 LANGUAGE.EarnedAchievement 			= " получил достижение: "
 
-LANGUAGE.TimeLeft 						= "Осталось времени: "
-
-LANGUAGE.StatXP							= "Получено ОП: "
+LANGUAGE.TimeLeft 						= "До смены: "
+--Финальные результаты
+LANGUAGE.StatXP							= "Получено Опыта: "
+LANGUAGE.StatKills						= "Всего Убито: "
 LANGUAGE.StatResin						= "Получено Резины: "
 LANGUAGE.ResinAmount					= "Резины: "
 LANGUAGE.Resin							= " Резины"
@@ -51,7 +52,7 @@ LANGUAGE.ERROR_JEEP_OWNER				= "Это не ваш Багги."
 LANGUAGE.ERROR_JEEP_INVALID				= "Сначала сядьте в Багги."
 LANGUAGE.ERROR_NO_JEEP					= "Вы не находитесь в транспорте."
 LANGUAGE.ERROR_JEEP_SEAT_EXIST			= "У вас уже установлено пассажирское кресло."
-
+--Оружие
 LANGUAGE.Flare_gun						= "Ракетница"
 LANGUAGE.MGL							= "Гранатомёт"
 LANGUAGE.HEAVY_SNIPER_BMG				= "Тяжёлая Снайперская Винтовка"
@@ -59,30 +60,32 @@ LANGUAGE.Flare_gun_desc					= "Используется в экстренных 
 LANGUAGE.MGL_DESC						= "Гранатомёт\nиспользуйте аккуратнее"
 LANGUAGE.HEAVY_SNIPER_BMG_DESC			= "Тяжёлая Винтовка\nс мощными результатами"
 LANGUAGE.WeaponCost						= "\n\nСтоимость: "
-
+--Скиллы
 LANGUAGE.LEVEL_LOCKED					= "ЗАКРЫТО\nДОСТИГНИТЕ УРОВНЯ "
 LANGUAGE.SKILL_REQUIRES					= "\nТРЕБУЕТСЯ: "
-
 LANGUAGE.SKILLS_PASSIVE					= "Пассивные"
 LANGUAGE.SKILLS_MEDIC					= "Полевой Медик"
 LANGUAGE.SKILLS_REPAIRMAN				= "Ремотник"
 LANGUAGE.SKILLS_MECHANIC				= "Механик"
-
+--Классы
 LANGUAGE.PickClass						= "Выбрать класс"
 LANGUAGE.Class_Locked					= "ЗАКРЫТО: Требуется 5 уровень"
-
+--Инвентарь
 LANGUAGE.Inv_Bar						= "Инв"
 LANGUAGE.Skills_Bar						= "Скиллы"
 LANGUAGE.Shop_Bar						= "Магаз"
 LANGUAGE.Pets_Bar						= "Петы"
 LANGUAGE.Class_Bar						= "Классы"
 LANGUAGE.Statistics_Bar					= "Статы"
+LANGUAGE.Achievements_Bar				= "Ачивки"
 LANGUAGE.Achievs						= "Получено достижений: "
 LANGUAGE.Quests_Done					= "Закончено квестов: "
-
+--Статы
 LANGUAGE.Kills							= "Убийств: "
 LANGUAGE.Deaths							= " | Смертей: "
 LANGUAGE.Average						= " | Среднее: "
+
+--Ачивки
 
 LANGUAGE.ERROR_VOTE_COOLDOWN1			= "Подождите "
 LANGUAGE.ERROR_VOTE_COOLDOWN2			= " перед тем, как начинать голосование."

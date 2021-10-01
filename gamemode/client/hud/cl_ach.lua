@@ -42,7 +42,7 @@ function AchNotice(achTbl)
 	achPopUp:Add(BGPnl)
 	
 	if achTbl.Rewards.XP > 0 then
-		chat.AddText(Color(240, 175, 0), "XP Gained: " .. achTbl.Rewards.XP)
+		chat.AddText(Color(240, 175, 0), translate.Get("StatXP") .. achTbl.Rewards.XP)
 	end
 	
 	achPopUp:MoveTo(ScrW() - 280, ScrH() - 100, 2, 0, -1, function()
@@ -118,5 +118,5 @@ net.Receive("HL2CR_AchievementUpdate", function()
 	local achImg = net.ReadString()
 	local achProgress = net.ReadInt(16)
 	local achMaxValue = net.ReadInt(16)
-	AchUpdateNotice(achTitle, achImg, achProgress, achMaxValue)
+	--AchUpdateNotice(achTitle, achImg, achProgress, achMaxValue)
 end)

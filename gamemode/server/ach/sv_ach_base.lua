@@ -10,10 +10,10 @@ function GrantAchievement(ply, baseList, achName)
 	if not ach then return print("ERROR: bad achievement name") end
 	
 	--If player already has the achievement, stop here
-	if table.HasValue(ply.hl2cr.Achievements, ach.NameServer) then return end
+	if table.HasValue(ply.hl2cr.Achievements, ach.Name) then return end
 	
 	--Insert the achievement to the player's data
-	table.insert(ply.hl2cr.Achievements, ach.NameServer)
+	table.insert(ply.hl2cr.Achievements, ach.Name)
 	
 	--Show the popup achievement similar to steam's achievements
 	net.Start("HL2CR_AchievementEarned")
@@ -32,8 +32,6 @@ function GrantAchievement(ply, baseList, achName)
 	end
 	
 	table.insert(ply.rewards["achs"], ach.Name)
-	
-	ply.rewards["stats"]["exp"] = ply.rewards["stats"]["exp"] + ach.Rewards.XP
 	
 	ply:SetNWInt("stat_totalachs", #ply.hl2cr.Achievements)
 	ply:SetNWString("stat_achievements", table.concat(ply.hl2cr.Achievements, " "))

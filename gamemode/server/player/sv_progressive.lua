@@ -8,6 +8,7 @@ end
 function AddResin(ply, resin)
 
 	ply.hl2cr.Resin = ply.hl2cr.Resin + resin
+	ply.rewards["resin"] = ply.rewards["resin"] + resin
 
 	ply:SetNWInt("currency_resin", ply.hl2cr.Resin)
 end
@@ -23,7 +24,7 @@ function AddXP(ply, XP)
 		ply.hl2cr.Exp = ply.hl2cr.Exp - ply.hl2cr.ReqExp
 		ply.hl2cr.Level = ply.hl2cr.Level + 1
 		ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints + 1
-		ply.hl2cr.ReqExp = math.ceil(ply.hl2cr.ReqExp + (1500 * ply.hl2cr.Level))
+		ply.hl2cr.ReqExp = math.ceil(ply.hl2cr.ReqExp + (750 * ply.hl2cr.Level))
 		notifyLevelUp = true
 	end
 		
@@ -36,6 +37,7 @@ function AddXP(ply, XP)
 		net.Send(ply)
 	end
 	
+	ply.rewards["stats"]["exp"] = ply.rewards["stats"]["exp"] + XP
 	ply:SetNWInt("stat_exp", ply.hl2cr.Exp)
 end
 
@@ -62,28 +64,26 @@ function ShowMapResults(ply)
 	
 	local randStart = math.random(1, 25)
 	
-	ply.hl2cr.Resin = ply.hl2cr.Resin + (randStart * ply.rewards["kills"] * GetConVar("hl2cr_difficulty"):GetInt())
-	
-	ply.rewards["resin"] = (randStart * ply.rewards["kills"] * GetConVar("hl2cr_difficulty"):GetInt())
+	AddResin(ply, randStart * ply.rewards["kills"] * GetConVar("hl2cr_difficulty"):GetInt())
 	
 	if ply.rewards.bonus["Pacifist"] and not IMPOSSIBLE_PACIFIST[game.GetMap()] then
+		AddXP(ply, 250 * GetConVar("hl2cr_difficulty"):GetInt())
+		AddResin(ply, 50 * GetConVar("hl2cr_difficulty"):GetInt())
+	end
+	
+	if ply.rewards.bonus["No Deaths"] then
+		AddXP(ply, 250 * GetConVar("hl2cr_difficulty"):GetInt())
+		AddResin(ply, 50 * GetConVar("hl2cr_difficulty"):GetInt())
+	end
+	
+	if ply.rewards.bonus["Crowbar Only"] then
 		AddXP(ply, 1000 * GetConVar("hl2cr_difficulty"):GetInt())
 		AddResin(ply, 250 * GetConVar("hl2cr_difficulty"):GetInt())
 	end
 	
-	if ply.rewards.bonus["No Deaths"] then
-		AddXP(ply, 500 * GetConVar("hl2cr_difficulty"):GetInt())
-		AddResin(ply, 100 * GetConVar("hl2cr_difficulty"):GetInt())
-	end
-	
-	if ply.rewards.bonus["Crowbar Only"] then
-		AddXP(ply, 2000 * GetConVar("hl2cr_difficulty"):GetInt())
-		AddResin(ply, 500 * GetConVar("hl2cr_difficulty"):GetInt())
-	end
-	
 	if ply.rewards.bonus["Teamplayer"] then
-		AddXP(ply, 500 * GetConVar("hl2cr_difficulty"):GetInt())
-		AddResin(ply, 100 * GetConVar("hl2cr_difficulty"):GetInt())
+		AddXP(ply, 250 * GetConVar("hl2cr_difficulty"):GetInt())
+		AddResin(ply, 50 * GetConVar("hl2cr_difficulty"):GetInt())
 	end
 	
 	net.Start("HL2CR_ClientMapResults")

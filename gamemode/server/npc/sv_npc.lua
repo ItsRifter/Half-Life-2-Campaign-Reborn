@@ -68,8 +68,10 @@ hook.Add("EntityTakeDamage", "HL2CR_SharedXPDmg", function(ent, dmgInfo)
 	local dmg = dmgInfo:GetDamage()
 	local att = dmgInfo:GetAttacker()
 	
-	if att:IsPlayer() and (att:GetActiveWeapon():GetClass() == "weapon_stunstick" and att.hl2cr.StunDamage) and not ent:IsPlayer() then
-		dmgInfo:SetDamage(dmg + att.hl2cr.StunDamage)
+	if att:IsPlayer() and att:GetActiveWeapon():GetClass() == "weapon_stunstick" then
+		if att.hl2cr.StunDamage and not ent:IsPlayer() then
+			dmgInfo:SetDamage(dmg + att.hl2cr.StunDamage)
+		end
 	end
 	
 	if ent:IsNPC() and not (ent:IsFriendly() or ent:IsPet() or ent:GetClass() == "npc_citizen") then
@@ -93,6 +95,8 @@ hook.Add("EntityTakeDamage", "HL2CR_FriendlyOrHostile", function(ent, dmgInfo)
 	end
 	
 	if game.GetMap() == "d1_trainstation_05" and (att:GetName("BabyStrike") and file.Exists("hl2cr_data/babycheck.txt", "DATA")) and not att:IsPlayer() then
+		if ent:GetClass() ~= "npc_kleiner" then return end
+		
 		for k, v in pairs(player.GetAll()) do
 			GrantAchievement(v, "HL2", "Red_Letter_Baby")
 			file.Delete("hl2cr_data/babycheck.txt")
@@ -141,7 +145,12 @@ hook.Add( "ScaleNPCDamage", "HL2CR_ScaleNPCDMG", function( npc, hitgroup, dmgInf
 	
 	if npc:GetClass() == "npc_citizen" then return end
 	
-	local hitDivide = GetConVar("hl2cr_difficulty"):GetInt()
+	local hitDivide = GetConVar("hl2cr_difficulty"):GetInt() - 1
+	
+	if hitDivide <= 1 then
+		dmgInfo:ScaleDamage(1.75)
+		return
+	end
 	
 	if hitgroup == HITGROUP_HEAD then
 		hitDivide = hitDivide * 1.25

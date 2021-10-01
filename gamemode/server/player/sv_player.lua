@@ -484,13 +484,18 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 				
 				timer.Simple(5, function()
 					p:StripWeapon("admire_hands")
-
-					for _, classWep in ipairs(p.hl2cr.CurClass.Weapons) do
-						if classWep then
-							p:Give(classWep)
+	
+	
+					if p.hl2cr.CurClass.Weapons then
+						for _, classWep in ipairs(p.hl2cr.CurClass.Weapons) do
+							if classWep then
+								p:Give(classWep)
+							end
 						end
 					end
-					p:Give(CONVERT_NAME_TO_ENT[p.hl2cr.Inventory.CurWeaponSlot])
+					if p.hl2cr.Inventory.CurWeaponSlot then
+						p:Give(CONVERT_NAME_TO_ENT[p.hl2cr.Inventory.CurWeaponSlot])
+					end
 				end)
 			end	
 		end
@@ -531,6 +536,7 @@ local RANDOM_XP_BASED_NPC = {
 	["npc_headcrab"] = {xpMin = 5, xpMax = 15},
 	["npc_headcrab_fast"] = {xpMin = 12, xpMax = 27},
 	["npc_headcrab_black"] = {xpMin = 13, xpMax = 28},
+	["npc_headcrab_poison"] = {xpMin = 13, xpMax = 28},
 	["npc_zombie_torso"] = {xpMin = 10, xpMax = 35},
 	["npc_zombie"] = {xpMin = 25, xpMax = 65},
 	["npc_fastzombie"] = {xpMin = 32, xpMax = 75},
@@ -572,7 +578,6 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 		createIndicator(totalXP, npc:GetPos(), player)
 		
 		player.rewards["kills"] = player.rewards["kills"] + 1
-		player.rewards["stats"]["exp"] = player.rewards["stats"]["exp"] + totalXP
 		player.hl2cr.Kills = player.hl2cr.Kills + 1
 		player:SetNWInt("stat_kills", player.hl2cr.Kills)
 		
@@ -669,25 +674,27 @@ hook.Add("EntityTakeDamage", "HL2CR_SlashDMGBuff", function( target, dmgInfo )
 	if target:IsPlayer() and att:IsNPC() then
 		if dmgType == DMG_SLASH and (att:GetClass() ~= "npc_headcrab_black" or att:GetClass() ~= "npc_headcrab_poison") then
 			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * 1.25)
-		else
-			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * 1.5)
 		end
 	end
 end)
 
 hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup, dmgInfo )
 		
-	local hitMulti = GetConVar("hl2cr_difficulty"):GetInt()
+	local hitMulti = GetConVar("hl2cr_difficulty"):GetInt() - 1
 	
+	if hitMulti <= 0 then return end
+
 	if hitgroup == HITGROUP_HEAD then
-		hitMulti = hitMulti * 2.5
+		hitMulti = hitMulti * 1.25
 	elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
-		hitMulti = hitMulti * 2
+		hitMulti = hitMulti * 1
 	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-		hitMulti = hitMulti * 1.5
+		hitMulti = hitMulti * 0.5
 	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-		hitMulti = hitMulti * 1.25	
+		hitMulti = hitMulti * 0.25	
 	end
+	
+	dmgInfo:ScaleDamage(hitMulti)
 end)
 
 function BroadcastMessage(msgTbl, player)
@@ -725,6 +732,12 @@ hook.Add("GravGunPickupAllowed", "HL2CR_AllowGravPickup", function(ply, ent)
 	end
 	
 	return true
+end)
+
+hook.Add("GravGunOnPickedUp", "HL2CR_BlastAch", function(ply, ent)
+	if ent and ent:GetClass() == "shot_nade" then
+		ent.Owner = ply
+	end
 end)
 
 net.Receive("HL2CR_UpdateModel", function(len, ply)

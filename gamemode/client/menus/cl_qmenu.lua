@@ -1,19 +1,22 @@
 local CONVERT_NAME_TO_IMAGE = {
 	["Flare_gun"] = "materials/hl2cr/weapon_flaregun.jpg",
 	["Multi_Grenade_Launcher"] = "materials/hl2cr/weapon_grenadelauncher.jpg",
-	[".50_BMG_Heavy_Sniper"] = "materials/hl2cr/weapon_bmgsniper.jpg"
+	[".50_BMG_Heavy_Sniper"] = "materials/hl2cr/weapon_bmgsniper.jpg",
+	["Test"] = "materials/hl2cr/empty.jpg"
 }
 
 local CONVERT_NAME_TO_PROPER = {
 	["Flare_gun"] = "Flare gun",
 	["Multi_Grenade_Launcher"] = "Multiple Grenade Launcher",
-	[".50_BMG_Heavy_Sniper"] = ".50 BMG Heavy Sniper"
+	[".50_BMG_Heavy_Sniper"] = ".50 BMG Heavy Sniper",
+	["Test"] = "Test"
 }
 
 local CONVERT_NAME_TO_DESC = {
 	["Flare_gun"] = "Used for emergencies...\nso it was",
 	["Multi_Grenade_Launcher"] = "A grenade launcher\nhandle with care",
-	[".50_BMG_Heavy_Sniper"] = "A rather heavy sniper\nwith devastating results"
+	[".50_BMG_Heavy_Sniper"] = "A rather heavy sniper\nwith devastating results",
+	["Test"] = "Test Item"
 }
 
 local PLAYERMODELS = {
@@ -56,17 +59,17 @@ local PLAYERMODELS = {
 	}
 }
 
+
 function StartQMenu(shouldOpen)
 	if shouldOpen then 
 		qMenuTabs = vgui.Create("HL2CR_Tab")
-		qMenuTabs:SetSize(ScrW() / 2, ScrH() / 2)
+		qMenuTabs:SetSize(ScrW() / 1.5, ScrH() / 1.5)
 		qMenuTabs:Center()
 		qMenuTabs:MakePopup()
 		qMenuTabs:SetKeyboardInputEnabled(false)
 		
 		local invPnl = vgui.Create("DPanel", qMenuTabs)
-		invPnl:SetSize(ScrW() / 2, ScrH() / 2)
-		invPnl:SetPos(0, 100)
+		invPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
 		
 		local invPnlBG = vgui.Create("DPanel", invPnl)
 		invPnlBG:SetSize(invPnl:GetWide(), invPnl:GetTall())
@@ -77,21 +80,20 @@ function StartQMenu(shouldOpen)
 		end
 		
 		local invPnlPlayer = vgui.Create("DPanel", invPnl)
-		invPnlPlayer:SetPos(invPnl:GetWide() / 1.37, 10)
-		invPnlPlayer:SetSize(invPnl:GetWide() / 4, ScrH() / 2.6)
+		invPnlPlayer:SetPos(invPnl:GetWide() / 1.3, -invPnl:GetTall() / 32 + 16)
+		invPnlPlayer:SetSize(invPnl:GetWide(), invPnl:GetTall() )
 		invPnlPlayer.Paint = function(self, w, h)
 			surface.SetDrawColor(HL2CR.Theme.qMenu2)
 			surface.DrawRect(0, 0, w, h)
 		end
 		
 		local invPnlPlayerModel = vgui.Create( "DModelPanel", invPnlPlayer )
-		invPnlPlayerModel:SetSize(ScrW() / 2.905, ScrH() / 1.3)
-		invPnlPlayerModel:SetPos(-ScrW() / 9, -ScrH() / 6.505)
+		invPnlPlayerModel:SetSize(invPnlPlayer:GetWide(), invPnlPlayer:GetTall() + 100)
+		invPnlPlayerModel:SetPos(-invPnlPlayerModel:GetWide() / 2.65, invPnlPlayerModel:GetTall() / invPnlPlayerModel:GetTall())
 		invPnlPlayerModel:SetDirectionalLight(BOX_RIGHT, Color(255, 160, 80, 255))
 		invPnlPlayerModel:SetDirectionalLight(BOX_LEFT, Color(80, 160, 255, 255))
 		invPnlPlayerModel:SetAmbientLight(Vector(-64, -64, -64))
 		invPnlPlayerModel:SetModel( LocalPlayer():GetModel() )
-		invPnlPlayerModel:SetAnimated(false)
 		invPnlPlayerModel.Angles = Angle(0, 0, 0)
 		function invPnlPlayerModel:DragMousePress()
 			self.PressX, self.PressY = gui.MousePos()
@@ -112,18 +114,18 @@ function StartQMenu(shouldOpen)
 		end
 		
 		local invPnlSlotsPnl = vgui.Create("DPanel", invPnl)
-		invPnlSlotsPnl:SetSize(ScrW() * 0.302, 250)
-		invPnlSlotsPnl:SetPos(ScrW() * 0.015, ScrH() * 0.015)
+		invPnlSlotsPnl:SetSize(invPnl:GetWide() / 2, invPnl:GetTall())
+		invPnlSlotsPnl:SetPos(15, 16)
 		invPnlSlotsPnl.Paint = function() end
 		
 		local invLayout = vgui.Create("DIconLayout", invPnlSlotsPnl)
 		invLayout:Dock(FILL)
 		invLayout:SetSpaceX(10)
 		invLayout:SetSpaceY(5)
-		
+
 		local weaponSlotPnl = vgui.Create("DPanel", invPnl)
-		weaponSlotPnl:SetPos(invPnl:GetWide() / 1.6, 50)
-		weaponSlotPnl:SetSize(invPnl:GetWide() / 10, invPnl:GetWide() / 10)
+		weaponSlotPnl:SetPos(invPnl:GetWide() / 1.55 + 15, 50)
+		weaponSlotPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetTall() / (ScrW() / 172) )
 		
 		weaponSlotPnl.Paint = function(pnl, w, h)
 			surface.SetDrawColor(HL2CR.Theme.qMenu2)
@@ -131,9 +133,11 @@ function StartQMenu(shouldOpen)
 		end
 		
 		weaponSlotImage = vgui.Create("DImage", weaponSlotPnl)
-		weaponSlotImage:SetSize(invPnl:GetWide() / 10, invPnl:GetWide() / 10)
+		weaponSlotImage:SetSize(weaponSlotPnl:GetWide(), weaponSlotPnl:GetTall())
 		if CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")] then
 			weaponSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")])
+		else
+			weaponSlotImage:SetImage("materials/hl2cr/empty.jpg")
 		end
 		
 		local slots = string.Explode(" ", LocalPlayer():GetNWString("inv_slots"))
@@ -145,7 +149,7 @@ function StartQMenu(shouldOpen)
 		
 		for i = 1, totalSlots do
 			pl.Inv[i] = invLayout:Add("HL2CR_InvSlot")
-			pl.Inv[i]:SetSize(52, 52)
+			pl.Inv[i]:SetSize(62, 62)
 			
 			if slots[i] and CONVERT_NAME_TO_IMAGE[slots[i]] then
 				pl.Inv[i].Icon = vgui.Create("DImageButton", pl.Inv[i])
@@ -163,13 +167,37 @@ function StartQMenu(shouldOpen)
 				end
 			end
 		end
+		
+		local modelHorizontalScroll = vgui.Create("DHorizontalScroller", invPnl)
+		modelHorizontalScroll:SetSize(512, 64)
+		modelHorizontalScroll:SetPos(invPnl:GetWide() / 12 - 110, invPnl:GetTall() / 1.30)
+		
+		for level, v in pairs(PLAYERMODELS) do
+			for i, p in ipairs(v) do
+				if LocalPlayer():GetNWInt("stat_level") >= level then
+					local playermodelBtn = vgui.Create("SpawnIcon", modelHorizontalScroll)
+					playermodelBtn:SetModel(v[i])
+					playermodelBtn:SetSize(64, 64)
+					modelHorizontalScroll:AddPanel(playermodelBtn)
+
+					playermodelBtn.DoClick = function(pnl)
+						net.Start("HL2CR_UpdateModel")
+							net.WriteString(v[i])
+						net.SendToServer()
+
+						invPnlPlayerModel:SetModel( v[i] )
+					end
+				end
+			end
+		end
 			
 		local skillsPnl = vgui.Create("DPanel", qMenuTabs)
-		skillsPnl:SetSize(ScrW() / 1.45, ScrH() / 2)
+		skillsPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
 		skillsPnl:SetPos(0, 100)
 		
 		local skillsPnlBG = vgui.Create("DPanel", skillsPnl)
 		skillsPnlBG:SetSize(skillsPnl:GetWide(), skillsPnl:GetTall())
+		skillsPnlBG.Paint = function() return end
 		
 		local skillsSelectionPnl = vgui.Create("HL2CR_Tab", skillsPnlBG)
 		skillsSelectionPnl:SetSize(skillsPnl:GetWide(), skillsPnl:GetTall())
@@ -207,7 +235,7 @@ function StartQMenu(shouldOpen)
 				skillBtn = vgui.Create("DImageButton", mechSkillsPnl)
 			end
 			
-			skillBtn:SetSize(64, 64)
+			skillBtn:SetSize(72, 72)
 			skillBtn:SetPos(skill["Pos"][1], skill["Pos"][2])
 		
 			if LocalPlayer():GetNWInt("stat_level") < skill.Level then
@@ -252,7 +280,7 @@ function StartQMenu(shouldOpen)
 				
 				local skillTick = vgui.Create("DImage", pnl)
 				skillTick:SetImage("icon16/tick.png")
-				skillTick:SetPos(0, 32)
+				skillTick:SetPos(0, 42)
 				skillTick:SetSize(32, 32)
 				
 				surface.PlaySound("buttons/button5.wav")
@@ -261,7 +289,7 @@ function StartQMenu(shouldOpen)
 			if string.find(LocalPlayer():GetNWString("stat_curskills"), skill.Name) then
 				local skillTick = vgui.Create("DImage", skillBtn)
 				skillTick:SetImage("icon16/tick.png")
-				skillTick:SetPos(0, 32)
+				skillTick:SetPos(0, 42)
 				skillTick:SetSize(32, 32)
 			end
 		end
@@ -273,7 +301,7 @@ function StartQMenu(shouldOpen)
 		skillsSelectionPnl.navbar:SetActive(1)
 		
 		local shopPnl = vgui.Create("DPanel", qMenuTabs)
-		shopPnl:SetSize(ScrW() / 1.45, ScrH() / 2)
+		shopPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
 		shopPnl:SetPos(0, 100)
 		
 		local shopPnlBG = vgui.Create("DPanel", shopPnl)
@@ -284,10 +312,10 @@ function StartQMenu(shouldOpen)
 		end
 		
 		local shopWeaponsPnl = vgui.Create("DPanel", shopPnlBG)
-		shopWeaponsPnl:SetSize(225, 125)
+		shopWeaponsPnl:SetSize(shopPnl:GetWide() / 4, 125)
 		shopWeaponsPnl:SetPos(25, 50)
 		shopWeaponsPnl.Paint = function(self, w, h)
-			surface.SetDrawColor(HL2CR.Theme.qMenu2)
+			surface.SetDrawColor(HL2CR.Theme.qMenu3)
 			surface.DrawRect(0, 0, w, h)
 		end
 				
@@ -306,8 +334,8 @@ function StartQMenu(shouldOpen)
 		
 		for k, item in pairs(GAMEMODE.ShopItems) do
 
+			if item.Type ~= "Weapon" then continue end
 			if string.find(LocalPlayer():GetNWString("inv_slots"), item.Name) then continue end
-			
 			
 			local itemBtn = weaponsLayout:Add("DImageButton")
 			itemBtn:SetSize(64, 64)
@@ -331,9 +359,50 @@ function StartQMenu(shouldOpen)
 				curResinLabel:SetText(translate.Get("ResinAmount") .. LocalPlayer():GetNWInt("currency_resin") - item.Cost)
 			end
 		end
+		local shopItemsPnl = vgui.Create("DPanel", shopPnlBG)
+		shopItemsPnl:SetSize(shopPnl:GetWide() / 4, 125)
+		shopItemsPnl:SetPos(shopPnl:GetWide() / 1.37, 50)
+		shopItemsPnl.Paint = function(self, w, h)
+			surface.SetDrawColor(HL2CR.Theme.qMenu3)
+			surface.DrawRect(0, 0, w, h)
+		end
+				
+		local shopItemsScroll = vgui.Create("DScrollPanel", shopItemsPnl)
+		shopItemsScroll:Dock(FILL)
+		
+		local itemsLayout = vgui.Create("DIconLayout", shopItemsScroll)
+		itemsLayout:Dock(FILL)
+		
+		for k, item in pairs(GAMEMODE.ShopItems) do
+
+			if item.Type ~= "Item" then continue end
+			if string.find(LocalPlayer():GetNWString("inv_slots"), item.Name) then continue end
+			
+			local itemBtn = itemsLayout:Add("DImageButton")
+			itemBtn:SetSize(64, 64)
+			itemBtn:SetImage(item.Icon)
+			itemBtn:SetToolTip(CONVERT_NAME_TO_PROPER[item.Name] .. "\n\n" .. item.Desc .. translate.Get("WeaponCost") .. item.Cost .. translate.Get("Resin"))
+			
+			itemBtn.DoClick = function(pnl)			
+
+				if LocalPlayer():GetNWInt("currency_resin") < item.Cost then
+					surface.PlaySound("buttons/button16.wav")
+					return
+				end
+				
+				net.Start("HL2CR_PurchaseItem")
+					net.WriteString(item.Name)
+				net.SendToServer()
+				
+				pnl:Remove()
+				
+				surface.PlaySound("buttons/button5.wav")
+				curResinLabel:SetText(translate.Get("ResinAmount") .. LocalPlayer():GetNWInt("currency_resin") - item.Cost)
+			end
+		end
 		
 		local petsPnl = vgui.Create("DPanel", qMenuTabs)
-		petsPnl:SetSize(ScrW() / 1.45, ScrH() / 2)
+		petsPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
 		petsPnl:SetPos(0, 100)
 		
 		local petsPnlBG = vgui.Create("DPanel", petsPnl)
@@ -344,7 +413,7 @@ function StartQMenu(shouldOpen)
 		end
 		
 		local classPnl = vgui.Create("DPanel", qMenuTabs)
-		classPnl:SetSize(ScrW() / 2.15, ScrH() / 2)
+		classPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
 		classPnl:SetPos(0, 100)
 		
 		local classPnlBG = vgui.Create("DPanel", classPnl)
@@ -356,7 +425,7 @@ function StartQMenu(shouldOpen)
 
 		local classHorizontalScroll = vgui.Create("DHorizontalScroller", classPnlBG)
 		classHorizontalScroll:Dock(FILL)
-		classHorizontalScroll:SetOverlap( -40 )
+		classHorizontalScroll:SetOverlap( -35 )
 
 		if LocalPlayer():GetNWInt("stat_level") >= 5 then
 			for i, class in pairs(GAMEMODE.PlayStyleClass) do
@@ -417,7 +486,7 @@ function StartQMenu(shouldOpen)
 		end
 		
 		local statsPnl = vgui.Create("DPanel", qMenuTabs)
-		statsPnl:SetSize(ScrW() / 2.5, ScrH() / 2)
+		statsPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
 		statsPnl:SetPos(0, 100)
 		
 		local statsPnlBG = vgui.Create("DPanel", statsPnl)
@@ -456,11 +525,10 @@ function StartQMenu(shouldOpen)
 		statsPnlLabelQuest:SizeToContents()
 		
 		local achsPnl = vgui.Create("DPanel", qMenuTabs)
-		achsPnl:SetSize(ScrW() / 2.35, ScrH() / 2.30)
-		achsPnl:SetPos(0, 100)
+		achsPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
 		
 		local achsPnlBG = vgui.Create("DPanel", achsPnl)
-		achsPnlBG:SetSize(achsPnl:GetWide(), achsPnl:GetTall())
+		achsPnlBG:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
 		achsPnlBG.Paint = function(self, w, h)
 			surface.SetDrawColor(HL2CR.Theme.qMenu)
 			surface.DrawRect(0, 0, w, h)
@@ -471,76 +539,69 @@ function StartQMenu(shouldOpen)
 		achsSelectionPnl:SetPos(0, -35)
 		achsSelectionPnl:SetKeyboardInputEnabled(false)
 		
-		local curAchs = string.Explode(" ", LocalPlayer():GetNWString("stat_achievements"))
-
 		local hl2Pnl = vgui.Create("DPanel", achsSelectionPnl)
 
 		local hl2ScrollPnl = vgui.Create("DScrollPanel", hl2Pnl)
-		hl2ScrollPnl:Dock(FILL)
+		hl2ScrollPnl:SetSize(achsSelectionPnl:GetWide(), achsSelectionPnl:GetTall() / 1.60 + 10)
 		
 		local hl2AchList = vgui.Create("DIconLayout", hl2ScrollPnl)
-		hl2AchList:Dock(FILL)
-		hl2AchList:SetSpaceY(15)
-		hl2AchList:SetSpaceX(50)
+		hl2AchList:SetPos(hl2Pnl:GetWide() - 50, achsSelectionPnl:GetTall() / 26 - (-hl2Pnl:GetTall() + 25))
+		hl2AchList:SetSize(achsSelectionPnl:GetWide(), achsSelectionPnl:GetTall())
+		hl2AchList:SetSpaceY(10)
+		hl2AchList:SetSpaceX(30)
 		
 		local achIndex = 0
 		
 		for k, v in pairs(GAMEMODE.Achievements["HL2"]) do
 			achIndex = achIndex + 1
+			
 			local achPnl = hl2AchList:Add("DPanel")
-			achPnl:SetSize(225, 75)
+			achPnl:SetSize(achsPnl:GetWide() / 6, 75)
 			achPnl.Paint = function(pnl, w, h)
-				surface.SetDrawColor(HL2CR.Theme.qMenu2)	
+				surface.SetDrawColor(HL2CR.Theme.qMenu2)
 				surface.DrawRect(0, 0, w, h)
 			end
 			
 			local achName = vgui.Create("DLabel", achPnl)
-
-			if v.NameServer == curAchs[achIndex] then
-				achName:SetText(v.Name)
-			else
-				achName:SetText("Locked")
-			end
-			
 			achName:SetPos(75, 0)
 			achName:SetFont("HL2CR_AchTitle")
-			achName:SizeToContents()
+			achName:SetText("Locked")
 			
 			local achDesc = vgui.Create("DLabel", achPnl)
-	
-			if v.NameServer == curAchs[achIndex] then
-				achDesc:SetText(v.Desc)
-			else
-				achDesc:SetText("")
-			end
-			
 			achDesc:SetPos(75, 20)
 			achDesc:SetFont("HL2CR_AchDesc")
-			achDesc:SizeToContents()
+			achDesc:SetText("")
 			
 			local achIcon = vgui.Create("DImage", achPnl)
 			achIcon:SetSize(75, 75)
-			if v.NameServer == curAchs[achIndex] then
+			achIcon:SetImage("vgui/hud/icon_locked.png")
+			
+			if string.find(LocalPlayer():GetNWString("stat_achievements"), v.Name) then
+				achName:SetText(v.Name)
+				achDesc:SetText(v.Desc)
 				achIcon:SetImage(v.Mat)
-			else
-				achIcon:SetImage("vgui/hud/icon_locked.png")
 			end
 
-
+			achName:SizeToContents()
+			achDesc:SizeToContents()
 		end
 		
 		local miscPnl = vgui.Create("DPanel", achScreenPnl)
 		
 		local miscScrollPnl = vgui.Create("DScrollPanel", miscPnl)
-		miscScrollPnl:Dock(FILL)
+		miscScrollPnl:SetSize(achsSelectionPnl:GetWide(), achsSelectionPnl:GetTall() / 1.60 + 10)
 		
 		local miscAchList = vgui.Create("DIconLayout", miscScrollPnl)
-		miscAchList:Dock(FILL)
-		miscAchList:SetSpaceY(15)
-		miscAchList:SetSpaceX(50)
+		miscAchList:SetPos(miscPnl:GetWide() - 50, achsSelectionPnl:GetTall() / 26 - (-hl2Pnl:GetTall() + 25))
+		miscAchList:SetSize(achsSelectionPnl:GetWide(), achsSelectionPnl:GetTall())
+		miscAchList:SetSpaceY(10)
+		miscAchList:SetSpaceX(30)
+		
 		achIndex = 0
+		
 		for k, v in pairs(GAMEMODE.Achievements["Misc"]) do
 			achIndex = achIndex + 1
+			
 			local achPnl = miscAchList:Add("DPanel")
 			achPnl:SetSize(225, 75)
 			achPnl.Paint = function(pnl, w, h)
@@ -549,89 +610,49 @@ function StartQMenu(shouldOpen)
 			end
 			
 			local achName = vgui.Create("DLabel", achPnl)
-			
-			if v.NameServer == curAchs[achIndex] then
-				achName:SetText(v.Name)
-			else
-				achName:SetText("Locked")
-			end
-			
 			achName:SetPos(75, 0)
 			achName:SetFont("HL2CR_AchTitle")
-			achName:SizeToContents()
+			achName:SetText("Locked")
 			
 			local achDesc = vgui.Create("DLabel", achPnl)
-			
-			if v.NameServer == curAchs[achIndex] then
-				achDesc:SetText(v.Desc)
-			else
-				achDesc:SetText("")
-			end
-			
 			achDesc:SetPos(75, 20)
 			achDesc:SetFont("HL2CR_AchDesc")
-			achDesc:SizeToContents()
+			achDesc:SetText("")
 			
 			local achIcon = vgui.Create("DImage", achPnl)
 			achIcon:SetSize(75, 75)
-			if v.NameServer == curAchs[achIndex] then
+			achIcon:SetImage("vgui/hud/icon_locked.png")
+
+			if string.find(LocalPlayer():GetNWString("stat_achievements"), v.Name) then
+				achName:SetText(v.Name)
+				achDesc:SetText(v.Desc)
 				achIcon:SetImage(v.Mat)
-			else
-				achIcon:SetImage("vgui/hud/icon_locked.png")
 			end
+			
+			achName:SizeToContents()
+			achDesc:SizeToContents()	
 		end
-		
 		
 		achsSelectionPnl.navbar:AddTab("Half-Life 2", hl2Pnl)
 		achsSelectionPnl.navbar:AddTab("Misc", miscPnl)
 		achsSelectionPnl.navbar:SetActive(1)
 		
-		qMenuTabs.navbar:AddTab(translate.Get("Inv_Bar"), invPnl)
+		--[[qMenuTabs.navbar:AddTab(translate.Get("Inv_Bar"), invPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Skills_Bar"), skillsPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Shop_Bar"), shopPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Pets_Bar"), petsPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Class_Bar"), classPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Statistics_Bar"), statsPnl)
+		qMenuTabs.navbar:AddTab(translate.Get("Achievements_Bar"), achsPnl)--]]
+		qMenuTabs.navbar:AddTab(translate.Get("Inv_Bar"), invPnl)
+		qMenuTabs.navbar:AddTab(translate.Get("Class_Bar"), classPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Achievements_Bar"), achsPnl)
+		qMenuTabs.navbar:AddTab(translate.Get("Skills_Bar"), skillsPnl)
+		qMenuTabs.navbar:AddTab(translate.Get("Shop_Bar"), shopPnl)
+		qMenuTabs.navbar:AddTab(translate.Get("Pets_Bar"), petsPnl)
+		qMenuTabs.navbar:AddTab(translate.Get("Statistics_Bar"), statsPnl)
 		
 		qMenuTabs.navbar:SetActive(1)
-		
-		qMenuTabs.Think = function(pnl)
-			if pnl.navbar:GetActive() == invPnl then
-				pnl:SetSize(ScrW() / 2, pnl:GetTall())
-				pnl:Center()
-			end
-				
-			if pnl.navbar:GetActive() == skillsPnl then
-				pnl:SetSize(ScrW() / 2, pnl:GetTall())
-				pnl:Center()
-			end
-			
-			if pnl.navbar:GetActive() == shopPnl then
-				pnl:SetSize(ScrW() / 2, pnl:GetTall())
-				pnl:Center()
-			end
-			
-			if pnl.navbar:GetActive() == petsPnl then
-				pnl:SetSize(ScrW() / 2, pnl:GetTall())
-				pnl:Center()
-			end
-			if pnl.navbar:GetActive() == classPnl then
-				pnl:SetSize(ScrW() / 2.15, pnl:GetTall())
-				pnl:Center()
-			end
-			
-			if pnl.navbar:GetActive() == statsPnl then
-				pnl:SetSize(ScrW() / 2.5, pnl:GetTall())
-				pnl:Center()
-			end
-			
-			if pnl.navbar:GetActive() == achsPnl then
-				pnl:SetSize(ScrW() / 2.35, pnl:GetTall())
-				pnl:Center()
-			end
-		end
-	
 	else
 		if qMenuTabs and qMenuTabs:IsValid() then
 			qMenuTabs:Remove()

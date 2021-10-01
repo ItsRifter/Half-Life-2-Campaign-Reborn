@@ -24,7 +24,7 @@ function ShowVoiceCMDMenu(shouldOpen)
 		voiceFrame:SetKeyboardInputEnabled( true )
 		
 		requestLabel = vgui.Create("DLabel", voiceFrame)
-		requestLabel:SetText("Press 'Enter'\nto confirm voice")
+		requestLabel:SetText("Press '+use'\nto confirm voice")
 		requestLabel:SetPos(voiceFrame:GetWide() / 12, voiceFrame:GetTall() / 3.5)
 		requestLabel:SetFont("HL2CR_VoicesHelp")
 		requestLabel:SizeToContents()	
@@ -40,7 +40,9 @@ function ShowVoiceCMDMenu(shouldOpen)
 			pnl:SizeToContents()
 		end
 	else
-		voiceFrame:Close()
+		if voiceFrame:IsValid() then
+			voiceFrame:Close()
+		end
 	end
 end
 
@@ -53,9 +55,14 @@ function GM:OnContextMenuClose()
 	ShowVoiceCMDMenu(false)
 end
 
+local fixScrolling = 0
+
 hook.Add("InputMouseApply", "HL2CR_ScrollVoice", function(cmd, x, y, ang)
 	
 	if voiceFrame and voiceFrame:IsValid() then
+
+		--if fixScrolling <= CurTime() then return end
+		
 		lastVoice = lastVoice + cmd:GetMouseWheel()
 		
 		if lastVoice > #VOICES then
@@ -63,14 +70,18 @@ hook.Add("InputMouseApply", "HL2CR_ScrollVoice", function(cmd, x, y, ang)
 		elseif lastVoice < 1 then
 			lastVoice = #VOICES
 		end
+		
+		fixScrolling = CurTime() + fixScrolling
 	end
+		
 end)
 
 hook.Add("KeyPress", "HL2CR_ConfirmVoice", function(ply, key)
-	if voiceFrame and key == IN_USE then
+	if voiceFrame and voiceFrame:IsValid() and key == IN_USE then
 		net.Start("HL2CR_HelpNotify")
 			net.WriteString(VOICES[lastVoice])
 		net.SendToServer()
+		ShowVoiceCMDMenu(false)
 	end
 end)
 

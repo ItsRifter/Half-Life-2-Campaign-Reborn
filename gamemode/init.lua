@@ -44,6 +44,7 @@ AddCSLuaFile("client/menus/cl_settings_menu.lua")
 AddCSLuaFile("client/menus/cl_voice_menu.lua")
 AddCSLuaFile("client/menus/cl_qmenu.lua")
 AddCSLuaFile("client/hud/cl_hitboxrender.lua")
+AddCSLuaFile("client/hud/cl_ach.lua")
 
 --Shared
 ----Voting
