@@ -2,7 +2,7 @@ local mapCountdown = false
 
 local NOTIFY_MESSAGES = {
 	[5] = "Classes Unlocked",
-	[10] = "Mechanic | Grenadier | Cop Dropout Class Unlocked",
+	[10] = "Mechanic | Grenadier | Combine Dropout Class Unlocked",
 }
 
 net.Receive("HL2CR_LevelUpSound", function()
@@ -203,13 +203,19 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 			continue
 		end
 		
-		if not pl:Alive() then continue end
-		
 		local dist = LocalPlayer():GetPos():Distance(pl:GetPos())
 		local pos = pl:GetPos()
 			pos.z = pl:GetPos().z + 45 + (dist * 0.0325)
 
 		local ScrPos = pos:ToScreen()
+		
+		if not pl:Alive() then 
+			if pl:GetNWEntity("hl2cr_grave") then
+				draw.SimpleText("R.I.P: " .. pl:Nick(), "HL2CR_HoverPlayer", ScrPos.x, ScrPos.y + 60, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+			
+			continue 
+		end
 		
 		local hpStatus = "nil"
 		local hpColour = Color(255, 255, 255)

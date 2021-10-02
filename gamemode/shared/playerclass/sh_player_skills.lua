@@ -19,7 +19,11 @@ end
 
 local passive_health = CreateSkill("Health Boost", "Increase life expectancy", "Passive", 1, "materials/hl2cr/skill_health.jpg", 10)
 
+local medic_revive = CreateSkill("Revival", "Revive the fallen players", "Medic", 1, "materials/hl2cr/skill_health.jpg", 1)
+
 table.insert(GM.PlayerSkills, passive_health)
+
+table.insert(GM.PlayerSkills, medic_revive)
 
 if SERVER then
 	net.Receive("HL2CR_SkillObtain", function(len, ply)

@@ -167,6 +167,17 @@ local function SetCheckpoints()
 			Vector(-6488, -1199, 8),		Vector(-7167, -1377, 5),
 			Vector(-10337, -4717, 328)
 		}
+		
+		CHECKPOINT_FUNC_1 = function()
+			
+			for _, b in ipairs(ents.FindByClass("prop_physics")) do
+				if b:GetModel() == "models/props_c17/doll01.mdl" then
+					for _, v in ipairs(player.GetAll()) do
+						GrantAchievement(v, "HL2", "Red_Letter_Baby")
+					end
+				end	
+			end
+		end
 	elseif game.GetMap() == "d1_trainstation_06" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(-8594, -575, -262), 		Vector(-8703, -513, -382)

@@ -376,6 +376,24 @@ surface.CreateFont( "HL2CR_Class_DescFont", {
 	outline = false,
 } )
 
+surface.CreateFont( "HL2CR_Skill_Level", {
+	font = "Arial",
+	extended = false,
+	size = 26,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
 surface.CreateFont( "HL2CR_Config_Option", {
 	font = "Roboto",
 	extended = false,

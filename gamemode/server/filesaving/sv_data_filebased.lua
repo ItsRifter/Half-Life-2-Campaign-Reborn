@@ -164,6 +164,10 @@ hook.Add("PlayerDisconnected", "HL2CR_SaveDataDisconnect", function(ply)
 	if ply.pet and ply.pet:IsValid() then
 		ply.pet:Remove()
 	end
+	
+	if ply.gravestone and ply.gravestone:IsValid() then
+		ply.gravestone:Remove()
+	end
 end)
 
 --Upon a map change or server shutdown, save everyones progress

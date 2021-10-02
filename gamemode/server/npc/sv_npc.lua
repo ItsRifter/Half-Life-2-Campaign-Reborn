@@ -89,21 +89,6 @@ end)
 hook.Add("EntityTakeDamage", "HL2CR_FriendlyOrHostile", function(ent, dmgInfo)
 	local att = dmgInfo:GetAttacker()
 	
-	if string.find(tostring(ent:GetPhysicsObject()), "models/props_c17/doll01.mdl") then
-		dmgInfo:SetDamageForce(Vector(100, 0, 0))
-		ent:SetName("BabyStrike")
-	end
-	
-	if game.GetMap() == "d1_trainstation_05" and (att:GetName("BabyStrike") and file.Exists("hl2cr_data/babycheck.txt", "DATA")) and not att:IsPlayer() then
-		if ent:GetClass() ~= "npc_kleiner" then return end
-		
-		for k, v in pairs(player.GetAll()) do
-			GrantAchievement(v, "HL2", "Red_Letter_Baby")
-			file.Delete("hl2cr_data/babycheck.txt")
-		end
-		ent:Remove()
-	end	
-	
 	if ent:IsFriendly() or (ent:GetClass() == "npc_citizen" and att:IsPlayer()) then
 		dmgInfo:SetDamage(0)
 		return

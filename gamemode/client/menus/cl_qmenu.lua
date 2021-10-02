@@ -140,6 +140,7 @@ local PLAYERMODELS = {
 	}
 }
 
+local skillsTbl = {}
 
 function StartQMenu(shouldOpen)
 	if shouldOpen then 
@@ -293,24 +294,28 @@ function StartQMenu(shouldOpen)
 		local passiveSkillsPnl = vgui.Create("DPanel", skillsPnl)
 		passiveSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
 		
-		local passiveSkillsLayout = vgui.Create("DIconLayout", passiveSkillsPnl)
-		passiveSkillsLayout:SetPos(passiveSkillsPnl:GetWide() / 22, 0)
-		passiveSkillsLayout:SetSize(passiveSkillsPnl:GetWide(), passiveSkillsPnl:GetTall())
+		local skillHorizontalScroll = vgui.Create("DHorizontalScroller", passiveSkillsPnl)
+		skillHorizontalScroll:Dock(FILL)
+		skillHorizontalScroll:SetOverlap( -75 )
+		
+		local passiveSkillsLayout = vgui.Create("DIconLayout", skillHorizontalScroll)
+		passiveSkillsLayout:Dock(FILL)
 		
 		local medicSkillsPnl = vgui.Create("DPanel", skillsPnl)
 		medicSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
+		
+		local medicSkillHorizontalScroll = vgui.Create("DHorizontalScroller", medicSkillsPnl)
+		medicSkillHorizontalScroll:Dock(FILL)
+		medicSkillHorizontalScroll:SetOverlap( -35 )
+		
+		local medicSkillsLayout = vgui.Create("DIconLayout", medicSkillHorizontalScroll)
+		medicSkillsLayout:Dock(FILL)
 		
 		local repairSkillsPnl = vgui.Create("DPanel", skillsPnl)
 		repairSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
 		
 		local mechSkillsPnl = vgui.Create("DPanel", skillsPnl)
 		mechSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
-		
-		local skillsTbl
-		
-		net.Receive("HL2CR_QMenuUpdate", function()
-			skillsTbl = net.ReadTable()
-		end)
 		
 		for i, skill in pairs(GAMEMODE.PlayerSkills) do
 			
@@ -320,7 +325,7 @@ function StartQMenu(shouldOpen)
 				statusPnl = vgui.Create("DPanel", passiveSkillsLayout)
 				statusPnl:SetSize(passiveSkillsPnl:GetWide() / 5, passiveSkillsPnl:GetTall())
 			elseif skill.Class == "Medic" then
-				statusPnl = vgui.Create("DPanel", medicSkillsPnl)
+				statusPnl = vgui.Create("DPanel", medicSkillsLayout)
 				statusPnl:SetSize(medicSkillsPnl:GetWide() / 8, medicSkillsPnl:GetTall())
 			elseif skill.Class == "Repair" then
 				statusPnl = vgui.Create("DPanel", repairSkillsPnl)
@@ -330,23 +335,37 @@ function StartQMenu(shouldOpen)
 				statusPnl:SetSize(mechSkillsPnl:GetWide() / 8, mechSkillsPnl:GetTall())
 			end
 			
-			local fillPnl = vgui.Create("DPanel", statusPnl)
-			fillPnl:SetPos(0, (fillPnl:GetTall() + 400) - 25)
-			fillPnl:SetSize(statusPnl:GetWide(), 150)
+			local skillPnlShowcase = vgui.Create("DLabel", statusPnl)
+			skillPnlShowcase:SetText(skill.Name)
+			skillPnlShowcase:SetFont("HL2CR_Class_TitleFont")
+			skillPnlShowcase:DockMargin(10, 0, 0, 0)
+			skillPnlShowcase:SetPos( (statusPnl:GetWide() / skillPnlShowcase:GetWide() ) + 50, 50)
+			skillPnlShowcase:SizeToContents()
+			skillPnlShowcase:SetTextColor(Color(0, 0, 0, 255))
 			
-			fillPnl.Paint = function(pnl, w, h)
-				surface.SetDrawColor(HL2CR.Theme.skillFill)
-				surface.DrawRect(0, 0, w, h)
-			end
+			local skillPnlDesc = vgui.Create("DLabel", statusPnl)
+			skillPnlDesc:SetText(skill.Desc)
+			skillPnlDesc:SetPos( (statusPnl:GetWide() / skillPnlDesc:GetWide() ) + 50, 75)
+			skillPnlDesc:SetFont("HL2CR_Class_DescFont")
+			skillPnlDesc:SizeToContents()
+			skillPnlDesc:SetTextColor(Color(0, 0, 0, 255))
 			
+			local skillPnlLevel = vgui.Create("DLabel", statusPnl)
+
+			skillPnlLevel:SetText( (skillsTbl[skill.Class].CurInvest or 0 ) .. "/" .. skill.Max)
+			skillPnlLevel:SetPos( (statusPnl:GetWide() / skillPnlDesc:GetWide() ) + 105, 100)
+			skillPnlLevel:SetFont("HL2CR_Skill_Level")
+			skillPnlLevel:SizeToContents()
+			skillPnlLevel:SetTextColor(Color(0, 0, 0, 255))
+						
 			statusPnl.Paint = function(pnl, w, h)
-				surface.SetDrawColor(HL2CR.Theme.skillPnl)
+				surface.SetDrawColor(HL2CR.Theme.skillFill)
 				surface.DrawRect(0, 0, w, h)
 			end
 			
 			skillBtn = vgui.Create("DImageButton", statusPnl)
 			skillBtn:SetSize(92, 92)
-			skillBtn:SetPos(statusPnl:GetWide() / 3, statusPnl:GetTall() / 2)
+			skillBtn:SetPos(statusPnl:GetWide() / 3, statusPnl:GetTall() / 5)
 		
 			if LocalPlayer():GetNWInt("stat_level") < skill.LevelReq then
 				skillBtn:SetToolTip(translate.Get("LEVEL_LOCKED") .. skill.LevelReq)
@@ -360,20 +379,13 @@ function StartQMenu(shouldOpen)
 			
 			local skillPoints = LocalPlayer():GetNWInt("stat_skillpoints")
 			
-			--print(skillBtn:GetParent():GetName())
-			
 			skillBtn.DoClick = function(pnl)
-				if string.find(LocalPlayer():GetNWString("stat_curskills"), skill.Name) then
-					surface.PlaySound("buttons/button16.wav")
-					return
-				end
-							
 				if LocalPlayer():GetNWInt("stat_level") < skill.LevelReq then
 					surface.PlaySound("buttons/button16.wav")
 					return
 				end
 				
-				if not table.IsEmpty(skillsTbl) then
+				if (skillsTbl[skill.Class].CurInvest or 0) >= skill.Max then
 					surface.PlaySound("buttons/button16.wav")
 					return
 				end
@@ -389,15 +401,12 @@ function StartQMenu(shouldOpen)
 				net.SendToServer()
 				
 				skillPoints = skillPoints - 1
-								
+				
+				skillsTbl[skill.Class].CurInvest = (skillsTbl[skill.Class].CurInvest or 0) + 1
+				skillPnlLevel:SetText( (skillsTbl[skill.Class].CurInvest or 0 ) .. "/" .. skill.Max)
+				skillPnlLevel:SizeToContents()
+				
 				surface.PlaySound("buttons/button5.wav")
-			end
-			
-			if string.find(LocalPlayer():GetNWString("stat_curskills"), skill.Name) then
-				local skillTick = vgui.Create("DImage", skillBtn)
-				skillTick:SetImage("icon16/tick.png")
-				skillTick:SetPos(0, 42)
-				skillTick:SetSize(32, 32)
 			end
 		end
 			
@@ -760,8 +769,14 @@ function StartQMenu(shouldOpen)
 	end
 end
 
+net.Receive("HL2CR_QMenuUpdate", function()
+	skillsTbl = net.ReadTable()
+end)
+
 hook.Add("OnSpawnMenuOpen", "HL2CR_QMenuOpen", function()
-	StartQMenu(true)
+	timer.Simple(0.1, function()
+		StartQMenu(true)
+	end)
 end)
 
 hook.Add("OnSpawnMenuClose", "HL2CR_QMenuClose", function()

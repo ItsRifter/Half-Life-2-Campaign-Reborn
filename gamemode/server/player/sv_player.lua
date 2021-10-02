@@ -76,6 +76,29 @@ end)
 local waitForRespawn = 0
 local waitDeath = 0
 
+hook.Add("DoPlayerDeath", "HL2CR_RevivalStone", function(ply, att, dmgInfo )
+	
+	local gravestone = ents.Create("prop_dynamic")
+	gravestone:SetModel("models/props_c17/gravestone003a.mdl")
+	gravestone:SetPos(ply:GetPos())
+	gravestone:SetColor(Color(0, 220, 10, 25))
+	gravestone:SetMaterial("models/props_combine/stasisshield_sheet")
+	gravestone:SetName(ply:Nick() .. " gravestone")
+	gravestone:Spawn()
+	gravestone:PhysicsInit(SOLID_VPHYSICS)
+	
+	gravestone.player = ply
+	
+	ply:SetNWEntity("hl2cr_grave", gravestone)
+	
+	--[[
+	models/props_combine/stasisshield_sheet
+	models/props_combine/com_shield001a
+	models/props_combine/portalball001_sheet
+	models/shadertest/shader3
+	--]]
+end)
+
 hook.Add("PostPlayerDeath", "HL2CR_HandlePlayerDeath", function(victim)
 	victim:SetTeam(TEAM_DEAD)
 	victim.hl2cr.Deaths = victim.hl2cr.Deaths + 1
@@ -91,6 +114,7 @@ hook.Add("PostPlayerDeath", "HL2CR_HandlePlayerDeath", function(victim)
 	
 	victim.waitForRespawn = CurTime() + GetConVar("hl2cr_difficulty"):GetInt() * 10
 	victim.waitDeath = CurTime() + 5
+	
 end)
 
 
@@ -158,6 +182,10 @@ local APPLY_SKILLS_DEPLOYABLE_MECH = {
 --Player spawning
 hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 
+	if ply:GetNWEntity("hl2cr_grave", gravestone) and ply:GetNWEntity("hl2cr_grave", gravestone):IsValid() then
+		ply:GetNWEntity("hl2cr_grave", gravestone):Remove()
+	end
+
 	net.Start("HL2CR_ShouldClientSpectate")
 		net.WriteBool(false)
 		net.WriteBool(false)
@@ -172,11 +200,24 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	ply:SetNoCollideWithTeammates(true)
 	
 	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
+	ply:SetNWBool("CanRevive", false)
 	
-	local newMaxHP = 100
+	local newMaxHP = 0
 	local healing = 0
 	local recharge = 0
 	
+	for k, skill in pairs(ply.hl2cr.Skills) do
+		if skill.Name == "Revival" then
+			ply:SetNWBool("CanRevive", true)
+		end
+		
+		if skill.Name == "Health Boost" and ply.hl2cr.Skills[k].CurInvest then
+			for i = 1, ply.hl2cr.Skills[k].CurInvest do 
+				newMaxHP = newMaxHP + 5
+			end
+		end
+	end
+	--[[
 	for k, skill in pairs(ply.hl2cr.Skills) do
 		if APPLY_SKILLS_HEALTH[skill] then
 			newMaxHP = newMaxHP + APPLY_SKILLS_HEALTH[skill]
@@ -191,7 +232,7 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 			ply:Give(APPLY_SKILLS_DEPLOYABLE_MECH[skill])
 		end
 	end
-	
+	--]]
 	if game.GetMap() == "d3_citadel_03" and not ON_CITADEL_MAPS then		
 		if player.GetAll()[1] == ply then
 			for k, wep in pairs(SPAWNING_WEAPONS) do
@@ -214,8 +255,8 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	ply:SetNWInt("skill_healing", healing)
 	ply:SetNWInt("skill_recharge", recharge)
 	
-	ply:SetMaxHealth(newMaxHP)
-	ply:SetHealth(newMaxHP)
+	ply:SetMaxHealth(100 + newMaxHP)
+	ply:SetHealth(100 + newMaxHP)
 
 	if CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot] and not (NOSUIT_MAPS[game.GetMap()] or SUPERGRAVGUN_MAPS[game.GetMap()] or game.GetMap() == "d1_trainstation_05") and not ON_CITADEL_MAPS then
 		ply:Give(CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot])
@@ -283,7 +324,8 @@ end
 
 --Bullet Ignoring player code collision so players can't block bullets
 hook.Add("EntityFireBullets", "HL2CR_NoBulletPlayer", function(ent, data)
-	if ent:IsNPC() then return false end 
+	if ent:IsNPC() then return true end 
+	
 	if ent:IsPlayer() then
 		local tr = util.TraceHull( {
 			start = ent:GetShootPos(),
@@ -669,8 +711,12 @@ hook.Add("PlayerEnteredVehicle", "HL2CR_EnableVehicleOnEnter", function(ply, veh
 	end	
 end)
 
-hook.Add("ShouldCollide", "HL2CR_IgnoreCollisionPet", function( ply, pet )
-	if ply:IsPlayer() and (pet:IsNextBot() and pet:IsPet()) then
+hook.Add("ShouldCollide", "HL2CR_IgnoreCollisionGravePet", function( ply, other )
+	if ply:IsPlayer() and (other:IsNextBot() and other:IsPet()) then
+		return false
+	end
+	
+	if ply:IsPlayer() and other.player then
 		return false
 	end
 	

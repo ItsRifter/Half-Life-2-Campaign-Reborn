@@ -85,7 +85,6 @@ MAPS_COOP_SYNB2 = {
 	"level04_synb2_across_the_darkness",
 	"level05_synb2_diehard",
 	"level06_synb2_base",
-	"level06_synb2_base",
 	"level07_synb2_scary_dark_house",
 	"level08_synb2_a_place_to_die",
 	"level09_synb2_choose_your_destiny",

@@ -354,7 +354,7 @@ local ITEMS = {
 
 	["item_battery"] = "item_battery",
 	["item_healthvial"] = "item_healthvial",
-	["item_medkit"] = "item_medkit"
+	["item_healthkit"] = "item_healthkit"
 }
 
 local WEAPONS = {

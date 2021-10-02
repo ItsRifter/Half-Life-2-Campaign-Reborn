@@ -116,7 +116,7 @@ function ENT:Think()
 		
 		self.MapChange = true
 	--else just check if completers is greater than alive players
-	elseif playerCount < 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > team.NumPlayers(TEAM_ALIVE) then
+	elseif playerCount < 4 and (team.NumPlayers(TEAM_COMPLETED_MAP) - 1) > team.NumPlayers(TEAM_ALIVE) then
 		StartMapCountdown()
 		net.Start("HL2CR_MapCountdown")
 		net.Broadcast()

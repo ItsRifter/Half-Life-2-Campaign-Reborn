@@ -39,7 +39,7 @@ votingTypes["Lobby"] = {
 				BroadcastMessage(VOTE_SUCCESS_LOBBY)
 			end
 			timer.Simple(5, function()
-				RunConsoleCommand("ChangeLevel", "hl2cr_lobby_v3")
+				RunConsoleCommand("ChangeLevel", "hl2cr_lobby_v2")
 			end)
 		else
 			BroadcastMessage(VOTE_FAILED)

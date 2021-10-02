@@ -62,7 +62,7 @@ function ShowMapResults(ply)
 		return
 	end
 	
-	local randStart = math.random(1, 50)
+	local randStart = math.random(1, 35)
 	
 	AddResin(ply, randStart * ply.rewards["kills"] * GetConVar("hl2cr_difficulty"):GetInt())
 	
