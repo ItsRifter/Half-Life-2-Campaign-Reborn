@@ -50,8 +50,6 @@ function GM:OnContextMenuClose()
 	ShowVoiceCMDMenu(false)
 end
 
-local fixScrolling = 0
-
 hook.Add("PlayerButtonDown", "HL2CR_ConfirmVoice", function(ply, btn)
 	if voiceFrame and voiceFrame:IsValid() and (btn == KEY_1 or btn == KEY_2 or btn == KEY_3)then
 		net.Start("HL2CR_HelpNotify")

@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 GM.PlayerSkills = {}
 
-function CreateSkill(name, desc, class, level, icon, pos1, pos2)
+function CreateSkill(name, desc, class, level, icon, maxLevel)
 	
 	local skill = {
 		["Name"] = name,
@@ -11,13 +11,15 @@ function CreateSkill(name, desc, class, level, icon, pos1, pos2)
 		["LevelReq"] = level,
 		["Icon"] = icon,
 		["Invested"] = 0,
+		["Max"] = maxLevel
 	}
 	
 	return skill
 end
 
+local passive_health = CreateSkill("Health Boost", "Increase life expectancy", "Passive", 1, "materials/hl2cr/skill_health.jpg", 10)
 
-
+table.insert(GM.PlayerSkills, passive_health)
 
 if SERVER then
 	net.Receive("HL2CR_SkillObtain", function(len, ply)
@@ -28,13 +30,21 @@ if SERVER then
 		
 		for i, v in ipairs(GAMEMODE.PlayerSkills) do
 			if v.Name == skillToAdd and v.Class == classAssign then
-
-				table.insert(ply.hl2cr.Skills[classAssign], v.Name)
+			
+				if not ply.hl2cr.Skills[classAssign]["CurInvest"] then
+					ply.hl2cr.Skills[classAssign]["CurInvest"] = 1
+				else
+					ply.hl2cr.Skills[classAssign]["CurInvest"] = ply.hl2cr.Skills[classAssign]["CurInvest"] + 1
+				end
+				local updateTbl = {
+					["Name"] = v.Name,
+					["CurInvest"] = ply.hl2cr.Skills[classAssign]["CurInvest"]
+				}
 				
-				ply:SetNWString("stat_curskills", table.concat(ply.hl2cr.Skills, " "))
+				table.Merge(ply.hl2cr.Skills[classAssign], updateTbl)
 				
-				ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints - 1
-				ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)
+				--ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints - 1
+				--ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)
 			end
 		end	
 	end)

@@ -53,12 +53,22 @@ LANGUAGE.ERROR_JEEP_INVALID				= "Сначала сядьте в Багги."
 LANGUAGE.ERROR_NO_JEEP					= "Вы не находитесь в транспорте."
 LANGUAGE.ERROR_JEEP_SEAT_EXIST			= "У вас уже установлено пассажирское кресло."
 --Оружие
-LANGUAGE.Flare_gun						= "Ракетница"
-LANGUAGE.MGL							= "Гранатомёт"
-LANGUAGE.HEAVY_SNIPER_BMG				= "Тяжёлая Снайперская Винтовка"
-LANGUAGE.Flare_gun_desc					= "Используется в экстренных ситуациях...\nвсё ещё..."
-LANGUAGE.MGL_DESC						= "Гранатомёт\nиспользуйте аккуратнее"
-LANGUAGE.HEAVY_SNIPER_BMG_DESC			= "Тяжёлая Винтовка\nс мощными результатами"
+LANGUAGE.Flare_Gun						= "Ракетница"
+LANGUAGE.Multi_Grenade_Launcher			= "Гранатомёт"
+LANGUAGE.BMG_Heavy_Sniper				= "Тяжёлая Снайперская Винтовка"
+LANGUAGE.Automatic_Pistol				= "Автоматический Пистолет"
+LANGUAGE.Shredding_Assault_Rifle		= "Дробящая Штурмовая Винтовка"
+LANGUAGE.Unstable_Electric_Shotgun		= "Дестабилизированный Электрический Дробовик"
+LANGUAGE.The_Nailer_Gun					= "Строительный Пистолет"
+
+LANGUAGE.Flare_Gun_desc					= "Используется в экстренных случаях...\nВсё ещё..."
+LANGUAGE.Automatic_Pistol_desc			= "Пистолет на Автоматике\nВопросы?"
+LANGUAGE.Shredding_Assault_Rifle_desc	= "Разрывает врагов в клочья"
+LANGUAGE.Unstable_Electric_Shotgun_desc	= "Очень нестабильное\nМоментально выбрасывайте после использования"
+LANGUAGE.The_Nailer_Gun_desc			= "Есть, прибил!"
+LANGUAGE.Multi_Grenade_Launcher_desc	= "Используйте с осторожностью."
+LANGUAGE.BMG_Heavy_Sniper_desc			= "Тяжёлая Винтовка\nС разрушительной мощью"
+
 LANGUAGE.WeaponCost						= "\n\nСтоимость: "
 --Скиллы
 LANGUAGE.LEVEL_LOCKED					= "ЗАКРЫТО\nДОСТИГНИТЕ УРОВНЯ "
@@ -86,7 +96,9 @@ LANGUAGE.Deaths							= " | Смертей: "
 LANGUAGE.Average						= " | Среднее: "
 
 --Ачивки
+LANGUAGE.Ach_Locked						= "Неполученное достижение"
 
+--Голосования
 LANGUAGE.ERROR_VOTE_COOLDOWN1			= "Подождите "
 LANGUAGE.ERROR_VOTE_COOLDOWN2			= " перед тем, как начинать голосование."
 

@@ -36,7 +36,7 @@ local CONVERT_NAME_TO_ENT = {
 	["Multi_Grenade_Launcher"] = "bakkers_blaster",
 	["The_Nailer_Gun"] = "the_multi_purpose_nailgun",
 	["Unstable_Electric_Shotgun"] = "the_turbo_lover",
-	[".50_BMG_Heavy_Sniper"] = "the_anti_rifle",
+	[".BMG_Heavy_Sniper"] = "the_anti_rifle",
 }
 
 --Super gravity gun maps
@@ -846,4 +846,12 @@ end)
 
 hook.Add("PlayerAmmoChanged", "HL2CR_Supplier_AmmoChange", function(ply, ammoID, oldCount, newCount )
 	ply.ammoCount = newCount
+end)
+
+hook.Add("PlayerButtonDown", "HL2CR_ConfirmVoice", function(ply, btn)
+	if btn == KEY_Q then
+		net.Start("HL2CR_QMenuUpdate")
+			net.WriteTable(ply.hl2cr.Skills)
+		net.Send(ply)
+	end
 end)

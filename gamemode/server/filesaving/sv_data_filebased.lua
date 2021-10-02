@@ -98,12 +98,6 @@ local function InitData(ply)
 	ply:SetNWInt("inv_totalslots", ply.hl2cr.Inventory.TotalSlots)
 	
 	ply:SetNWInt("stat_totalachs", #ply.hl2cr.Achievements)
-	ply:SetNWInt("stat_curskills_passive", table.concat(ply.hl2cr.Skills.Passive, " "))
-	ply:SetNWInt("stat_curskills_medic", table.concat(ply.hl2cr.Skills.Medic, " "))
-	ply:SetNWInt("stat_curskills_repair", table.concat(ply.hl2cr.Skills.Repair, " "))
-	ply:SetNWInt("stat_curskills_mechanic", table.concat(ply.hl2cr.Skills.Mechanic, " "))
-	ply:SetNWInt("stat_curskills_grenadier", table.concat(ply.hl2cr.Skills.Grenadier, " "))
-	ply:SetNWInt("stat_curskills_droput", table.concat(ply.hl2cr.Skills.Dropout, " "))
 	
 	ply:SetNWInt("config_playerdrawdist", ply.hl2cr.Config.PlayerSettings["PlayerDrawDistance"])
 	ply:SetNWBool("config_shouldendmusicplay", ply.hl2cr.Config.PlayerSettings["ShouldPlayEndMusic"])

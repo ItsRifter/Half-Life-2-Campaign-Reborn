@@ -53,14 +53,6 @@ LANGUAGE.ERROR_JEEP_INVALID				= "You need to be in a Jeep to use this"
 LANGUAGE.ERROR_NO_JEEP					= "You aren't in a vehicle"
 LANGUAGE.ERROR_JEEP_SEAT_EXIST			= "You already have a passenger seat"
 
-LANGUAGE.Flare_gun						= "Flare Gun"
-LANGUAGE.MGL							= "Multi Grenade Launcher"
-LANGUAGE.HEAVY_SNIPER_BMG				= ".50 BMG Heavy Sniper"
-LANGUAGE.Flare_gun_desc					= "Used for emergencies...\nso it was"
-LANGUAGE.MGL_DESC						= "A grenade launcher\nhandle with care"
-LANGUAGE.HEAVY_SNIPER_BMG_DESC			= "A rather heavy sniper\nwith devastating results"
-LANGUAGE.WeaponCost						= "\n\nCOST: "
-
 LANGUAGE.LEVEL_LOCKED					= "LOCKED\nREACH LEVEL "
 LANGUAGE.SKILL_REQUIRES					= "\nREQUIRES: "
 LANGUAGE.SKILLS_PASSIVE					= "Passive"
@@ -85,6 +77,25 @@ LANGUAGE.Class_Bar						= "Class"
 LANGUAGE.Statistics_Bar					= "Statistics"
 LANGUAGE.Achievements_Bar				= "Achievements"
 
+LANGUAGE.Flare_Gun						= "Flare Gun"
+LANGUAGE.Multi_Grenade_Launcher			= "Multi Grenade Launcher"
+LANGUAGE.BMG_Heavy_Sniper				= "50 BMG Heavy Sniper"
+LANGUAGE.Automatic_Pistol				= "Automatic Pistol"
+LANGUAGE.Shredding_Assault_Rifle		= "'Shredding' Assault Rifle"
+LANGUAGE.Unstable_Electric_Shotgun		= "'Unstable' Electric Shotgun"
+LANGUAGE.The_Nailer_Gun					= "The 'Nailer' Gun"
+
+LANGUAGE.Flare_Gun_desc					= "Used for emergencies...\nso it was"
+LANGUAGE.Automatic_Pistol_desc			= "A pistol that is automatic\nno questions"
+LANGUAGE.Shredding_Assault_Rifle_desc	= "This thing shreds people"
+LANGUAGE.Unstable_Electric_Shotgun_desc	= "Highly unstable\nImmediately throw after use"
+LANGUAGE.The_Nailer_Gun_desc			= "Nailed it!"
+LANGUAGE.Multi_Grenade_Launcher_desc	= "A grenade launcher\nhandle with care"
+LANGUAGE.BMG_Heavy_Sniper_desc			= "A rather heavy sniper\nwith devastating results"
+LANGUAGE.WeaponCost						= "\n\nCOST: "
+
+LANGUAGE.Ach_Locked						= "Locked"
+
 LANGUAGE.ERROR_VOTE_COOLDOWN1			= "You must wait "
 LANGUAGE.ERROR_VOTE_COOLDOWN2			= " before calling this vote"
 
@@ -95,4 +106,3 @@ LANGUAGE.RequestArmor			= "Needs armor"
 LANGUAGE.RequestAmmo			= "Needs ammo"
 
 LANGUAGE.ACH_FAILED_SAND			= " stepped on the sand\nachievement failed"
-

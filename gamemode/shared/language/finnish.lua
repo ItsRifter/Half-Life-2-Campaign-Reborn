@@ -55,7 +55,7 @@ LANGUAGE.ERROR_JEEP_SEAT_EXIST			= "You already have a passenger seat"
 
 LANGUAGE.Flare_gun						= "Flare Gun"
 LANGUAGE.MGL							= "Multi Grenade Launcher"
-LANGUAGE.HEAVY_SNIPER_BMG				= ".50 BMG Heavy Sniper"
+LANGUAGE.BMG_Heavy_Sniper				= "50 BMG Heavy Sniper"
 LANGUAGE.Flare_gun_desc					= "Used for emergencies...\nso it was"
 LANGUAGE.MGL_DESC						= "A grenade launcher\nhandle with care"
 LANGUAGE.HEAVY_SNIPER_BMG_DESC			= "A rather heavy sniper\nwith devastating results"

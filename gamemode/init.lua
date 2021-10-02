@@ -100,6 +100,7 @@ util.AddNetworkString("HL2CR_MsgSound")
 util.AddNetworkString("HL2CR_UpdateSlot")
 util.AddNetworkString("HL2CR_ApplySettings")
 util.AddNetworkString("HL2CR_UpdateModel")
+util.AddNetworkString("HL2CR_QMenuUpdate")
 
 hook.Add("PrePACConfigApply", "HL2CR_DisablePac3Autoload", function(ply, outfit_data)
 	return false
