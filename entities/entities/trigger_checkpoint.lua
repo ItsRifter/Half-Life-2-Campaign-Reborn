@@ -44,7 +44,7 @@ function ENT:StartTouch(ent)
 		BroadcastMessage(CHECKPOINT_HIT)
 		BroadcastSound("hl2cr/standardbeep.wav")
 		
-		for k, p in pairs(player.GetAll()) do
+		for _, p in pairs(player.GetAll()) do
 			if not table.IsEmpty(AchTrigger) then
 				GrantAchievement(p, AchTrigger[1], AchTrigger[2])
 			end
@@ -74,9 +74,16 @@ function ENT:StartTouch(ent)
 				p.vehicleSpawnable = true
 			end
 			
-			for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-				spawn:SetPos(self:GetPointPos(self:GetPointIndex()))
-				p:SetPos(self:GetPointPos(self:GetPointIndex()))
+			if ents.FindByClass("info_player_start")[1] then	
+				for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+					spawn:SetPos(self:GetPointPos(self:GetPointIndex()))
+					p:SetPos(self:GetPointPos(self:GetPointIndex()))
+				end
+			elseif ents.FindByClass("info_player_deathmatch")[1] then
+				for l, spawn in pairs(ents.FindByClass("info_player_deathmatch")) do
+					spawn:SetPos(self:GetPointPos(self:GetPointIndex()))
+					p:SetPos(self:GetPointPos(self:GetPointIndex()))
+				end
 			end
 		end
 		
@@ -103,11 +110,4 @@ end
 
 function ENT:AddPointPos(vec)
 	table.insert(Checkpoints.PointPos, vec)
-end
-
-function ENT:AddAchTrigger(achList, achName)
-	AchTrigger = {
-		achList,
-		achName
-	}
 end

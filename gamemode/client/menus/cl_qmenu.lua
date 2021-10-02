@@ -1,22 +1,35 @@
 local CONVERT_NAME_TO_IMAGE = {
 	["Flare_gun"] = "materials/hl2cr/weapon_flaregun.jpg",
+	["Automatic_Pistol"] = "materials/hl2cr/weapon_autopistol.jpg",
 	["Multi_Grenade_Launcher"] = "materials/hl2cr/weapon_grenadelauncher.jpg",
+	["Shredding_Assault_Rifle"] = "materials/hl2cr/weapon_shreddingar.jpg",
+	["The_Nailer_Gun"] = "materials/hl2cr/weapon_nailer.jpg",
+	["Unstable_Electric_Shotgun"] = "materials/hl2cr/weapon_unstableshotgun.jpg",
 	[".50_BMG_Heavy_Sniper"] = "materials/hl2cr/weapon_bmgsniper.jpg",
 	["Test"] = "materials/hl2cr/empty.jpg"
 }
 
 local CONVERT_NAME_TO_PROPER = {
 	["Flare_gun"] = "Flare gun",
+	["Automatic_Pistol"] = "Automatic Pistol",
 	["Multi_Grenade_Launcher"] = "Multiple Grenade Launcher",
+	["Shredding_Assault_Rifle"] = "'Shredding' Assault Rifle",
+	["Unstable_Electric_Shotgun"] = "'Unstable' Electric Shotgun",
+	["The_Nailer_Gun"] = "The 'Nailer' Gun",
 	[".50_BMG_Heavy_Sniper"] = ".50 BMG Heavy Sniper",
+	
 	["Test"] = "Test"
 }
 
 local CONVERT_NAME_TO_DESC = {
 	["Flare_gun"] = "Used for emergencies...\nso it was",
+	["Automatic_Pistol"] = "A pistol that is automatic\nno questions",
 	["Multi_Grenade_Launcher"] = "A grenade launcher\nhandle with care",
+	["Shredding_Assault_Rifle"] = "This thing shreds people",
+	["Unstable_Electric_Shotgun"] = "Highly unstable\nImmediately throw after use",
+	["The_Nailer_Gun"] = "Nailed it!",
 	[".50_BMG_Heavy_Sniper"] = "A rather heavy sniper\nwith devastating results",
-	["Test"] = "Test Item"
+	["Test"] = "Test Item\nYou shouldn't be buying this"
 }
 
 local PLAYERMODELS = {
@@ -222,7 +235,7 @@ function StartQMenu(shouldOpen)
 		mechSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
 		
 		for i, skill in pairs(GAMEMODE.PlayerSkills) do
-			
+		
 			local skillBtn
 			
 			if skill.Class == "Passive" then
@@ -274,6 +287,7 @@ function StartQMenu(shouldOpen)
 				
 				net.Start("HL2CR_SkillObtain")
 					net.WriteString(skill.Name)
+					net.WriteString(skill.Class)
 				net.SendToServer()
 				
 				skillPoints = skillPoints - 1

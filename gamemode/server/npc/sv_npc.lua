@@ -1,7 +1,7 @@
 local meta = FindMetaTable( "Entity" )
 if not meta then return end
 
-local FRIENDLY_NPCS = {
+FRIENDLY_NPCS = {
 	["npc_kleiner"] = true,
 	["npc_dog"] = true,
 	["npc_eli"] = true,

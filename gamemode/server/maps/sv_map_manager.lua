@@ -78,6 +78,21 @@ MAPS_HL2 = {
 	"hl2cr_lobby_v2"
 }
 
+MAPS_COOP_SYNB2 = {
+	"level01_synb2_entryway_of_doom",
+	"level02_synb2_tricks_and_traps",
+	"level03_synb2_underground",
+	"level04_synb2_across_the_darkness",
+	"level05_synb2_diehard",
+	"level06_synb2_base",
+	"level06_synb2_base",
+	"level07_synb2_scary_dark_house",
+	"level08_synb2_a_place_to_die",
+	"level09_synb2_choose_your_destiny",
+	"level10_synb2_end_of_evil_part1_b1",
+	"hl2cr_lobby_v2"
+}
+
 function StartMapCountdown()
 		
 	timer.Create("HL2CR_Countdown", 20, 1, function()
@@ -88,14 +103,6 @@ function StartMapCountdown()
 		
 		if game.GetMap() == "d1_town_02" and not file.Exists("hl2cr_data/ravenholmcheck.txt", "DATA") then
 			RunConsoleCommand("changelevel", "d1_town_03")
-			table.insert(SPAWNING_WEAPONS, "weapon_shotgun")
-			
-			local addBuckshot = {
-				["Type"] = "Buckshot",
-				["Amount"] = 6,
-			}
-			
-			table.insert(SPAWNING_ITEMS, addBuckshot)
 			return
 		elseif file.Exists("hl2cr_data/ravenholmcheck.txt", "DATA") then
 			RunConsoleCommand("changelevel", "d1_town_02a")
@@ -125,6 +132,12 @@ function StartMapCountdown()
 		for k = 1, #MAPS_HL2 do
 			if game.GetMap() == MAPS_HL2[k] then
 				RunConsoleCommand("changelevel", MAPS_HL2[k+1])
+			end
+		end
+
+		for k = 1, #MAPS_COOP_SYNB2 do
+			if game.GetMap() == MAPS_COOP_SYNB2[k] then
+				RunConsoleCommand("changelevel", MAPS_COOP_SYNB2[k+1])
 			end
 		end
 	end)

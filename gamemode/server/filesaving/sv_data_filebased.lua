@@ -18,7 +18,14 @@ local function InitData(ply)
 	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 3000
 	
 	--Skills
-	ply.hl2cr.Skills = ply.hl2cr.Skills or {}
+	ply.hl2cr.Skills = ply.hl2cr.Skills or {
+		["Passive"] = {},
+		["Medic"] = {},
+		["Repair"] = {},
+		["Mechanic"] = {},
+		["Grenadier"] = {},
+		["Dropout"] = {},
+	}
 	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints or 0
 	
 	--Pets
@@ -91,7 +98,12 @@ local function InitData(ply)
 	ply:SetNWInt("inv_totalslots", ply.hl2cr.Inventory.TotalSlots)
 	
 	ply:SetNWInt("stat_totalachs", #ply.hl2cr.Achievements)
-	ply:SetNWString("stat_curskills", table.concat(ply.hl2cr.Skills, " "))
+	ply:SetNWInt("stat_curskills_passive", table.concat(ply.hl2cr.Skills.Passive, " "))
+	ply:SetNWInt("stat_curskills_medic", table.concat(ply.hl2cr.Skills.Medic, " "))
+	ply:SetNWInt("stat_curskills_repair", table.concat(ply.hl2cr.Skills.Repair, " "))
+	ply:SetNWInt("stat_curskills_mechanic", table.concat(ply.hl2cr.Skills.Mechanic, " "))
+	ply:SetNWInt("stat_curskills_grenadier", table.concat(ply.hl2cr.Skills.Grenadier, " "))
+	ply:SetNWInt("stat_curskills_droput", table.concat(ply.hl2cr.Skills.Dropout, " "))
 	
 	ply:SetNWInt("config_playerdrawdist", ply.hl2cr.Config.PlayerSettings["PlayerDrawDistance"])
 	ply:SetNWBool("config_shouldendmusicplay", ply.hl2cr.Config.PlayerSettings["ShouldPlayEndMusic"])
@@ -105,8 +117,6 @@ local function InitData(ply)
 	ply:SetNWString("config_npccolours_medium", ply.hl2cr.Config.NPCSettings["Colours"][2].r .. " " .. ply.hl2cr.Config.NPCSettings["Colours"][2].g .. " " ..  ply.hl2cr.Config.NPCSettings["Colours"][2].b .. " 255")
 	
 	ply:SetNWString("config_npccolours_hard", ply.hl2cr.Config.NPCSettings["Colours"][3].r .. " " .. ply.hl2cr.Config.NPCSettings["Colours"][3].g .. " " ..  ply.hl2cr.Config.NPCSettings["Colours"][3].b .. " 255")
-	
-	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
 end
 
 local function CreateData(ply)

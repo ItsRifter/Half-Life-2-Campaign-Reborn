@@ -1,5 +1,3 @@
-ENT_VOTE_HL2 = nil
-
 function StartLobby()
 	
 	--Set each global state to 0
@@ -19,8 +17,7 @@ function StartLobby()
 		"weapon_crowbar",
 		"weapon_physcannon"
 	}
-	
-	ENT_VOTE_HL2 = ents.FindByName("hl2_lambda_play_break")[1]
+
 	--Same as above but for the bridge maps
 	if file.Exists("hl2cr_data/bridgecheck.txt", "DATA") then
 		file.Delete("hl2cr_data/bridgecheck.txt", "DATA")

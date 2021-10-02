@@ -87,17 +87,11 @@ local IMPORTANT_MAPS = {
 	["d3_breen_01"] = true,
 }
 
-EXISTING_CHECKPOINTS = {}
-
 local function SetCheckpoints()
 	for k, cl in ipairs(ents.FindByClass("trigger_changelevel")) do
 		cl:Remove()
 	end
-	for p, cp in ipairs(EXISTING_CHECKPOINTS) do
-		if cp:IsValid() then
-			cp:Remove()
-		end
-	end
+
 	
 	if game.GetMap() == "d1_trainstation_01" then
 		TRIGGER_CHANGELEVEL = {
@@ -946,8 +940,6 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_1
-			
-			table.insert(EXISTING_CHECKPOINTS, Checkpoint)
 		end
 		
 		if TRIGGER_CHECKPOINT[3] and TRIGGER_CHECKPOINT[4] then
@@ -968,8 +960,6 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_2
-			
-			table.insert(EXISTING_CHECKPOINTS, Checkpoint)
 		end
 		
 		if TRIGGER_CHECKPOINT[5] and TRIGGER_CHECKPOINT[6] then
@@ -990,8 +980,6 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_3
-			
-			table.insert(EXISTING_CHECKPOINTS, Checkpoint)
 		end
 		
 		if TRIGGER_CHECKPOINT[7] and TRIGGER_CHECKPOINT[8] then
@@ -1012,8 +1000,6 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_4
-			
-			table.insert(EXISTING_CHECKPOINTS, Checkpoint)
 		end
 		
 	end
@@ -4083,6 +4069,12 @@ local function SetUpMisc()
 			s:SetAngles(Angle(0, 90, 0))
 		end
 		
+		local addBuckshot = {
+			["Type"] = "Buckshot",
+			["Amount"] = 6,
+		}
+		
+		table.insert(SPAWNING_ITEMS, addBuckshot)
 		table.insert(SPAWNING_WEAPONS, "weapon_shotgun")
 	end
 	

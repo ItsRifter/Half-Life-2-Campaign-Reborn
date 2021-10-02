@@ -21,13 +21,21 @@ NO_SPAWNING_WEAPONS = {
 	["the_fire_hazard"] = true,
 	["bakkers_blaster"] = true,
 	["the_lobotomizer"] = true,
-	["weapon_stunstick"] = true
+	["weapon_stunstick"] = true,
+	["the_swiss_hellbringer"] = true,
+	["the_aerosol_ar"] = true,
+	["the_multi_purpose_nailgun"] = true,
+	["the_turbo_lover"] = true
 }
 
 --Takes the name in CurWeaponSlot into a entity weapon
 local CONVERT_NAME_TO_ENT = {
 	["Flare_gun"] = "the_fire_hazard",
+	["Automatic_Pistol"] = "the_swiss_hellbringer",
+	["Shredding_Assault_Rifle"] = "the_aerosol_ar",
 	["Multi_Grenade_Launcher"] = "bakkers_blaster",
+	["The_Nailer_Gun"] = "the_multi_purpose_nailgun",
+	["Unstable_Electric_Shotgun"] = "the_turbo_lover",
 	[".50_BMG_Heavy_Sniper"] = "the_anti_rifle",
 }
 
@@ -37,7 +45,8 @@ SUPERGRAVGUN_MAPS = {
 	["d3_citadel_05"] = true
 }
 
-function GM:ShowHelp(ply)	
+function GM:ShowHelp(ply)
+	--StartCoop()
 	HL2CR_Voting:PlayerVote(ply, true)
 end
 
@@ -142,7 +151,7 @@ local APPLY_SKILLS_CLASS_MEDIC_RECHARGE = {
 	["Heal Recharge III"] = 30,
 }
 
-local APPLY_SKILLS_DEPLOYABLE = {
+local APPLY_SKILLS_DEPLOYABLE_MECH = {
 	["Controllable Drone"] = "weapon_controllable_drone"
 }
 
@@ -162,20 +171,24 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	ply:SetCustomCollisionCheck(true)
 	ply:SetNoCollideWithTeammates(true)
 	
+	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
 	
 	local newMaxHP = 100
 	local healing = 0
 	local recharge = 0
 	
-	for _, skill in ipairs(ply.hl2cr.Skills) do
+	for k, skill in pairs(ply.hl2cr.Skills) do
 		if APPLY_SKILLS_HEALTH[skill] then
 			newMaxHP = newMaxHP + APPLY_SKILLS_HEALTH[skill]
+			
 		elseif APPLY_SKILLS_CLASS_MEDIC[skill] then
 			healing = healing + APPLY_SKILLS_CLASS_MEDIC[skill]
+			
 		elseif APPLY_SKILLS_CLASS_MEDIC_RECHARGE[skill] then
 			recharge = recharge + APPLY_SKILLS_CLASS_MEDIC_RECHARGE[skill]
-		elseif APPLY_SKILLS_DEPLOYABLE[skill] then
-			ply:Give(APPLY_SKILLS_DEPLOYABLE[skill])
+			
+		elseif APPLY_SKILLS_DEPLOYABLE_MECH[skill] and ply.hl2cr.CurClass.Name == "Mechanic" then
+			ply:Give(APPLY_SKILLS_DEPLOYABLE_MECH[skill])
 		end
 	end
 	
@@ -196,7 +209,7 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	elseif ply.hl2cr.CurClass.Name == "Combine Dropout" then
 		ply.hl2cr.StunDamage = ply.hl2cr.StunDamage + 10
 	end
-	
+	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
 
 	ply:SetNWInt("skill_healing", healing)
 	ply:SetNWInt("skill_recharge", recharge)
@@ -270,11 +283,20 @@ end
 
 --Bullet Ignoring player code collision so players can't block bullets
 hook.Add("EntityFireBullets", "HL2CR_NoBulletPlayer", function(ent, data)
-	if ent:IsNPC() then return end 
-	for k, v in ipairs(player.GetAll()) do
-		data.IgnoreEntity = v
+	if ent:IsNPC() then return false end 
+	if ent:IsPlayer() then
+		local tr = util.TraceHull( {
+			start = ent:GetShootPos(),
+			endpos = ent:GetShootPos() + ( ent:GetAimVector() * 2500 ),
+			filter = ent,
+			mask = MASK_SHOT_HULL
+		} )
+		
+		if tr.Entity:IsPlayer() then
+			data.IgnoreEntity = tr.Entity
+		end
+		
 	end
-	
 	return true
 end)
 
@@ -454,7 +476,7 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 	
 	if (item:GetClass() == "item_ammo_pistol" or item:GetClass() == "item_ammo_pistol_large") and ply:GetAmmoCount("Pistol") >= GetConVar("hl2cr_max_Pistol"):GetInt() then		
 		ply:RemoveAmmo( ply:GetAmmoCount("Pistol") -GetConVar("hl2cr_max_Pistol"):GetInt(), "Pistol" )
-		return falset
+		return false
 	end
 	
 	if item:GetClass() == "item_rpg_round" and ply:GetAmmoCount("RPG_Round") >= GetConVar("hl2cr_max_RPG_Round"):GetInt() then		
@@ -532,7 +554,7 @@ local function createIndicator(rewardAmount, position, player)
 	
 end
 
-local RANDOM_XP_BASED_NPC = {
+RANDOM_XP_BASED_NPC = {
 	["npc_headcrab"] = {xpMin = 5, xpMax = 15},
 	["npc_headcrab_fast"] = {xpMin = 12, xpMax = 27},
 	["npc_headcrab_black"] = {xpMin = 13, xpMax = 28},
@@ -647,13 +669,26 @@ hook.Add("PlayerEnteredVehicle", "HL2CR_EnableVehicleOnEnter", function(ply, veh
 	end	
 end)
 
-function GM:ShouldCollide( ply, pet )
+hook.Add("ShouldCollide", "HL2CR_IgnoreCollisionPet", function( ply, pet )
 	if ply:IsPlayer() and (pet:IsNextBot() and pet:IsPet()) then
 		return false
 	end
 	
 	return true
-end
+end)
+
+local PROJ_IGNORE = {
+	["grenade_ar2"] = true,
+	["crossbow_bolt"] = true,
+	["prop_combine_ball"] = true,
+	["rpg_missile"] = true,
+	["npc_grenade_frag"] = true
+}
+hook.Add("ShouldCollide", "HL2CR_IgnoreCollisionProjectile", function( ent, other )
+	if ent:IsPlayer() and PROJ_IGNORE[other:GetClass()] then
+		return false
+	end
+end)
 
 hook.Add("EntityTakeDamage", "HL2CR_VehicleFix", function( target, dmgInfo )
 	local att = dmgInfo:GetAttacker()
@@ -803,5 +838,12 @@ net.Receive("HL2CR_ApplySettings", function(len, ply)
 	ply.hl2cr.Config.NPCSettings["Colours"][3].b = fixColourHard.b
 
 	ply:SetNWString("config_npccolours_hard", ply.hl2cr.Config.NPCSettings["Colours"][3].r .. " ".. ply.hl2cr.Config.NPCSettings["Colours"][3].g .. " " ..  ply.hl2cr.Config.NPCSettings["Colours"][3].b .. " 255")
-	
+end)
+
+hook.Add("PlayerSwitchWeapon", "HL2CR_Supplier_WeaponChange", function(ply, oldWeapon, newWeapon)
+	ply.ammoCount = newWeapon:GetPrimaryAmmoType()
+end)
+
+hook.Add("PlayerAmmoChanged", "HL2CR_Supplier_AmmoChange", function(ply, ammoID, oldCount, newCount )
+	ply.ammoCount = newCount
 end)

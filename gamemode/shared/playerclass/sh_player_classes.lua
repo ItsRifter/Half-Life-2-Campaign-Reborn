@@ -88,7 +88,6 @@ if SERVER then
 		ply.classCooldown = CurTime() + GetConVar("hl2cr_cooldown_class"):GetInt()
 		
 		ply.hl2cr.CurClass = GAMEMODE.PlayStyleClass[classToAdd]
-		ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
 			
 		local ASSIGNED_MESSAGE = {
 			["Colour"] = Color(50, 215, 50),

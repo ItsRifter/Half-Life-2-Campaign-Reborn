@@ -19,6 +19,7 @@ include("server/npc/sv_npc.lua")
 include("server/maps/sv_hl2.lua")
 include("server/maps/sv_lobby.lua")
 include("server/maps/sv_map_manager.lua")
+include("server/maps/sv_custom_coop.lua")
 
 ----Resources
 include("server/sv_resource.lua")

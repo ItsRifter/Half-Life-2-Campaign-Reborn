@@ -399,7 +399,7 @@ surface.CreateFont( "HL2CR_Config_Option", {
 surface.CreateFont( "HL2CR_Voices", {
 	font = "Roboto",
 	extended = false,
-	size = 48,
+	size = 32,
 	weight = 500,
 	blursize = 0,
 	scanlines = 0,

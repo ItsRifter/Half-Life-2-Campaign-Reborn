@@ -185,17 +185,26 @@ local FIX_FONT_SPACING = {
 	["HL2CR_FancyShmancy"] = 45,
 }
 
+local FIX_AMMO_TYPE = {
+	[1] = "AR2",
+	[3] = "Pistol",
+	[4] = "SMG",
+	[5] = ".357",
+	[6] = "Bolts",
+	[7] = "Buckshot",
+	[8] = "RPG",
+	[10] = "Frags"
+}
+
 hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 
 	for k, pl in ipairs(player.GetAll()) do
-		if LocalPlayer() == pl or LocalPlayer():Team() == TEAM_ALIVE then 
+		if LocalPlayer() == pl then 
 			continue
 		end
 		
-		if pl:Team() == TEAM_ALIVE then
-			break
-		end
-			
+		if not pl:Alive() then continue end
+		
 		local dist = LocalPlayer():GetPos():Distance(pl:GetPos())
 		local pos = pl:GetPos()
 			pos.z = pl:GetPos().z + 45 + (dist * 0.0325)
@@ -265,9 +274,15 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 				draw.SimpleText(hpStatus, font, ScrPos.x + hpSpacing + fixFontSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			
+			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_supporter.jpg" then
+				if not (pl:GetActiveWeapon():GetPrimaryAmmoType() or FIX_AMMO_TYPE[pl:GetActiveWeapon():GetPrimaryAmmoType()]) or not pl.ammoCount then continue end
+				draw.SimpleText(pl.ammoCount.. " " .. FIX_AMMO_TYPE[pl:GetActiveWeapon():GetPrimaryAmmoType()] , font, ScrPos.x + 105 + hpSpacing + fixFontSpacing, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+			
 			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_repairman.jpg" then
 				draw.SimpleText(" / Armor: " .. pl:Armor(), font, ScrPos.x + 115 + hpSpacing + fixFontSpacing, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
+			
 			--Classes
 			if pl:GetNWString("class_icon") ~= "" then
 				local icon = Material(pl:GetNWString("class_icon"))
@@ -279,8 +294,7 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 	end
 	
 	return false
-end )
-
+end)
 
 local meta = FindMetaTable( "Entity" )
 if not meta then return end
