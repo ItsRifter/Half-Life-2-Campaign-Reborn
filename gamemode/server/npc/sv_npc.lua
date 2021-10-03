@@ -33,6 +33,8 @@ function meta:IsPet()
 end
 
 function SetNPCTraits(npc)
+	if not npc:IsNPC() then return end
+	
 	if GetConVar("hl2cr_difficulty"):GetInt() == 1 then
 		npc.level = math.random(1, 3)
 	elseif GetConVar("hl2cr_difficulty"):GetInt() == 2 then
@@ -46,7 +48,7 @@ function SetNPCTraits(npc)
 	end
 	
 	npc:SetNWInt("HL2CR_NPC_Level", npc.level)
-	
+	npc:SetHealth(npc:Health() + (npc.level * 15) )
 	--npc:SetNWBool("HL2CR_Special", true)
 	--npc:SetNWString("HL2CR_NPC_Name", "Riot Shield Cop")
 end
@@ -64,26 +66,16 @@ end
 	["npc_combine_synth"] = "Synth",
 --]]
 
-hook.Add("EntityTakeDamage", "HL2CR_SharedXPDmg", function(ent, dmgInfo)
+hook.Add("EntityTakeDamage", "HL2CR_NPCDmg", function(ent, dmgInfo)
 	local dmg = dmgInfo:GetDamage()
 	local att = dmgInfo:GetAttacker()
 	
-	if att:IsPlayer() and att:GetActiveWeapon():GetClass() == "weapon_stunstick" then
+	if att:IsPlayer() and att:GetActiveWeapon():GetClass() == "weapon_stunstick" and not (ent:IsFriendly() or ent:GetClass() == "npc_citizen") then
 		if att.hl2cr.StunDamage and not ent:IsPlayer() then
-			dmgInfo:SetDamage(dmg + att.hl2cr.StunDamage)
+			local totalStun = dmg + att.hl2cr.StunDamage
+			dmgInfo:SetDamage(totalStun)
 		end
-	end
-	
-	if ent:IsNPC() and not (ent:IsFriendly() or ent:IsPet() or ent:GetClass() == "npc_citizen") then
-		ent.attacker = ent.attacker or {}
-		ent.totalDMG = ent.totalDMG or 0
-		if not table.HasValue(ent.attacker, att) then
-			table.insert(ent.attacker, att)
-		end
-		
-		ent.totalDMG = ent.totalDMG + dmg
-	end
-	
+	end	
 end)
 
 hook.Add("EntityTakeDamage", "HL2CR_FriendlyOrHostile", function(ent, dmgInfo)
@@ -99,7 +91,7 @@ hook.Add("EntityTakeDamage", "HL2CR_FriendlyOrHostile", function(ent, dmgInfo)
 		return
 	end
 	
-	if ent:GetClass() == "npc_vortigaunt" and HOSTILE_VORTS == false then
+	if ent:GetClass() == "npc_vortigaunt" and att:IsPlayer() and HOSTILE_VORTS == false then
 		dmgInfo:SetDamage(0)
 		return
 	end
@@ -128,24 +120,20 @@ end)
 
 hook.Add( "ScaleNPCDamage", "HL2CR_ScaleNPCDMG", function( npc, hitgroup, dmgInfo )
 	
-	if npc:GetClass() == "npc_citizen" then return end
+	if npc:IsFriendly() or npc:GetClass() == "npc_citizen" then return end
 	
-	local hitDivide = GetConVar("hl2cr_difficulty"):GetInt() - 1
-	
-	if hitDivide <= 1 then
-		dmgInfo:ScaleDamage(1.75)
-		return
-	end
+	local hitDivide = GetConVar("hl2cr_difficulty"):GetInt()
 	
 	if hitgroup == HITGROUP_HEAD then
-		hitDivide = hitDivide * 1.25
+		hitDivide = hitDivide * 2.35
 	elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
-		hitDivide = hitDivide * 1.5
+		hitDivide = hitDivide * 2.05
 	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-		hitDivide = hitDivide * 2
+		hitDivide = hitDivide * 1.65
 	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-		hitDivide = hitDivide * 2.5	
+		hitDivide = hitDivide * 1.15
 	end
 	
-	dmgInfo:ScaleDamage(1.75 / hitDivide)
+	local finalDMG = dmgInfo:GetDamage() / hitDivide
+	dmgInfo:ScaleDamage(finalDMG)
 end)

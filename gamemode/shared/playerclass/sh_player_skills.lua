@@ -17,12 +17,16 @@ function CreateSkill(name, desc, class, level, icon, maxLevel)
 	return skill
 end
 
-local passive_health = CreateSkill("Health Boost", "Increase life expectancy", "Passive", 1, "materials/hl2cr/skill_health.jpg", 10)
+local passive_health = CreateSkill("Health Boost", "Increase life\nexpectancy", "Passive", 1, "materials/hl2cr/skill_health.jpg", 10)
+local passive_armor = CreateSkill("Armor Boost", "Your armor\ncan sustain\nmore damage", "Passive", 1, "materials/hl2cr/skill_armor.jpg", 3)
 
-local medic_revive = CreateSkill("Revival", "Revive the fallen players", "Medic", 1, "materials/hl2cr/skill_health.jpg", 1)
+local medic_heal = CreateSkill("Healing", "Heal more\neffectively", "Medic", 5, "materials/hl2cr/skill_healing.jpg", 5)
+local medic_revive = CreateSkill("Revival", "Revive the fallen", "Medic", 10, "materials/hl2cr/skill_healing.jpg", 1)
 
 table.insert(GM.PlayerSkills, passive_health)
+table.insert(GM.PlayerSkills, passive_armor)
 
+table.insert(GM.PlayerSkills, medic_heal)
 table.insert(GM.PlayerSkills, medic_revive)
 
 if SERVER then
@@ -44,8 +48,16 @@ if SERVER then
 					["Name"] = v.Name,
 					["CurInvest"] = ply.hl2cr.Skills[classAssign]["CurInvest"]
 				}
+				for i, v in pairs(ply.hl2cr.Skills) do 
+			
+					for k, l in pairs(v) do
+						
+					end
+				end
 				
-				table.Merge(ply.hl2cr.Skills[classAssign], updateTbl)
+				if table.IsEmpty(ply.hl2cr.Skills[classAssign]) then
+				end
+				--table.Merge(ply.hl2cr.Skills[classAssign], updateTbl)
 				
 				--ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints - 1
 				--ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)

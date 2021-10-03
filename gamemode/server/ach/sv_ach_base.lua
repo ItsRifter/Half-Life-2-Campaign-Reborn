@@ -106,7 +106,7 @@ hook.Add("ShutDown", "HL2CR_CheckAchStatus", function()
 	if savedBaby == false and file.Exists("hl2cr_data/babycheck.txt", "DATA") then
 		file.Delete("hl2cr_data/babycheck.txt")
 	end
-	if savedRoller == false and file.Exists("hl2cr_dawta/ballcheck.txt", "DATA") then
+	if savedRoller == false and file.Exists("hl2cr_data/ballcheck.txt", "DATA") then
 		file.Delete("hl2cr_data/ballcheck.txt")
 	end
 end)

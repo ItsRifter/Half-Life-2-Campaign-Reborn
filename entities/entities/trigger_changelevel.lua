@@ -109,14 +109,14 @@ function ENT:Think()
 	if FINAL_MAPS[game.GetMap()] then self.MapChange = true return end
 	
 	--If the player count is over 4, check if completers is greater than total players divided
-	if playerCount >= 4 and team.NumPlayers(TEAM_COMPLETED_MAP) >= math.ceil(team.NumPlayers(TEAM_ALIVE) / 2) then
+	if playerCount >= 4 and team.NumPlayers(TEAM_COMPLETED_MAP - 1) > math.ceil(team.NumPlayers(TEAM_ALIVE) / 2) then
 		StartMapCountdown()
 		net.Start("HL2CR_MapCountdown")
 		net.Broadcast()
 		
 		self.MapChange = true
 	--else just check if completers is greater than alive players
-	elseif playerCount < 4 and (team.NumPlayers(TEAM_COMPLETED_MAP) - 1) > team.NumPlayers(TEAM_ALIVE) then
+	elseif playerCount < 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > team.NumPlayers(TEAM_ALIVE) then
 		StartMapCountdown()
 		net.Start("HL2CR_MapCountdown")
 		net.Broadcast()

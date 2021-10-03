@@ -9,7 +9,7 @@ net.Receive("HL2CR_LevelUpSound", function()
 	surface.PlaySound("hl2cr/levelup.wav")
 	local level = net.ReadInt(16)
 	
-	chat.AddText(Color(240, 175, 0), "User Level is now '" .. level .. "'")
+	chat.AddText(Color(240, 175, 0), translate.Get("HUDPlayerGotLevel") .. level .. "'")
 	
 	if NOTIFY_MESSAGES[level] then
 		chat.AddText(Color(240, 175, 0), NOTIFY_MESSAGES[level])
@@ -36,7 +36,7 @@ hook.Add( "player_disconnect", "HL2CR_PlayerDisconnect", function( data )
 	local bot = data.bot
 	local reason = data.reason
 	
-	chat.AddText(Color(240, 175, 0), steamid .. ": " .. name .. " has left the server REASON: " .. reason)
+	chat.AddText(Color(240, 175, 0), steamid .. ": " .. name .. translate.Get("HUDPlayerLeftTheGame") .. reason)
 end)
 
 gameevent.Listen("player_connect_client")
@@ -46,17 +46,17 @@ hook.Add( "player_connect_client", "HL2CR_PlayerConnect", function( data )
 		
 	if id == "STEAM_0:0:6009886" then
 		surface.PlaySound("hl2cr/admin/supersponer_join.wav")
-		chat.AddText(Color(240, 175, 0), "The Creator - ".. name .. " - has joined the server")
+		chat.AddText(Color(240, 175, 0), translate.Get("HUDSponerAlert").. name .. translate.Get("HUDAdminAlert2"))
 	end
 	
 	if id == "STEAM_0:1:7832469" then
 		surface.PlaySound("hl2cr/admin/birdman_join.wav")
-		chat.AddText(Color(240, 175, 0), "An admin - ".. name .. " - has joined the server")
+		chat.AddText(Color(240, 175, 0), translate.Get("HUDAdminAlert").. name .. translate.Get("HUDAdminAlert2"))
 	end
 	
 	if id == "STEAM_0:0:97860967" then
 		surface.PlaySound("hl2cr/admin/sarin_join.wav")
-		chat.AddText(Color(240, 175, 0), "An admin - ".. name .. " - has joined the server")
+		chat.AddText(Color(240, 175, 0), translate.Get("HUDAdminAlert").. name .. translate.Get("HUDAdminAlert2"))
 	end
 end)
 
@@ -67,7 +67,7 @@ net.Receive("HL2CR_AchievementNotifyAll", function()
 	if not isRareAch then
 		chat.AddText(Color(240, 175, 0), achiever .. translate.Get("EarnedAchievement") .. achName)
 	else
-		chat.AddText(Color(240, 175, 0), achiever .. " has earned a ", Color(255, 238, 0), "RARE ", Color(240, 175, 0), "achievement: " .. achName)
+		chat.AddText(Color(240, 175, 0), achiever .. translate.Get("HUDRareAch1"), Color(255, 238, 0), translate.Get("HUDRareAch2"), Color(240, 175, 0), translate.Get("HUDRareAch3") .. achName)
 	end
 end)
 
@@ -122,12 +122,12 @@ hook.Add("HUDPaint", "HL2CR_HUD", function()
 	end
 	
 	if LocalPlayer():GetNWInt("stat_skillpoints") > 0 then
-		draw.DrawText("UNUSED SKILL POINTS: " .. LocalPlayer():GetNWInt("stat_skillpoints"), "HL2CR_Stats", 250, ScrH() - 240, color_white, TEXT_ALIGN_LEFT)
+		draw.DrawText(translate.Get("HUDSkillPoints") .. LocalPlayer():GetNWInt("stat_skillpoints"), "HL2CR_Stats", 250, ScrH() - 240, color_white, TEXT_ALIGN_LEFT)
 	end
 
 	draw.RoundedBox( 4, 50, ScrH() - 240, barW, barH, color_black )
 	draw.RoundedBox( 4, 50, ScrH() - 240, math.max( 0, smoothXPLerp ) / maxXP * barW, barH, Color(235, 180, 52, 255) )
-	draw.DrawText("XP", "HL2CR_Stats", 50, ScrH() - 240, color_white, TEXT_ALIGN_LEFT)
+	draw.DrawText(translate.Get("HUDXP"), "HL2CR_Stats", 50, ScrH() - 240, color_white, TEXT_ALIGN_LEFT)
 	
 end)
 
@@ -203,51 +203,61 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 			continue
 		end
 		
+		if not pl:Alive() and (pl:GetNWEntity("hl2cr_grave") and pl:GetNWEntity("hl2cr_grave"):IsValid()) then 
+			local distGrave = LocalPlayer():GetPos():Distance(pl:GetNWEntity("hl2cr_grave"):GetPos())
+			local posGrave = pl:GetNWEntity("hl2cr_grave"):GetPos()
+			posGrave.z = pl:GetPos().z + 45 + (distGrave * 0.0325)
+
+			local ScrPosGrave = posGrave:ToScreen()
+			
+			draw.SimpleText(translate.Get("HUDDeadPlayer") .. pl:Nick(), "HL2CR_HoverPlayer", ScrPosGrave.x, ScrPosGrave.y + 60, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			
+			if LocalPlayer():GetNWBool("CanRevive") then
+				draw.SimpleText(translate.Get("ReviveMe"), "HL2CR_HoverPlayer", ScrPosGrave.x, ScrPosGrave.y + 90, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+			
+			continue 
+		end
+		
 		local dist = LocalPlayer():GetPos():Distance(pl:GetPos())
 		local pos = pl:GetPos()
 			pos.z = pl:GetPos().z + 45 + (dist * 0.0325)
 
 		local ScrPos = pos:ToScreen()
 		
-		if not pl:Alive() then 
-			if pl:GetNWEntity("hl2cr_grave") then
-				draw.SimpleText("R.I.P: " .. pl:Nick(), "HL2CR_HoverPlayer", ScrPos.x, ScrPos.y + 60, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			end
-			
-			continue 
-		end
+		
 		
 		local hpStatus = "nil"
 		local hpColour = Color(255, 255, 255)
 		local hpSpacing = 0
 		
 		if pl:Health() >= pl:GetMaxHealth() then
-			hpStatus = "Perfect"
+			hpStatus = translate.Get("HUDHealthStatus1")
 			hpColour = Color(10, 210, 0)
 			hpSpacing = 50
 			
 		elseif pl:Health() < pl:GetMaxHealth() and pl:Health() > 75 then
-			hpStatus = "Great"
+			hpStatus = translate.Get("HUDHealthStatus2")
 			hpColour = Color(155, 210, 0)
 			hpSpacing = 40
 			
 		elseif pl:Health() > 50 and pl:Health() <= 75 then
-			hpStatus = "Fine"
+			hpStatus = translate.Get("HUDHealthStatus3")
 			hpColour = Color(210, 220, 0)
 			hpSpacing = 35
 			
 		elseif pl:Health() > 25 and pl:Health() <= 50 then
-			hpStatus = "Hurt"
+			hpStatus = translate.Get("HUDHealthStatus4")
 			hpColour = Color(220, 180, 0)
 			hpSpacing = 35
 			
 		elseif pl:Health() > 10 and pl:Health() <= 25 then
-			hpStatus = "Wounded"
+			hpStatus = translate.Get("HUDHealthStatus5")
 			hpColour = Color(220, 130, 0)
 			hpSpacing = 65
 			
 		elseif pl:Health() <= 10 then
-			hpStatus = "Critical"
+			hpStatus = translate.Get("HUDHealthStatus6")
 			hpColour = Color(220, 0, 0)
 			hpSpacing = 50
 		end
@@ -269,24 +279,22 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 			draw.SimpleText(pl:Nick(), font, ScrPos.x, ScrPos.y, HL2CR.Theme.standard, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			
 			--Level
-			draw.SimpleText("Level: " .. pl:GetNWInt("stat_level", -1), font, ScrPos.x, ScrPos.y + 30, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			draw.SimpleText(translate.Get("SCLevel") .. pl:GetNWInt("stat_level", -1), font, ScrPos.x, ScrPos.y + 30, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			
 			--Status
-			draw.SimpleText("Status: ", font, ScrPos.x - 35, ScrPos.y + 60, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			
 			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_medic.jpg" then
-				draw.SimpleText("HP: " .. pl:Health(), font, ScrPos.x + 55, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(translate.Get("HUDPlayerHealth") .. pl:Health(), font, ScrPos.x, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			else
-				draw.SimpleText(hpStatus, font, ScrPos.x + hpSpacing + fixFontSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(hpStatus, font, ScrPos.x - 50, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			
 			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_supporter.jpg" then
-				if not (pl:GetActiveWeapon():GetPrimaryAmmoType() or FIX_AMMO_TYPE[pl:GetActiveWeapon():GetPrimaryAmmoType()]) or not pl.ammoCount then continue end
-				draw.SimpleText(pl.ammoCount.. " " .. FIX_AMMO_TYPE[pl:GetActiveWeapon():GetPrimaryAmmoType()] , font, ScrPos.x + 105 + hpSpacing + fixFontSpacing, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				--Niik fix this please
 			end
 			
 			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_repairman.jpg" then
-				draw.SimpleText(" / Armor: " .. pl:Armor(), font, ScrPos.x + 115 + hpSpacing + fixFontSpacing, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(translate.Get("HUDPlayerArmor") .. pl:Armor(), font, ScrPos.x + 65, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			
 			--Classes
@@ -361,7 +369,7 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 				
 			local ScrPos = pos:ToScreen()
 			if entPet:GetOwner() and dist <= 250 then
-				draw.SimpleText(entPet:GetOwner():Nick() .. "'s Pet", "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(entPet:GetOwner():Nick() .. translate.Get("HUDPlayerPets"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				draw.SimpleText(entPet:GetOwner():GetNWString("pet_name"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y + 35, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end

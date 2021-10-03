@@ -140,9 +140,13 @@ local PLAYERMODELS = {
 	}
 }
 
-local skillsTbl = {}
+net.Receive("HL2CR_QMenuUpdate", function()
+	local skillsTbl = net.ReadTable()
+	StartQMenu(net.ReadBool(), skillsTbl)
+end)
 
-function StartQMenu(shouldOpen)
+function StartQMenu(shouldOpen, skillsTbl)
+
 	if shouldOpen then 
 		qMenuTabs = vgui.Create("HL2CR_Tab")
 		qMenuTabs:SetSize(ScrW() / 1.5, ScrH() / 1.5)
@@ -252,7 +256,7 @@ function StartQMenu(shouldOpen)
 		
 		local modelHorizontalScroll = vgui.Create("DHorizontalScroller", invPnl)
 		modelHorizontalScroll:SetSize(512, 64)
-		modelHorizontalScroll:SetPos(0, invPnl:GetTall() / 1.32)
+		modelHorizontalScroll:SetPos(0, invPnl:GetTall() - 168)
 		
 		for level, v in pairs(PLAYERMODELS) do
 			for i, p in ipairs(v) do
@@ -302,7 +306,7 @@ function StartQMenu(shouldOpen)
 		passiveSkillsLayout:Dock(FILL)
 		
 		local medicSkillsPnl = vgui.Create("DPanel", skillsPnl)
-		medicSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
+		medicSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.60, skillsSelectionPnl:GetTall())
 		
 		local medicSkillHorizontalScroll = vgui.Create("DHorizontalScroller", medicSkillsPnl)
 		medicSkillHorizontalScroll:Dock(FILL)
@@ -339,25 +343,28 @@ function StartQMenu(shouldOpen)
 			skillPnlShowcase:SetText(skill.Name)
 			skillPnlShowcase:SetFont("HL2CR_Class_TitleFont")
 			skillPnlShowcase:DockMargin(10, 0, 0, 0)
-			skillPnlShowcase:SetPos( (statusPnl:GetWide() / skillPnlShowcase:GetWide() ) + 50, 50)
+			skillPnlShowcase:SetPos( (statusPnl:GetWide()/skillPnlShowcase:GetWide())*14, 25)
 			skillPnlShowcase:SizeToContents()
 			skillPnlShowcase:SetTextColor(Color(0, 0, 0, 255))
 			
 			local skillPnlDesc = vgui.Create("DLabel", statusPnl)
 			skillPnlDesc:SetText(skill.Desc)
-			skillPnlDesc:SetPos( (statusPnl:GetWide() / skillPnlDesc:GetWide() ) + 50, 75)
+			skillPnlDesc:SetPos((statusPnl:GetWide()/skillPnlDesc:GetWide())*15, 62.5)
 			skillPnlDesc:SetFont("HL2CR_Class_DescFont")
 			skillPnlDesc:SizeToContents()
 			skillPnlDesc:SetTextColor(Color(0, 0, 0, 255))
 			
 			local skillPnlLevel = vgui.Create("DLabel", statusPnl)
-
-			skillPnlLevel:SetText( (skillsTbl[skill.Class].CurInvest or 0 ) .. "/" .. skill.Max)
-			skillPnlLevel:SetPos( (statusPnl:GetWide() / skillPnlDesc:GetWide() ) + 105, 100)
+			skillPnlLevel:SetPos((statusPnl:GetWide()/skillPnlDesc:GetWide())*35, 125)
 			skillPnlLevel:SetFont("HL2CR_Skill_Level")
 			skillPnlLevel:SizeToContents()
 			skillPnlLevel:SetTextColor(Color(0, 0, 0, 255))
-						
+			
+			if skill.Name == skillsTbl[skill.Class].Name then
+				skillPnlLevel:SetText( (skillsTbl[skill.Class].CurInvest ) .. "/" .. skill.Max)
+			end
+			skillPnlLevel:SizeToContents()
+			
 			statusPnl.Paint = function(pnl, w, h)
 				surface.SetDrawColor(HL2CR.Theme.skillFill)
 				surface.DrawRect(0, 0, w, h)
@@ -365,17 +372,14 @@ function StartQMenu(shouldOpen)
 			
 			skillBtn = vgui.Create("DImageButton", statusPnl)
 			skillBtn:SetSize(92, 92)
-			skillBtn:SetPos(statusPnl:GetWide() / 3, statusPnl:GetTall() / 5)
+			skillBtn:SetPos(statusPnl:GetWide() / 4, statusPnl:GetWide())
 		
 			if LocalPlayer():GetNWInt("stat_level") < skill.LevelReq then
-				skillBtn:SetToolTip(translate.Get("LEVEL_LOCKED") .. skill.LevelReq)
 				skillBtn:SetImage("vgui/hud/icon_locked.png")
 				continue
 			end
 			
 			skillBtn:SetImage(skill.Icon)
-			
-			skillBtn:SetToolTip(skill.Name .. "\n" .. skill.Desc)
 			
 			local skillPoints = LocalPlayer():GetNWInt("stat_skillpoints")
 			
@@ -385,7 +389,7 @@ function StartQMenu(shouldOpen)
 					return
 				end
 				
-				if (skillsTbl[skill.Class].CurInvest or 0) >= skill.Max then
+				if skill.Name == skillsTbl[skill.Class].Name and skillsTbl[skill.Class].CurInvest >= skill.Max then
 					surface.PlaySound("buttons/button16.wav")
 					return
 				end
@@ -574,13 +578,13 @@ function StartQMenu(shouldOpen)
 				
 				local classIcon = vgui.Create("DImage", classShowPanel)
 				classIcon:SetImage(class.Icon)
-				classIcon:SetSize(ScrW() / 15, ScrW() / 15)
-				classIcon:SetPos(classShowPanel:GetWide() / 4, ScrH() / 6)
+				classIcon:SetSize(138, 138)
+				classIcon:SetPos(classShowPanel:GetWide() / 5, ScrH() / 5)
 				
 				local classBtn = vgui.Create("DButton", classShowPanel)
 				classBtn:SetText(translate.Get("PickClass"))
-				classBtn:SetSize(125, 35)
-				classBtn:SetPos(classShowPanel:GetWide() / 4, classShowPanel:GetTall() / 1.5)
+				classBtn:SetSize(138, 35)
+				classBtn:SetPos(classIcon:GetWide()/2.75, classShowPanel:GetTall() / 1.5)
 				
 				classBtn.DoClick = function()
 					net.Start("HL2CR_SelectClass")
@@ -768,17 +772,12 @@ function StartQMenu(shouldOpen)
 		end
 	end
 end
-
-net.Receive("HL2CR_QMenuUpdate", function()
-	skillsTbl = net.ReadTable()
-end)
-
+--[[
 hook.Add("OnSpawnMenuOpen", "HL2CR_QMenuOpen", function()
-	timer.Simple(0.1, function()
-		StartQMenu(true)
-	end)
+	StartQMenu(true)
 end)
 
 hook.Add("OnSpawnMenuClose", "HL2CR_QMenuClose", function()
 	StartQMenu(false)
 end)
+--]]

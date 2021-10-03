@@ -36,7 +36,7 @@ local CONVERT_NAME_TO_ENT = {
 	["Multi_Grenade_Launcher"] = "bakkers_blaster",
 	["The_Nailer_Gun"] = "the_multi_purpose_nailgun",
 	["Unstable_Electric_Shotgun"] = "the_turbo_lover",
-	[".BMG_Heavy_Sniper"] = "the_anti_rifle",
+	["BMG_Heavy_Sniper"] = "the_anti_rifle",
 }
 
 --Super gravity gun maps
@@ -200,7 +200,7 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	ply:SetNoCollideWithTeammates(true)
 	
 	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
-	ply:SetNWBool("CanRevive", false)
+	ply:SetNWBool("CanRevive", true)
 	
 	local newMaxHP = 0
 	local healing = 0
@@ -274,10 +274,6 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	elseif game.GetMap() == "d1_trainstation_05" and ents.FindByClass("item_suit")[1] then
 		ply:SetWalkSpeed(125)
 		ply:SetRunSpeed(125)
-	else
-		local suit = ents.Create("item_suit")
-		suit:SetPos(ply:GetPos())
-		suit:Spawn()
 	end
 	
 
@@ -402,7 +398,17 @@ function StoreWeapons(newWeapon)
 end
 
 hook.Add("GravGunPunt", "HL2CR_PreventPunting", function(ply, ent)
-	if ent and ent:GetClass() == "sent_controllable_manhack" then
+	if ent and ent:GetClass() == "sent_controllable_manhack" or ent.player then
+		return false
+	end
+end)
+
+hook.Add("GravGunPickupAllowed", "HL2CR_PreventPickup", function(ply, ent)
+	if ent and ent:GetClass() == "shot_nade" then
+		return false
+	end
+	
+	if ent and ent.player then
 		return false
 	end
 end)
@@ -815,12 +821,6 @@ hook.Add("GravGunPickupAllowed", "HL2CR_AllowGravPickup", function(ply, ent)
 	return true
 end)
 
-hook.Add("GravGunOnPickedUp", "HL2CR_BlastAch", function(ply, ent)
-	if ent and ent:GetClass() == "shot_nade" then
-		ent.Owner = ply
-	end
-end)
-
 net.Receive("HL2CR_UpdateModel", function(len, ply)
 	if not ply then return end
 	
@@ -898,6 +898,16 @@ hook.Add("PlayerButtonDown", "HL2CR_ConfirmVoice", function(ply, btn)
 	if btn == KEY_Q then
 		net.Start("HL2CR_QMenuUpdate")
 			net.WriteTable(ply.hl2cr.Skills)
+			net.WriteBool(true)
+		net.Send(ply)
+	end
+end)
+
+hook.Add("PlayerButtonUp", "HL2CR_ConfirmVoice", function(ply, btn)
+	if btn == KEY_Q then
+		net.Start("HL2CR_QMenuUpdate")
+			net.WriteTable(ply.hl2cr.Skills)
+			net.WriteBool(false)
 		net.Send(ply)
 	end
 end)

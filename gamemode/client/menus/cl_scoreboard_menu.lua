@@ -28,7 +28,7 @@ function ToggleBoard(toggle)
 		end
 		
 		local versionLabel = vgui.Create("DLabel", mainPanel)
-		versionLabel:SetText("Version: " .. GAMEMODE.Version)
+		versionLabel:SetText(translate.Get("SCVersion") .. GAMEMODE.Version)
 		versionLabel:SetPos(0, 460)
 		versionLabel:SetFont("HL2CR_Title")
 		versionLabel:SizeToContents()
@@ -87,7 +87,7 @@ function ToggleBoard(toggle)
 			
 			local playerStats = vgui.Create("DLabel", panel)
 			playerStats:SetPos(80, 20)
-			playerStats:SetText("Level: " .. pl:GetNWInt("stat_level", -1) .. "\nXP: " .. pl:GetNWInt("stat_exp", -1) .. "/" .. pl:GetNWInt("stat_reqexp", 0))
+			playerStats:SetText(translate.Get("SCLevel") .. pl:GetNWInt("stat_level", -1) .. translate.Get("SCExprience") .. pl:GetNWInt("stat_exp", -1) .. "/" .. pl:GetNWInt("stat_reqexp", 0))
 			playerStats:SetTextColor( Color( 0, 0, 0) )
 			playerStats:SizeToContents()
 			

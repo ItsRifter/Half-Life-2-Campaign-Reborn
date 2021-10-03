@@ -43,12 +43,12 @@ end
 
 
 function GM:OnContextMenuOpen()
-	if LocalPlayer:Team() ~= TEAM_ALIVE then return end
+	if LocalPlayer():Team() == TEAM_ALIVE then return end
 	ShowVoiceCMDMenu(true)
 end
 
 function GM:OnContextMenuClose()
-	if LocalPlayer:Team() ~= TEAM_ALIVE then return end
+	if LocalPlayer():Team() == TEAM_ALIVE then return end
 	ShowVoiceCMDMenu(false)
 end
 

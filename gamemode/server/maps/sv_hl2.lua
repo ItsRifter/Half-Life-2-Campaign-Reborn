@@ -304,6 +304,19 @@ local function SetCheckpoints()
 					v.vehicle = nil
 				end
 			end
+			
+			local gunboatMap = ents.Create(AirboatGun.Class)
+			gunboatMap:SetModel(Airboat.Model)
+			gunboatMap:SetPos(Vector(6306, 4861, -943) )
+			
+			for i, key in pairs(AirboatGun.KeyValues) do
+				gunboatMap:SetKeyValue(i, key)
+			end
+			gunboatMap:Activate()
+			gunboatMap:Fire( "addoutput", "targetname airboat" );
+			gunboatMap:Spawn()
+			gunboatMap:SetAngles(Angle(0, 180, 0))
+					
 		end
 		
 		CHECKPOINT_FUNC_2 = function()
@@ -4444,7 +4457,7 @@ end)
 hook.Add("GravGunOnPickedUp", "HL2CR_BlastAch", function(ply, ent)
 	if ent and ent:GetModel() == "models/props_lab/hevplate.mdl" then
 		GrantAchievement(ply, "HL2", "Blast_From_The_Past")
-	end	
+	end
 end)
 
 hook.Add( "PlayerFootstep", "CustomFootstep", function( ply, pos, foot, sound, volume, rf )

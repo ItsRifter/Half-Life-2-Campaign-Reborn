@@ -105,9 +105,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	if ( CLIENT ) then return end
-	
-	
+	if ( CLIENT ) then return end	
 	
 	if ( self.Owner:IsPlayer() ) then
 		if self.Owner:GetNWBool("CanRevive") == false then return end
@@ -128,30 +126,41 @@ function SWEP:SecondaryAttack()
 	
 	local ent = tr.Entity
 
-	if not tr.Entity.player then return end
+	if not ent.player then return end
 
 	local healer = self.Owner
 	
 	local need = 50
 
-	if IsValid( tr.Entity.player ) && self:Clip1() >= need then
+	if IsValid( ent.player ) && self:Clip1() >= need then
 		
 		self.Owner:EmitSound("items/suitchargeok1.wav")
 		
 		timer.Create("revive_" .. self:EntIndex(), 3, 1, function()
+			
+			local tr2 = util.TraceLine( {
+				start = self.Owner:GetShootPos(),
+				endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 64,
+				filter = self.Owner
+			} )
+			
+			local checkAim = tr2.Entity.player
+			
+			if not checkAim then return end
+			
 			self:SendWeaponAnim( ACT_VM_PRIMARYATTACK )
 			self:TakePrimaryAmmo( need )
 			self.Owner:EmitSound("npc/roller/mine/rmine_shockvehicle1.wav")
-			tr.Entity.player:Spawn()
-			tr.Entity.player:SetHealth(tr.Entity.player:GetMaxHealth() / 2)
-			tr.Entity.player:SetPos(tr.Entity:GetPos())
-			tr.Entity:Remove()
+			ent.player:Spawn()
+			ent.player:SetHealth(ent.player:GetMaxHealth() / 2)
+			ent.player:SetPos(ent:GetPos())
+			ent:Remove()
 		
 			AddXP(self.Owner, need + self.Owner:GetNWInt("skill_healing") * 2)
 		
 			net.Start("HL2CR_SpawnIndicators")
 				net.WriteInt( need  * 2, 32)
-				net.WriteVector(tr.Entity.player:GetPos())
+				net.WriteVector(ent.player:GetPos())
 			net.Send(self.Owner)
 			
 		end)
