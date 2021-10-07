@@ -122,16 +122,16 @@ hook.Add( "ScaleNPCDamage", "HL2CR_PlayerToNPCDMG", function( npc, hitgroup, dmg
 	
 	if npc:IsFriendly() or npc:GetClass() == "npc_citizen" then return end
 	
-	local hitDivide = GetConVar("hl2cr_difficulty"):GetInt() + 1
+	local hitDivide = GetConVar("hl2cr_difficulty"):GetInt()
 	
 	if hitgroup == HITGROUP_HEAD then
-		hitDivide = 2
+		hitDivide = hitDivide + 0.75
 	elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
-		hitDivide = 1
+		hitDivide = hitDivide + 1
 	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-		hitDivide = 0.75
+		hitDivide = hitDivide + 1.25
 	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-		hitDivide = 0.25
+		hitDivide = hitDivide + 1.50
 	end
 	
 	local finalDMG = dmgInfo:GetDamage() / hitDivide

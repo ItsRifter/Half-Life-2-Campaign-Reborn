@@ -304,6 +304,17 @@ GM.Achievements = {
 			IsRare = false
 		},
 		
+		Leiftiger = {
+			Name = "The return of the Leiftiger",
+			Mat = "materials/hl2cr/ach_leif.jpg", 
+			Desc = "Met the original creator\nof HL2-C",
+			Rewards = {
+				XP = 0,
+				Item = nil
+			},
+			IsRare = true
+		},
+		
 		Unpleasant_Secret = {
 			Name = "Unpleasant Secret",
 			Mat = "materials/hl2cr/ach_gimmeasecret.jpg", 

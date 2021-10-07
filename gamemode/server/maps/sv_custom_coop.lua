@@ -1,4 +1,4 @@
-local function SetCheckpoints()
+	local function SetCheckpoints()
 	
 	for k, cl in ipairs(ents.FindByClass("trigger_changelevel")) do
 		cl:Remove()
@@ -69,7 +69,7 @@ local function SetCheckpoints()
 	elseif game.GetMap() == "level_1a" then
 	
 		TRIGGER_CHANGELEVEL = {
-			Vector(1933, 1166, 355),	Vector(1874, 1082, 212)
+			Vector(1860, 1011, 256),	Vector(1874, 1082, 212)
 		}
 	
 		TRIGGER_CHECKPOINT = {
@@ -99,7 +99,7 @@ local function SetCheckpoints()
 	end
 	
 	if TRIGGER_CHANGELEVEL then
-		Changelevel = ents.Create("trigger_changelevel")
+		Changelevel = ents.Create("trigger_changelevel_coop")
 		Changelevel.Min = Vector(TRIGGER_CHANGELEVEL[1])
 		Changelevel.Max = Vector(TRIGGER_CHANGELEVEL[2])
 		Changelevel.Pos = Vector(TRIGGER_CHANGELEVEL[2]) - ( ( Vector(TRIGGER_CHANGELEVEL[2]) - Vector(TRIGGER_CHANGELEVEL[1])) / 2 )
@@ -403,7 +403,7 @@ local MAP_LOGIC = {
 		
 		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		
-		ents.FindByName("make_ag1")[1]:Fire("AddOutput", "OnAllSpawnedDead triggerhook:RunCode")
+		ents.FindByName("ag1")[1]:Fire("AddOutput", "OnDeath triggerhook:RunCode")
 	end,
 }
 
@@ -429,8 +429,8 @@ local ITEMS = {
 	["item_ammo_ar2"] = "item_ammo_ar2",
 	["item_ammo_ar2_large"] = "item_ammo_ar2_large",
 	
-	["item_ammo_buckshot"] = "item_ammo_buckshot",
-	["item_ammo_buckshot_large"] = "item_ammo_buckshot_large",
+	["item_box_buckshot"] = "item_box_buckshot",
+	["item_box_buckshot_large"] = "item_box_buckshot_large",
 	
 	["item_ammo_crossbow"] = "item_ammo_crossbow",
 	

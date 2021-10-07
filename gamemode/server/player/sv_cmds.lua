@@ -127,6 +127,12 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		return ""
 	end
 	
+	if text == "!ach" or text == "!achievement" then
+		net.Start("HL2CR_OpenAch")
+		net.Send(ply)
+		return ""
+	end
+	
 	if string.find(text, "!kickuser ") then
 		local findName = string.sub(text, 11)
 		if not findName then

@@ -46,17 +46,21 @@ hook.Add( "player_connect_client", "HL2CR_PlayerConnect", function( data )
 		
 	if id == "STEAM_0:0:6009886" then
 		surface.PlaySound("hl2cr/admin/supersponer_join.wav")
-		chat.AddText(Color(240, 175, 0), translate.Get("HUDSponerAlert").. name .. translate.Get("HUDAdminAlert2"))
+		chat.AddText(Color(240, 175, 0), translate.Get("HUDSponerAlert") .. name .. translate.Get("HUDAdminAlert2"))
 	end
 	
 	if id == "STEAM_0:1:7832469" then
 		surface.PlaySound("hl2cr/admin/birdman_join.wav")
-		chat.AddText(Color(240, 175, 0), translate.Get("HUDAdminAlert").. name .. translate.Get("HUDAdminAlert2"))
+		chat.AddText(Color(240, 175, 0), translate.Get("HUDAdminAlert") .. name .. translate.Get("HUDAdminAlert2"))
 	end
 	
 	if id == "STEAM_0:0:97860967" then
 		surface.PlaySound("hl2cr/admin/sarin_join.wav")
-		chat.AddText(Color(240, 175, 0), translate.Get("HUDAdminAlert").. name .. translate.Get("HUDAdminAlert2"))
+		chat.AddText(Color(240, 175, 0), translate.Get("HUDAdminAlert") .. name .. translate.Get("HUDAdminAlert2"))
+	end
+	
+	if id == "STEAM_0:1:19822252" then
+		chat.AddText(Color(240, 175, 0), translate.Get("HUDLeiftigerAlert") )
 	end
 end)
 

@@ -25,6 +25,11 @@ local heavy_sniper = CreateShopItem("BMG_Heavy_Sniper", "A rather heavy sniper\n
 
 local test = CreateShopItem("Test", "Test Item\nYou shouldn't be buying this", 900000, "materials/hl2cr/weapon_nailer.jpg", "Item")
 local suit_buff = CreateShopItem("Suit_PWR_Boost", "Test Item\nYou shouldn't be buying this", 900000, "materials/hl2cr/weapon_bmgsniper.jpg", "Item")
+local suit_buff = CreateShopItem("Suit_PWR_Boost", "Test Item\nYou shouldn't be buying this", 900000, "materials/hl2cr/weapon_bmgsniper.jpg", "Item")
+
+local test_mat1 = CreateShopItem("Test_Mat_1", "Test Item\nYou shouldn't be buying this", 1, "materials/hl2cr/mat_iron.jpg", "Material")
+local test_mat2 = CreateShopItem("Test_Mat_2", "Test Item\nYou shouldn't be buying this", 1, "materials/hl2cr/mat_scrap.jpg", "Material")
+local test_mat3 = CreateShopItem("Test_Mat_3", "Test Item\nYou shouldn't be buying this", 1, "materials/hl2cr/mat_morphine.jpg", "Material")
 
 table.insert(GM.ShopItems, flaregun)
 table.insert(GM.ShopItems, automatic_pistol)
@@ -34,9 +39,12 @@ table.insert(GM.ShopItems, nailer)
 table.insert(GM.ShopItems, unstable_shotgun)
 table.insert(GM.ShopItems, heavy_sniper)
 
-
 table.insert(GM.ShopItems, test)
 table.insert(GM.ShopItems, suit_buff)
+
+table.insert(GM.ShopItems, test_mat1)
+table.insert(GM.ShopItems, test_mat2)
+table.insert(GM.ShopItems, test_mat3)
 
 if SERVER then
 	
@@ -47,16 +55,16 @@ if SERVER then
 		
 		for i, v in ipairs(GAMEMODE.ShopItems) do
 			if v.Name == slotToUpdate and v.Type == "Weapon" then
-					ply.hl2cr.Inventory.CurWeaponSlot = v.Name
-					ply:SetNWString("inv_weaponslot", ply.hl2cr.Inventory.CurWeaponSlot)
-				elseif v.Name == slotToUpdate and v.Type == "Item" then
-					ply.hl2cr.Inventory.CurItemSlot = v.Name
-					ply:SetNWString("inv_itemslot", ply.hl2cr.Inventory.CurItemSlot)
-		    end
+				ply.hl2cr.Inventory.CurWeaponSlot = v.Name
+				ply:SetNWString("inv_weaponslot", ply.hl2cr.Inventory.CurWeaponSlot)
+			elseif v.Name == slotToUpdate and v.Type == "Item" then
+				ply.hl2cr.Inventory.CurItemSlot = v.Name
+				ply:SetNWString("inv_itemslot", ply.hl2cr.Inventory.CurItemSlot)
+			end
 		end
 	end)
 	
-	net.Receive("HL2CR_PurchaseItem", function(len, ply)
+	net.Receive("HL2CR_ObtainItem", function(len, ply)
 		if not ply then return end
 		
 		local itemToAdd = net.ReadString()

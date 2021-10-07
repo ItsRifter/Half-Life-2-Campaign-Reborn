@@ -47,6 +47,7 @@ AddCSLuaFile("client/menus/cl_qmenu.lua")
 AddCSLuaFile("client/menus/cl_achievement_menu.lua")
 AddCSLuaFile("client/hud/cl_hitboxrender.lua")
 AddCSLuaFile("client/hud/cl_ach.lua")
+AddCSLuaFile("client/hud/cl_ach.lua")
 
 --Shared
 ----Voting
@@ -61,6 +62,7 @@ include("shared/ach/sh_player_ach.lua")
 
 ----Shops
 include("shared/shop/sh_shop_items.lua")
+include("shared/shop/sh_craftable_items.lua")
 
 ----Misc
 include("shared/sh_translate.lua")
@@ -93,7 +95,7 @@ util.AddNetworkString("HL2CR_ShouldClientSpectate")
 util.AddNetworkString("HL2CR_UpdatePlayerName")
 util.AddNetworkString("HL2CR_SelectClass")
 util.AddNetworkString("HL2CR_SkillObtain")
-util.AddNetworkString("HL2CR_PurchaseItem")
+util.AddNetworkString("HL2CR_ObtainItem")
 util.AddNetworkString("HL2CR_Message")
 util.AddNetworkString("HL2CR_HelpNotify")
 util.AddNetworkString("HL2CR_OpenAchs")
@@ -103,6 +105,7 @@ util.AddNetworkString("HL2CR_ApplySettings")
 util.AddNetworkString("HL2CR_UpdateModel")
 util.AddNetworkString("HL2CR_QMenuUpdate")
 util.AddNetworkString("HL2CR_Discord")
+util.AddNetworkString("HL2CR_OpenAch")
 
 hook.Add("PrePACConfigApply", "HL2CR_DisablePac3Autoload", function(ply, outfit_data)
 	ply:SetModel(ply.hl2cr.Model)

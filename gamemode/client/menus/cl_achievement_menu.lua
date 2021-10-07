@@ -1,4 +1,4 @@
-concommand.Add("hl2cr_achievements_beware", function( ply, cmd, args ) -- still not done, better not to use for now
+net.Receive("HL2CR_OpenAch", function()
 		
 	local achsSelectionPnl = vgui.Create("HL2CR_Tab")
 	achsSelectionPnl:SetSize(ScrW() / 1.5, ScrH() / 1.5)

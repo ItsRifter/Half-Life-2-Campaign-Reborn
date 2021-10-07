@@ -7,7 +7,16 @@ local CONVERT_NAME_TO_IMAGE = {
 	["Unstable_Electric_Shotgun"] = "materials/hl2cr/weapon_unstableshotgun.jpg",
 	["BMG_Heavy_Sniper"] = "materials/hl2cr/weapon_bmgsniper.jpg",
 	["Test"] = "materials/hl2cr/weapon_nailer.jpg",
-	["Suit_PWR_Boost"] = "materials/hl2cr/weapon_bmgsniper.jpg"
+	["Suit_PWR_Boost"] = "materials/hl2cr/weapon_bmgsniper.jpg",
+	["Test_Mat_1"] = "materials/hl2cr/mat_iron.jpg",
+	["Test_Mat_2"] = "materials/hl2cr/mat_scrap.jpg",
+	["Test_Mat_3"] = "materials/hl2cr/mat_morphine.jpg"
+}
+
+local CRAFTING_ITEMS = {
+	["Test_Mat_1"] = "Test_Mat_1",
+	["Test_Mat_2"] = "Test_Mat_2",
+	["Test_Mat_3"] = "Test_Mat_3"
 }
 
 local ITEM_TYPE = {
@@ -19,7 +28,10 @@ local ITEM_TYPE = {
 	["The_Nailer_Gun"] = "weapon",
 	["BMG_Heavy_Sniper"] = "weapon",
 	["Test"] = "item",
-	["Suit_PWR_Boost"] = "item"
+	["Suit_PWR_Boost"] = "item",
+	["Test_Mat_1"] = "mat",
+	["Test_Mat_2"] = "mat",
+	["Test_Mat_3"] = "mat"
 }
 
 local CONVERT_NAME_TRANSLATION = {
@@ -94,6 +106,18 @@ local CONVERT_DESC_TRANSLATION = {
 	end,
 
 	["Suit_PWR_Boost"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+	
+	["Test_Mat_1"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+	
+	["Test_Mat_2"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+	
+	["Test_Mat_3"] = function()
 		return translate.Get("SuitPower_desc")
 	end,
 }
@@ -206,6 +230,16 @@ function StartQMenu(shouldOpen, skillsTbl)
 		invLayout:Dock(FILL)
 		invLayout:SetSpaceX(10)
 		invLayout:SetSpaceY(5)
+		
+		local craftPnlSlotsPnl = vgui.Create("DPanel", invPnl)
+		craftPnlSlotsPnl:SetSize(invPnl:GetWide() / 2.2, invPnl:GetTall())
+		craftPnlSlotsPnl:SetPos(15, 256)
+		craftPnlSlotsPnl.Paint = function() end
+		
+		local craftLayout = vgui.Create("DIconLayout", craftPnlSlotsPnl)
+		craftLayout:Dock(FILL)
+		craftLayout:SetSpaceX(10)
+		craftLayout:SetSpaceY(5)
 
 		local weaponSlotPnl = vgui.Create("DPanel", invPnl)
 		weaponSlotPnl:SetPos(invPnl:GetWide() / 1.95, 50)
@@ -221,7 +255,7 @@ function StartQMenu(shouldOpen, skillsTbl)
 		if CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")] then
 			weaponSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")])
 		else
-			weaponSlotImage:SetImage("materials/hl2cr/empty.jpg")
+			weaponSlotImage:SetImage("materials/hl2cr/empty_weapon.jpg")
 		end
 
 		local itemSlotPanel = vgui.Create("DPanel", invPnl)
@@ -238,7 +272,7 @@ function StartQMenu(shouldOpen, skillsTbl)
 		if CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_itemslot")] then
 			itemSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_itemslot")])
 		else
-			itemSlotImage:SetImage("materials/hl2cr/empty.jpg")
+			itemSlotImage:SetImage("materials/hl2cr/empty_item.jpg")
 		end
 		
 		local slots = string.Explode(" ", LocalPlayer():GetNWString("inv_slots"))
@@ -247,6 +281,17 @@ function StartQMenu(shouldOpen, skillsTbl)
 		
 		local pl = LocalPlayer()
 		pl.Inv = {}
+
+        pl.Craft = {}
+		for i = 1, 6 do
+			pl.Craft[i] = craftLayout:Add("HL2CR_InvSlot")
+			pl.Craft[i]:SetSize(50, 50)
+			
+			pl.Craft[i].Icon = vgui.Create("DImageButton", pl.Craft[i])
+			pl.Craft[i].Icon:SetSize(pl.Craft[i]:GetWide(), pl.Craft[i]:GetTall())
+		end
+		
+		local totalItemsInCraft = 1
 		
 		for i = 1, totalSlots do
 			pl.Inv[i] = invLayout:Add("HL2CR_InvSlot")
@@ -257,20 +302,62 @@ function StartQMenu(shouldOpen, skillsTbl)
 				pl.Inv[i].Icon:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
 				pl.Inv[i].Icon:SetToolTip(CONVERT_DESC_TRANSLATION[slots[i]]())
 				pl.Inv[i].Icon:SetSize(pl.Inv[i]:GetWide(), pl.Inv[i]:GetTall())
-				pl.Inv[i].Icon.DoClick = function()
-					net.Start("HL2CR_UpdateSlot")
-						net.WriteString(slots[i])
-					net.SendToServer()
-					
+				pl.Inv[i].Icon.DoClick = function(pnl)
 					
 					surface.PlaySound("hl2cr/standardbeep.wav")
+					
 					if ITEM_TYPE[slots[i]] == "weapon" then
 						weaponSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
 					elseif ITEM_TYPE[slots[i]] == "item" then
 						itemSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
+					elseif ITEM_TYPE[slots[i]] == "mat" then
+						
+						if totalItemsInCraft > 6 then return end
+						
+						pl.Craft[totalItemsInCraft].Icon:SetImage(pnl:GetImage())
+						
+						
+						if CRAFTING_ITEMS[slots[k]] then
+						
+						end
+						totalItemsInCraft = totalItemsInCraft + 1
+						
+						pnl:Remove()					
+						return
+					end
+					
+					net.Start("HL2CR_UpdateSlot")
+						net.WriteString(slots[i])
+					net.SendToServer()
+				end
+			end
+			
+			if pl.Craft[i] then
+				pl.Craft[i].Icon.DoClick = function(pnl)
+					if pl.Craft[i].Icon:GetImage() ~= "" then
+						surface.PlaySound("hl2cr/standardbeep.wav")
+						pnl:SetImage("materials/hl2cr/empty.jpg")
+						totalItemsInCraft = totalItemsInCraft - 1
 					end
 				end
 			end
+		end
+		
+		local CraftingResultPnl = vgui.Create("DPanel", invPnl)
+		CraftingResultPnl:SetPos(155, invPnl:GetWide() / (ScrW() / 600))
+		CraftingResultPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
+		
+		CraftingResultPnl.Paint = function(pnl, w, h)
+			surface.SetDrawColor(HL2CR.Theme.qMenu2)
+			surface.DrawRect(0, 0, w, h)
+		end
+		
+		CraftingResultImage = vgui.Create("DImageButton", CraftingResultPnl)
+		CraftingResultImage:SetSize(CraftingResultPnl:GetWide(), CraftingResultPnl:GetTall())
+		CraftingResultImage:SetImage("materials/hl2cr/mystery.jpg")
+
+		CraftingResultPnl.DoClick = function(pnl)
+			surface.PlaySound("buttons/button16.wav")
 		end
 		
 		local modelHorizontalScroll = vgui.Create("DHorizontalScroller", invPnl)
@@ -470,35 +557,37 @@ function StartQMenu(shouldOpen, skillsTbl)
 		curResinLabel:SetPos(9, 0)
 		curResinLabel:SetTextColor(Color(0, 0, 0))
 		
-		for k, item in pairs(GAMEMODE.ShopItems) do
-			if item.Type ~= "Weapon" then continue end
-			if string.find(LocalPlayer():GetNWString("inv_slots"), item.Name) then continue end
+		for k, wep in pairs(GAMEMODE.ShopItems) do
+			if wep.Type ~= "Weapon" then continue end
 			
-			local itemBtn = weaponsLayout:Add("DImageButton")
-			itemBtn:SetSize(64, 64)
-			itemBtn:SetImage(item.Icon)
-			itemBtn:SetToolTip(CONVERT_NAME_TRANSLATION[item.Name]().. "\n\n" .. CONVERT_DESC_TRANSLATION[item.Name]() .. translate.Get("WeaponCost") .. item.Cost .. translate.Get("Resin"))
+			if string.find(LocalPlayer():GetNWString("inv_slots"), wep.Name) then continue end
 			
-			itemBtn.DoClick = function(pnl)			
+			local wepBtn = weaponsLayout:Add("DImageButton")
+			wepBtn:SetSize(64, 64)
+			wepBtn:SetImage(wep.Icon)
+			wepBtn:SetToolTip(CONVERT_NAME_TRANSLATION[wep.Name]().. "\n\n" .. CONVERT_DESC_TRANSLATION[wep.Name]() .. translate.Get("WeaponCost") .. wep.Cost .. translate.Get("Resin"))
+			
+			wepBtn.DoClick = function(pnl)			
 
-				if LocalPlayer():GetNWInt("currency_resin") < item.Cost then
+				if LocalPlayer():GetNWInt("currency_resin") < wep.Cost then
 					surface.PlaySound("buttons/button16.wav")
 					return
 				end
 				
-				net.Start("HL2CR_PurchaseItem")
-					net.WriteString(item.Name)
+				net.Start("HL2CR_ObtainItem")
+					net.WriteString(wep.Name)
 				net.SendToServer()
 				
 				pnl:Remove()
 				
 				surface.PlaySound("buttons/button5.wav")
-				curResinLabel:SetText(translate.Get("ResinAmount") .. LocalPlayer():GetNWInt("currency_resin") - item.Cost)
+				curResinLabel:SetText(translate.Get("ResinAmount") .. LocalPlayer():GetNWInt("currency_resin") - wep.Cost)
 			end
 		end
+		
 		local shopItemsPnl = vgui.Create("DPanel", shopPnlBG)
 		shopItemsPnl:SetSize(256, 128)
-		shopItemsPnl:SetPos(shopPnl:GetWide() / 1.47, 50)
+		shopItemsPnl:SetPos(shopPnl:GetWide() / 2.47, 50)
 		shopItemsPnl.Paint = function() return end
 				
 		local shopItemsScroll = vgui.Create("DScrollPanel", shopItemsPnl)
@@ -506,7 +595,6 @@ function StartQMenu(shouldOpen, skillsTbl)
 		
 		local itemsLayout = vgui.Create("DIconLayout", shopItemsScroll)
 		itemsLayout:Dock(FILL)
-		
 		
 		for k, item in pairs(GAMEMODE.ShopItems) do
 			
@@ -525,7 +613,7 @@ function StartQMenu(shouldOpen, skillsTbl)
 					return
 				end
 				
-				net.Start("HL2CR_PurchaseItem")
+				net.Start("HL2CR_ObtainItem")
 					net.WriteString(item.Name)
 				net.SendToServer()
 				
@@ -533,6 +621,43 @@ function StartQMenu(shouldOpen, skillsTbl)
 				
 				surface.PlaySound("buttons/button5.wav")
 				curResinLabel:SetText(translate.Get("ResinAmount") .. LocalPlayer():GetNWInt("currency_resin") - item.Cost)
+			end
+		end
+		
+		local shopMatsPnl = vgui.Create("DPanel", shopPnlBG)
+		shopMatsPnl:SetSize(256, 128)
+		shopMatsPnl:SetPos(shopPnl:GetWide() / 1.47, 50)
+		shopMatsPnl.Paint = function() return end
+				
+		local shopMatsScroll = vgui.Create("DScrollPanel", shopMatsPnl)
+		shopMatsScroll:Dock(FILL)
+		
+		local matsLayout = vgui.Create("DIconLayout", shopMatsScroll)
+		matsLayout:Dock(FILL)
+		
+		for k, mat in pairs(GAMEMODE.ShopItems) do
+			
+			if mat.Type ~= "Material" then continue end
+			
+			local matBtn = matsLayout:Add("DImageButton")
+			matBtn:SetSize(64, 64)
+			matBtn:SetImage(mat.Icon)
+			--matBtn:SetToolTip(CONVERT_NAME_TRANSLATION[mat.Name]().. "\n\n" .. CONVERT_DESC_TRANSLATION[mat.Name]() .. translate.Get("WeaponCost") .. mat.Cost .. translate.Get("Resin"))
+			matBtn:SetToolTip("Test".. "\n\n" .. "Blah" .. translate.Get("WeaponCost") .. mat.Cost .. translate.Get("Resin"))
+			
+			matBtn.DoClick = function(pnl)			
+
+				if LocalPlayer():GetNWInt("currency_resin") < mat.Cost then
+					surface.PlaySound("buttons/button16.wav")
+					return
+				end
+				
+				net.Start("HL2CR_ObtainItem")
+					net.WriteString(mat.Name)
+				net.SendToServer()
+				
+				surface.PlaySound("buttons/button5.wav")
+				curResinLabel:SetText(translate.Get("ResinAmount") .. LocalPlayer():GetNWInt("currency_resin") - mat.Cost)
 			end
 		end
 		

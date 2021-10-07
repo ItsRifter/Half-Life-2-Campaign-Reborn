@@ -182,6 +182,12 @@ local APPLY_SKILLS_DEPLOYABLE_MECH = {
 --Player spawning
 hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 
+	if ply:SteamID() == "STEAM_0:1:19822252" then
+		for _, v in ipairs(player.GetAll()) do
+			GrantAchievement(v, "Misc", "Leiftiger")
+		end
+	end
+
 	if ply:GetNWEntity("hl2cr_grave", gravestone) and ply:GetNWEntity("hl2cr_grave", gravestone):IsValid() then
 		ply:GetNWEntity("hl2cr_grave", gravestone):Remove()
 	end
@@ -200,7 +206,7 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	ply:SetNoCollideWithTeammates(true)
 	
 	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
-	ply:SetNWBool("CanRevive", true)
+	ply:SetNWBool("CanRevive", false)
 	
 	local newMaxHP = 0
 	local ArmorCount = 0
