@@ -118,8 +118,12 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		
 		BroadcastMessage(GIMME_A_SECRET[ply.gimmeasecret], ply)
 
-		
-
+		return ""
+	end
+	
+	if text == "!discord" then
+		net.Start("HL2CR_Discord")
+		net.Send(ply)
 		return ""
 	end
 	

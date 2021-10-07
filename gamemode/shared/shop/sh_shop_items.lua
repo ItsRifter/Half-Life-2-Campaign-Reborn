@@ -23,7 +23,8 @@ local nailer = CreateShopItem("The_Nailer_Gun", "Nailed it!", 32575, "materials/
 local unstable_shotgun = CreateShopItem("Unstable_Electric_Shotgun", "Highly unstable\nImmediately throw after use", 50000, "materials/hl2cr/weapon_unstableshotgun.jpg", "Weapon")
 local heavy_sniper = CreateShopItem("BMG_Heavy_Sniper", "A rather heavy sniper\nwith devastating results", 75000, "materials/hl2cr/weapon_bmgsniper.jpg", "Weapon")
 
-local test = CreateShopItem("Test", "Test Item\nYou shouldn't be buying this", 1, "materials/hl2cr/empty.jpg", "Item")
+local test = CreateShopItem("Test", "Test Item\nYou shouldn't be buying this", 900000, "materials/hl2cr/weapon_nailer.jpg", "Item")
+local suit_buff = CreateShopItem("Suit_PWR_Boost", "Test Item\nYou shouldn't be buying this", 900000, "materials/hl2cr/weapon_bmgsniper.jpg", "Item")
 
 table.insert(GM.ShopItems, flaregun)
 table.insert(GM.ShopItems, automatic_pistol)
@@ -34,7 +35,8 @@ table.insert(GM.ShopItems, unstable_shotgun)
 table.insert(GM.ShopItems, heavy_sniper)
 
 
---table.insert(GM.ShopItems, test)
+table.insert(GM.ShopItems, test)
+table.insert(GM.ShopItems, suit_buff)
 
 if SERVER then
 	
@@ -44,13 +46,13 @@ if SERVER then
 		local slotToUpdate = net.ReadString()
 		
 		for i, v in ipairs(GAMEMODE.ShopItems) do
-			if v.Name == slotToUpdate then
-				
-				if v.Type == "Weapon" then
+			if v.Name == slotToUpdate and v.Type == "Weapon" then
 					ply.hl2cr.Inventory.CurWeaponSlot = v.Name
 					ply:SetNWString("inv_weaponslot", ply.hl2cr.Inventory.CurWeaponSlot)
-				end
-			end
+				elseif v.Name == slotToUpdate and v.Type == "Item" then
+					ply.hl2cr.Inventory.CurItemSlot = v.Name
+					ply:SetNWString("inv_itemslot", ply.hl2cr.Inventory.CurItemSlot)
+		    end
 		end
 	end)
 	

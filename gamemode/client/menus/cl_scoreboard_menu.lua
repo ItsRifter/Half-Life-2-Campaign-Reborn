@@ -93,25 +93,46 @@ function ToggleBoard(toggle)
 			
 			if LocalPlayer() != pl then
 				local muteBtn = vgui.Create("DImageButton", panel)
-				muteBtn:SetSize(16, 16)
-				muteBtn:SetPos(panel:GetWide() - 20, 60)
+				muteBtn:SetSize(32, 32)
+				muteBtn:SetPos(panel:GetWide() - 30, 45	)
 				
 				if pl:IsMuted() then
-					muteBtn:SetImage("icon16/sound_mute.png")
+					muteBtn:SetImage( "icon32/muted.png" )
 				else
-					muteBtn:SetImage("icon16/sound.png")
+					muteBtn:SetImage( "icon32/unmuted.png" )
+				end
+
+				muteBtn.PaintOver = function( s, w, h )
+					if ( !IsValid( pl ) ) then return end
+				
+					local a = 255 - math.Clamp( CurTime() - ( s.LastTick or 0 ), 0, 3 ) * 255
+					if ( a <= 0 ) then return end
+					
+					draw.RoundedBox( 4, 0, 0, muteBtn:GetSize()/1.05, muteBtn:GetSize()/1.05, Color( 0, 0, 0, a * 0.75 ) )
+					draw.SimpleText( math.ceil( pl:GetVoiceVolumeScale() * 100 ) .. "%", "DermaDefault", muteBtn:GetSize()/2, muteBtn:GetSize()/2, Color( 255, 255, 255, a ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				end
+
+				muteBtn.OnMouseWheeled = function( s, delta )
+					pl:SetVoiceVolumeScale( pl:GetVoiceVolumeScale() + ( delta / 100 * 5 ) )
+					s.LastTick = CurTime()
 				end
 				
 				muteBtn.DoClick = function()
 					if !pl:IsMuted() then
 						pl:SetMuted( true )
-						muteBtn:SetImage("icon16/sound_mute.png")
+						muteBtn:SetImage( "icon32/muted.png" )
 					else
 						pl:SetMuted( false )
-						muteBtn:SetImage("icon16/sound.png")
+						muteBtn:SetImage( "icon32/unmuted.png" )
 					end
 				end
 			end
+			
+			local playerPing = vgui.Create("DLabel", panel)
+			playerPing:SetPos(80, 45)
+			playerPing:SetText(translate.Get("Ping") .. pl:Ping())
+			playerPing:SetTextColor( Color( 0, 0, 0) )
+			playerPing:SizeToContents()
 		end
 	elseif not toggle and scoreboard:IsValid() then
 		scoreboard:Remove()

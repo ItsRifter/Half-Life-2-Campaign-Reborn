@@ -17,15 +17,37 @@ local function InitData(ply)
 	ply.hl2cr.Exp = ply.hl2cr.Exp or 0
 	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 3000
 	
-	--Skills
+	--Skills (Blanks are for later skills adds, just not to wipe player data every time, when new stuff are added)
 	ply.hl2cr.Skills = ply.hl2cr.Skills or {
 		["Passive"] = {},
+		["Armor"] = {},
 		["Medic"] = {},
+		["Revival"] = {},
 		["Repair"] = {},
 		["Mechanic"] = {},
 		["Grenadier"] = {},
 		["Dropout"] = {},
+		["Blank1"] = {},
+		["Blank2"] = {},
+		["Blank3"] = {},
+		["Blank4"] = {},
+		["Blank5"] = {},
+		["Blank6"] = {},
+		["Blank7"] = {},
+		["Blank8"] = {},
+		["Blank9"] = {},
+		["Blank10"] = {},
+		["Blank11"] = {},
+		["Blank12"] = {},
+		["Blank13"] = {},
+		["Blank14"] = {},
+		["Blank15"] = {},
+		["Blank16"] = {},
+		["Blank17"] = {},
+		["Blank18"] = {},
+		["Blank19"] = {},
 	}
+
 	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints or 0
 	
 	--Pets
@@ -57,8 +79,16 @@ local function InitData(ply)
 	--Inventory
 	ply.hl2cr.Inventory = ply.hl2cr.Inventory or {}
 	ply.hl2cr.Inventory.Slots = ply.hl2cr.Inventory.Slots or {}
+	ply.hl2cr.Inventory.ArmorSlots = ply.hl2cr.Inventory.ArmorSlots or {
+		["Helmet"] = "",
+		["Shoulders"] = "",
+		["Chest"] = "",
+		["Boots"] = "",
+	}
+	
 	ply.hl2cr.Inventory.TotalSlots = ply.hl2cr.Inventory.TotalSlots or 15
 	ply.hl2cr.Inventory.CurWeaponSlot = ply.hl2cr.Inventory.CurWeaponSlot or ""
+	ply.hl2cr.Inventory.CurItemSlot = ply.hl2cr.Inventory.CurItemSlot or ""
 	--ply.hl2cr.Inventory.Weight = ply.hl2cr.Inventory.Weight = 0
 	
 	--Achievement + Progress

@@ -92,8 +92,17 @@ MAPS_COOP_SYNB2 = {
 	"hl2cr_lobby_v2"
 }
 
+MAPS_COOP_RND = {
+	"level_1a",
+	"level_1b",
+	"level_2",
+	"level_3",
+	"level_4a",
+	"level_4b"
+}
+
 function StartMapCountdown()
-		
+	
 	timer.Create("HL2CR_Countdown", 20, 1, function()
 		if game.GetMap() == "d2_lostcoast" then
 			RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
@@ -137,6 +146,12 @@ function StartMapCountdown()
 		for k = 1, #MAPS_COOP_SYNB2 do
 			if game.GetMap() == MAPS_COOP_SYNB2[k] then
 				RunConsoleCommand("changelevel", MAPS_COOP_SYNB2[k+1])
+			end
+		end
+		
+		for k = 1, #MAPS_COOP_RND do
+			if game.GetMap() == MAPS_COOP_RND[k] then
+				RunConsoleCommand("changelevel", MAPS_COOP_RND[k+1])
 			end
 		end
 	end)

@@ -78,6 +78,14 @@ votingTypes["KickPlayer"] = {
 	end
 }
 
+local UPDATE_DIFF_MESSAGE = {
+	[1] = "Very Easy",
+	[2] = "Easy",
+	[3] = "Medium",
+	[4] = "Hard",
+	[5] = "Very Hard",
+}
+
 votingTypes["VoteVEasy"] = {
 	Description = "Set Difficulty to 'Very Easy'?",
 	Callback = function(state)
@@ -85,6 +93,7 @@ votingTypes["VoteVEasy"] = {
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
 		if positive > negative then
 			GetConVar("hl2cr_difficulty"):SetInt(1)
+			BroadcastMessage(VOTE_DIFF .. UPDATE_DIFF_MESSAGE[GetConVar("hl2cr_difficulty"):GetInt()])
 		else
 			BroadcastMessage(VOTE_FAILED)
 		end
@@ -97,6 +106,7 @@ votingTypes["VoteEasy"] = {
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
 		if positive > negative then
 			GetConVar("hl2cr_difficulty"):SetInt(2)
+			BroadcastMessage(VOTE_DIFF .. UPDATE_DIFF_MESSAGE[GetConVar("hl2cr_difficulty"):GetInt()])
 		else
 			BroadcastMessage(VOTE_FAILED)
 		end
@@ -109,6 +119,7 @@ votingTypes["VoteMedium"] = {
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
 		if positive > negative then
 			GetConVar("hl2cr_difficulty"):SetInt(3)
+			BroadcastMessage(VOTE_DIFF .. UPDATE_DIFF_MESSAGE[GetConVar("hl2cr_difficulty"):GetInt()])
 		else
 			BroadcastMessage(VOTE_FAILED)
 		end
@@ -121,6 +132,7 @@ votingTypes["VoteHard"] = {
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
 		if positive > negative then
 			GetConVar("hl2cr_difficulty"):SetInt(4)
+			BroadcastMessage(VOTE_DIFF .. UPDATE_DIFF_MESSAGE[GetConVar("hl2cr_difficulty"):GetInt()])
 		else
 			BroadcastMessage(VOTE_FAILED)
 		end
@@ -133,6 +145,7 @@ votingTypes["VoteVHard"] = {
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
 		if positive > negative then
 			GetConVar("hl2cr_difficulty"):SetInt(5)
+			BroadcastMessage(VOTE_DIFF .. UPDATE_DIFF_MESSAGE[GetConVar("hl2cr_difficulty"):GetInt()])
 		else
 			BroadcastMessage(VOTE_FAILED)
 		end

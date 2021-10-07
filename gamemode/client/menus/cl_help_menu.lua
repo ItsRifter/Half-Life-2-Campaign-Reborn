@@ -23,7 +23,7 @@ function ShowHelpMenu()
 	
 	local warningLabel = vgui.Create("DLabel", welcomePnl)
 	warningLabel:SetPos(helpFrame:GetWide() / 4 - 25, 165)
-	warningLabel:SetText("This gamemode is currently in ALPHA\nExpect bugs and things to change")
+	warningLabel:SetText(translate.Get("AlphaWarning"))
 	warningLabel:SetFont("HL2CR_GamemodeHelp")
 	warningLabel:SizeToContents()
 	
@@ -39,12 +39,12 @@ function ShowHelpMenu()
 	
 	local creditsLabel = vgui.Create("DLabel", exitPnl)
 	creditsLabel:SetPos(helpFrame:GetWide() / 3.25, 25)
-	creditsLabel:SetText("Credits\nCreator: SuperSponer\n\nSpecial Thanks to:\nD3, Nick, Birdman, Niik,\nThe Supreme Combine")
+	creditsLabel:SetText(translate.Get("CreditsHelp"))
 	creditsLabel:SetFont("HL2CR_GamemodeHelp")
 	creditsLabel:SizeToContents()
 	
 	local helpCloseBtn = vgui.Create("DButton", exitPnl)
-	helpCloseBtn:SetText("Start")
+	helpCloseBtn:SetText(translate.Get("PlayBoard"))
 	helpCloseBtn:SetPos(helpFrame:GetWide() / 2 - 50, 250)
 	helpCloseBtn:SetFont("HL2CR_GamemodeHelp")
 	helpCloseBtn:SetSize(100, 50)
@@ -54,9 +54,9 @@ function ShowHelpMenu()
 		helpFrame:Remove()
 	end
 	
-	helpFrame.navbar:AddTab("Welcome", welcomePnl)
-	helpFrame.navbar:AddTab("Useful Info", usefulCmdsPnl)
-	helpFrame.navbar:AddTab("Begin Playing", exitPnl)
+	helpFrame.navbar:AddTab(translate.Get("WelcomeBoard"), welcomePnl)
+	helpFrame.navbar:AddTab(translate.Get("UsefulInfoBoard"), usefulCmdsPnl)
+	helpFrame.navbar:AddTab(translate.Get("BeginPlayBoard"), exitPnl)
 	
 	helpFrame.navbar:SetActive(1)
 end

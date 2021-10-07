@@ -88,10 +88,10 @@ local IMPORTANT_MAPS = {
 }
 
 local function SetCheckpoints()
+	
 	for k, cl in ipairs(ents.FindByClass("trigger_changelevel")) do
 		cl:Remove()
 	end
-
 	
 	if game.GetMap() == "d1_trainstation_01" then
 		TRIGGER_CHANGELEVEL = {
@@ -4048,6 +4048,7 @@ local function SetUpMisc()
 	if game.GetMap() == "d1_town_02a" then
 		local checkpoint = ents.FindByClass("trigger_checkpoint")[1] 
 		checkpoint:AddAchTrigger("HL2", "Hallowed_Ground")
+		print(ents.FindByClass("trigger_checkpoint"))
 	end
 	
 	if file.Exists("hl2cr_data/babycheck.txt", "DATA") then

@@ -46,7 +46,7 @@ SUPERGRAVGUN_MAPS = {
 }
 
 function GM:ShowHelp(ply)
-	--StartCoop()
+	StartCoop()
 	HL2CR_Voting:PlayerVote(ply, true)
 end
 
@@ -203,9 +203,10 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	ply:SetNWBool("CanRevive", true)
 	
 	local newMaxHP = 0
+	local ArmorCount = 0
 	local healing = 0
 	local recharge = 0
-	
+
 	for k, skill in pairs(ply.hl2cr.Skills) do
 		if skill.Name == "Revival" then
 			ply:SetNWBool("CanRevive", true)
@@ -216,23 +217,16 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 				newMaxHP = newMaxHP + 5
 			end
 		end
-	end
-	--[[
-	for k, skill in pairs(ply.hl2cr.Skills) do
-		if APPLY_SKILLS_HEALTH[skill] then
-			newMaxHP = newMaxHP + APPLY_SKILLS_HEALTH[skill]
-			
-		elseif APPLY_SKILLS_CLASS_MEDIC[skill] then
-			healing = healing + APPLY_SKILLS_CLASS_MEDIC[skill]
-			
-		elseif APPLY_SKILLS_CLASS_MEDIC_RECHARGE[skill] then
-			recharge = recharge + APPLY_SKILLS_CLASS_MEDIC_RECHARGE[skill]
-			
-		elseif APPLY_SKILLS_DEPLOYABLE_MECH[skill] and ply.hl2cr.CurClass.Name == "Mechanic" then
-			ply:Give(APPLY_SKILLS_DEPLOYABLE_MECH[skill])
+		if skill.Name == "Armor Boost" and ply.hl2cr.Skills[k].CurInvest then
+			for i = 1, ply.hl2cr.Skills[k].CurInvest do 
+				ArmorCount = ArmorCount + 15
+			end
 		end
 	end
-	--]]
+
+	if ply:GetNWString("inv_itemslot") == "Suit_PWR_Boost" then
+	end
+
 	if game.GetMap() == "d3_citadel_03" and not ON_CITADEL_MAPS then		
 		if player.GetAll()[1] == ply then
 			for k, wep in pairs(SPAWNING_WEAPONS) do
@@ -257,6 +251,7 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	
 	ply:SetMaxHealth(100 + newMaxHP)
 	ply:SetHealth(100 + newMaxHP)
+	ply:SetArmor(ply:Armor() + ArmorCount)
 
 	if CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot] and not (NOSUIT_MAPS[game.GetMap()] or SUPERGRAVGUN_MAPS[game.GetMap()] or game.GetMap() == "d1_trainstation_05") and not ON_CITADEL_MAPS then
 		ply:Give(CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot])
@@ -291,7 +286,7 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 		end
 	end
 	
-	if not table.IsEmpty(ply.hl2cr.CurClass) and not ( NOSUIT_MAPS[game.GetMap()] or SUPERGRAVGUN_MAPS[game.GetMap()] or game.GetMap() == "d1_trainstation_05") and not MAPS_LOBBY[game.GetMap()] then
+	if not table.IsEmpty(ply.hl2cr.CurClass) and not ( NOSUIT_MAPS[game.GetMap()] or SUPERGRAVGUN_MAPS[game.GetMap()] or game.GetMap() == "d1_trainstation_05") then
 		for _, classWep in ipairs(ply.hl2cr.CurClass.Weapons) do
 			ply:Give(classWep)
 		end
@@ -488,12 +483,12 @@ hook.Add("Tick", "HL2CR_AmmoLimiter", function()
 end)
 
 hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
-	if (item:GetClass() == "item_ammo_357" or item:GetClass() == "item_ammo_357_large") and ply:GetAmmoCount("357") >= GetConVar("hl2cr_max_357"):GetInt() then
+	if (item:GetClass() == "item_ammo_357" or item:GetClass() == "item_ammo_357_large" or item:GetClass() == "weapon_357") and ply:GetAmmoCount("357") >= GetConVar("hl2cr_max_357"):GetInt() then
 		ply:RemoveAmmo( ply:GetAmmoCount("357") -GetConVar("hl2cr_max_357"):GetInt(), "357" )
 		return false
 	end
 	
-	if (item:GetClass() == "item_ammo_ar2" or item:GetClass() == "item_ammo_ar2_large") and ply:GetAmmoCount("AR2") >= GetConVar("hl2cr_max_AR2"):GetInt() then		
+	if (item:GetClass() == "item_ammo_ar2" or item:GetClass() == "item_ammo_ar2_large" or item:GetClass() == "weapon_ar2") and ply:GetAmmoCount("AR2") >= GetConVar("hl2cr_max_AR2"):GetInt() then		
 		ply:RemoveAmmo( ply:GetAmmoCount("AR2") -GetConVar("hl2cr_max_AR2"):GetInt(), "AR2" )
 		return false
 	end
@@ -503,17 +498,17 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 		return false
 	end
 	
-	if (item:GetClass() == "item_box_buckshot" or item:GetClass() == "item_ammo_buckshot_large") and ply:GetAmmoCount("Buckshot") >= GetConVar("hl2cr_max_Buckshot"):GetInt() then		
+	if (item:GetClass() == "item_box_buckshot" or item:GetClass() == "item_ammo_buckshot_large" or item:GetClass() == "weapon_shotgun") and ply:GetAmmoCount("Buckshot") >= (GetConVar("hl2cr_max_Buckshot"):GetInt() or 30) then		
 		ply:RemoveAmmo( ply:GetAmmoCount("Buckshot") -GetConVar("hl2cr_max_Buckshot"):GetInt(), "Buckshot" )
 		return false
 	end
 	
-	if item:GetClass() == "item_ammo_crossbow" and ply:GetAmmoCount("XBowBolt") >= GetConVar("hl2cr_max_crossbowbolt"):GetInt() then		
+	if item:GetClass() == ("item_ammo_crossbow" or item:GetClass() == "weapon_crossbow") and ply:GetAmmoCount("XBowBolt") >= GetConVar("hl2cr_max_crossbowbolt"):GetInt() then		
 		ply:RemoveAmmo( ply:GetAmmoCount("XBowBolt") -GetConVar("hl2cr_max_crossbowbolt"):GetInt(), "XBowBolt" )
 		return false
 	end
 
-	if item:GetClass() == "weapon_frag" and ply:GetAmmoCount("Grenade") >= (GetConVar("hl2cr_max_frags"):GetInt() + ply.hl2cr.AmmoGrenade) then		
+	if item:GetClass() == "weapon_frag" and ply:GetAmmoCount("Grenade") >= (GetConVar("hl2cr_max_frags"):GetInt() or 5) then		
 		return false
 	end
 
@@ -522,17 +517,17 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 		return false
 	end
 	
-	if (item:GetClass() == "item_ammo_pistol" or item:GetClass() == "item_ammo_pistol_large") and ply:GetAmmoCount("Pistol") >= GetConVar("hl2cr_max_Pistol"):GetInt() then		
+	if (item:GetClass() == "item_ammo_pistol" or item:GetClass() == "item_ammo_pistol_large" or item:GetClass() == "weapon_pistol") and ply:GetAmmoCount("Pistol") >= GetConVar("hl2cr_max_Pistol"):GetInt() then		
 		ply:RemoveAmmo( ply:GetAmmoCount("Pistol") -GetConVar("hl2cr_max_Pistol"):GetInt(), "Pistol" )
 		return false
 	end
 	
-	if item:GetClass() == "item_rpg_round" and ply:GetAmmoCount("RPG_Round") >= GetConVar("hl2cr_max_RPG_Round"):GetInt() then		
+	if (item:GetClass() == "item_rpg_round" or item:GetClass() == "weapon_rpg") and ply:GetAmmoCount("RPG_Round") >= GetConVar("hl2cr_max_RPG_Round"):GetInt() then		
 		ply:RemoveAmmo( ply:GetAmmoCount("RPG_Round") -GetConVar("hl2cr_max_RPG_Round"):GetInt(), "RPG_Round" )
 		return false
 	end
 	
-	if (item:GetClass() == "item_ammo_smg1" or item:GetClass() == "item_ammo_smg1_large") and ply:GetAmmoCount("SMG1") >= GetConVar("hl2cr_max_SMG1"):GetInt() then		
+	if (item:GetClass() == "item_ammo_smg1" or item:GetClass() == "item_ammo_smg1_large" or item:GetClass() == "weapon_smg1") and ply:GetAmmoCount("SMG1") >= GetConVar("hl2cr_max_SMG1"):GetInt() then		
 		ply:RemoveAmmo( ply:GetAmmoCount("SMG1") -GetConVar("hl2cr_max_SMG1"):GetInt(), "SMG1" )
 		return false
 	end
@@ -545,7 +540,7 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 	if item:GetClass() == "item_suit" then
 		for _, p in ipairs(player.GetAll()) do
 			p:SetWalkSpeed(200)
-			p:SetRunSpeed(350)
+			p:SetRunSpeed(320)
 			if game.GetMap() == "d1_trainstation_05" then
 				p:Give("admire_hands")
 				timer.Simple(0.1, function()
@@ -768,19 +763,18 @@ end)
 hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup, dmgInfo )
 		
 	local hitMulti = GetConVar("hl2cr_difficulty"):GetInt() - 1
+	local hitMultiSkill = GetConVar("hl2cr_difficulty"):GetInt()
 	
 	if hitMulti <= 0 then return end
-
-	if hitgroup == HITGROUP_HEAD then
-		hitMulti = hitMulti * 1.25
-	elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
-		hitMulti = hitMulti * 1
-	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-		hitMulti = hitMulti * 0.5
-	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-		hitMulti = hitMulti * 0.25	
-	end
-	
+	    if hitgroup == HITGROUP_HEAD then
+		    hitMulti = hitMulti * 1.25
+	    elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
+		    hitMulti = hitMulti * 1
+	    elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+		    hitMulti = hitMulti * 0.5
+	    elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+		    hitMulti = hitMulti * 0.25	
+	    end
 	dmgInfo:ScaleDamage(hitMulti)
 end)
 

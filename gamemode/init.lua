@@ -44,6 +44,7 @@ AddCSLuaFile("client/menus/cl_help_menu.lua")
 AddCSLuaFile("client/menus/cl_settings_menu.lua")
 AddCSLuaFile("client/menus/cl_voice_menu.lua")
 AddCSLuaFile("client/menus/cl_qmenu.lua")
+AddCSLuaFile("client/menus/cl_achievement_menu.lua")
 AddCSLuaFile("client/hud/cl_hitboxrender.lua")
 AddCSLuaFile("client/hud/cl_ach.lua")
 
@@ -101,8 +102,10 @@ util.AddNetworkString("HL2CR_UpdateSlot")
 util.AddNetworkString("HL2CR_ApplySettings")
 util.AddNetworkString("HL2CR_UpdateModel")
 util.AddNetworkString("HL2CR_QMenuUpdate")
+util.AddNetworkString("HL2CR_Discord")
 
 hook.Add("PrePACConfigApply", "HL2CR_DisablePac3Autoload", function(ply, outfit_data)
+	ply:SetModel(ply.hl2cr.Model)
 	return false
 end)
 

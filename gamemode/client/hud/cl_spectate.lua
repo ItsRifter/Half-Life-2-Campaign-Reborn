@@ -22,19 +22,19 @@ function StartClientSpectate(shouldSpectate)
 
 		specPanel:MoveTo(0, ScrH() / 1.125, 2, 0, -1, nil )
 		specUser = vgui.Create("DLabel", specPanel)
-		specUser:SetText("Spectating: ")
+		specUser:SetText(translate.Get("Spectate"))
 		specUser:SetFont("HL2CR_SpectatePlayer")
 		specUser:SizeToContents()
-		specUser:SetPos(0, 12.5)
+		specUser:SetPos(10, 12.5)
 		
 		specTime = vgui.Create("DLabel", specPanel)
 		specTime:SetText("")
 		
 		if wasKilled then
-			specTime:SetText("Respawn in: " .. math.Round(timeForRespawn - CurTime()))
+			specTime:SetText(translate.Get("Respawn") .. math.Round(timeForRespawn - CurTime()))
 			specTime:SetFont("HL2CR_SpectatePlayer")
 			specTime:SizeToContents()
-			specTime:SetPos(specPanel:GetWide() - 375, 12.5)
+			specTime:SetPos(specPanel:GetWide() - 400, 12.5)
 		end
 	else
 		if specFrame and specFrame:IsValid() then
@@ -47,19 +47,22 @@ hook.Add("Think", "HL2CR_SpectateThink", function()
 	if not isSpectating or not specFrame then return end
 
 	if specUsername == nil then
-		specUser:SetText("Spectating: Nobody")
+		specUser:SetText(translate.Get("SpecNobody"))
 	else 
-		specUser:SetText("Spectating: " .. specUsername)
+		specUser:SetText(translate.Get("Spectate") .. specUsername)
 	end
 	specUser:SizeToContents()
 	
-	specTime:SetText("Respawn in: " .. math.Round(timeForRespawn - CurTime()))
+	specTime:SetText(translate.Get("Respawn") .. math.Round(timeForRespawn - CurTime()))
 	specTime:SizeToContents()
 	
 	if (timeForRespawn - 0.5) < CurTime() then
 		specFrame:Close()
 		isSpectating = false
 		specUsername = nil
+		if qMenuTabs and !specFrame:IsValid() then
+			qMenuTabs:Remove() 
+		end 
 	end
 end)
 

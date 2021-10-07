@@ -66,7 +66,7 @@ end
 	["npc_combine_synth"] = "Synth",
 --]]
 
-hook.Add("EntityTakeDamage", "HL2CR_NPCDmg", function(ent, dmgInfo)
+hook.Add("EntityTakeDamage", "HL2CR_PlayerToNPCDmgMisc", function(ent, dmgInfo)
 	local dmg = dmgInfo:GetDamage()
 	local att = dmgInfo:GetAttacker()
 	
@@ -118,22 +118,22 @@ hook.Add("OnEntityCreated", "HL2CR_NPCCreated", function(ent)
 end)
 
 
-hook.Add( "ScaleNPCDamage", "HL2CR_ScaleNPCDMG", function( npc, hitgroup, dmgInfo )
+hook.Add( "ScaleNPCDamage", "HL2CR_PlayerToNPCDMG", function( npc, hitgroup, dmgInfo )
 	
 	if npc:IsFriendly() or npc:GetClass() == "npc_citizen" then return end
 	
-	local hitDivide = GetConVar("hl2cr_difficulty"):GetInt()
+	local hitDivide = GetConVar("hl2cr_difficulty"):GetInt() + 1
 	
 	if hitgroup == HITGROUP_HEAD then
-		hitDivide = hitDivide * 2.35
+		hitDivide = 2
 	elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
-		hitDivide = hitDivide * 2.05
+		hitDivide = 1
 	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-		hitDivide = hitDivide * 1.65
+		hitDivide = 0.75
 	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-		hitDivide = hitDivide * 1.15
+		hitDivide = 0.25
 	end
 	
 	local finalDMG = dmgInfo:GetDamage() / hitDivide
-	dmgInfo:ScaleDamage(finalDMG)
+	dmgInfo:SetDamage(finalDMG)
 end)

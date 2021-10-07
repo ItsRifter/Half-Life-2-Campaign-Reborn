@@ -117,26 +117,26 @@ function ResultScreen(tblResults)
 	
 	if totalAchNames != "\n" then
 		local achsLabel = vgui.Create("DLabel", endFrame)
-		achsLabel:SetPos(ScrW() / 2.61224, 100)
+		achsLabel:SetPos(ScrW() / 2.61224, 25)
 		achsLabel:SetAlpha(0)
 		achsLabel:SetText(translate.Get("StatAchievement") .. totalAchNames)
 		achsLabel:SetFont("HL2CR_EndMapStats")
 		achsLabel:SizeToContents()
 		
 		achsLabel:AlphaTo(255, 2, 0, nil)
-		achsLabel:MoveTo(ScrW() / 2.61224, 500, 1, 0, 0.5, nil)
+		achsLabel:MoveTo(ScrW() / 2.61224, 375, 1, 0, 0.5, nil)
 	end
 	
 	if totalBonuses != "" then
 		local bonusesLabel = vgui.Create("DLabel", endFrame)
-		bonusesLabel:SetPos(ScrW() / 2.3703703, 100)
+		bonusesLabel:SetPos(ScrW() / 2.3703703, 50)
 		bonusesLabel:SetAlpha(0)
 		bonusesLabel:SetText(translate.Get("StatBonus") .. totalBonuses)
 		bonusesLabel:SetFont("HL2CR_EndMapStats")
 		bonusesLabel:SizeToContents()
 		
 		bonusesLabel:AlphaTo(255, 2, 0, nil)
-		bonusesLabel:MoveTo(ScrW() / 2.3703703, 600, 1, 0, 0.5, nil)
+		bonusesLabel:MoveTo(ScrW() / 2.3703703, 500, 1, 0, 0.5, nil)
 	end
 	
 	local closeBtn = vgui.Create("DButton", endFrame)

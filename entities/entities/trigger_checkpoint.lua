@@ -111,3 +111,10 @@ end
 function ENT:AddPointPos(vec)
 	table.insert(Checkpoints.PointPos, vec)
 end
+
+function ENT:AddAchTrigger(achList, achName) -- was deleted (d1_town_02a error 4050 ach)
+	AchTrigger = {
+		achList,
+		achName
+	}
+end

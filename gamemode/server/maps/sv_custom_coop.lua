@@ -1,5 +1,9 @@
 local function SetCheckpoints()
 	
+	for k, cl in ipairs(ents.FindByClass("trigger_changelevel")) do
+		cl:Remove()
+	end
+	
 	if game.GetMap() == "level02_synb2_tricks_and_traps" then
 
 		TRIGGER_CHECKPOINT = {
@@ -62,6 +66,55 @@ local function SetCheckpoints()
 		CHECKPOINT_POS = {
 			Vector(1483, 207, -1363),		Vector(1440, 487, -2078)
 		}
+	elseif game.GetMap() == "level_1a" then
+	
+		TRIGGER_CHANGELEVEL = {
+			Vector(1933, 1166, 355),	Vector(1874, 1082, 212)
+		}
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(-253, -2045, 3), 		Vector(-97, -1941, 107),
+			Vector(0, -1006, 256), 		Vector(-63, -913, 137),
+			Vector(535, 1113, -62), 		Vector(694, 1527, 114),
+			Vector(1161, 1528, 258), 		Vector(1221, 1426, 375)
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(-187, -1988, 24),		Vector(-21, -956, 146),
+			Vector(681, 1348, -48),		Vector(1196, 1485, 277)
+		}
+		
+		CHECKPOINT_FUNC_2 = function()
+			game.SetGlobalState("antlion_allied", 1)
+		end
+		
+		CHECKPOINT_FUNC_4 = function()
+			ents.FindByName("FieldLaser")[1]:Remove()
+			timer.Simple(8, function()
+				ents.FindByName("Brenda")[1]:SetPos(Vector(1401, 1023, -42))
+			end)
+		end
+		
+		
+	end
+	
+	if TRIGGER_CHANGELEVEL then
+		Changelevel = ents.Create("trigger_changelevel")
+		Changelevel.Min = Vector(TRIGGER_CHANGELEVEL[1])
+		Changelevel.Max = Vector(TRIGGER_CHANGELEVEL[2])
+		Changelevel.Pos = Vector(TRIGGER_CHANGELEVEL[2]) - ( ( Vector(TRIGGER_CHANGELEVEL[2]) - Vector(TRIGGER_CHANGELEVEL[1])) / 2 )
+		Changelevel:SetPos(Changelevel.Pos)
+		Changelevel:Spawn()
+			
+		Changelevel.lambdaModel = ents.Create("prop_dynamic")
+		Changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
+		Changelevel.lambdaModel:SetPos(Changelevel.Pos)
+		Changelevel.lambdaModel:Spawn()
+		Changelevel.lambdaModel:SetName("lambdaCheckpoint")
+		Changelevel.lambdaModel:ResetSequence("idle")
+		Changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
+		
+		Changelevel.Func = CHANGELEVEL_FUNC
 	end
 	
 	if TRIGGER_CHECKPOINT then
@@ -84,7 +137,6 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_1
-		
 		end
 		
 		if TRIGGER_CHECKPOINT[3] and TRIGGER_CHECKPOINT[4] then
@@ -105,7 +157,6 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_2
-			
 		end
 		
 		if TRIGGER_CHECKPOINT[5] and TRIGGER_CHECKPOINT[6] then
@@ -126,7 +177,6 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_3
-			
 		end
 		
 		if TRIGGER_CHECKPOINT[7] and TRIGGER_CHECKPOINT[8] then
@@ -147,7 +197,6 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_4
-			
 		end
 		
 		if TRIGGER_CHECKPOINT[9] and TRIGGER_CHECKPOINT[10] then
@@ -168,7 +217,6 @@ local function SetCheckpoints()
 			Checkpoint.lambdaModel:SetMaterial(Checkpoint.Mat)
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_4
-			
 		end
 		
 	end
@@ -220,6 +268,15 @@ local COOP_WEAPONS = {
 	},
 	
 	["level06_synb2_base"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_physcannon",
+	},
+	
+	["level07_synb2_scary_dark_house"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_physcannon",
+	},
+	["level08_synb2_a_place_to_die"] = {
 		[1] = "weapon_crowbar",
 		[2] = "weapon_physcannon",
 	},
@@ -319,6 +376,35 @@ local MAP_LOGIC = {
 		ents.FindByName("countoto")[1]:Fire("AddOutput", "OnHitMax triggerhook:RunCode")
 	
 	end,
+	
+	["level07_synb2_scary_dark_house"] = function(mapLua)
+		
+		local npc_vortigaunt = {
+			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
+		}
+		
+		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
+		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+		ents.FindByName("count")[1]:Fire("AddOutput", "OnHitMax triggerhook:RunCode")
+	
+	end,
+	
+	["level08_synb2_a_place_to_die"] = function(mapLua)
+		
+		local npc_vortigaunt = {
+			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
+		}
+		local npc_antlion = {
+			["npc_antlion"] = {xpMin = 12, xpMax = 27},
+		}
+		
+		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
+		table.Merge(RANDOM_XP_BASED_NPC, npc_antlion)
+		
+		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+		
+		ents.FindByName("make_ag1")[1]:Fire("AddOutput", "OnAllSpawnedDead triggerhook:RunCode")
+	end,
 }
 
 local ITEMS = {
@@ -348,7 +434,7 @@ local ITEMS = {
 	
 	["item_ammo_crossbow"] = "item_ammo_crossbow",
 	
-	["item_ammo_rpg"] = "item_ammo_rpg",
+	["item_rpg_round"] = "item_rpg_round",
 	
 	["weapon_frag"] = "weapon_frag",
 
@@ -365,7 +451,11 @@ local WEAPONS = {
 	["weapon_ar2"] = "weapon_ar2",
 	["weapon_shotgun"] = "weapon_shotgun",
 	["weapon_crossbow"] = "weapon_crossbow",
-	["weapon_rpg"] = "weapon_rpg"
+	["weapon_rpg"] = "weapon_rpg",
+	["weapon_deagle"] = "weapon_deagle",
+	["weapon_mg1"] = "weapon_mg1",
+	["weapon_mp5k"] = "weapon_mp5k",
+	["weapon_sl8"] = "weapon_sl8"
 
 }
 
