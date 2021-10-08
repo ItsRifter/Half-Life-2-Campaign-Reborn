@@ -92,6 +92,13 @@ MAPS_COOP_SYNB2 = {
 	"hl2cr_lobby_v2"
 }
 
+NightmareHouse = {
+	"nh1remake1_fixed",
+	"nh2c1_v2",
+	"nh2c2_v2",
+	"hl2cr_lobby_v2"
+}
+
 MAPS_COOP_RND = {
 	"level_1a",
 	"level_1b",
@@ -154,6 +161,12 @@ function StartMapCountdown()
 				RunConsoleCommand("changelevel", MAPS_COOP_RND[k+1])
 			end
 		end
+		
+		for k = 1, #NightmareHouse do
+			if game.GetMap() == NightmareHouse[k] then
+				RunConsoleCommand("changelevel", NightmareHouse[k+1])
+			end
+		end
 	end)
 end
 
@@ -181,3 +194,11 @@ function InitMap()
 		StartCoop()
 	end
 end
+
+net.Receive("HL2CR_VoteCustomMap", function(len, ply)
+	if not ply then return end
+	
+	local mapToLoad = net.ReadString()
+	
+	HL2CR_Voting:StartVote(ply, mapToLoad)
+end)

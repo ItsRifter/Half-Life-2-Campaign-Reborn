@@ -39,28 +39,22 @@ if SERVER then
 		for i, v in ipairs(GAMEMODE.PlayerSkills) do
 			if v.Name == skillToAdd and v.Class == classAssign then
 			
-				if ply.hl2cr.Skills[classAssign]["CurInvest"] == nil then -- how the fuck it starts from nil
-					ply.hl2cr.Skills[classAssign]["CurInvest"] = 1
+				if ply.hl2cr.Skills[classAssign]["Invested"] == nil then
+					ply.hl2cr.Skills[classAssign]["Invested"] = 1
 				else
-					ply.hl2cr.Skills[classAssign]["CurInvest"] = ply.hl2cr.Skills[classAssign]["CurInvest"] + 1
+					ply.hl2cr.Skills[classAssign]["Invested"] = ply.hl2cr.Skills[classAssign]["Invested"] + 1
 				end
+				
 				local updateTbl = {
 					["Name"] = v.Name,
 					["Max"] = v.Max,
-					["CurInvest"] = ply.hl2cr.Skills[classAssign]["CurInvest"],
+					["Invested"] = ply.hl2cr.Skills[classAssign]["Invested"],
 				}
-				for i, v in pairs(ply.hl2cr.Skills) do 
-			
-					for k, l in pairs(v) do
-						
-					end
-				end
-				
-				if table.IsEmpty(ply.hl2cr.Skills[classAssign]) then
-				end
+								
 				table.Merge(ply.hl2cr.Skills[classAssign], updateTbl)
-				if ply.hl2cr.Skills[classAssign]["CurInvest"] then
-				ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints - 1
+				
+				if ply.hl2cr.Skills[classAssign]["Invested"] then
+					ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints - 1
 				end
 				ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)
 			end
@@ -71,5 +65,5 @@ end
 --[[
 	print(v.Max)
 	print(v.Name)
-	print(ply.hl2cr.Skills[classAssign]["CurInvest"] + 1)	
+	print(ply.hl2cr.Skills[classAssign]["Invested"] + 1)	
 ]]--

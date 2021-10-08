@@ -1,7 +1,11 @@
-	local function SetCheckpoints()
+local function SetCheckpoints()
 	
 	for k, cl in ipairs(ents.FindByClass("trigger_changelevel")) do
 		cl:Remove()
+	end
+	
+	for k, clcoop in ipairs(ents.FindByClass("trigger_changelevel_coop")) do
+		clcoop:Remove()
 	end
 	
 	if game.GetMap() == "level02_synb2_tricks_and_traps" then
@@ -66,15 +70,28 @@
 		CHECKPOINT_POS = {
 			Vector(1483, 207, -1363),		Vector(1440, 487, -2078)
 		}
+		
+	elseif game.GetMap() == "level08_synb2_a_place_to_die" then
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(-2239, -1341, 73), 		Vector(-2352, -961, 384),
+			Vector(-6304, -3289, -3124), 		Vector(-6179, -3210, -3254),
+			Vector(-3906, -3890, -3360), 		Vector(-4168, -4127, -3554)
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(-2272, -1174, 82),		Vector(-6245, -3363, -3244),
+			Vector(-4284, -3987, -4069)		
+		}
 	elseif game.GetMap() == "level_1a" then
 	
-		TRIGGER_CHANGELEVEL = {
-			Vector(1860, 1011, 256),	Vector(1874, 1082, 212)
+		TRIGGER_CHANGELEVEL_COOP = {
+			Vector(1932, 1184, 376),	Vector(1873, 1091, 203)
 		}
 	
 		TRIGGER_CHECKPOINT = {
 			Vector(-253, -2045, 3), 		Vector(-97, -1941, 107),
-			Vector(0, -1006, 256), 		Vector(-63, -913, 137),
+			Vector(0, -1006, 256), 			Vector(-63, -913, 137),
 			Vector(535, 1113, -62), 		Vector(694, 1527, 114),
 			Vector(1161, 1528, 258), 		Vector(1221, 1426, 375)
 		}
@@ -95,14 +112,65 @@
 			end)
 		end
 		
+	elseif game.GetMap() == "nh1remake1_fixed" then
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(465, 74, -237), 		Vector(369, -38, -361),
+			Vector(702, -1186, -108), 		Vector(593, -1255, -233),
+			Vector(1392, -1024, -415), 		Vector(1558, -1118, -670),
+			Vector(398, -595, 136), 		Vector(329, -702, 9)
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(451, 9, -352),		Vector(645, -1235, -221),
+			Vector(1500, -1073, -597),		Vector(481, -658, 25)
+		}
+	elseif game.GetMap() == "nh2c1_v2" then
+		
+		TRIGGER_CHANGELEVEL_COOP = {
+			Vector(-1420, -286, 4),		Vector(-1521, -218, 89)
+		}
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(-830, -376, 5), 		Vector(-711, -274, 92),
+			Vector(158, 684, 1), 		Vector(-38, 772, 126),
+			Vector(-1409, 382, 1), 		Vector(-1492, 230, 124)
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(72, 760, 6),		Vector(72, 760, 6),
+			Vector(-1462, 312, 10)
+		}
+	elseif game.GetMap() == "nh2c2_v2" then
+		
+		TRIGGER_CHANGELEVEL_COOP = {
+			Vector(-354, -3618, 3841),		Vector(-474, -3741, 3724)
+		}
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(-1530, -10, 2683), 		Vector(-1423, -131, 2562),
+			Vector(-2472, -1857, 2688), 		Vector(-2374, -2045, 2563),
+			Vector(-2369, -2813, 2560), 		Vector(-2437, -2690, 2687)
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(-1605, -52, 2572),		Vector(-2453, -1946, 2581),
+			Vector(-2431, -2751, 2576)
+		}
+
+		CHANGELEVEL_COOP_FUNC = function()
+			for _, v in ipairs(player.GetAll()) do
+				v:SetPos(Vector(-410, -3688, 3919))
+			end
+		end
 		
 	end
-	
-	if TRIGGER_CHANGELEVEL then
+
+	if TRIGGER_CHANGELEVEL_COOP then
 		Changelevel = ents.Create("trigger_changelevel_coop")
-		Changelevel.Min = Vector(TRIGGER_CHANGELEVEL[1])
-		Changelevel.Max = Vector(TRIGGER_CHANGELEVEL[2])
-		Changelevel.Pos = Vector(TRIGGER_CHANGELEVEL[2]) - ( ( Vector(TRIGGER_CHANGELEVEL[2]) - Vector(TRIGGER_CHANGELEVEL[1])) / 2 )
+		Changelevel.Min = Vector(TRIGGER_CHANGELEVEL_COOP[1])
+		Changelevel.Max = Vector(TRIGGER_CHANGELEVEL_COOP[2])
+		Changelevel.Pos = Vector(TRIGGER_CHANGELEVEL_COOP[2]) - ( ( Vector(TRIGGER_CHANGELEVEL_COOP[2]) - Vector(TRIGGER_CHANGELEVEL_COOP	[1])) / 2 )
 		Changelevel:SetPos(Changelevel.Pos)
 		Changelevel:Spawn()
 			
@@ -114,9 +182,9 @@
 		Changelevel.lambdaModel:ResetSequence("idle")
 		Changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
 		
-		Changelevel.Func = CHANGELEVEL_FUNC
+		Changelevel.Func = CHANGELEVEL_COOP_FUNC
 	end
-	
+
 	if TRIGGER_CHECKPOINT then
 	
 		if TRIGGER_CHECKPOINT[1] and TRIGGER_CHECKPOINT[2] then
@@ -218,26 +286,6 @@
 			
 			Checkpoint.Func = CHECKPOINT_FUNC_4
 		end
-		
-	end
-	
-	if TRIGGER_CHANGELEVEL then
-		Changelevel = ents.Create("trigger_changelevel")
-		Changelevel.Min = Vector(TRIGGER_CHANGELEVEL[1])
-		Changelevel.Max = Vector(TRIGGER_CHANGELEVEL[2])
-		Changelevel.Pos = Vector(TRIGGER_CHANGELEVEL[2]) - ( ( Vector(TRIGGER_CHANGELEVEL[2]) - Vector(TRIGGER_CHANGELEVEL[1])) / 2 )
-		Changelevel:SetPos(Changelevel.Pos)
-		Changelevel:Spawn()
-			
-		Changelevel.lambdaModel = ents.Create("prop_dynamic")
-		Changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
-		Changelevel.lambdaModel:SetPos(Changelevel.Pos)
-		Changelevel.lambdaModel:Spawn()
-		Changelevel.lambdaModel:SetName("lambdaCheckpoint")
-		Changelevel.lambdaModel:ResetSequence("idle")
-		Changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
-		
-		Changelevel.Func = CHANGELEVEL_FUNC
 	end
 end
 
@@ -276,9 +324,15 @@ local COOP_WEAPONS = {
 		[1] = "weapon_crowbar",
 		[2] = "weapon_physcannon",
 	},
+	
 	["level08_synb2_a_place_to_die"] = {
 		[1] = "weapon_crowbar",
 		[2] = "weapon_physcannon",
+	},
+	
+	["nh2c2_v2"] = {
+		[1] = "weapon_nh_hatchet",
+		[2] = "weapon_nh_colt",
 	},
 	
 }
@@ -404,6 +458,101 @@ local MAP_LOGIC = {
 		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		
 		ents.FindByName("ag1")[1]:Fire("AddOutput", "OnDeath triggerhook:RunCode")
+	end,
+	
+	["nh1remake1_fixed"] = function(mapLua)	
+		local axe = ents.Create("weapon_nh_hatchet")
+		axe:SetPos(ents.FindByClass("weapon_crowbar")[1]:GetPos())
+		axe:SetAngles(ents.FindByClass("weapon_crowbar")[1]:GetAngles())
+		axe:Spawn()
+		
+		ents.FindByClass("weapon_crowbar")[1]:Remove()
+		
+		local pistol = ents.Create("weapon_nh_colt")
+		pistol:SetPos(ents.FindByClass("weapon_pistol")[1]:GetPos())
+		pistol:SetAngles(ents.FindByClass("weapon_pistol")[1]:GetAngles())
+		pistol:Spawn()
+		
+		ents.FindByClass("weapon_pistol")[1]:Remove()
+		
+		local magnum = ents.Create("weapon_nh_revolver")
+		magnum:SetPos(ents.FindByClass("weapon_357")[1]:GetPos())
+		magnum:SetAngles(ents.FindByClass("weapon_357")[1]:GetAngles())
+		magnum:Spawn()
+		
+		ents.FindByClass("weapon_357")[1]:Remove()
+		
+		local shotgun = ents.Create("weapon_nh_shotgun")
+		shotgun:SetPos(ents.FindByClass("weapon_shotgun")[1]:GetPos())
+		shotgun:SetAngles(ents.FindByClass("weapon_shotgun")[1]:GetAngles())
+		shotgun:Spawn()
+		
+		ents.FindByClass("weapon_shotgun")[1]:Remove()
+		
+		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+		
+		ents.FindByName("teleport2")[1]:Fire("AddOutput", "OnStartTouch triggerhook:RunCode")
+	end,
+	
+	["nh2c1_v2"] = function(mapLua)	
+		
+		local pistol = ents.Create("weapon_nh_colt")
+		pistol:SetPos(Vector(-1473, 380, 62))
+		pistol:SetAngles(Angle(0, -180, 0))
+		pistol:Spawn()
+		
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor1:SetCamera('snow_camera')")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor2:SetCamera('snow_camera')")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor3:SetCamera('snow_camera')")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor4:SetCamera('snow_camera')")
+		pistol:Fire("AddOutput", "OnPlayerPickup monitor_1:SetCamera('snow_camera')")
+		pistol:Fire("AddOutput", "OnPlayerPickup lab_mic:SetSpeakerName('TV_speaker')")
+		pistol:Fire("AddOutput", "OnPlayerPickup sec_room_door:Close")
+		pistol:Fire("AddOutput", "OnPlayerPickup sec_room_door:Lock")
+		
+		pistol:Fire("AddOutput", "OnPlayerPickup whitenoise_sound1:PlaySound:0:2")
+		pistol:Fire("AddOutput", "OnPlayerPickup tv_sound1:PlaySound:0:2")
+		
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor2:Enable:0:3")
+		pistol:Fire("AddOutput", "OnPlayerPickup tv_sound1:PlaySound:0:3")
+		
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor3:Enable:0:4")
+		pistol:Fire("AddOutput", "OnPlayerPickup tv_sound1:PlaySound:0:4")
+		
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor4:Enable:0:5")
+		pistol:Fire("AddOutput", "OnPlayerPickup tv_sound1:PlaySound:0:5")
+		
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor1:SetCamera('lab_camera'):0:7")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor2:SetCamera('lab_camera'):0:7")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor3:SetCamera('lab_camera'):0:7")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor4:SetCamera('lab_camera'):0:7")
+		pistol:Fire("AddOutput", "OnPlayerPickup monitor_1:SetCamera('lab_camera'):0:7")
+		
+		pistol:Fire("AddOutput", "OnPlayerPickup doctor_scriptseq:BeginSequence:0:7")
+		
+		ents.FindByName("woman_eleroom_seq")[1]:Fire("AddOutput", "OnBeginSequence sec_room_wall:Kill:0:-1")
+	end,
+	
+	["nh2c2_v2"] = function(mapLua)	
+		local npc_stalker = {
+			["npc_stalker"] = true
+		}
+		table.Merge(FRIENDLY_NPCS, npc_stalker)
+		
+		ents.FindByClass("info_player_start")[1]:SetParent(ents.FindByName("elevator_parts")[1])
+		
+		ents.FindByName("speed")[1]:Remove()
+		
+		ents.FindByName("nurse1")[1]:Fire("AddOutput", "OnWake triggerhook:RunPassedCode:hook.Run('ReduceSpeed'):0:-1")
+		
+		ents.FindByName("dreamhall_doors")[1]:Fire("AddOutput", "OnClose triggerhook:RunPassedCode:hook.Run('FixSpeed'):0:-1")
+		ents.FindByName("doorzombie_triggerlook")[1]:Fire("AddOutput", "OnTrigger firstdoor_door:Open")
+		ents.FindByName("speed2")[1]:Remove()
+		
+		for _, zoom in ipairs(ents.FindByClass("env_zoom")) do
+			--zoom:Remove()
+		end
+		
 	end,
 }
 
@@ -531,12 +680,32 @@ local function SetUpMisc()
 	end)
 end
 
+hook.Add("ReduceSpeed", "HL2CR_NH2_ReduceSpeed", function()
+	for _, v in ipairs(player.GetAll()) do
+		v:SetWalkSpeed(125)
+		v:SetRunSpeed(125)
+	end
+end)
+
+hook.Add("FixSpeed", "HL2CR_NH2_FixSpeed", function()
+	for _, v in ipairs(player.GetAll()) do
+		v:SetWalkSpeed(200)
+		v:SetRunSpeed(320)
+	end
+end)
+
 hook.Add("EndCoopMap", "HL2CR_EndCoop", function()
 	for _, v in ipairs(player.GetAll()) do
 		v:SetTeam(TEAM_COMPLETED_MAP)
 		EnableSpectate(v)
 		ShowMapResults(v)
+		
+		if game.GetMap() == "nh1remake1_fixed" then
+			GrantAchievement(v, "Custom", "The_Beginning")
+		end
 	end
+	
+	
 	
 	net.Start("HL2CR_MapCountdown")
 	net.Broadcast()

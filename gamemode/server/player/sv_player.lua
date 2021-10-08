@@ -46,7 +46,6 @@ SUPERGRAVGUN_MAPS = {
 }
 
 function GM:ShowHelp(ply)
-	StartCoop()
 	HL2CR_Voting:PlayerVote(ply, true)
 end
 
@@ -179,6 +178,10 @@ local APPLY_SKILLS_DEPLOYABLE_MECH = {
 	["Controllable Drone"] = "weapon_controllable_drone"
 }
 
+local APPLY_ARMOR_RESIST_POINTS = {
+	
+}
+
 --Player spawning
 hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 
@@ -212,19 +215,21 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	local ArmorCount = 0
 	local healing = 0
 	local recharge = 0
-
+	
+	ply.totalArmorRes = 0
+	
 	for k, skill in pairs(ply.hl2cr.Skills) do
 		if skill.Name == "Revival" then
 			ply:SetNWBool("CanRevive", true)
 		end
 		
-		if skill.Name == "Health Boost" and ply.hl2cr.Skills[k].CurInvest then
-			for i = 1, ply.hl2cr.Skills[k].CurInvest do 
+		if skill.Name == "Health Boost" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
 				newMaxHP = newMaxHP + 5
 			end
 		end
-		if skill.Name == "Armor Boost" and ply.hl2cr.Skills[k].CurInvest then
-			for i = 1, ply.hl2cr.Skills[k].CurInvest do 
+		if skill.Name == "Armor Boost" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
 				ArmorCount = ArmorCount + 15
 			end
 		end
@@ -622,10 +627,6 @@ RANDOM_XP_BASED_NPC = {
 	["npc_turret_ground"] = {xpMin = 5, xpMax = 25},
 }
 
-local RESTRICT_MAPS_ANTLIONS = {
-	
-}
-
 hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 	
 	local player = nil
@@ -685,7 +686,7 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 		end
 		
 		
-	elseif attacker:IsNextBot() and attacker:GetOwner():IsPlayer() and attacker:GetOwner().pet then
+	elseif attacker:IsPet() and attacker:GetOwner():IsPlayer() and attacker:GetOwner().pet then
 		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
 		
 		local totalXP = CalculateXP(attacker:GetOwner(), math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin * npc.level, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax * npc.level))

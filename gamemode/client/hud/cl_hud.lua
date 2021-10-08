@@ -181,6 +181,7 @@ local CONVERT_TO_NAME_STANDARD = {
 	["npc_antlion_worker"] = "Antlion Worker",
 	["npc_antlionguard"] = "Antlion Guard",
 	["npc_antlionguardian"] = "Antlion Guardian",
+	["npc_stalker"] = "Stalker",
 }
 
 local FIX_FONT_SPACING = {

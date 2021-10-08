@@ -124,6 +124,10 @@ local function InitData(ply)
 	ply:SetNWInt("currency_essence", ply.hl2cr.Essence)
 	
 	ply:SetNWString("inv_slots", table.concat(ply.hl2cr.Inventory.Slots, " "))
+	ply:SetNWString("inv_armorslot_helmet", ply.hl2cr.Inventory.ArmorSlots["Helmet"])
+	ply:SetNWString("inv_armorslot_shoulders", ply.hl2cr.Inventory.ArmorSlots["Shoulder"])
+	ply:SetNWString("inv_armorslot_chest", ply.hl2cr.Inventory.ArmorSlots["Chest"])
+	ply:SetNWString("inv_armorslot_boots", ply.hl2cr.Inventory.ArmorSlots["Boots"])
 	ply:SetNWString("inv_weaponslot", ply.hl2cr.Inventory.CurWeaponSlot)
 	ply:SetNWInt("inv_totalslots", ply.hl2cr.Inventory.TotalSlots)
 	

@@ -8,10 +8,21 @@ local CONVERT_NAME_TO_IMAGE = {
 	["BMG_Heavy_Sniper"] = "materials/hl2cr/weapon_bmgsniper.jpg",
 	["Test"] = "materials/hl2cr/weapon_nailer.jpg",
 	["Suit_PWR_Boost"] = "materials/hl2cr/weapon_bmgsniper.jpg",
+	["Exosuit_Boots"] = "materials/hl2cr/boot_exo.jpg",
+	["Longfall_Boots"] = "materials/hl2cr/boot_longfall.jpg",
+	["Metal_Boots"] = "materials/hl2cr/boot_metal.jpg",
+	["Exosuit_Vest"] = "materials/hl2cr/chest_exo.jpg",
+	["Heavy_Vest"] = "materials/hl2cr/chest_heavyvest.jpg",
+	["Light_Vest"] = "materials/hl2cr/chest_vest.jpg",
+	["HECU_Helm"] = "materials/hl2cr/helmet_hecu.jpg",
+	["Robo_Helm"] = "materials/hl2cr/helmet_robot.jpg",
+	["Exosuit_Shoulders"] = "materials/hl2cr/shoulder_exo.jpg",
 	["Test_Mat_1"] = "materials/hl2cr/mat_iron.jpg",
 	["Test_Mat_2"] = "materials/hl2cr/mat_scrap.jpg",
 	["Test_Mat_3"] = "materials/hl2cr/mat_morphine.jpg"
 }
+
+
 
 local CRAFTING_ITEMS = {
 	["Test_Mat_1"] = "Test_Mat_1",
@@ -29,6 +40,15 @@ local ITEM_TYPE = {
 	["BMG_Heavy_Sniper"] = "weapon",
 	["Test"] = "item",
 	["Suit_PWR_Boost"] = "item",
+	["Exosuit_Boots"] = "boot",
+	["Longfall_Boots"] = "boot",
+	["Metal_Boots"] = "boot",
+	["Exosuit_Vest"] = "chest",
+	["Heavy_Vest"] = "chest",
+	["Light_Vest"] = "chest",
+	["HECU_Helm"] = "helmet",
+	["Robo_Helm"] = "helmet",
+	["Exosuit_Shoulders"] = "shoulder",
 	["Test_Mat_1"] = "mat",
 	["Test_Mat_2"] = "mat",
 	["Test_Mat_3"] = "mat"
@@ -70,6 +90,34 @@ local CONVERT_NAME_TRANSLATION = {
 	["Suit_PWR_Boost"] = function()
 		return translate.Get("SuitPower")
 	end,
+
+	["Exosuit_Boots"] = function()
+		return translate.Get("SuitPower")
+	end,
+	["Longfall_Boots"] = function()
+		return translate.Get("SuitPower")
+	end,
+	["Metal_Boots"] = function()
+		return translate.Get("SuitPower")
+	end,
+	["Exosuit_Vest"] = function()
+		return translate.Get("SuitPower")
+	end,
+	["Heavy_Vest"] = function()
+		return translate.Get("SuitPower")
+	end,
+	["Light_Vest"] = function()
+		return translate.Get("SuitPower")
+	end,
+	["HECU_Helm"] = function()
+		return translate.Get("SuitPower")
+	end,
+	["Robo_Helm"] = function()
+		return translate.Get("SuitPower")
+	end,
+	["Exosuit_Shoulders"] = function()
+		return translate.Get("SuitPower")
+	end,
 }
 
 local CONVERT_DESC_TRANSLATION = {
@@ -106,6 +154,34 @@ local CONVERT_DESC_TRANSLATION = {
 	end,
 
 	["Suit_PWR_Boost"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+
+	["Exosuit_Boots"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+	["Longfall_Boots"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+	["Metal_Boots"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+	["Exosuit_Vest"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+	["Heavy_Vest"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+	["Light_Vest"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+	["HECU_Helm"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+	["Robo_Helm"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+	["Exosuit_Shoulders"] = function()
 		return translate.Get("SuitPower_desc")
 	end,
 	
@@ -175,6 +251,7 @@ function StartQMenu(shouldOpen, skillsTbl)
 		qMenuTabs:Center()
 		qMenuTabs:MakePopup()
 		qMenuTabs:SetKeyboardInputEnabled(false)
+		print(LocalPlayer():GetNWString("inv_armorslots"))
 		
 		local invPnl = vgui.Create("DPanel", qMenuTabs)
 		invPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
@@ -250,12 +327,80 @@ function StartQMenu(shouldOpen, skillsTbl)
 			surface.DrawRect(0, 0, w, h)
 		end
 		
-		weaponSlotImage = vgui.Create("DImage", weaponSlotPnl)
+		local weaponSlotImage = vgui.Create("DImage", weaponSlotPnl)
 		weaponSlotImage:SetSize(weaponSlotPnl:GetWide(), weaponSlotPnl:GetTall())
 		if CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")] then
 			weaponSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")])
 		else
 			weaponSlotImage:SetImage("materials/hl2cr/empty_weapon.jpg")
+		end
+
+        local ArmorHeadSlotPnl = vgui.Create("DPanel", invPnl)
+		ArmorHeadSlotPnl:SetPos(invPnl:GetWide() / 1.12, 150)
+		ArmorHeadSlotPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
+		
+		ArmorHeadSlotPnl.Paint = function(pnl, w, h)
+			surface.SetDrawColor(HL2CR.Theme.qMenu2)
+			surface.DrawRect(0, 0, w, h)
+		end
+		
+		local ArmorHeadSlotImage = vgui.Create("DImage", ArmorHeadSlotPnl)
+		ArmorHeadSlotImage:SetSize(ArmorHeadSlotPnl:GetWide(), ArmorHeadSlotPnl:GetTall())
+		if CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_helmet")] then
+			ArmorHeadSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_helmet")])
+		else
+			ArmorHeadSlotImage:SetImage("materials/hl2cr/empty_helmet.jpg")
+		end
+
+		local ArmorShouldersSlotPnl = vgui.Create("DPanel", invPnl)
+		ArmorShouldersSlotPnl:SetPos(invPnl:GetWide() / 1.12, 250)
+		ArmorShouldersSlotPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
+		
+		ArmorShouldersSlotPnl.Paint = function(pnl, w, h)
+			surface.SetDrawColor(HL2CR.Theme.qMenu2)
+			surface.DrawRect(0, 0, w, h)
+		end
+		
+		local ArmorShouldersSlotImage = vgui.Create("DImage", ArmorShouldersSlotPnl)
+		ArmorShouldersSlotImage:SetSize(ArmorShouldersSlotPnl:GetWide(), ArmorShouldersSlotPnl:GetTall())
+		if CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_shoulders")] then
+			ArmorShouldersSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_shoulders")])
+		else
+			ArmorShouldersSlotImage:SetImage("materials/hl2cr/empty_shoulders.jpg")
+		end
+		
+		local ArmorChestSlotPnl = vgui.Create("DPanel", invPnl)
+		ArmorChestSlotPnl:SetPos(invPnl:GetWide() / 1.12, 350)
+		ArmorChestSlotPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
+		
+		ArmorChestSlotPnl.Paint = function(pnl, w, h)
+			surface.SetDrawColor(HL2CR.Theme.qMenu2)
+			surface.DrawRect(0, 0, w, h)
+		end
+		
+		local ArmorChestSlotImage = vgui.Create("DImage", ArmorChestSlotPnl)
+		ArmorChestSlotImage:SetSize(ArmorChestSlotPnl:GetWide(), ArmorChestSlotPnl:GetTall())
+		if CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_chest")] then
+			ArmorChestSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_chest")])
+		else
+			ArmorChestSlotImage:SetImage("materials/hl2cr/empty_chest.jpg")
+		end
+		
+		local ArmorBootsSlotPnl = vgui.Create("DPanel", invPnl)
+		ArmorBootsSlotPnl:SetPos(invPnl:GetWide() / 1.12, 450)
+		ArmorBootsSlotPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
+		
+		ArmorBootsSlotPnl.Paint = function(pnl, w, h)
+			surface.SetDrawColor(HL2CR.Theme.qMenu2)
+			surface.DrawRect(0, 0, w, h)
+		end
+		
+		local ArmorBootsSlotImage = vgui.Create("DImage", ArmorBootsSlotPnl)
+		ArmorBootsSlotImage:SetSize(ArmorBootsSlotPnl:GetWide(), ArmorBootsSlotPnl:GetTall())
+		if CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_boots")] then
+			ArmorBootsSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_boots")])
+		else
+			ArmorBootsSlotImage:SetImage("materials/hl2cr/empty_boots.jpg")
 		end
 
 		local itemSlotPanel = vgui.Create("DPanel", invPnl)
@@ -267,7 +412,7 @@ function StartQMenu(shouldOpen, skillsTbl)
 			surface.DrawRect(0, 0, w, h)
 		end
 		
-		itemSlotImage = vgui.Create("DImage", itemSlotPanel)
+		local itemSlotImage = vgui.Create("DImage", itemSlotPanel)
 		itemSlotImage:SetSize(itemSlotPanel:GetWide(), itemSlotPanel:GetTall())
 		if CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_itemslot")] then
 			itemSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_itemslot")])
@@ -298,37 +443,101 @@ function StartQMenu(shouldOpen, skillsTbl)
 			pl.Inv[i]:SetSize(62, 62)
 			
 			if slots[i] and CONVERT_NAME_TO_IMAGE[slots[i]] then
+				
 				pl.Inv[i].Icon = vgui.Create("DImageButton", pl.Inv[i])
 				pl.Inv[i].Icon:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
 				pl.Inv[i].Icon:SetToolTip(CONVERT_DESC_TRANSLATION[slots[i]]())
 				pl.Inv[i].Icon:SetSize(pl.Inv[i]:GetWide(), pl.Inv[i]:GetTall())
+				
+				pl.Inv[i].ComboBox = vgui.Create("DComboBox", pl.Inv[i])
+				
+				if ITEM_TYPE[slots[i]] ~= "mat" then
+					pl.Inv[i].ComboBox:AddChoice("Equip")
+				else
+					pl.Inv[i].ComboBox:AddChoice("Use")
+				end
+				
+				pl.Inv[i].ComboBox:AddChoice("Sell")
+				pl.Inv[i].ComboBox:SetVisible(false)
+				
 				pl.Inv[i].Icon.DoClick = function(pnl)
+					pl.Inv[i].ComboBox:SetVisible(true)
+				end
+				
+				pl.Inv[i].ComboBox.OnSelect = function( self, index, value )
+					if value == "Equip" then
 					
-					surface.PlaySound("hl2cr/standardbeep.wav")
-					
-					if ITEM_TYPE[slots[i]] == "weapon" then
-						weaponSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
-					elseif ITEM_TYPE[slots[i]] == "item" then
-						itemSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
-					elseif ITEM_TYPE[slots[i]] == "mat" then
+						surface.PlaySound("hl2cr/standardbeep.wav")
+						self:SetVisible(false)
+						self:SetValue("")
 						
-						if totalItemsInCraft > 6 then return end
-						
-						pl.Craft[totalItemsInCraft].Icon:SetImage(pnl:GetImage())
-						
-						
-						if CRAFTING_ITEMS[slots[k]] then
-						
+						if ITEM_TYPE[slots[i]] == "weapon" then
+							weaponSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
+							
+						elseif ITEM_TYPE[slots[i]] == "item" then
+							itemSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
+							
+						elseif ITEM_TYPE[slots[i]] == "helmet" then
+							ArmorHeadSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
+							
+						elseif ITEM_TYPE[slots[i]] == "shoulder" then
+							ArmorShouldersSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
+							
+						elseif ITEM_TYPE[slots[i]] == "chest" then
+							ArmorChestSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
+							
+						elseif ITEM_TYPE[slots[i]] == "boot" then
+							ArmorBootsSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
+							
+						elseif ITEM_TYPE[slots[i]] == "mat" then
+							
+							if totalItemsInCraft > 6 then return end
+							
+							pl.Craft[totalItemsInCraft].Icon:SetImage(pnl:GetImage())
+							
+							
+							if CRAFTING_ITEMS[slots[k]] then
+							
+							end
+							totalItemsInCraft = totalItemsInCraft + 1
+							
+							pnl:Remove()					
+							return
 						end
-						totalItemsInCraft = totalItemsInCraft + 1
 						
-						pnl:Remove()					
-						return
+						net.Start("HL2CR_UpdateSlot")
+							net.WriteString(slots[i])
+						net.SendToServer()
+					elseif value == "Sell" then
+						surface.PlaySound("hl2cr/standardbeep.wav")
+						self:SetVisible(false)
+						self:SetValue("")
+						pl.Inv[i].Icon:Remove()
+						
+						if LocalPlayer():GetNWString("inv_armorslot_helmet") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_helmet")] then
+							ArmorHeadSlotImage:SetImage("materials/hl2cr/empty_helmet.jpg")
+						elseif LocalPlayer():GetNWString("inv_armorslot_shoulders") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_shoulders")] then
+							ArmorShouldersSlotImage:SetImage("materials/hl2cr/empty_shoulders.jpg")
+						elseif LocalPlayer():GetNWString("inv_armorslot_chest") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_chest")] then
+							ArmorChestSlotImage:SetImage("materials/hl2cr/empty_chest.jpg")
+						elseif LocalPlayer():GetNWString("inv_armorslot_boots") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_boots")] then
+							ArmorBootsSlotImage:SetImage("materials/hl2cr/empty_boots.jpg")
+						elseif LocalPlayer():GetNWString("inv_weaponslot") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")] then 
+							weaponSlotImage:SetImage("materials/hl2cr/empty_weapon")
+						end
+						
+						
+						net.Start("HL2CR_SellSlot")
+							net.WriteString(slots[i])
+						net.SendToServer()
+					elseif value == "Use" then
+						surface.PlaySound("hl2cr/standardbeep.wav")
+						self:SetVisible(false)
+						self:SetValue("")
+						pl.Craft[totalItemsInCraft].Icon:SetImage(pl.Inv[i].Icon:GetImage())
+						pl.Inv[i].Icon:Remove()
+						
 					end
-					
-					net.Start("HL2CR_UpdateSlot")
-						net.WriteString(slots[i])
-					net.SendToServer()
 				end
 			end
 			
@@ -470,9 +679,10 @@ function StartQMenu(shouldOpen, skillsTbl)
 			skillPnlLevel:SetFont("HL2CR_Skill_Level")
 			skillPnlLevel:SizeToContents()
 			skillPnlLevel:SetTextColor(Color(0, 0, 0, 255))
+			skillPnlLevel:SetText("0/" .. skill.Max)
 			
 			if skill.Name == skillsTbl[skill.Class].Name then
-				skillPnlLevel:SetText( (skillsTbl[skill.Class].CurInvest ) .. "/" .. skill.Max)
+				skillPnlLevel:SetText( (skillsTbl[skill.Class].Invested ) .. "/" .. skill.Max)
 			end
 			skillPnlLevel:SizeToContents()
 			
@@ -497,7 +707,7 @@ function StartQMenu(shouldOpen, skillsTbl)
 					return
 				end
 
-				if (skillsTbl[skill.Class].CurInvest or 0) >= skill.Max then 
+				if (skillsTbl[skill.Class].Invested or 0) >= skill.Max then 
 					surface.PlaySound("buttons/button16.wav")
 					return
 				end
@@ -514,8 +724,8 @@ function StartQMenu(shouldOpen, skillsTbl)
 				
 				skillPoints = skillPoints - 1
 
-				skillsTbl[skill.Class].CurInvest = (skillsTbl[skill.Class].CurInvest or 0) + 1
-				skillPnlLevel:SetText( (skillsTbl[skill.Class].CurInvest or 0 ) .. "/" .. skill.Max)
+				skillsTbl[skill.Class].Invested = (skillsTbl[skill.Class].Invested or 0) + 1
+				skillPnlLevel:SetText( (skillsTbl[skill.Class].Invested or 0 ) .. "/" .. skill.Max)
 				skillPnlLevel:SizeToContents()
 				
 				surface.PlaySound("buttons/button5.wav")
@@ -623,6 +833,46 @@ function StartQMenu(shouldOpen, skillsTbl)
 				curResinLabel:SetText(translate.Get("ResinAmount") .. LocalPlayer():GetNWInt("currency_resin") - item.Cost)
 			end
 		end
+
+		
+		
+		local shoparmorPnl = vgui.Create("DPanel", shopPnlBG)
+		shoparmorPnl:SetSize(192, 192)
+		shoparmorPnl:SetPos(12.5, 320)
+		shoparmorPnl.Paint = function() return end
+				
+		local shoparmorScroll = vgui.Create("DScrollPanel", shoparmorPnl)
+		shoparmorScroll:Dock(FILL)
+			
+		local armorLayout = vgui.Create("DIconLayout", shoparmorScroll)
+		armorLayout:Dock(FILL)
+		
+		for k, item in pairs(GAMEMODE.ShopItems) do
+			
+			if item.Type ~= "Chest" && item.Type ~= "Boots" && item.Type ~= "Helmet" && item.Type ~= "Shoulders" then continue end
+			
+			local armorBtn = armorLayout:Add("DImageButton")
+			armorBtn:SetSize(64, 64)
+			armorBtn:SetImage(item.Icon)
+			armorBtn:SetToolTip(CONVERT_NAME_TRANSLATION[item.Name]().. "\n\n" .. CONVERT_DESC_TRANSLATION[item.Name]() .. translate.Get("WeaponCost") .. item.Cost .. translate.Get("Resin"))
+			armorBtn.DoClick = function(pnl)			
+
+				if LocalPlayer():GetNWInt("currency_resin") < item.Cost then
+					surface.PlaySound("buttons/button16.wav")
+					return
+				end
+				
+				net.Start("HL2CR_ObtainItem")
+					net.WriteString(item.Name)
+				net.SendToServer()
+				
+				pnl:Remove()
+				
+				surface.PlaySound("buttons/button5.wav")
+				curResinLabel:SetText(translate.Get("ResinAmount") .. LocalPlayer():GetNWInt("currency_resin") - item.Cost)
+			end
+		end
+		
 		
 		local shopMatsPnl = vgui.Create("DPanel", shopPnlBG)
 		shopMatsPnl:SetSize(256, 128)
@@ -659,17 +909,6 @@ function StartQMenu(shouldOpen, skillsTbl)
 				surface.PlaySound("buttons/button5.wav")
 				curResinLabel:SetText(translate.Get("ResinAmount") .. LocalPlayer():GetNWInt("currency_resin") - mat.Cost)
 			end
-		end
-		
-		local petsPnl = vgui.Create("DPanel", qMenuTabs)
-		petsPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
-		petsPnl:SetPos(0, 100)
-		
-		local petsPnlBG = vgui.Create("DPanel", petsPnl)
-		petsPnlBG:SetSize(petsPnl:GetWide(), petsPnl:GetTall())
-		petsPnlBG.Paint = function(self, w, h)
-			surface.SetDrawColor(HL2CR.Theme.qMenu)
-			surface.DrawRect(0, 0, w, h)
 		end
 		
 		local classPnl = vgui.Create("DPanel", qMenuTabs)
@@ -788,7 +1027,6 @@ function StartQMenu(shouldOpen, skillsTbl)
 		qMenuTabs.navbar:AddTab(translate.Get("Class_Bar"), classPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Skills_Bar"), skillsPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Shop_Bar"), shopPnl)
-		qMenuTabs.navbar:AddTab(translate.Get("Pets_Bar"), petsPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Statistics_Bar"), statsPnl)
 		
 		qMenuTabs.navbar:SetActive(1)

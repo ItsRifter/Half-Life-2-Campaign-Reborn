@@ -338,6 +338,19 @@ GM.Achievements = {
 		},
 	},
 	
+	Custom = {
+		The_Beginning = {
+			Name = "The Beginning", 
+			Mat = "materials/hl2cr/ach_nightmare.jpg", 
+			Desc = "Escape the nightmare...\nor did you?",
+			Rewards = {
+				XP = 500,
+				Item = nil
+			},
+			IsRare = false
+		},
+	},
+	
 	Killer = {
 		Zombie_Killer_1 = {
 			Name = "Zombie Killer I", 

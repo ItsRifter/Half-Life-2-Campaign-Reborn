@@ -133,6 +133,23 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		return ""
 	end
 	
+	if text == "!pet" or text == "!petmenu" then
+		net.Start("HL2CR_OpenPets")
+		net.Send(ply)
+		return ""
+	end
+	
+	if text == "!custom" or text == "!coop" then
+		if not MAPS_LOBBY[game.GetMap()] then
+			ply:ChatPrint("You need to be in the lobby to use this!")
+			return ""
+		end
+		
+		net.Start("HL2CR_OpenCustomMap")
+		net.Send(ply)
+		return ""
+	end
+	
 	if string.find(text, "!kickuser ") then
 		local findName = string.sub(text, 11)
 		if not findName then

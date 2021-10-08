@@ -24,8 +24,12 @@ function meta:IsFriendly()
 	end
 end
 
+local PETS = {
+	["hl2cr_pet_headcrab"] = true,
+}
+
 function meta:IsPet()
-	if self:IsValid() and self:IsNextBot() and self:GetOwner() then
+	if self:IsValid() and PETS[self:GetClass()] then
 		return true
 	else
 		return false
@@ -117,7 +121,7 @@ hook.Add("OnEntityCreated", "HL2CR_NPCCreated", function(ent)
 	SetNPCTraits(ent)
 end)
 
-
+--[[
 hook.Add( "ScaleNPCDamage", "HL2CR_PlayerToNPCDMG", function( npc, hitgroup, dmgInfo )
 	
 	if npc:IsFriendly() or npc:GetClass() == "npc_citizen" then return end
@@ -137,3 +141,4 @@ hook.Add( "ScaleNPCDamage", "HL2CR_PlayerToNPCDMG", function( npc, hitgroup, dmg
 	local finalDMG = dmgInfo:GetDamage() / hitDivide
 	dmgInfo:SetDamage(finalDMG)
 end)
+--]]

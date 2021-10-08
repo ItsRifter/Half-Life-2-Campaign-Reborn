@@ -198,6 +198,69 @@ votingTypes["BeginHL2"] = {
 	end
 }
 
+votingTypes["BeginRND"] = {
+	Description = "Start Research and Development?",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			VOTE_SUCCESS_CUSTOM = {
+				["Colour"] = Color(50, 215, 50),
+				["Message"] = translate.Get("VOTE_SUCCESS_CUSTOM")
+			}
+			BroadcastMessage(VOTE_SUCCESS_CUSTOM)
+			BroadcastSound("hl2cr/begin_game.wav")
+			timer.Simple(10, function()
+				RunConsoleCommand("ChangeLevel", "level_01a")
+			end)
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+
+votingTypes["BeginPursoups"] = {
+	Description = "Start Pursoups Campaign?",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			VOTE_SUCCESS_CUSTOM = {
+				["Colour"] = Color(50, 215, 50),
+				["Message"] = translate.Get("VOTE_SUCCESS_CUSTOM")
+			}
+			BroadcastMessage(VOTE_SUCCESS_CUSTOM)
+			BroadcastSound("hl2cr/begin_game.wav")
+			timer.Simple(10, function()
+				RunConsoleCommand("ChangeLevel", "level01_synb2_entryway_of_doom")
+			end)
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+
+votingTypes["BeginNightmareHouse"] = {
+	Description = "Start Nightmare House?",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			VOTE_SUCCESS_CUSTOM = {
+				["Colour"] = Color(50, 215, 50),
+				["Message"] = translate.Get("VOTE_SUCCESS_CUSTOM")
+			}
+			BroadcastMessage(VOTE_SUCCESS_CUSTOM)
+			BroadcastSound("hl2cr/begin_game.wav")
+			timer.Simple(10, function()
+				RunConsoleCommand("ChangeLevel", "nh1remake1_fixed")
+			end)
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+
 if SERVER then
 
 	HL2CR_Voting = HL2CR_Voting or {}

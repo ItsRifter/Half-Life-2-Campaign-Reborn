@@ -11,9 +11,9 @@ include("client/menus/cl_settings_menu.lua")
 include("client/menus/cl_voice_menu.lua")
 include("client/menus/cl_qmenu.lua")
 include("client/menus/cl_achievement_menu.lua")
+include("client/menus/cl_pet_menu.lua")
 include("client/hud/cl_hitboxrender.lua")
 include("client/hud/cl_ach.lua")
-
 
 include("shared/misc/sh_voting.lua")
 include("shared/ach/sh_player_ach.lua")

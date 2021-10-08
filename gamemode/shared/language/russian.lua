@@ -67,6 +67,7 @@ LANGUAGE.VOTE_SUCCESS_MAP				= "Голосование прошло успешн
 LANGUAGE.MAPS_HL2_FINISHED				= "Поздравляем с прохождением Half-Life 2.\nВозвращаем вас в лобби через 40 секунд."
 LANGUAGE.ERROR_CLASS_ALREADY_ASSIGNED	= "Вы уже выбрали данный класс!"
 LANGUAGE.VOTE_SUCCESS_HL2				= "Голосование прошло успешно, запускаем Half-Life 2."
+LANGUAGE.VOTE_SUCCESS_CUSTOM			= "Vote Successful, Starting Custom Map"
 LANGUAGE.VOTE_DIFF						= "Голосование прошло успешно, меняем сложность на "
 LANGUAGE.VOTE_DIFF_VEASY				= "Очень Лёгкую"
 LANGUAGE.VOTE_DIFF_EASY					= "Лёгкую"
