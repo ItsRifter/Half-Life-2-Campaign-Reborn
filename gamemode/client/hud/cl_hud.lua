@@ -5,6 +5,57 @@ local NOTIFY_MESSAGES = {
 	[10] = "Mechanic | Grenadier | Combine Dropout Class Unlocked",
 }
 
+local CONVERT_TO_NAME_STANDARD = {}
+
+hook.Add( "Initialize", "HL2CR_SetUpNPCNames", function()
+	if string.find(game.GetMap(), "nh2") or game.GetMap() == "nh1remake1_fixed" then
+		CONVERT_TO_NAME_STANDARD = {
+			["npc_headcrab"] = "Headcrab",
+			["npc_headcrab_fast"] = "Fast Headcrab",
+			["npc_headcrab_black"] = "Poison Headcrab",
+			["npc_headcrab_poison"] = "Poison Headcrab",
+			["npc_nh_patient"] = "Brainless Patient",
+			["npc_nh_cook"] = "Brainless Cook",
+			["npc_zombine"] = "Brainless Riot",
+			["npc_zombie"] = "Brainless",
+			["npc_fastzombie"] = "Creeper",
+			["npc_poisonzombie"] = "Husk",
+			["npc_stalker"] = "Nurse",
+		}
+	else
+		CONVERT_TO_NAME_STANDARD = {
+			["npc_headcrab"] = "Headcrab",
+			["npc_headcrab_fast"] = "Fast Headcrab",
+			["npc_headcrab_black"] = "Poison Headcrab",
+			["npc_headcrab_poison"] = "Poison Headcrab",
+			["npc_zombie_torso"] = "Torso Zombie",
+			["npc_fastzombie_torso"] = "Fast Torso Zombie",
+			["npc_zombine"] = "Zombine",
+			["npc_zombie"] = "Zombie",
+			["npc_barnacle"] = "Barnacle",
+			["npc_fastzombie"] = "Fast Zombie",
+			["npc_poisonzombie"] = "Poison Zombie",
+			["npc_metropolice"] = "Cop",
+			["npc_combine_s"] = "Soldier",
+			["npc_manhack"] = "Manhack",
+			["npc_cscanner"] = "City Scanner",
+			["npc_clawscanner"] = "Shield Scanner",
+			["npc_hunter"] = "Hunter",
+			["npc_rollermine"] = "Rollermine",
+			["npc_turret_floor"] = "Turret",
+			["npc_turret_ground"] = "Ground Turret",
+			["npc_strider"] = "Strider",
+			["npc_combinegunship"] = "Gunship",
+			["npc_antlion"] = "Antlion",
+			["npc_antlion_worker"] = "Antlion Worker",
+			["npc_antlionguard"] = "Antlion Guard",
+			["npc_antlionguardian"] = "Antlion Guardian",
+			["npc_stalker"] = "Stalker",
+		}
+	end
+end)
+
+
 net.Receive("HL2CR_LevelUpSound", function()
 	surface.PlaySound("hl2cr/levelup.wav")
 	local level = net.ReadInt(16)
@@ -154,36 +205,6 @@ local CLIENT_FRIENDLY_NPCS = {
 	["npc_seagull"] = true
 }
 
-local CONVERT_TO_NAME_STANDARD = {
-	["npc_headcrab"] = "Headcrab",
-	["npc_headcrab_fast"] = "Fast Headcrab",
-	["npc_headcrab_black"] = "Poison Headcrab",
-	["npc_headcrab_poison"] = "Poison Headcrab",
-	["npc_zombie_torso"] = "Torso Zombie",
-	["npc_fastzombie_torso"] = "Fast Torso Zombie",
-	["npc_zombine"] = "Zombine",
-	["npc_zombie"] = "Zombie",
-	["npc_barnacle"] = "Barnacle",
-	["npc_fastzombie"] = "Fast Zombie",
-	["npc_poisonzombie"] = "Poison Zombie",
-	["npc_metropolice"] = "Cop",
-	["npc_combine_s"] = "Soldier",
-	["npc_manhack"] = "Manhack",
-	["npc_cscanner"] = "City Scanner",
-	["npc_clawscanner"] = "Shield Scanner",
-	["npc_hunter"] = "Hunter",
-	["npc_rollermine"] = "Rollermine",
-	["npc_turret_floor"] = "Turret",
-	["npc_turret_ground"] = "Ground Turret",
-	["npc_strider"] = "Strider",
-	["npc_combinegunship"] = "Gunship",
-	["npc_antlion"] = "Antlion",
-	["npc_antlion_worker"] = "Antlion Worker",
-	["npc_antlionguard"] = "Antlion Guard",
-	["npc_antlionguardian"] = "Antlion Guardian",
-	["npc_stalker"] = "Stalker",
-}
-
 local FIX_FONT_SPACING = {
 	["HL2CR_HoverPlayer"] = 0,
 	["HL2CR_EasyHorror"] = 5,
@@ -328,7 +349,7 @@ end
 
 hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 	for k, ent in pairs(ents.FindByClass("npc_*")) do
-		if ent:IsNPC() and not CLIENT_FRIENDLY_NPCS[ent:GetClass()] then
+		if (ent:IsNPC() or ent:IsNextBot()) and not CLIENT_FRIENDLY_NPCS[ent:GetClass()] then
 			local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
 			local pos = ent:GetPos()
 			if string.find(ent:GetClass(), "headcrab") then
@@ -355,7 +376,7 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 				
 				--For strange reasons, this gets set to default despite above string.find
 				if font == "HL2CR_Default" then font = "HL2CR_NPCStats" end
-				
+
 				if not ent:GetNWBool("HL2CR_Special") then
 					draw.SimpleText(CONVERT_TO_NAME_STANDARD[ent:GetClass()], font or "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				else

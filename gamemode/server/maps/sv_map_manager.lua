@@ -75,7 +75,6 @@ MAPS_HL2 = {
 	"d3_citadel_04",
 	"d3_citadel_05",
 	"d3_breen_01",
-	"hl2cr_lobby_v2"
 }
 
 MAPS_COOP_SYNB2 = {
@@ -89,14 +88,13 @@ MAPS_COOP_SYNB2 = {
 	"level08_synb2_a_place_to_die",
 	"level09_synb2_choose_your_destiny",
 	"level10_synb2_end_of_evil_part1_b1",
-	"hl2cr_lobby_v2"
+
 }
 
-NightmareHouse = {
+MAPS_NH2 = {
 	"nh1remake1_fixed",
 	"nh2c1_v2",
 	"nh2c2_v2",
-	"hl2cr_lobby_v2"
 }
 
 MAPS_COOP_RND = {
@@ -146,25 +144,37 @@ function StartMapCountdown()
 		
 		for k = 1, #MAPS_HL2 do
 			if game.GetMap() == MAPS_HL2[k] then
+				if not MAPS_HL2[k+1] then
+					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+				end
 				RunConsoleCommand("changelevel", MAPS_HL2[k+1])
 			end
 		end
 
 		for k = 1, #MAPS_COOP_SYNB2 do
 			if game.GetMap() == MAPS_COOP_SYNB2[k] then
+				if not MAPS_COOP_SYNB2[k+1] then
+					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+				end
 				RunConsoleCommand("changelevel", MAPS_COOP_SYNB2[k+1])
 			end
 		end
 		
 		for k = 1, #MAPS_COOP_RND do
 			if game.GetMap() == MAPS_COOP_RND[k] then
+				if not MAPS_COOP_RND[k+1] then
+					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+				end
 				RunConsoleCommand("changelevel", MAPS_COOP_RND[k+1])
 			end
 		end
 		
-		for k = 1, #NightmareHouse do
-			if game.GetMap() == NightmareHouse[k] then
-				RunConsoleCommand("changelevel", NightmareHouse[k+1])
+		for k = 1, #MAPS_NH2 do
+			if game.GetMap() == MAPS_NH2[k] then
+				if not MAPS_NH2[k+1] then
+					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+				end
+				RunConsoleCommand("changelevel", MAPS_NH2[k+1])
 			end
 		end
 	end)
@@ -193,6 +203,8 @@ function InitMap()
 	else
 		StartCoop()
 	end
+	
+	SetUpWorkshopContent()
 end
 
 net.Receive("HL2CR_VoteCustomMap", function(len, ply)

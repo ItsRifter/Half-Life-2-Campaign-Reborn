@@ -1,2 +1,3 @@
---Icons
-resource.AddFile("materials/icons/suit")
+function SetUpWorkshopContent()
+	
+end
