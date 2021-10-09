@@ -203,8 +203,6 @@ function InitMap()
 	else
 		StartCoop()
 	end
-	
-	SetUpWorkshopContent()
 end
 
 net.Receive("HL2CR_VoteCustomMap", function(len, ply)

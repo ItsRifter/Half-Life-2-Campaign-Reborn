@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.PrintName =			"Shotgun"
 SWEP.AuthorName =			"Niik"
-SWEP.Purpose = 				"Rock, paper... SHOTGUN! >:)"
+SWEP.Purpose = 				""
 SWEP.Category =				"Nightmare House 2"
 
 SWEP.Spawnable = true

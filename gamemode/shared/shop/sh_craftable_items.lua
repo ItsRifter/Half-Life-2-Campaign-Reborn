@@ -32,21 +32,40 @@ if SERVER then
 		local itemToAdd = net.ReadString()
 		local removingItems = {}
 		
-		local removeItem1 = net.ReadString()
-		local removeItem2 = net.ReadString()
-		local removeItem3 = net.ReadString()
-		local removeItem4 = net.ReadString()
-		local removeItem5 = net.ReadString()
-		local removeItem6 = net.ReadString()
+		local removeItem1 = net.ReadString() or nil
+		local removeItem2 = net.ReadString() or nil
+		local removeItem3 = net.ReadString() or nil
+		local removeItem4 = net.ReadString() or nil
+		local removeItem5 = net.ReadString() or nil
+		local removeItem6 = net.ReadString() or nil
 		
-		for i = 1, 6 do
-			if (removeItem .. i) then
-				print(removeItem .. i)
-			end
-		end
 		
 		for i, v in ipairs(GAMEMODE.CraftableItems) do
-			if v.Name == itemToAdd then
+			if v.Icon == itemToAdd then
+				
+				if removeItem1 ~= nil then
+					table.RemoveByValue(ply.hl2cr.Inventory.Slots, removeItem1)
+				end
+				
+				if removeItem2 ~= nil then
+					table.RemoveByValue(ply.hl2cr.Inventory.Slots, removeItem2)
+				end
+				
+				if removeItem3 ~= nil then
+					table.RemoveByValue(ply.hl2cr.Inventory.Slots, removeItem3)
+				end
+				
+				if removeItem4 ~= nil then
+					table.RemoveByValue(ply.hl2cr.Inventory.Slots, removeItem4)
+				end
+				
+				if removeItem5 ~= nil then
+					table.RemoveByValue(ply.hl2cr.Inventory.Slots, removeItem5)
+				end
+				
+				if removeItem6 ~= nil then
+					table.RemoveByValue(ply.hl2cr.Inventory.Slots, removeItem6)
+				end
 				
 				table.insert(ply.hl2cr.Inventory.Slots, v.Name)
 				

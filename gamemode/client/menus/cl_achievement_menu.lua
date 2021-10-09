@@ -44,7 +44,7 @@ net.Receive("HL2CR_OpenAch", function()
 			
 		local achIcon = vgui.Create("DImage", achPnl)
 		achIcon:SetSize(75, 75)
-		achIcon:SetImage("vgui/hud/icon_locked.png")
+		achIcon:SetImage("materials/hl2cr/locked.jpg")
 			
 		if string.find(LocalPlayer():GetNWString("stat_achievements"), v.Name) then
 			achName:SetText(v.Name)
@@ -92,7 +92,7 @@ net.Receive("HL2CR_OpenAch", function()
 			
 		local achIcon = vgui.Create("DImage", achPnl)
 		achIcon:SetSize(75, 75)
-		achIcon:SetImage("vgui/hud/icon_locked.png")
+		achIcon:SetImage("materials/hl2cr/locked.jpg")
 
 		if string.find(LocalPlayer():GetNWString("stat_achievements"), v.Name) then
 			achName:SetText(v.Name)
@@ -140,7 +140,7 @@ net.Receive("HL2CR_OpenAch", function()
 			
 		local achIcon = vgui.Create("DImage", achPnl)
 		achIcon:SetSize(75, 75)
-		achIcon:SetImage("vgui/hud/icon_locked.png")
+		achIcon:SetImage("materials/hl2cr/locked.jpg")
 			
 		if string.find(LocalPlayer():GetNWString("stat_achievements"), v.Name) then
 			achName:SetText(v.Name)

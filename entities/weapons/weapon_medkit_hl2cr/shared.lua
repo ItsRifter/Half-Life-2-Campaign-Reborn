@@ -2,8 +2,8 @@
 AddCSLuaFile()
 
 SWEP.PrintName = "Medkit"
-SWEP.Author = "SuperSponer"
-SWEP.Purpose = "Heals the target"
+SWEP.Author = ""
+SWEP.Purpose = ""
 
 SWEP.Slot = 5
 SWEP.SlotPos = 3

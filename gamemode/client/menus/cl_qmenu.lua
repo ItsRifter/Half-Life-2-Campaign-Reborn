@@ -19,16 +19,39 @@ local CONVERT_NAME_TO_IMAGE = {
 	["Exosuit_Shoulders"] = "materials/hl2cr/shoulder_exo.jpg",
 	["Test_Mat_1"] = "materials/hl2cr/mat_iron.jpg",
 	["Test_Mat_2"] = "materials/hl2cr/mat_scrap.jpg",
-	["Test_Mat_3"] = "materials/hl2cr/mat_morphine.jpg"
+	["Test_Mat_3"] = "materials/hl2cr/mat_morphine.jpg",
+	["Test_Result"] = "materials/hl2cr/item_stimshot.jpg"
+}
+
+local CONVERT_IMAGE_TO_CRAFT = {
+	["materials/hl2cr/mat_iron.jpg"] = "Test_Mat_1",
+	["materials/hl2cr/mat_scrap.jpg"] = "Test_Mat_2",
+	["materials/hl2cr/mat_morphine.jpg"] = "Test_Mat_3",
+}
+
+local CONVERT_CRAFTED_TO_IMAGE = {
+	["Test_Result"] = "materials/hl2cr/item_stimshot.jpg",
+}
+
+local MENU_CRAFTABLES_RECIPE = {
+	[1] = {
+		[1] = "Test_Mat_1",
+		[2] = "Test_Mat_1",
+	}
+}
+
+local MENU_CRAFTABLES_RESULT = {
+	[1] = "Test_Result",
+}
+
+local MENU_CRAFTABLE_TAKEITEMS = {
+	["materials/hl2cr/item_stimshot.jpg"] = {
+		[1] = "Test_Mat_1",
+		[2] = "Test_Mat_1",
+	}
 }
 
 
-
-local CRAFTING_ITEMS = {
-	["Test_Mat_1"] = "Test_Mat_1",
-	["Test_Mat_2"] = "Test_Mat_2",
-	["Test_Mat_3"] = "Test_Mat_3"
-}
 
 local ITEM_TYPE = {
 	["Flare_gun"] = "weapon",
@@ -51,7 +74,8 @@ local ITEM_TYPE = {
 	["Exosuit_Shoulders"] = "shoulder",
 	["Test_Mat_1"] = "mat",
 	["Test_Mat_2"] = "mat",
-	["Test_Mat_3"] = "mat"
+	["Test_Mat_3"] = "mat",
+	["Test_Result"] = "usable"
 }
 
 local CONVERT_NAME_TRANSLATION = {
@@ -160,27 +184,34 @@ local CONVERT_DESC_TRANSLATION = {
 	["Exosuit_Boots"] = function()
 		return translate.Get("SuitPower_desc")
 	end,
+	
 	["Longfall_Boots"] = function()
 		return translate.Get("SuitPower_desc")
 	end,
+	
 	["Metal_Boots"] = function()
 		return translate.Get("SuitPower_desc")
 	end,
 	["Exosuit_Vest"] = function()
 		return translate.Get("SuitPower_desc")
 	end,
+	
 	["Heavy_Vest"] = function()
 		return translate.Get("SuitPower_desc")
 	end,
+	
 	["Light_Vest"] = function()
 		return translate.Get("SuitPower_desc")
 	end,
+	
 	["HECU_Helm"] = function()
 		return translate.Get("SuitPower_desc")
 	end,
+	
 	["Robo_Helm"] = function()
 		return translate.Get("SuitPower_desc")
 	end,
+	
 	["Exosuit_Shoulders"] = function()
 		return translate.Get("SuitPower_desc")
 	end,
@@ -194,6 +225,10 @@ local CONVERT_DESC_TRANSLATION = {
 	end,
 	
 	["Test_Mat_3"] = function()
+		return translate.Get("SuitPower_desc")
+	end,
+	
+	["Test_Result"] = function()
 		return translate.Get("SuitPower_desc")
 	end,
 }
@@ -251,7 +286,6 @@ function StartQMenu(shouldOpen, skillsTbl)
 		qMenuTabs:Center()
 		qMenuTabs:MakePopup()
 		qMenuTabs:SetKeyboardInputEnabled(false)
-		print(LocalPlayer():GetNWString("inv_armorslots"))
 		
 		local invPnl = vgui.Create("DPanel", qMenuTabs)
 		invPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
@@ -420,6 +454,37 @@ function StartQMenu(shouldOpen, skillsTbl)
 			itemSlotImage:SetImage("materials/hl2cr/empty_item.jpg")
 		end
 		
+		local CraftingResultPnl = vgui.Create("DPanel", invPnl)
+		CraftingResultPnl:SetPos(155, invPnl:GetWide() / (ScrW() / 600))
+		CraftingResultPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
+		
+		CraftingResultPnl.Paint = function(pnl, w, h)
+			surface.SetDrawColor(HL2CR.Theme.qMenu2)
+			surface.DrawRect(0, 0, w, h)
+		end
+		
+		CraftingResultImage = vgui.Create("DImageButton", CraftingResultPnl)
+		CraftingResultImage:SetSize(CraftingResultPnl:GetWide(), CraftingResultPnl:GetTall())
+		CraftingResultImage:SetImage("materials/hl2cr/mystery.jpg")
+
+		CraftingResultImage.DoClick = function(pnl)
+			if pnl:GetImage() == "materials/hl2cr/mystery.jpg" then 
+				surface.PlaySound("buttons/button16.wav")
+			else
+				surface.PlaySound("hl1/ambience/steamburst1.wav")
+				net.Start("HL2CR_CraftItem")
+				net.WriteString(pnl:GetImage())
+				
+				for i = 1, #MENU_CRAFTABLE_TAKEITEMS[pnl:GetImage()] do
+					net.WriteString(MENU_CRAFTABLE_TAKEITEMS[pnl:GetImage()][i])
+				end
+				
+				net.SendToServer()
+				
+				qMenuTabs:Remove()
+			end
+		end
+		
 		local slots = string.Explode(" ", LocalPlayer():GetNWString("inv_slots"))
 
 		local totalSlots = LocalPlayer():GetNWInt("inv_totalslots")
@@ -437,6 +502,8 @@ function StartQMenu(shouldOpen, skillsTbl)
 		end
 		
 		local totalItemsInCraft = 1
+		
+		local recipes = table.Copy(MENU_CRAFTABLES_RECIPE)
 		
 		for i = 1, totalSlots do
 			pl.Inv[i] = invLayout:Add("HL2CR_InvSlot")
@@ -467,6 +534,8 @@ function StartQMenu(shouldOpen, skillsTbl)
 				pl.Inv[i].ComboBox.OnSelect = function( self, index, value )
 					if value == "Equip" then
 					
+						local equipUsable = false
+						
 						surface.PlaySound("hl2cr/standardbeep.wav")
 						self:SetVisible(false)
 						self:SetValue("")
@@ -489,25 +558,16 @@ function StartQMenu(shouldOpen, skillsTbl)
 						elseif ITEM_TYPE[slots[i]] == "boot" then
 							ArmorBootsSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
 							
-						elseif ITEM_TYPE[slots[i]] == "mat" then
-							
-							if totalItemsInCraft > 6 then return end
-							
-							pl.Craft[totalItemsInCraft].Icon:SetImage(pnl:GetImage())
-							
-							
-							if CRAFTING_ITEMS[slots[k]] then
-							
-							end
-							totalItemsInCraft = totalItemsInCraft + 1
-							
-							pnl:Remove()					
-							return
+						elseif ITEM_TYPE[slots[i]] == "usable" then
+							pl.Inv[i].Icon:SetImage("materials/hl2cr/empty.jpg")
+							equipUsable	= true
 						end
 						
 						net.Start("HL2CR_UpdateSlot")
 							net.WriteString(slots[i])
+							net.WriteBool(equipUsable)
 						net.SendToServer()
+						
 					elseif value == "Sell" then
 						surface.PlaySound("hl2cr/standardbeep.wav")
 						self:SetVisible(false)
@@ -531,42 +591,35 @@ function StartQMenu(shouldOpen, skillsTbl)
 							net.WriteString(slots[i])
 						net.SendToServer()
 					elseif value == "Use" then
+						if totalItemsInCraft > 6 then return end
+						
+						pl.Craft[totalItemsInCraft].Icon:SetImage(pl.Inv[i].Icon:GetImage())
+						for k = 1, #MENU_CRAFTABLES_RECIPE do
+							if not recipes[k] then continue end
+							
+							if CONVERT_IMAGE_TO_CRAFT[pl.Craft[totalItemsInCraft].Icon:GetImage()] == recipes[k][totalItemsInCraft] then
+							
+								recipes[k][totalItemsInCraft] = nil
+								local finalResult = MENU_CRAFTABLES_RESULT[k]
+								
+								recipes[k]["Result"] = nil
+								
+								if table.IsEmpty(recipes[k]) then
+									CraftingResultImage:SetImage(CONVERT_CRAFTED_TO_IMAGE[finalResult])
+								end
+							end
+						end
+						
 						surface.PlaySound("hl2cr/standardbeep.wav")
 						self:SetVisible(false)
 						self:SetValue("")
-						pl.Craft[totalItemsInCraft].Icon:SetImage(pl.Inv[i].Icon:GetImage())
+
+						totalItemsInCraft = totalItemsInCraft + 1
 						pl.Inv[i].Icon:Remove()
 						
 					end
 				end
 			end
-			
-			if pl.Craft[i] then
-				pl.Craft[i].Icon.DoClick = function(pnl)
-					if pl.Craft[i].Icon:GetImage() ~= "" then
-						surface.PlaySound("hl2cr/standardbeep.wav")
-						pnl:SetImage("materials/hl2cr/empty.jpg")
-						totalItemsInCraft = totalItemsInCraft - 1
-					end
-				end
-			end
-		end
-		
-		local CraftingResultPnl = vgui.Create("DPanel", invPnl)
-		CraftingResultPnl:SetPos(155, invPnl:GetWide() / (ScrW() / 600))
-		CraftingResultPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
-		
-		CraftingResultPnl.Paint = function(pnl, w, h)
-			surface.SetDrawColor(HL2CR.Theme.qMenu2)
-			surface.DrawRect(0, 0, w, h)
-		end
-		
-		CraftingResultImage = vgui.Create("DImageButton", CraftingResultPnl)
-		CraftingResultImage:SetSize(CraftingResultPnl:GetWide(), CraftingResultPnl:GetTall())
-		CraftingResultImage:SetImage("materials/hl2cr/mystery.jpg")
-
-		CraftingResultPnl.DoClick = function(pnl)
-			surface.PlaySound("buttons/button16.wav")
 		end
 		
 		local modelHorizontalScroll = vgui.Create("DHorizontalScroller", invPnl)
@@ -693,7 +746,7 @@ function StartQMenu(shouldOpen, skillsTbl)
 			skillBtn:SetPos(statusPnl:GetWide() / 4, statusPnl:GetWide())
 		
 			if LocalPlayer():GetNWInt("stat_level") < skill.LevelReq then
-				skillBtn:SetImage("vgui/hud/icon_locked.png")
+				skillBtn:SetImage("materials/hl2cr/locked.jpg")
 				continue
 			end
 			

@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.PrintName =			"Revolver"
 SWEP.AuthorName =			"Niik"
-SWEP.Purpose = 				"How can u handle this revolver in ONE hand!?"
+SWEP.Purpose = 				""
 SWEP.Category =				"Nightmare House 2"
 
 SWEP.Spawnable = true

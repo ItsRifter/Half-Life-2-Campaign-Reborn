@@ -69,6 +69,10 @@ table.insert(GM.ShopItems, test_mat3)
 
 if SERVER then
 	
+	local CONVERT_CRAFT_TO_WEAPON = {
+		["Test_Result"] = "weapon_stimshot_health",
+	}
+	
 	net.Receive("HL2CR_SellSlot", function(len, ply)
 		if not ply then return end
 		
@@ -112,7 +116,19 @@ if SERVER then
 		if not ply then return end
 		
 		local slotToUpdate = net.ReadString()
-		local ItemAssign = net.ReadString()
+		local isUsable = net.ReadBool()
+
+		if isUsable then
+			for i, v in ipairs(GAMEMODE.CraftableItems) do
+				if v.Name == slotToUpdate and not ply:HasWeapon(CONVERT_CRAFT_TO_WEAPON[v.Name]) then
+					ply:Give(CONVERT_CRAFT_TO_WEAPON[v.Name])
+					table.RemoveByValue(ply.hl2cr.Inventory.Slots, v.Name)
+					ply:SetNWString("inv_slots", table.concat(ply.hl2cr.Inventory.Slots, " "))
+				end
+			end
+			
+			return
+		end
 		
 		for i, v in ipairs(GAMEMODE.ShopItems) do
 			if v.Name == slotToUpdate and v.Type == "Weapon" then

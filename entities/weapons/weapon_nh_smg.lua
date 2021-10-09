@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 SWEP.PrintName =			"SMG"
 SWEP.AuthorName =			"Niik"
-SWEP.Purpose = 				"The great Submachine gun from that game! :D"
+SWEP.Purpose = 				""
 SWEP.Category =				"Nightmare House 2"
 
 SWEP.Spawnable = true

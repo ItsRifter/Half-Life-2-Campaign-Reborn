@@ -25,7 +25,8 @@ NO_SPAWNING_WEAPONS = {
 	["the_swiss_hellbringer"] = true,
 	["the_aerosol_ar"] = true,
 	["the_multi_purpose_nailgun"] = true,
-	["the_turbo_lover"] = true
+	["the_turbo_lover"] = true,
+	["weapon_stimshot_health"] = true
 }
 
 --Takes the name in CurWeaponSlot into a entity weapon
@@ -135,7 +136,6 @@ hook.Add("Think", "HL2CR_DeathTick", function()
 end)
 
 hook.Add("PlayerInitialSpawn", "HL2CR_InitialPlayerSpawn", function(ply, transition)
-	
 	ply.rewards = {
 		["kills"] = 0,
 		["resin"] = 0,
