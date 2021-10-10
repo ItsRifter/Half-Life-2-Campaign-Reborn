@@ -418,6 +418,13 @@ local function SetCheckpoints()
 		CHECKPOINT_POS = {
 			Vector(-7458, -208, -3402)
 		}
+		
+		CHECKPOINT_FUNC_1 = function()
+			for _, v in ipairs(player.GetAll()) do	
+				GrantAchievement(v, "HL2", "Hallowed_Ground")
+			end
+		end
+		
 	elseif game.GetMap() == "d1_town_04" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(-2688, 1024, -4735),		Vector(-2679, 1278, -4862)
@@ -4043,12 +4050,6 @@ local function SetUpMisc()
 		for k, basket in ipairs(ents.FindByName("trigger_BBall_score_top")) do
 			basket:Fire("AddOutput", "OnEndTouch triggerhook:RunPassedCode:hook.Run( 'GiveBallAch' ):0:-1" )
 		end
-	end
-	
-	if game.GetMap() == "d1_town_02a" then
-		local checkpoint = ents.FindByClass("trigger_checkpoint")[1] 
-		checkpoint:AddAchTrigger("HL2", "Hallowed_Ground")
-		print(ents.FindByClass("trigger_checkpoint"))
 	end
 	
 	if file.Exists("hl2cr_data/babycheck.txt", "DATA") then

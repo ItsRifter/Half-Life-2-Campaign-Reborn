@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 GM.PlayerSkills = {}
 
-function CreateSkill(name, desc, class, level, icon, maxLevel)
+local function CreateSkill(name, desc, class, level, icon, maxLevel)
 	
 	local skill = {
 		["Name"] = name,
@@ -61,9 +61,3 @@ if SERVER then
 		end	
 	end)
 end
-
---[[
-	print(v.Max)
-	print(v.Name)
-	print(ply.hl2cr.Skills[classAssign]["Invested"] + 1)	
-]]--

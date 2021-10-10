@@ -11,8 +11,8 @@ SWEP.Weight					= 5
 
 SWEP.AutoSwitchTo			= false
 SWEP.AutoSwitchFrom			= false
-SWEP.Slot					= 3
-SWEP.SlotPos				= 4
+SWEP.Slot					= 2
+SWEP.SlotPos				= 3
 SWEP.DrawAmmo				= false
 SWEP.DrawCrosshair			= true
 SWEP.AccurateCrosshair		= false

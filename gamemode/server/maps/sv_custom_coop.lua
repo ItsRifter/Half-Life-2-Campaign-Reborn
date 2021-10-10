@@ -112,6 +112,83 @@ local function SetCheckpoints()
 			end)
 		end
 		
+	elseif game.GetMap() == "level_1b" then
+		TRIGGER_CHANGELEVEL_COOP = {
+			Vector(3372, 2173, -69),		Vector(3410, 2237, -30),
+		}
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(2051, 1369, 261),		Vector(2107, 1340, 378),
+			Vector(2361, 4223, 256), 		Vector(2462, 4115, 132),
+			Vector(1817, 4309, 230), 		Vector(1666, 4233, 130),
+			Vector(3577, 3301, 4), 			Vector(3420, 3209, 112)
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(2078, 1436, 278),		Vector(2404, 4167, 142),
+			Vector(1746, 4316, 142),		Vector(3492, 3259, 26)
+		}
+		
+	elseif game.GetMap() == "level_2" then
+		TRIGGER_CHANGELEVEL_COOP = {
+			Vector(5576, -10769, -88),		Vector(5623, -10820, -123),
+		}
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(5538, -10489, -268),		Vector(5662, -10614, -129)
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(5591, -10558, -122)
+		}
+
+		CHECKPOINT_FUNC_1 = function()
+			for _, v in ipairs(player.GetAll()) do	
+				GrantAchievement(v, "Custom", "Carts_Journey")
+			end
+		end
+	
+	elseif game.GetMap() == "level_3" then
+	
+		TRIGGER_CHANGELEVEL_COOP = {
+			Vector(11969, 6688, -64), Vector(12094, 6620, -190)
+		}
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(-6549, -2439, 12),		Vector(-6644, -2548, -125),
+			Vector(-5563, -2374, 524),		Vector(-5187, -2617, 654),
+			Vector(-5586, -3165, 772),		Vector(-5712, -3032, 888),
+			Vector(8703, 5888, -161),		Vector(9210, 6651, 1)
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(-6583, -2499, -111),	Vector(-5368, -2495, 560),
+			Vector(-5626, -3083, 783),	Vector(8995, 6343, -112)
+		}
+	
+	elseif game.GetMap() == "level_4a" then
+	
+		TRIGGER_CHANGELEVEL_COOP = {
+			Vector(620, -1023, -253),		Vector(519, -1286, -138)
+		}
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(3974, 1473, 133),		Vector(4401, 1339, 298),
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(4180, 1230, 171)
+		}
+	elseif game.GetMap() == "level_4b" then
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(1003, -1444, -129),		Vector(1400, -1684, 47),
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(1235, -1639, -95)
+		}
+	
 	elseif game.GetMap() == "nh1remake1_fixed" then
 	
 		TRIGGER_CHECKPOINT = {
@@ -138,7 +215,7 @@ local function SetCheckpoints()
 		}
 	
 		CHECKPOINT_POS = {
-			Vector(72, 760, 6),		Vector(72, 760, 6),
+			Vector(-621, -289, 11),		Vector(72, 760, 6),
 			Vector(-1462, 312, 10)
 		}
 	elseif game.GetMap() == "nh2c2_v2" then
@@ -154,7 +231,7 @@ local function SetCheckpoints()
 		}
 	
 		CHECKPOINT_POS = {
-			Vector(-1605, -52, 2572),		Vector(-2453, -1946, 2581),
+			Vector(-1689, -7, 2571),		Vector(-2453, -1946, 2581),
 			Vector(-2431, -2751, 2576)
 		}
 
@@ -163,7 +240,21 @@ local function SetCheckpoints()
 				v:SetPos(Vector(-410, -3688, 3919))
 			end
 		end
-		
+	elseif game.GetMap() == "nh2c3_v2" then
+		TRIGGER_CHANGELEVEL_COOP = {
+			Vector(),		Vector(-474, -3741, 3724)
+		}
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(-7065 -5957, -7), 		Vector(-7165, -5950, -126),
+			Vector(-6560, -4653, 127), 		Vector(-2374, -2045, 2563),
+			Vector(-2369, -2813, 2560), 		Vector(-6623, -4735, 0)
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(-7091, -5975, -107),		Vector(-6583, -4667, 8),
+			Vector(-2431, -2751, 2576)
+		}
 	end
 
 	if TRIGGER_CHANGELEVEL_COOP then
@@ -460,6 +551,26 @@ local MAP_LOGIC = {
 		ents.FindByName("ag1")[1]:Fire("AddOutput", "OnDeath triggerhook:RunCode")
 	end,
 	
+	["level_1b"] = function(maplua)
+		for _, c in ipairs(ents.FindByName("ConveyorArm*")) do
+			c:Fire("AddOutput", "OnStartTouch triggerhook:RunPassedCode:hook.Run('FailCoopMap'):0:-1")
+		end
+		
+		for _, t in ipairs(ents.FindByName("SteamJetPush*")) do
+			t:Fire("AddOutput", "OnStartTouch triggerhook:RunPassedCode:hook.Run('FailCoopMap'):0:-1")
+		end
+		
+		ents.FindByName("MicrowaveKitRelay2")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:hook.Run('Fix1b'):0:-1")
+	end,
+	
+	["level_3"] = function(maplua)
+		ents.FindByName("fusebox_fix_rl")[1]:Fire("AddOutput", "OnTrigger roller_exit_doors:Open")
+	end,
+	
+	["level_4b"] = function(maplua)
+		ents.FindByName("strider_hit_count")[1]:Fire("AddOutput", "OnHitMax triggerhook:RunPassedCode:hook.Run('FinishRnD')")
+	end,
+	
 	["nh1remake1_fixed"] = function(mapLua)	
 		local axe = ents.Create("weapon_nh_hatchet")
 		axe:SetPos(ents.FindByClass("weapon_crowbar")[1]:GetPos())
@@ -501,6 +612,8 @@ local MAP_LOGIC = {
 		pistol:SetAngles(Angle(0, -180, 0))
 		pistol:Spawn()
 		
+		ents.FindByClass("weapon_nh_hatchet")[1]:Fire("AddOutput", "OnPlayerPickup wood_block1_wall:Kill")
+		
 		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor1:SetCamera('snow_camera')")
 		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor2:SetCamera('snow_camera')")
 		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor3:SetCamera('snow_camera')")
@@ -537,6 +650,7 @@ local MAP_LOGIC = {
 		local npc_stalker = {
 			["npc_stalker"] = true
 		}
+		
 		table.Merge(FRIENDLY_NPCS, npc_stalker)
 		
 		ents.FindByClass("info_player_start")[1]:SetParent(ents.FindByName("elevator_parts")[1])
@@ -547,13 +661,24 @@ local MAP_LOGIC = {
 		
 		ents.FindByName("dreamhall_doors")[1]:Fire("AddOutput", "OnClose triggerhook:RunPassedCode:hook.Run('FixSpeed'):0:-1")
 		ents.FindByName("doorzombie_triggerlook")[1]:Fire("AddOutput", "OnTrigger firstdoor_door:Open")
-		ents.FindByName("speed2")[1]:Remove()
-		
-		for _, zoom in ipairs(ents.FindByClass("env_zoom")) do
-			--zoom:Remove()
+		ents.FindByName("speed2")[1]:Remove()		
+	end,
+	
+	["nh2c3_v2"] = function(mapLua)
+		for i, s in ipairs(ents.FindByClass("info_player_start")) do
+			if i ~= 1 then
+				s:Remove()
+			end
 		end
 		
-	end,
+		local axe = ents.Create("weapon_nh_hatchet")
+		axe:SetPos(Vector(-4912, -4204, 21))
+		axe:Spawn()
+		
+		local colt = ents.Create("weapon_nh_colt")
+		colt:SetPos(Vector(-4912, -4204, 21))
+		colt:Spawn()
+	end,	
 }
 
 local ITEMS = {
@@ -694,6 +819,46 @@ hook.Add("FixSpeed", "HL2CR_NH2_FixSpeed", function()
 	end
 end)
 
+hook.Add("FailCoopMap", "HL2CR_RestartCoop", function()
+	BroadcastSound("music/hl2_song23_suitsong3.mp3")
+	timer.Simple(10, function()
+		RunConsoleCommand("ChangeLevel", game.GetMap())
+	end)
+end)
+
+hook.Add("FinishRnD", "HL2CR_FinishRndSeries", function()
+	for k, v in ipairs(player.GetAll()) do
+		v:SetTeam(TEAM_COMPLETED_MAP)
+		GrantAchievement(v, "Custom", "Science_Squared")
+	end
+	
+	BroadcastMessage(MAPS_CUSTOM_FINISHED_RND)
+	
+	net.Start("HL2CR_EndCampaign")
+	net.Broadcast()
+	StartFinalMapCountdown()
+end)
+
+hook.Add("Fix1b", "HL2CR_RNDFixMap", function()
+	for _, j in ipairs(ents.FindByName("kit_junk")) do
+		j:Remove()
+	end
+	
+	for _, j in ipairs(ents.FindByName("KitCeilingDebris")) do
+		j:Remove()
+	end
+	
+	for _, j in ipairs(ents.FindByName("MicrowaveKitDissolver*")) do
+		j:Remove()
+	end
+	
+	ents.FindByName("MicrowaveKitCore")[1]:Remove()
+	ents.FindByName("MicrowaveKitTable")[1]:Remove()
+	ents.FindByName("KitchenDoorBreak1")[1]:Remove()
+	ents.FindByName("KitchenDoorBreak2")[1]:Remove()
+
+end)
+
 hook.Add("EndCoopMap", "HL2CR_EndCoop", function()
 	for _, v in ipairs(player.GetAll()) do
 		v:SetTeam(TEAM_COMPLETED_MAP)
@@ -704,9 +869,7 @@ hook.Add("EndCoopMap", "HL2CR_EndCoop", function()
 			GrantAchievement(v, "Custom", "The_Beginning")
 		end
 	end
-	
-	
-	
+
 	net.Start("HL2CR_MapCountdown")
 	net.Broadcast()
 	

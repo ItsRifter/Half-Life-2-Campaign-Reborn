@@ -26,7 +26,8 @@ NO_SPAWNING_WEAPONS = {
 	["the_aerosol_ar"] = true,
 	["the_multi_purpose_nailgun"] = true,
 	["the_turbo_lover"] = true,
-	["weapon_stimshot_health"] = true
+	["weapon_stimshot_health"] = true,
+	["weapon_stimshot_speed"] = true
 }
 
 --Takes the name in CurWeaponSlot into a entity weapon
@@ -47,6 +48,16 @@ SUPERGRAVGUN_MAPS = {
 }
 
 function GM:ShowHelp(ply)
+	local test = ents.Create("npc_zombie")
+	
+	test:SetPos(Vector(-354, 1063, 21))
+	test:Spawn()
+	
+	timer.Simple(0.1, function()
+		test:SetModel("models/nh2zombies/cook.mdl")
+		test:SetBodygroup( 1, 2 )	
+	end)
+	
 	HL2CR_Voting:PlayerVote(ply, true)
 end
 
@@ -720,7 +731,7 @@ hook.Add("PlayerEnteredVehicle", "HL2CR_EnableVehicleOnEnter", function(ply, veh
 end)
 
 hook.Add("ShouldCollide", "HL2CR_IgnoreCollisionGravePet", function( ply, other )
-	if ply:IsPlayer() and (other:IsNextBot() and other:IsPet()) then
+	if ply:IsPlayer() and other:IsPet() then
 		return false
 	end
 	
@@ -895,7 +906,7 @@ hook.Add("PlayerAmmoChanged", "HL2CR_Supplier_AmmoChange", function(ply, ammoID,
 	ply.ammoCount = newCount
 end)
 
-hook.Add("PlayerButtonDown", "HL2CR_ConfirmVoice", function(ply, btn)
+hook.Add("PlayerButtonDown", "HL2CR_OpenQMenu", function(ply, btn)
 	if btn == KEY_Q then
 		net.Start("HL2CR_QMenuUpdate")
 			net.WriteTable(ply.hl2cr.Skills)
@@ -904,7 +915,7 @@ hook.Add("PlayerButtonDown", "HL2CR_ConfirmVoice", function(ply, btn)
 	end
 end)
 
-hook.Add("PlayerButtonUp", "HL2CR_ConfirmVoice", function(ply, btn)
+hook.Add("PlayerButtonUp", "HL2CR_CloseQMenu", function(ply, btn)
 	if btn == KEY_Q then
 		net.Start("HL2CR_QMenuUpdate")
 			net.WriteTable(ply.hl2cr.Skills)

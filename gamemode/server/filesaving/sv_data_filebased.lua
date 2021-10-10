@@ -196,7 +196,7 @@ hook.Add("PlayerDisconnected", "HL2CR_SaveDataDisconnect", function(ply)
 	SaveData(ply)
 
 	if ply.pet and ply.pet:IsValid() then
-		ply.pet:Remove()
+		RemovePet(ply)
 	end
 	
 	if ply:GetNWEntity("hl2cr_grave") and ply:GetNWEntity("hl2cr_grave"):IsValid() then

@@ -73,6 +73,10 @@ if SERVER then
 		["Test_Result"] = "weapon_stimshot_health",
 	}
 	
+	local SELL_CRAFTABLES = {
+		[1] = "Test_Result"
+	}
+	
 	net.Receive("HL2CR_SellSlot", function(len, ply)
 		if not ply then return end
 		
@@ -84,6 +88,8 @@ if SERVER then
 				table.RemoveByValue(ply.hl2cr.Inventory.Slots, v.Name)
 				ply:SetNWString("inv_slots", table.concat(ply.hl2cr.Inventory.Slots, " "))
 				
+				if v.Cost then return end
+					
 				ply.hl2cr.Resin = ply.hl2cr.Resin + math.ceil(v.Cost / 3)
 				ply:SetNWInt("currency_resin", ply.hl2cr.Resin)
 				
@@ -107,7 +113,9 @@ if SERVER then
 					ply:SetNWString("inv_weaponslot", "")
 				end
 				
-				
+			elseif SELL_CRAFTABLES[i] == slotToSell then
+				table.RemoveByValue(ply.hl2cr.Inventory.Slots, slotToSell)
+				ply:SetNWString("inv_slots", table.concat(ply.hl2cr.Inventory.Slots, " "))
 			end
 		end
 	end)
@@ -116,7 +124,7 @@ if SERVER then
 		if not ply then return end
 		
 		local slotToUpdate = net.ReadString()
-		local isUsable = net.ReadBool()
+		local isUsable = net.ReadBool() or false
 
 		if isUsable then
 			for i, v in ipairs(GAMEMODE.CraftableItems) do

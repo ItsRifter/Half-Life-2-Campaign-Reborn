@@ -349,6 +349,28 @@ GM.Achievements = {
 			},
 			IsRare = false
 		},
+		
+		Carts_Journey = {
+			Name = "A Carts Journey", 
+			Mat = "vgui/achievements/ep2_kill_enemies_withcar.png", 
+			Desc = "Successfully ride the cart\nwithout dying",
+			Rewards = {
+				XP = 1500,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Science_Squared = {
+			Name = "Science²",
+			Mat = "vgui/achievements/hl2_beat_game.png", 
+			Desc = "Complete Research and Development",
+			Rewards = {
+				XP = 5000,
+				Item = nil
+			},
+			IsRare = false
+		},
 	},
 	
 	Killer = {

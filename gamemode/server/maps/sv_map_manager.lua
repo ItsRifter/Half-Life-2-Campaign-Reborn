@@ -95,6 +95,11 @@ MAPS_NH2 = {
 	"nh1remake1_fixed",
 	"nh2c1_v2",
 	"nh2c2_v2",
+	"nh2c3_v2",
+	"nh2c4_v2",
+	"nh2c5_v2",
+	"nh2c6_v2",
+	"nh2c7_v2"
 }
 
 MAPS_COOP_RND = {

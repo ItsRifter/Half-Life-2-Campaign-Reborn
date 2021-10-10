@@ -25,6 +25,7 @@ function AddXP(ply, XP)
 		ply.hl2cr.Level = ply.hl2cr.Level + 1
 		ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints + 1
 		ply.hl2cr.ReqExp = math.ceil(ply.hl2cr.ReqExp + (750 * ply.hl2cr.Level))
+		
 		notifyLevelUp = true
 	end
 		
@@ -49,7 +50,13 @@ end
 local IMPOSSIBLE_PACIFIST = {
 	["d1_eli_01"] = true,
 	["d1_eli_02"] = true,
-	["d3_c17_01"] = true
+	["d3_c17_01"] = true,
+	["level_1a"] = true,
+	["level_1b"] = true,
+	["level_2"] = true,
+	["level_3"] = true,
+	["level_4a"] = true,
+	["level_4b"] = true
 }
 
 function ShowMapResults(ply)

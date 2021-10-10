@@ -1,5 +1,5 @@
 local CONVERT_NAME_TO_IMAGE = {
-	["Flare_gun"] = "materials/hl2cr/weapon_flaregun.jpg",
+	["Flare_Gun"] = "materials/hl2cr/weapon_flaregun.jpg",
 	["Automatic_Pistol"] = "materials/hl2cr/weapon_autopistol.jpg",
 	["Multi_Grenade_Launcher"] = "materials/hl2cr/weapon_grenadelauncher.jpg",
 	["Shredding_Assault_Rifle"] = "materials/hl2cr/weapon_shreddingar.jpg",
@@ -54,7 +54,7 @@ local MENU_CRAFTABLE_TAKEITEMS = {
 
 
 local ITEM_TYPE = {
-	["Flare_gun"] = "weapon",
+	["Flare_Gun"] = "weapon",
 	["Automatic_Pistol"] = "weapon",
 	["Multi_Grenade_Launcher"] = "weapon",
 	["Shredding_Assault_Rifle"] = "weapon",
@@ -332,6 +332,8 @@ function StartQMenu(shouldOpen, skillsTbl)
 			ent:SetAngles(self.Angles)
 		end
 		
+		local slots = string.Explode(" ", LocalPlayer():GetNWString("inv_slots"))
+		
 		local invPnlSlotsPnl = vgui.Create("DPanel", invPnl)
 		invPnlSlotsPnl:SetSize(invPnl:GetWide() / 2.2, invPnl:GetTall())
 		invPnlSlotsPnl:SetPos(15, 16)
@@ -471,6 +473,8 @@ function StartQMenu(shouldOpen, skillsTbl)
 			if pnl:GetImage() == "materials/hl2cr/mystery.jpg" then 
 				surface.PlaySound("buttons/button16.wav")
 			else
+				if #slots >= 15 then surface.PlaySound("buttons/button16.wav") return end
+				
 				surface.PlaySound("hl1/ambience/steamburst1.wav")
 				net.Start("HL2CR_CraftItem")
 				net.WriteString(pnl:GetImage())
@@ -480,12 +484,10 @@ function StartQMenu(shouldOpen, skillsTbl)
 				end
 				
 				net.SendToServer()
-				
 				qMenuTabs:Remove()
+					
 			end
 		end
-		
-		local slots = string.Explode(" ", LocalPlayer():GetNWString("inv_slots"))
 
 		local totalSlots = LocalPlayer():GetNWInt("inv_totalslots")
 		
@@ -518,10 +520,14 @@ function StartQMenu(shouldOpen, skillsTbl)
 				
 				pl.Inv[i].ComboBox = vgui.Create("DComboBox", pl.Inv[i])
 				
-				if ITEM_TYPE[slots[i]] ~= "mat" then
+				--Weird thing, 
+				if ITEM_TYPE[slots[i]] == "mat" then
+					pl.Inv[i].ComboBox:AddChoice("Use")
+					
+				elseif ITEM_TYPE[slots[i]] == "usable" then
 					pl.Inv[i].ComboBox:AddChoice("Equip")
 				else
-					pl.Inv[i].ComboBox:AddChoice("Use")
+					pl.Inv[i].ComboBox:AddChoice("Equip")
 				end
 				
 				pl.Inv[i].ComboBox:AddChoice("Sell")

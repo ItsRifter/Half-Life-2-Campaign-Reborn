@@ -24,18 +24,6 @@ function meta:IsFriendly()
 	end
 end
 
-local PETS = {
-	["hl2cr_pet_headcrab"] = true,
-}
-
-function meta:IsPet()
-	if self:IsValid() and PETS[self:GetClass()] then
-		return true
-	else
-		return false
-	end
-end
-
 function SetNPCTraits(npc)
 	if not npc:IsNPC() then return end
 	

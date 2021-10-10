@@ -12,17 +12,15 @@ include("server/player/sv_cmds.lua")
 include("server/player/sv_spectating.lua")
 include("server/player/sv_progressive.lua")
 
-----NPC
+----NPC/Pets
 include("server/npc/sv_npc.lua")
+include("server/npc/sv_npc_pets.lua")
 
 ----Map
 include("server/maps/sv_hl2.lua")
 include("server/maps/sv_lobby.lua")
 include("server/maps/sv_map_manager.lua")
 include("server/maps/sv_custom_coop.lua")
-
-----Resources
-include("server/sv_resource.lua")
 
 ----Data Saving
 include("server/filesaving/sv_data_filebased.lua")
@@ -56,6 +54,7 @@ include("shared/misc/sh_voting.lua")
 ----Classes
 include("shared/playerclass/sh_player_classes.lua")
 include("shared/playerclass/sh_player_skills.lua")
+include("shared/playerclass/sh_player_pets.lua")
 
 ----Achievements
 include("shared/ach/sh_player_ach.lua")
@@ -202,6 +201,11 @@ VOTE_SUCCESS_KICK = {
 MAPS_HL2_FINISHED = {
 	["Colour"] = Color(250, 230, 45),
 	["Message"] = "MAPS_HL2_FINISHED"
+}
+
+MAPS_CUSTOM_FINISHED_RND = {
+	["Colour"] = Color(250, 230, 45),
+	["Message"] = "MAPS_RND_FINISHED"
 }
 
 ERROR_CLASS_ALREADY_ASSIGNED = {

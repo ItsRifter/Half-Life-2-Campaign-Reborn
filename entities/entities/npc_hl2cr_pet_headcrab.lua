@@ -9,11 +9,12 @@ function ENT:Initialize()
 	
 	self.LoseTargetDist	= 200
 	self.SearchRadius 	= 250
+	self.NextAttack = 0
+	self.followOwner = false
+	
 	self.BaseSpeed = 30
 	self.AttackDist = 175
 	self.AttackDMG = 5
-	self.NextAttack = 0
-	self.followOwner = false
 	
 	self:SetHealth(100)
 	
@@ -21,6 +22,13 @@ function ENT:Initialize()
 	self:AddFlags(FL_OBJECT)
 	self:SetCollisionGroup(COLLISION_GROUP_NPC)
 	self:SetCollisionBounds(Vector(-14, -9, (-6 * 2)), Vector(14, 8, (16 * 2)))
+end
+
+function ENT:SetUpStats(stats)
+	if not stats then return end
+	
+	self.BaseSpeed = stats["speed"]
+	self.AttackDMG = stats["damage"]
 end
 
 ----------------------------------------------------

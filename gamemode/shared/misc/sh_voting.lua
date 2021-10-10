@@ -211,7 +211,7 @@ votingTypes["BeginRND"] = {
 			BroadcastMessage(VOTE_SUCCESS_CUSTOM)
 			BroadcastSound("hl2cr/begin_game.wav")
 			timer.Simple(10, function()
-				RunConsoleCommand("ChangeLevel", "level_01a")
+				RunConsoleCommand("ChangeLevel", "level_1a")
 			end)
 		else
 			BroadcastMessage(VOTE_FAILED)

@@ -38,10 +38,9 @@ if SERVER then
 		local removeItem4 = net.ReadString() or nil
 		local removeItem5 = net.ReadString() or nil
 		local removeItem6 = net.ReadString() or nil
-		
-		
+				
 		for i, v in ipairs(GAMEMODE.CraftableItems) do
-			if v.Icon == itemToAdd then
+			if v.Icon == itemToAdd and table.HasValue(ply.hl2cr.Inventory.Slots, removeItem1) then
 				
 				if removeItem1 ~= nil then
 					table.RemoveByValue(ply.hl2cr.Inventory.Slots, removeItem1)

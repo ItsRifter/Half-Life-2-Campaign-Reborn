@@ -134,7 +134,10 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	end
 	
 	if text == "!pet" or text == "!petmenu" then
+		--if ply.hl2cr.Level < 8 then return "" end
+		
 		net.Start("HL2CR_OpenPets")
+			net.WriteTable(ply.hl2cr.Pets)
 		net.Send(ply)
 		return ""
 	end
@@ -318,7 +321,7 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	end
 	
 	if text == "!petsummon" or text == "!summonpet" then
-		if ply.hl2cr.Level < 15 then
+		if table.IsEmpty(ply.hl2cr.Pets) then
 			BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
 			return ""
 		end
@@ -327,7 +330,6 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 			BroadcastMessage(ERROR_PET_NOPET, ply)
 			return ""
 		end
-	
 	
 		if ply.pet then
 			BroadcastMessage(ERROR_PET_EXISTS, ply)
@@ -349,22 +351,8 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 			return ""
 		end
 		
-		local tr = util.TraceHull( {
-			start = ply:GetShootPos(),
-			endpos = ply:GetShootPos() + ( ply:GetAimVector() * 150 ),
-			filter = ply,		
-		} )
+		SpawnPet(ply)
 		
-		local pet = ents.Create("hl2cr_pet_headcrab")
-		pet:SetPos(tr.HitPos)
-		pet:Spawn()
-		pet:SetOwner(ply)
-		pet:SetCustomCollisionCheck( true )
-		
-		pet:AddFlags( FL_OBJECT )
-		
-		ply.pet = pet
-		ply.spawnCooldown = 5 + CurTime()
 		return ""
 	end
 	
@@ -446,11 +434,8 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 			return ""
 		end
 		
-		ply.spawnCooldown = 5 + CurTime()
-		if ply.pet:IsValid() then
-			ply.pet:Remove()
-		end
-		ply.pet = nil
+		RemovePet(ply)
+		
 		return ""
 	end
 		
@@ -571,9 +556,9 @@ concommand.Add("hl2cr_petremove", function(ply, cmd, args)
 end)
 
 concommand.Add("hl2cr_petsummon", function(ply, cmd, args)
-	if ply.hl2cr.Level < 15 then
+	if table.IsEmpty(ply.hl2cr.Pets) then
 		BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
-		return
+		return 
 	end
 	
 	if table.IsEmpty(ply.hl2cr.Pets.CurrentPet) then
@@ -601,19 +586,7 @@ concommand.Add("hl2cr_petsummon", function(ply, cmd, args)
 		return
 	end
 	
-	local tr = util.TraceHull( {
-		start = ply:GetShootPos(),
-		endpos = ply:GetShootPos() + ( ply:GetAimVector() * 150 ),
-		filter = ply,		
-	} )
-	
-	local pet = ents.Create("hl2cr_pet_headcrab")
-	pet:SetPos(tr.HitPos)
-	pet:Spawn()
-	pet:SetOwner(ply)
-	
-	ply.spawnCooldown = CurTime() + 5
-	ply.pet = pet
+	SpawnPet(ply)
 	
 end)
 

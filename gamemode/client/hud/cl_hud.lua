@@ -2,6 +2,7 @@ local mapCountdown = false
 
 local NOTIFY_MESSAGES = {
 	[5] = "Classes Unlocked",
+	[8] = "Pets Unlocked, use !pet / !petmenu",
 	[10] = "Mechanic | Grenadier | Combine Dropout Class Unlocked",
 }
 
@@ -18,7 +19,7 @@ end)
 
 net.Receive("HL2CR_MapCountdown", function()
 	
-	surface.PlaySound("npc/overwatch/radiovoice/allunitsapLocalPlayer()forwardpressure.wav")
+	surface.PlaySound("npc/overwatch/radiovoice/allunitsapplyforwardpressure.wav")
 
 	mapCountdown = true
 	TimerScreen()
@@ -329,20 +330,9 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 	return false
 end)
 
-local meta = FindMetaTable( "Entity" )
-if not meta then return end
-
-function meta:IsClientPet()
-	if self:IsValid() and self:IsNextBot() and self:GetOwner() then
-		return true
-	else
-		return false
-	end
-end
-
 hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 	for k, ent in pairs(ents.FindByClass("npc_*")) do
-		if (ent:IsNPC() or ent:IsNextBot()) and not CLIENT_FRIENDLY_NPCS[ent:GetClass()] then
+		if (ent:IsNPC() or (ent:IsNextBot() and not ent:IsPet())) and not CLIENT_FRIENDLY_NPCS[ent:GetClass()] then
 			local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
 			local pos = ent:GetPos()
 			if string.find(ent:GetClass(), "headcrab") then
@@ -384,8 +374,8 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 		end
 	end
 	
-	for k, entPet in pairs(ents.FindByClass("hl2cr_pet_*")) do
-		if entPet:IsNextBot() and entPet:IsClientPet() then
+	for k, entPet in pairs(ents.FindByClass("npc_hl2cr_pet_*")) do
+		if entPet:IsNextBot() and entPet:IsPet() then
 			local dist = LocalPlayer():GetPos():Distance(entPet:GetPos())
 			local pos = entPet:GetPos()
 				pos.z = entPet:GetPos().z + 20 + (dist * 0.0325)
