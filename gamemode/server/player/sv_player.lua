@@ -48,16 +48,6 @@ SUPERGRAVGUN_MAPS = {
 }
 
 function GM:ShowHelp(ply)
-	local test = ents.Create("npc_zombie")
-	
-	test:SetPos(Vector(-354, 1063, 21))
-	test:Spawn()
-	
-	timer.Simple(0.1, function()
-		test:SetModel("models/nh2zombies/cook.mdl")
-		test:SetBodygroup( 1, 2 )	
-	end)
-	
 	HL2CR_Voting:PlayerVote(ply, true)
 end
 

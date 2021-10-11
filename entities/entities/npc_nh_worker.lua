@@ -5,22 +5,21 @@ ENT.Spawnable       = false
 ENT.AdminSpawnable  = false
 
 function ENT:Initialize()
-	
+	if CLIENT then return end
 	self:SetModel("models/props_lab/huladoll.mdl")
 	self:SetNoDraw(true)
 	self:DrawShadow(false)
-	
-	if CLIENT then return end
 	self:SetCollisionGroup(COLLISION_GROUP_NONE)
 	self:SetOwner(self.Owner)
 	self:DropToFloor()
+
 	
 	self.npc = ents.Create("npc_zombie")
 	self.npc:SetPos(self:GetPos())
 	self.npc:SetAngles(self:GetAngles())
 	self.npc:Spawn()
 	self.npc:Activate()
-	self.npc:SetModel("models/nh2zombies/cook.mdl")
+	self.npc:SetModel("models/nh2zombies/worker01.mdl")
 	self:SetParent(self.npc)
 	
 	self.npc:SetHealth(50)
@@ -55,11 +54,6 @@ function ENT:Think()
 			timer.Simple(0.1, function()
 				ents.FindByClass("npc_headcrab")[1]:Remove()
 			end)
-		end
-		
-		if game.GetMap() == "nh2c1_v2" then
-			ents.FindByName("kitchen_door")[1]:Fire("Unlock")
-			ents.FindByName("zombie_corpse_sound")[1]:Fire("PlaySound")
 		end
 	end
 end

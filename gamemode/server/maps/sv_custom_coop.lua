@@ -205,7 +205,7 @@ local function SetCheckpoints()
 	elseif game.GetMap() == "nh2c1_v2" then
 		
 		TRIGGER_CHANGELEVEL_COOP = {
-			Vector(-1420, -286, 4),		Vector(-1521, -218, 89)
+			Vector(-1423, -151, 2),		Vector(-1521, -218, 89)
 		}
 	
 		TRIGGER_CHECKPOINT = {
@@ -215,7 +215,7 @@ local function SetCheckpoints()
 		}
 	
 		CHECKPOINT_POS = {
-			Vector(-621, -289, 11),		Vector(72, 760, 6),
+			Vector(-855, -323,	 11),		Vector(72, 760, 6),
 			Vector(-1462, 312, 10)
 		}
 	elseif game.GetMap() == "nh2c2_v2" then
@@ -242,19 +242,24 @@ local function SetCheckpoints()
 		end
 	elseif game.GetMap() == "nh2c3_v2" then
 		TRIGGER_CHANGELEVEL_COOP = {
-			Vector(),		Vector(-474, -3741, 3724)
+			Vector(-8269, -5759, 162),		Vector(-8376, -5634, 2)
 		}
 	
 		TRIGGER_CHECKPOINT = {
-			Vector(-7065 -5957, -7), 		Vector(-7165, -5950, -126),
-			Vector(-6560, -4653, 127), 		Vector(-2374, -2045, 2563),
-			Vector(-2369, -2813, 2560), 		Vector(-6623, -4735, 0)
+			Vector(-7163, -5914, -126), 	Vector(-7039, -6024, -12),
+			Vector(-6560, -4653, 127), 		Vector(-6605, -4698, 2),
 		}
 	
 		CHECKPOINT_POS = {
 			Vector(-7091, -5975, -107),		Vector(-6583, -4667, 8),
 			Vector(-2431, -2751, 2576)
 		}
+		
+		CHANGELEVEL_COOP_FUNC = function()
+			for _, v in ipairs(player.GetAll()) do
+				v:SetPos(Vector(-8235, -5695, 64))
+			end
+		end
 	end
 
 	if TRIGGER_CHANGELEVEL_COOP then
@@ -614,11 +619,11 @@ local MAP_LOGIC = {
 		
 		ents.FindByClass("weapon_nh_hatchet")[1]:Fire("AddOutput", "OnPlayerPickup wood_block1_wall:Kill")
 		
-		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor1:SetCamera('snow_camera')")
-		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor2:SetCamera('snow_camera')")
-		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor3:SetCamera('snow_camera')")
-		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor4:SetCamera('snow_camera')")
-		pistol:Fire("AddOutput", "OnPlayerPickup monitor_1:SetCamera('snow_camera')")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor1:SetCamera('lab_camera')")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor2:SetCamera('lab_camera')")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor3:SetCamera('lab_camera')")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor4:SetCamera('lab_camera')")
+		pistol:Fire("AddOutput", "OnPlayerPickup monitor_1:SetCamera('lab_camera')")
 		pistol:Fire("AddOutput", "OnPlayerPickup lab_mic:SetSpeakerName('TV_speaker')")
 		pistol:Fire("AddOutput", "OnPlayerPickup sec_room_door:Close")
 		pistol:Fire("AddOutput", "OnPlayerPickup sec_room_door:Lock")
@@ -634,14 +639,26 @@ local MAP_LOGIC = {
 		
 		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor4:Enable:0:5")
 		pistol:Fire("AddOutput", "OnPlayerPickup tv_sound1:PlaySound:0:5")
+
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor1:SetCamera('lab_camera'):0:5")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor2:SetCamera('lab_camera'):0:5")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor3:SetCamera('lab_camera'):0:5")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor4:SetCamera('lab_camera'):0:5")
+		pistol:Fire("AddOutput", "OnPlayerPickup monitor_1:SetCamera('lab_camera'):0:5")
+
+		pistol:Fire("AddOutput", "OnPlayerPickup doctor_scriptseq:BeginSequence:0:5")
 		
 		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor1:SetCamera('lab_camera'):0:7")
 		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor2:SetCamera('lab_camera'):0:7")
 		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor3:SetCamera('lab_camera'):0:7")
 		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor4:SetCamera('lab_camera'):0:7")
 		pistol:Fire("AddOutput", "OnPlayerPickup monitor_1:SetCamera('lab_camera'):0:7")
-		
-		pistol:Fire("AddOutput", "OnPlayerPickup doctor_scriptseq:BeginSequence:0:7")
+
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor1:SetCamera('lab_camera'):0:8")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor2:SetCamera('lab_camera'):0:8")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor3:SetCamera('lab_camera'):0:8")
+		pistol:Fire("AddOutput", "OnPlayerPickup secroom_monitor4:SetCamera('lab_camera'):0:8")
+		pistol:Fire("AddOutput", "OnPlayerPickup monitor_1:SetCamera('lab_camera'):0:8")
 		
 		ents.FindByName("woman_eleroom_seq")[1]:Fire("AddOutput", "OnBeginSequence sec_room_wall:Kill:0:-1")
 	end,
@@ -678,6 +695,8 @@ local MAP_LOGIC = {
 		local colt = ents.Create("weapon_nh_colt")
 		colt:SetPos(Vector(-4912, -4204, 21))
 		colt:Spawn()
+		
+		ents.FindByName("speed2")[1]:Remove()
 	end,	
 }
 

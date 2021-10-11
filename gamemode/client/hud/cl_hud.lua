@@ -306,7 +306,7 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_medic.jpg" then
 				draw.SimpleText(translate.Get("HUDPlayerHealth") .. pl:Health(), font, ScrPos.x, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			else
-				draw.SimpleText(hpStatus, font, ScrPos.x - 50, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(hpStatus, font, ScrPos.x - 50 + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 			
 			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_supporter.jpg" then
