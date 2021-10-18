@@ -342,7 +342,7 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 			end
 			local ScrPos = pos:ToScreen()
 			if ent:GetOwner() and dist <= LocalPlayer():GetNWInt("config_npcdrawdist", 150) then
-				local levelColour = Color(255, 255, 255)
+				local levelColour = Color(255, 255, 255, 255)
 				
 				if ent:GetNWInt("HL2CR_NPC_Level") <= 7 then
 					levelColour = string.ToColor(LocalPlayer():GetNWString("config_npccolours_easy"))
@@ -351,6 +351,8 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 				else
 					levelColour = string.ToColor(LocalPlayer():GetNWString("config_npccolours_hard"))
 				end
+			
+				levelColour.a = math.Clamp((dist * 1.2325), 0, 255)
 			
 				local font = "HL2CR_NPCStats"
 				if not string.find(LocalPlayer():GetNWString("config_npcfont"), "default") then
@@ -362,13 +364,14 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 
 				if not ent:GetNWBool("HL2CR_Special") then
 					if string.find(game.GetMap(), "nh2") or game.GetMap() == "nh1remake1_fixed" then
-					draw.SimpleText(CONVERT_TO_NAME_NH2[ent:GetClass()], font or "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText(CONVERT_TO_NAME_NH2[ent:GetClass()], font or "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					else 
-					draw.SimpleText(CONVERT_TO_NAME_STANDARD[ent:GetClass()], font or "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText(CONVERT_TO_NAME_STANDARD[ent:GetClass()], font or "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				else
 					draw.SimpleText(ent:GetNWString("HL2CR_NPC_Name"), font, ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
+				
 				draw.SimpleText("LEVEL " .. ent:GetNWInt("HL2CR_NPC_Level"), font, ScrPos.x, ScrPos.y + 30, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
@@ -382,8 +385,9 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 				
 			local ScrPos = pos:ToScreen()
 			if entPet:GetOwner() and dist <= 250 then
-				draw.SimpleText(entPet:GetOwner():Nick() .. translate.Get("HUDPlayerPets"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				draw.SimpleText(entPet:GetOwner():GetNWString("pet_name"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y + 35, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText("Level: " .. entPet:GetOwner():GetNWInt("pet_level", -1), "HL2CR_NPCStats", ScrPos.x, ScrPos.y - 35, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(entPet:GetOwner():Nick() .. translate.Get("HUDPlayerPets"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(entPet:GetOwner():GetNWString("pet_name"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y + 35, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 	end
@@ -420,8 +424,13 @@ net.Receive( "HL2CR_SpawnIndicators", function()
 	
 	local reward = net.ReadInt(32)
 	local pos = net.ReadVector()
+	local wasPet = net.ReadBool()
 	
-	spawnIndicator("XP: " .. reward, HL2CR.Theme.standard, pos, Vector(math.Rand(-0.5, 0.5), math.Rand(-0.5, 0.5), math.Rand(0.75, 1) * 1.5), 2)
+	if wasPet then
+		spawnIndicator("Pet XP: " .. reward, HL2CR.Theme.petKill, pos, Vector(math.Rand(-0.5, 0.5), math.Rand(-0.5, 0.5), math.Rand(0.75, 1) * 1.5), 2)
+	else
+		spawnIndicator("XP: " .. reward, HL2CR.Theme.playerKill, pos, Vector(math.Rand(-0.5, 0.5), math.Rand(-0.5, 0.5), math.Rand(0.75, 1) * 1.5), 2)
+	end
 	
 end)
 

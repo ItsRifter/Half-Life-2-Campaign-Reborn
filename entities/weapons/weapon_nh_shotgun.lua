@@ -19,9 +19,11 @@ SWEP.AccurateCrosshair		= false
 
 SWEP.ShellTime			= .5
 SWEP.Primary.ClipSize		= 8
-SWEP.Primary.DefaultClip	= 39
+SWEP.Primary.DefaultClip	= 32
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "Buckshot"
+SWEP.IsReloading = false
+
 
 SWEP.Base = "weapon_base"
 
@@ -58,7 +60,7 @@ function SWEP:NHShgShoot( num, spread, recoil )
 	bullet.Tracer = 1
 	bullet.TracerName = "Tracer" 
 	bullet.Force = 0.5
-	bullet.Damage = 12
+	bullet.Damage = 8
 	bullet.AmmoType = "none" 
  
 	self:TakePrimaryAmmo(1)
@@ -68,14 +70,14 @@ end
 
 function SWEP:PrimaryAttack()
 	local vm = self.Owner:GetViewModel()
-	if not (self:CanPrimaryAttack()) then return end
+	if not (self:CanPrimaryAttack()) or self.IsReloading then return end
 
 	if (self.Owner:IsPlayer()) then
 		self:EmitSound(Sound("weapons_nh/shotgun/shoot"..math.random(1,3)..".wav") )
 	else
 		self:EmitSound(Sound("weapons_nh/shotgun/shoot"..math.random(1,3).."_npc.wav") )
 	end
-	self:NHShgShoot( 8, 0.5, 1 )
+	self:NHShgShoot( 6, 0.5, 1 )
 	vm:SendViewModelMatchingSequence( vm:LookupSequence( "shoot" ) )
  
 	self:SetNextPrimaryFire( CurTime() + 1.25 )
@@ -93,7 +95,7 @@ function SWEP:Reload()
 	local maxcap = self.Primary.ClipSize
 	local spaceavail = self.Weapon:Clip1()
 	local shellz = (maxcap) - (spaceavail) + 1
-
+	self.IsReloading = true
 	if (timer.Exists("ShotgunReload_" ..  self.Owner:UniqueID())) or (self.Owner.NextReload and self.Owner.NextReload > CurTime()) or maxcap == spaceavail then return end
 	
 	if self.Owner:IsPlayer() then 
@@ -106,7 +108,7 @@ function SWEP:Reload()
 		self.Owner:SetAnimation( PLAYER_RELOAD )
 		
 		self.Owner.NextReload = CurTime() + 1
-	
+		
 		if (SERVER) then
 			self.Owner:SetFOV( 0, 0.15 )
 		end
@@ -130,16 +132,6 @@ function SWEP:Reload()
 	
 end
 
-function SWEP:FireAnimationEvent( pos, ang, event, options )
-
-	-- Disables animation based muzzle event
-	if ( event == 21 ) then return true end
-
-	-- Disable thirdperson muzzle flash
-	if ( event == 6001 ) then return true end
-
-end
-
 function SWEP:InsertShell()
 	local vm = self.Owner:GetViewModel()
 	if not IsValid(self) then return end
@@ -148,21 +140,21 @@ function SWEP:InsertShell()
 	
 	local timerName = "ShotgunReload_" ..  self.Owner:UniqueID()
 	if self.Owner:Alive() then
-		local curwep = self.Owner:GetActiveWeapon()
-		
 		
 		if (self.Weapon:Clip1() >= self.Primary.ClipSize or self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0) then
-		self.Owner:EmitSound("weapons_nh/shotgun/reload_end.wav")
-		vm:SendViewModelMatchingSequence( vm:LookupSequence( "reload_end" ) )
+			self.Owner:EmitSound("weapons_nh/shotgun/reload_end.wav")
+			vm:SendViewModelMatchingSequence( vm:LookupSequence( "reload_end" ) )
+			self.IsReloading = false
 			timer.Destroy(timerName)
 		elseif (self.Weapon:Clip1() <= self.Primary.ClipSize and self.Owner:GetAmmoCount(self.Primary.Ammo) >= 0) then
 			self.InsertingShell = true
-			timer.Simple( .05, function() self:ShellAnimCaller() end)
+			timer.Simple(.05, function() self:ShellAnimCaller() end)
 	
 			self.Weapon:SetClip1(self.Weapon:Clip1() + 1)
 			self.Owner:RemoveAmmo( 1, self.Weapon:GetPrimaryAmmoType() )
 		end
 	else
+		self.IsReloading = false
 		timer.Destroy(timerName)
 	end
 	

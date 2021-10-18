@@ -46,6 +46,7 @@ AddCSLuaFile("client/menus/cl_achievement_menu.lua")
 AddCSLuaFile("client/hud/cl_hitboxrender.lua")
 AddCSLuaFile("client/hud/cl_ach.lua")
 AddCSLuaFile("client/menus/cl_pet_menu.lua")
+AddCSLuaFile("client/menus/cl_pet_statmenu.lua")
 
 --Shared
 ----Voting
@@ -55,6 +56,7 @@ include("shared/misc/sh_voting.lua")
 include("shared/playerclass/sh_player_classes.lua")
 include("shared/playerclass/sh_player_skills.lua")
 include("shared/playerclass/sh_player_pets.lua")
+include("shared/playerclass/sh_player_pets_skills.lua")
 
 ----Achievements
 include("shared/ach/sh_player_ach.lua")
@@ -111,6 +113,8 @@ util.AddNetworkString("HL2CR_VoteCustomMap")
 util.AddNetworkString("HL2CR_ResetContent")
 util.AddNetworkString("HL2CR_EquipPet")
 util.AddNetworkString("HL2CR_UpdatePet")
+util.AddNetworkString("HL2CR_UpdatePetSkill")
+util.AddNetworkString("HL2CR_SpawnPet")
 
 hook.Add("PrePACConfigApply", "HL2CR_DisablePac3Autoload", function(ply, outfit_data)
 	ply:SetModel(ply.hl2cr.Model)

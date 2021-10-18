@@ -438,7 +438,7 @@ local REMOVE_WEAPONS = {
 }
 
 local MAP_LOGIC = {
-	["level01_synb2_entryway_of_doom"] = function(mapLua)
+	["level01_synb2_entryway_of_doom"] = function(MapLua)
 		local npc_vortigaunt = {
 			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
 		}
@@ -449,11 +449,11 @@ local MAP_LOGIC = {
 		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
 		table.Merge(RANDOM_XP_BASED_NPC, npc_antlion)
 		
-		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		ents.FindByName("bouton10")[1]:Fire("AddOutput", "OnPressed triggerhook:RunCode")
 	end,
 	
-	["level02_synb2_tricks_and_traps"] = function(mapLua)
+	["level02_synb2_tricks_and_traps"] = function(MapLua)
 		local npc_vortigaunt = {
 			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
 		}
@@ -464,11 +464,11 @@ local MAP_LOGIC = {
 		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
 		table.Merge(RANDOM_XP_BASED_NPC, npc_antlion)
 		
-		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		ents.FindByName("m_g1")[1]:Fire("AddOutput", "OnAllSpawnedDead triggerhook:RunCode")
 	end,
 	
-	["level03_synb2_underground"] = function(mapLua)
+	["level03_synb2_underground"] = function(MapLua)
 		local npc_vortigaunt = {
 			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
 		}
@@ -479,12 +479,12 @@ local MAP_LOGIC = {
 		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
 		table.Merge(RANDOM_XP_BASED_NPC, npc_antlion)
 		
-		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		ents.FindByName("craps1")[1]:Fire("AddOutput", "OnDeath triggerhook:RunCode")
 		
 	end,
 	
-	["level04_synb2_across_the_darkness"] = function(mapLua)
+	["level04_synb2_across_the_darkness"] = function(MapLua)
 		local npc_vortigaunt = {
 			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
 		}
@@ -495,11 +495,11 @@ local MAP_LOGIC = {
 		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
 		table.Merge(RANDOM_XP_BASED_NPC, npc_antlion)
 		
-		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		ents.FindByClass("trigger_once")[18]:Fire("AddOutput", "OnStartTouch triggerhook:RunCode")
 	end,
 	
-	["level05_synb2_diehard"] = function(mapLua)
+	["level05_synb2_diehard"] = function(MapLua)
 		for _, newSpawn in ipairs(ents.FindByClass("info_player_deathmatch")) do
 			newSpawn:SetPos(Vector(758, 93, 76))
 		end
@@ -508,12 +508,12 @@ local MAP_LOGIC = {
 		
 		table.RemoveByValue(FRIENDLY_NPCS, "npc_dog")
 		
-		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		ents.FindByName("m_ag1")[1]:Fire("AddOutput", "OnAllSpawnedDead triggerhook:RunCode")
 	
 	end,
 	
-	["level06_synb2_base"] = function(mapLua)
+	["level06_synb2_base"] = function(MapLua)
 		
 		local booster = ents.Create("prop_dynamic")
 		booster:SetModel("models/props_borealis/bluebarrel001.mdl")
@@ -522,24 +522,24 @@ local MAP_LOGIC = {
 		booster:Spawn()
 		ents.FindByName("m_big1")[1]:Fire("AddOutput", "OnAllSpawnedDead sas15:Unlock()")
 		
-		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		ents.FindByName("countoto")[1]:Fire("AddOutput", "OnHitMax triggerhook:RunCode")
 	
 	end,
 	
-	["level07_synb2_scary_dark_house"] = function(mapLua)
+	["level07_synb2_scary_dark_house"] = function(MapLua)
 		
 		local npc_vortigaunt = {
 			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
 		}
 		
 		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
-		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		ents.FindByName("count")[1]:Fire("AddOutput", "OnHitMax triggerhook:RunCode")
 	
 	end,
 	
-	["level08_synb2_a_place_to_die"] = function(mapLua)
+	["level08_synb2_a_place_to_die"] = function(MapLua)
 		
 		local npc_vortigaunt = {
 			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
@@ -551,12 +551,12 @@ local MAP_LOGIC = {
 		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
 		table.Merge(RANDOM_XP_BASED_NPC, npc_antlion)
 		
-		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		
 		ents.FindByName("ag1")[1]:Fire("AddOutput", "OnDeath triggerhook:RunCode")
 	end,
 	
-	["level_1b"] = function(maplua)
+	["level_1b"] = function(MapLua)
 		for _, c in ipairs(ents.FindByName("ConveyorArm*")) do
 			c:Fire("AddOutput", "OnStartTouch triggerhook:RunPassedCode:hook.Run('FailCoopMap'):0:-1")
 		end
@@ -568,15 +568,15 @@ local MAP_LOGIC = {
 		ents.FindByName("MicrowaveKitRelay2")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:hook.Run('Fix1b'):0:-1")
 	end,
 	
-	["level_3"] = function(maplua)
+	["level_3"] = function(MapLua)
 		ents.FindByName("fusebox_fix_rl")[1]:Fire("AddOutput", "OnTrigger roller_exit_doors:Open")
 	end,
 	
-	["level_4b"] = function(maplua)
+	["level_4b"] = function(MapLua)
 		ents.FindByName("strider_hit_count")[1]:Fire("AddOutput", "OnHitMax triggerhook:RunPassedCode:hook.Run('FinishRnD')")
 	end,
 	
-	["nh1remake1_fixed"] = function(mapLua)	
+	["nh1remake1_fixed"] = function(MapLua)	
 		local axe = ents.Create("weapon_nh_hatchet")
 		axe:SetPos(ents.FindByClass("weapon_crowbar")[1]:GetPos())
 		axe:SetAngles(ents.FindByClass("weapon_crowbar")[1]:GetAngles())
@@ -605,12 +605,12 @@ local MAP_LOGIC = {
 		
 		ents.FindByClass("weapon_shotgun")[1]:Remove()
 		
-		mapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		
 		ents.FindByName("teleport2")[1]:Fire("AddOutput", "OnStartTouch triggerhook:RunCode")
 	end,
 	
-	["nh2c1_v2"] = function(mapLua)	
+	["nh2c1_v2"] = function(MapLua)	
 		
 		local pistol = ents.Create("weapon_nh_colt")
 		pistol:SetPos(Vector(-1473, 380, 62))
@@ -663,7 +663,7 @@ local MAP_LOGIC = {
 		ents.FindByName("woman_eleroom_seq")[1]:Fire("AddOutput", "OnBeginSequence sec_room_wall:Kill:0:-1")
 	end,
 	
-	["nh2c2_v2"] = function(mapLua)	
+	["nh2c2_v2"] = function(MapLua)	
 		local npc_stalker = {
 			["npc_stalker"] = true
 		}
@@ -681,7 +681,7 @@ local MAP_LOGIC = {
 		ents.FindByName("speed2")[1]:Remove()		
 	end,
 	
-	["nh2c3_v2"] = function(mapLua)
+	["nh2c3_v2"] = function(MapLua)
 		for i, s in ipairs(ents.FindByClass("info_player_start")) do
 			if i ~= 1 then
 				s:Remove()

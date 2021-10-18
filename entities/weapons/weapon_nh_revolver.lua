@@ -52,7 +52,7 @@ function SWEP:PrimaryAttack()
 	bullet.Tracer = 1 
 	bullet.TracerName = "Tracer"
 	bullet.Force = self.Primary.Force 
-	bullet.Damage = 85
+	bullet.Damage = 40
 	bullet.AmmoType = self.Primary.Ammo 
 
 	self:ShootEffects()

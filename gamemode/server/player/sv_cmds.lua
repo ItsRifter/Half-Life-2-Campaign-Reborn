@@ -79,7 +79,6 @@ local DIFF_VOTES = {
 }
 
 hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
-	text = string.lower(text)
 	
 	--Enables AFK mode on the player
 	if text == "!afk" and (ply:Team() ~= TEAM_AFK and ply:Team() ~= TEAM_COMPLETED_MAP) then
@@ -134,7 +133,10 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	end
 	
 	if text == "!pet" or text == "!petmenu" then
-		--if ply.hl2cr.Level < 8 then return "" end
+		if ply.hl2cr.Level < 8 then 
+			ply:ChatPrint("You are too low of a level to have pets!")
+			return "" 
+		end
 		
 		net.Start("HL2CR_OpenPets")
 			net.WriteTable(ply.hl2cr.Pets)
@@ -331,9 +333,9 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 			return ""
 		end
 	
-		if ply.pet then
+		if ply.pet and ply.pet:IsValid() then
 			BroadcastMessage(ERROR_PET_EXISTS, ply)
-			return ""
+			return
 		end
 		
 		if NO_PETS_MAPS[game.GetMap()] then
@@ -548,11 +550,8 @@ concommand.Add("hl2cr_petremove", function(ply, cmd, args)
 		return ""
 	end
 	
-	ply.spawnCooldown = CurTime() + 5
-	if ply.pet:IsValid() then
-		ply.pet:Remove()
-	end
-	ply.pet = nil
+	RemovePet(ply)
+	
 end)
 
 concommand.Add("hl2cr_petsummon", function(ply, cmd, args)
@@ -566,7 +565,7 @@ concommand.Add("hl2cr_petsummon", function(ply, cmd, args)
 		return
 	end
 	
-	if ply.pet then
+	if ply.pet and ply.pet:IsValid() then
 		BroadcastMessage(ERROR_PET_EXISTS, ply)
 		return
 	end

@@ -4,7 +4,6 @@ function SpawnPet(ply)
 		endpos = ply:GetShootPos() + ( ply:GetAimVector() * 150 ),
 		filter = ply,		
 	} )
-	print(ply.hl2cr.Pets.CurrentPet["class"])
 
 	local pet = ents.Create(ply.hl2cr.Pets.CurrentPet["class"])
 	pet:SetPos(tr.HitPos)
@@ -21,13 +20,32 @@ function SpawnPet(ply)
 	
 	pet:SetUpStats(petstats)
 	
+	ply:SetNWInt("pet_level", ply.hl2cr.Pets.CurrentPet["level"])
+	ply:SetNWInt("pet_curxp", ply.hl2cr.Pets.CurrentPet["xp"])
+	ply:SetNWInt("pet_curreqxp", ply.hl2cr.Pets.CurrentPet["reqxp"])
+	
+	ply:SetNWInt("pet_skillpoints", ply.hl2cr.Pets.CurrentPet["skillpoints"])
+	
+	ply:SetNWInt("pet_health", pet:Health())
+	ply:SetNWInt("pet_maxhealth", pet:Health())
+	
 	ply.pet = pet
 	ply.spawnCooldown = 5 + CurTime()
+	
+	net.Start("HL2CR_SpawnPet")
+		net.WriteBool(true)
+	net.Send(ply)
 	
 end
 
 function RemovePet(ply)
+	net.Start("HL2CR_SpawnPet")
+		net.WriteBool(false)
+	net.Send(ply)
+	
 	ply.spawnCooldown = 5 + CurTime()
 	ply.pet:Remove()
 	ply.pet = nil
+	
+	
 end

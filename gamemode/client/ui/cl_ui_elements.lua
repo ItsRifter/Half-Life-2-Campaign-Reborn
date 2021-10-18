@@ -21,6 +21,9 @@ HL2CR.Theme = {
 	skillPnl = Color(212, 116, 0, 125),
 	skillFill = Color(255, 140, 0, 255),
 	
+	playerKill = Color(250, 140, 5, 255),
+	petKill = Color(255, 210, 105, 255),
+	
 }
 
 HL2CR.UISizes = {

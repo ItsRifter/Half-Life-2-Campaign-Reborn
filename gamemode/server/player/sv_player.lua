@@ -570,7 +570,7 @@ hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
 							end
 						end
 					end
-					if p.hl2cr.Inventory.CurWeaponSlot then
+					if p.hl2cr.Inventory.CurWeaponSlot and CONVERT_NAME_TO_ENT[p.hl2cr.Inventory.CurWeaponSlot] then
 						p:Give(CONVERT_NAME_TO_ENT[p.hl2cr.Inventory.CurWeaponSlot])
 					end
 				end)
@@ -593,14 +593,14 @@ hook.Add( "CanPlayerSuicide", "HL2CR_CanSuicide", function( ply )
 end)
 
 
-local function createIndicator(rewardAmount, position, player)
+local function createIndicator(rewardAmount, position, player, isPet)
 	
 	net.Start("HL2CR_SpawnIndicators")
 	
 	net.WriteInt(rewardAmount, 32)
 	
 	net.WriteVector(position)
-	
+	net.WriteBool(isPet)
 	if player == nil then
 		net.Broadcast()
 	else
@@ -634,12 +634,10 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 	
 	if attacker:IsPlayer() then
 		player = attacker
-	elseif npc.Attacker then
-		player = npc.Attacker
 	end
 	
-	if player then
-		
+	if player and not attacker:IsNextBot() then
+	
 		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
 		
 		local totalXP = CalculateXP(player, math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin * npc.level, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax * npc.level))
@@ -648,7 +646,7 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 		
 		AddXP(player, totalXP)
 		
-		createIndicator(totalXP, npc:GetPos(), player)
+		createIndicator(totalXP, npc:GetPos(), player, false)
 		
 		player.rewards["kills"] = player.rewards["kills"] + 1
 		player.hl2cr.Kills = player.hl2cr.Kills + 1
@@ -687,22 +685,16 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 		end
 		
 		
-	elseif attacker:IsPet() and attacker:GetOwner():IsPlayer() and attacker:GetOwner().pet then
+	elseif attacker:IsNextBot() and attacker:GetOwner():IsPlayer() then
 		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
 		
 		local totalXP = CalculateXP(attacker:GetOwner(), math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin * npc.level, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax * npc.level))
 		
 		if totalXP <= 0 then return end
 		
-		AddXP(attacker:GetOwner(), totalXP)
+		AddPetXP(attacker:GetOwner(), totalXP)
 
-		createIndicator(totalXP, npc:GetPos(), attacker:GetOwner())
-		
-		attacker:GetOwner().rewards["kills"] = attacker:GetOwner():GetOwner().rewards["kills"] + 1
-		attacker:GetOwner().rewards["stats"]["exp"] = attacker:GetOwner().rewards["stats"]["exp"] + totalXP
-		attacker:GetOwner().hl2cr.Kills = attacker:GetOwner().hl2cr.Kills + 1
-		attacker:GetOwner():SetNWInt("stat_kills", attacker:GetOwner().hl2cr.Kills)
-	
+		createIndicator(totalXP, npc:GetPos(), attacker:GetOwner(), true)
 	end
 end)
 
@@ -832,6 +824,7 @@ net.Receive("HL2CR_UpdateModel", function(len, ply)
 	
 	ply:SetModel(ply.hl2cr.Model)
 	ply:SetNWString("stat_model", ply.hl2cr.Model)
+	ply:SetupHands()
 end)
 
 net.Receive("HL2CR_ApplySettings", function(len, ply)

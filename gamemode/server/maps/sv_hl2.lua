@@ -93,6 +93,10 @@ local function SetCheckpoints()
 		cl:Remove()
 	end
 	
+	for k, pb in ipairs(ents.FindByClass("trigger_pushback")) do
+		pb:Remove()
+	end
+	
 	if game.GetMap() == "d1_trainstation_01" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(-3130, -164, -61),		Vector(-3073, -209, 59)
@@ -131,6 +135,14 @@ local function SetCheckpoints()
 		
 		CHECKPOINT_POS = {
 			Vector(-4556, -4632, 389),		Vector(-4990, -4788, 520)
+		}
+		
+		TRIGGER_PUSHBACK = {
+			Vector(-5072, -4528, 422), 		Vector(-5133, -4595, 378)
+		}
+		
+		TRIGGER_PUSHBACK_SPOT = {
+			Vector(-5105, -4477, 334)
 		}
 	elseif game.GetMap() == "d1_trainstation_04" then
 		TRIGGER_CHANGELEVEL = {
@@ -212,6 +224,14 @@ local function SetCheckpoints()
 		TRIGGER_CHANGELEVEL = {
 			Vector(-416, 1702, -829), 		Vector(-396, 1605, -725)
 		}	
+
+		TRIGGER_PUSHBACK = {
+			Vector(88, -56, -495), 		Vector(533, 100, -896)
+		}
+		
+		TRIGGER_PUSHBACK_SPOT = {
+			Vector(440, -317, -793)
+		}
 
 	elseif game.GetMap() == "d1_canals_03" then
 		TRIGGER_CHANGELEVEL = {
@@ -392,6 +412,14 @@ local function SetCheckpoints()
 	elseif game.GetMap() == "d1_town_03" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(-3722, -62, -3453),		Vector(-3798, 9, -3337)
+		}
+		
+		TRIGGER_PUSHBACK = {
+			Vector(-2361, -1592, -3450), 		Vector(-2576, -1224, -3237)
+		}
+		
+		TRIGGER_PUSHBACK_SPOT = {
+			Vector(-1994, -1424, -3645)
 		}
 	elseif game.GetMap() == "d1_town_02" and file.Exists("hl2cr_data/ravenholmcheck.txt", "DATA") then
 		TRIGGER_CHANGELEVEL = {
@@ -1036,7 +1064,7 @@ local function SetCheckpoints()
 	end
 	
 	if TRIGGER_CHANGELEVEL then
-		Changelevel = ents.Create("trigger_changelevel")
+		local Changelevel = ents.Create("trigger_changelevel")
 		Changelevel.Min = Vector(TRIGGER_CHANGELEVEL[1])
 		Changelevel.Max = Vector(TRIGGER_CHANGELEVEL[2])
 		Changelevel.Pos = Vector(TRIGGER_CHANGELEVEL[2]) - ( ( Vector(TRIGGER_CHANGELEVEL[2]) - Vector(TRIGGER_CHANGELEVEL[1])) / 2 )
@@ -1052,6 +1080,16 @@ local function SetCheckpoints()
 		Changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
 		
 		Changelevel.Func = CHANGELEVEL_FUNC
+	end
+	
+	if TRIGGER_PUSHBACK then
+		local PushBack = ents.Create("trigger_pushback")
+		PushBack.Min = Vector(TRIGGER_PUSHBACK[1])
+		PushBack.Max = Vector(TRIGGER_PUSHBACK[2])
+		PushBack.Pos = Vector(TRIGGER_PUSHBACK[2]) - ( ( Vector(TRIGGER_PUSHBACK[2]) - Vector(TRIGGER_PUSHBACK[1])) / 2 )
+		PushBack:SetPos(PushBack.Pos)
+		PushBack:SetName("hl2cr_pushback")
+		PushBack:Spawn()
 	end
 end
 
@@ -4014,7 +4052,7 @@ local function SetUpMisc()
 		ents.FindByName("cupcop_fail_relay")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:TrainSodaCan(false)")
 		ents.FindByName("player_escape_trigger")[1]:Remove()
 	end
-		
+
 	if game.GetMap() == "d1_trainstation_05" then
 		for a, catTrigger in ipairs(ents.FindByName("kill_mtport_rl_1")) do
 			catTrigger:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:hook.Run( 'GiveWhatCat' ):2:-1" )
@@ -4023,6 +4061,10 @@ local function SetUpMisc()
 	
 	if game.GetMap() == "d1_trainstation_06" then
 		ents.FindByClass("info_player_start")[1]:SetPos(Vector(-9939, -3672, 333))
+	end
+	
+	if game.GetMap() == "d1_canals_02" then
+		ents.FindByName("underground_door_basinexit2")[1]:Fire("AddOutput", "OnOpen triggerhook:RunPassedCode:RemovePushTrigger()")
 	end
 	
 	if game.GetMap() == "d1_canals_07" then
@@ -4106,6 +4148,10 @@ local function SetUpMisc()
 	
 	if game.GetMap() == "d1_town_02a" and file.Exists("hl2cr_data/ravenholmcheck.txt", "DATA") then
 		file.Delete("hl2cr_data/ravenholmcheck.txt", "DATA")
+	end
+	
+	if game.GetMap() == "d1_town_03" then
+		ents.FindByName("street_lever")[1]:Fire("AddOutput", "OnPressed triggerhook:RunPassedCode:RemovePushTrigger()")
 	end
 	
 	if game.GetMap() == "d2_coast_09" and file.Exists("hl2cr_data/bridgecheck.txt", "DATA") then
@@ -4471,6 +4517,10 @@ hook.Add( "PlayerFootstep", "CustomFootstep", function( ply, pos, foot, sound, v
 	return false 
 end)
 
+function RemovePushTrigger()
+	ents.FindByClass("trigger_pushback")[1]:Remove()
+end
+
 function TrainSodaCan(hasSubmissive)
 	for _, v in ipairs(player.GetAll()) do
 		if hasSubmissive then
@@ -4481,7 +4531,7 @@ function TrainSodaCan(hasSubmissive)
 	end
 end
 
-function FailSandAchievement(ply)		
+local function FailSandAchievement(ply)		
 	local FAILER = {
 		["Colour"] = Color(215, 50, 50),
 		["Message"] = "ACH_FAILED_SAND",

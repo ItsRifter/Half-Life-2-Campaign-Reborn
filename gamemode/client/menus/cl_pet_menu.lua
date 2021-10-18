@@ -115,6 +115,8 @@ net.Receive("HL2CR_OpenPets", function()
 	adoptionLayout:SetSize(adoptionPnl:GetWide(), adoptionPnl:GetTall())
 	adoptionLayout:SetSpaceX(25)
 	
+	local resin = LocalPlayer():GetNWInt("currency_resin")
+	
 	for i, p in ipairs(GAMEMODE.PlayerPets) do
 		if curPlayerPets[i] and curPlayerPets[i].name == p["name"] then continue end
 		
@@ -169,12 +171,26 @@ net.Receive("HL2CR_OpenPets", function()
 			ent:SetAngles(self.Angles)
 		end
 		
+		local petCostLabel = vgui.Create("DLabel", petPanel)
+		petCostLabel:SetFont("HL2CR_Pets_Desc")
+		petCostLabel:SetText("Cost: " ..  p["cost"])
+		petCostLabel:SetTextColor(Color(0, 0, 0, 255))
+		petCostLabel:SetPos(0, petPanel:GetTall() - 75)
+		petCostLabel:SizeToContents()
+		
 		local petUseBtn = vgui.Create("DButton", petPanel)
 		petUseBtn:SetSize(125, 50)
 		petUseBtn:SetPos(0, petPanel:GetTall() - 50)
 		petUseBtn:SetText(translate.Get("AdoptPet"))
 		
 		petUseBtn.DoClick = function(self)
+			if resin < p["cost"] then
+				surface.PlaySound("buttons/button16.wav")
+				return
+			end
+			
+			resin = resin - p["cost"]
+			
 			net.Start("HL2CR_UpdatePet")
 				net.WriteString(p["name"])
 			net.SendToServer()
@@ -182,12 +198,46 @@ net.Receive("HL2CR_OpenPets", function()
 		end
 	end
 	
+	local enhancePnl = vgui.Create("DPanel", petTabs)
+	enhancePnl:SetSize(petTabs:GetWide(), petTabs:GetTall())
+	enhancePnl:SetPos(0, 100)
+	
+	local enchanceSkillLabel = vgui.Create("DLabel", enhancePnl)
+	enchanceSkillLabel:SetText(LocalPlayer():GetNWString("pet_name") .. "'s Skillpoints: " .. curPlayerPets.CurrentPet["skillpoints"])
+	enchanceSkillLabel:SetFont("HL2CR_Pets_Points")
+	enchanceSkillLabel:SizeToContents()
+	
+	if curPlayerPets.CurrentPet["class"] then
+		for i, s in ipairs(GAMEMODE.PlayerPetSkills) do
+			local skillPanel = vgui.Create("DPanel", enhancePnl)
+			skillPanel:SetSize(64, 64)
+			skillPanel:SetPos(s["Pos"]["x"], s["Pos"]["y"])
+			
+			local skillBtnIcon = vgui.Create("DImageButton", skillPanel)
+			skillBtnIcon:SetImage(s["Icon"])
+			skillBtnIcon:SetSize(skillPanel:GetWide(), skillPanel:GetTall())
+			
+			skillBtnIcon.DoClick = function()
+				
+			end
+			
+		end
+	else
+		local noPetLabel = vgui.Create("DLabel", enhancePnl)
+		noPetLabel:SetFont("HL2CR_Pets_Desc")
+		noPetLabel:SetText("You don't have any current pets!")
+		noPetLabel:SetTextColor(Color(0, 0, 0, 255))
+		noPetLabel:SetPos(enhancePnl:GetWide() /4 , enhancePnl:GetTall() / 4)
+		noPetLabel:SizeToContents()
+	end
+	
 	local closePnl = vgui.Create("DPanel", petTabs)
 	closePnl:SetSize(petTabs:GetWide(), petTabs:GetTall())
 	closePnl:SetPos(0, 100)
-
+	
 	petTabs.navbar:AddTab(translate.Get("Pets_Bar"), petsPnl)
 	petTabs.navbar:AddTab(translate.Get("AdoptPnl"), adoptionPnl)
+	petTabs.navbar:AddTab("Enhancement Centre", enhancePnl)
 	petTabs.navbar:AddTab(translate.Get("Close"), closePnl)
 	petTabs.navbar:SetActive(1)
 	

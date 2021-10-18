@@ -42,6 +42,30 @@ function AddXP(ply, XP)
 	ply:SetNWInt("stat_exp", ply.hl2cr.Exp)
 end
 
+function AddPetXP(ply, XP)
+
+	ply.hl2cr.Pets.CurrentPet["xp"] = ply.hl2cr.Pets.CurrentPet["xp"] + XP
+	
+	local notifyLevelUp = false
+	
+	while ply.hl2cr.Pets.CurrentPet["xp"] >= ply.hl2cr.Pets.CurrentPet["reqxp"] do
+		ply.hl2cr.Pets.CurrentPet["xp"] = ply.hl2cr.Pets.CurrentPet["xp"] - ply.hl2cr.Pets.CurrentPet["xp"]
+		ply.hl2cr.Pets.CurrentPet["level"] = ply.hl2cr.Pets.CurrentPet["level"] + 1
+		ply.hl2cr.Pets.CurrentPet["skillpoints"] = ply.hl2cr.Pets.CurrentPet["skillpoints"] + 1
+		ply.hl2cr.Pets.CurrentPet["reqxp"] = math.ceil(ply.hl2cr.Pets.CurrentPet["reqxp"] + (250 * ply.hl2cr.Pets.CurrentPet["level"]))
+		
+		notifyLevelUp = true
+	end
+	
+	if notifyLevelUp then	
+		ply:SetNWInt("pet_curxp", ply.hl2cr.Pets.CurrentPet["level"])
+		ply:SetNWInt("stat_skillpoints", ply.hl2cr.Pets.CurrentPet["skillpoints"])
+		ply:SetNWInt("pet_curreqxp", ply.hl2cr.Pets.CurrentPet["reqxp"])
+	end
+	
+	ply:SetNWInt("pet_curxp", ply.hl2cr.Pets.CurrentPet["xp"])
+end
+
 function SetLevel(ply, lvlToSet)
 	ply.hl2cr.Level = lvlToSet
 	ply:SetNWInt("HL2CR_Level", lvlToSet)

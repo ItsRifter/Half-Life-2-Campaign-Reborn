@@ -35,7 +35,7 @@ GM.Achievements = {
 		Malcontent = {
 			Name = "Malcontent",
 			Mat = "vgui/achievements/hl2_escape_apartmentraid.png", 
-			Desc = "Escape the apartment block raid",
+			Desc = "Escape the apartment\nblock raid",
 			Rewards = {
 				XP = 500,
 				Item = nil
@@ -345,6 +345,17 @@ GM.Achievements = {
 			Desc = "Escape the nightmare...\nor did you?",
 			Rewards = {
 				XP = 500,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		The_End = {
+			Name = "A bad nightmare",
+			Mat = "materials/hl2cr/ach_losehope.jpg",
+			Desc = "Escape the hospital\nand the nightmare",
+			Rewards = {
+				XP = 2000,
 				Item = nil
 			},
 			IsRare = false

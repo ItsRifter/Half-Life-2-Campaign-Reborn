@@ -486,6 +486,24 @@ surface.CreateFont( "HL2CR_Pets_Desc", {
 	outline = false,
 } )
 
+surface.CreateFont( "HL2CR_Pets_Points", {
+	font = "Roboto",
+	extended = false,
+	size = 32,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
 surface.CreateFont( "HL2CR_Alive in a Science-Fiction", {
 	font = "Alive in a Science Fiction",
 	extended = false,

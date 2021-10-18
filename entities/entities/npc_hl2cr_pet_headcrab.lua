@@ -18,6 +18,10 @@ function ENT:Initialize()
 	
 	self:SetHealth(100)
 	
+	if SERVER then
+		self.loco:SetStepHeight(12)
+	end
+	
 	self:AddFlags(FL_NPC)
 	self:AddFlags(FL_OBJECT)
 	self:SetCollisionGroup(COLLISION_GROUP_NPC)
@@ -88,16 +92,9 @@ function ENT:RunBehaviour()
 			self.loco:FaceTowards(self:GetEnemy():GetPos())
 			self:StartActivity( ACT_RUN )
 			self.loco:SetDesiredSpeed( self.BaseSpeed )
-			--self.loco:SetAcceleration(900)
-			self:ChaseEnemy( )
-			--self.loco:SetAcceleration(400)
-			--self:PlaySequenceAndWait( "jumpattack_broadcast" )
+			self:ChaseEnemy()
 			self:EmitSound("npc/headcrab/alert1.wav")
 			self:StartActivity( ACT_IDLE )
-		elseif self.teleport and self:GetOwner():Alive() then
-			self:SetPos(self:GetOwner():GetPos())
-			self.teleport = false
-			self:GetOwner().bringCooldown = 6 + CurTime()
 		elseif self.followOwner then
 			self:StartActivity( ACT_RUN )
 			self.loco:SetDesiredSpeed( self.BaseSpeed )
@@ -105,7 +102,7 @@ function ENT:RunBehaviour()
 		else
 			self:StartActivity( ACT_RUN )
 			self.loco:SetDesiredSpeed( self.BaseSpeed )
-			self:MoveToPos( self:GetPos() + Vector( math.Rand( -1, 1 ), math.Rand( -1, 1 ), 0 ) * 150 )
+			self:Move()
 			self:StartActivity( ACT_IDLE )
 		end
 		
@@ -141,6 +138,11 @@ function ENT:ChaseEnemy( options )
 				self:PlaySequenceAndWait("jumpattack_broadcast")
 				
 				self:GetEnemy():TakeDamage(self.AttackDMG, self:GetOwner(), self)
+				
+				if self:GetEnemy():Health() <= 0 then
+					hook.Call( "OnNPCKilled", "HL2CR_NPCKilled", self:GetEnemy(), self, self:GetOwner() )
+				end
+				
 				self:GetEnemy():AddEntityRelationship( self, D_HT, 99 )
 				self:GetEnemy():EmitSound("npc/headcrab/headbite.wav")
 				
@@ -163,6 +165,63 @@ function ENT:ChaseEnemy( options )
 
 	return "ok"
 
+end
+
+function ENT:Move( options )
+
+	local pos = Vector( math.Rand( -1, 1 ), math.Rand( -1, 1 ), 0 ) * 75
+	
+	local options = options or {}
+	local path = Path( "Follow" )
+	path:SetMinLookAheadDistance( options.lookahead or 300 )
+	path:SetGoalTolerance( options.tolerance or 35 )
+	path:Compute( self, pos )
+	
+	if ( !path:IsValid() ) then return "failed" end
+	
+	while ( path:IsValid() and not self:HaveEnemy() ) do
+		if self.teleport and self:GetOwner():Alive() then
+			path:SetGoalTolerance( options.tolerance or 60 )
+			path:Compute( self, self:GetOwner():GetPos())
+			timer.Simple(0.5, function()
+				self.teleport = false
+				self:GetOwner().bringCooldown = 6 + CurTime()
+			end)
+		end
+		
+		if ( path:GetAge() > 8 or !self.loco:IsAttemptingToMove() ) then			
+			path:Compute(self, pos, function( area, fromArea, ladder, elevator, length )
+				if not IsValid(fromArea) then
+					return -1
+				end
+				
+				if ( !self.loco:IsAreaTraversable( area ) ) then
+					return -1
+				end
+
+				local deltaZ = fromArea:ComputeAdjacentConnectionHeightChange( area )
+				
+				if ( deltaZ > self.loco:GetStepHeight() ) then
+					return -1
+				end
+
+				return cost
+			end )
+		end
+		
+		path:Update( self )
+		
+		if ( options.draw ) then path:Draw() end
+		
+		if ( self.loco:IsStuck() ) then
+			self:HandleStuck()
+			return "stuck"
+		end
+
+		coroutine.yield()
+	end
+
+	return "ok"
 end
 
 function ENT:HandleStuck()
@@ -213,6 +272,10 @@ function ENT:OnInjured( dmginfo )
 	if att:IsPlayer() then
 		return
 	end
+	
+	self:SetHealth(self:Health() - dmginfo:GetDamage())
+	
+	self:GetOwner():SetNWInt("pet_health", self:Health())
 
 end
 
@@ -222,6 +285,10 @@ function ENT:OnKilled( dmginfo )
 	if att:IsPlayer() then
 		return
 	end
+	
+	net.Start("HL2CR_SpawnPet")
+		net.WriteBool(false)
+	net.Send(self:GetOwner())
 	
 	self:GetOwner().pet = nil
 	SafeRemoveEntity(self) 
