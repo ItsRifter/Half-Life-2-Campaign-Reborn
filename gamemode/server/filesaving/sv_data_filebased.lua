@@ -18,35 +18,7 @@ local function InitData(ply)
 	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 3000
 	
 	--Skills (Blanks are for later skills adds, just not to wipe player data every time, when new stuff are added)
-	ply.hl2cr.Skills = ply.hl2cr.Skills or {
-		["Passive"] = {},
-		["Armor"] = {},
-		["Medic"] = {},
-		["Revival"] = {},
-		["Repair"] = {},
-		["Mechanic"] = {},
-		["Grenadier"] = {},
-		["Dropout"] = {},
-		["Assassin"] = {},
-		["Rocketeer"] = {},
-		["Blank3"] = {},
-		["Blank4"] = {},
-		["Blank5"] = {},
-		["Blank6"] = {},
-		["Blank7"] = {},
-		["Blank8"] = {},
-		["Blank9"] = {},
-		["Blank10"] = {},
-		["Blank11"] = {},
-		["Blank12"] = {},
-		["Blank13"] = {},
-		["Blank14"] = {},
-		["Blank15"] = {},
-		["Blank16"] = {},
-		["Blank17"] = {},
-		["Blank18"] = {},
-		["Blank19"] = {},
-	}
+	ply.hl2cr.Skills = ply.hl2cr.Skills or {}
 
 	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints or 0
 	
@@ -175,7 +147,7 @@ local function LoadData(ply)
 	return true -- Return true to signal that the settings could be loaded
 end
 
-local function SaveData(ply)
+local function SavePlayerData(ply)
 	local PlayerID = string.Replace(ply:SteamID(), ":", "!")
 
 	-- Store all persistent data as JSON
@@ -192,8 +164,8 @@ hook.Add("Initialize", "CreateDataFolder", function()
 end)
 
 --When the player disconnects, save their data
-hook.Add("PlayerDisconnected", "HL2CR_SaveDataDisconnect", function(ply) 
-	SaveData(ply)
+hook.Add("PlayerDisconnected", "HL2CR_SavePlayerDataDisconnect", function(ply) 
+	SavePlayerData(ply)
 
 	if ply.pet and ply.pet:IsValid() then
 		RemovePet(ply)
@@ -207,7 +179,7 @@ end)
 --Upon a map change or server shutdown, save everyones progress
 hook.Add( "ShutDown", "HL2CR_MapChangeSave", function() 
 	for _, ply in ipairs( player.GetAll() ) do
-		SaveData(ply)
+		SavePlayerData(ply)
 	end
 end)
 

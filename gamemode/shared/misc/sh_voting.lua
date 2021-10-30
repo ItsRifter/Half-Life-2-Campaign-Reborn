@@ -99,6 +99,9 @@ votingTypes["VoteVEasy"] = {
 				["Message"] = translate.Get("VOTE_DIFF") .. UPDATE_DIFF_MESSAGE[GetConVar("hl2cr_difficulty"):GetInt()]
 			}
 			BroadcastMessage(SUCCESS_VOTE)
+			for _, ent in ipairs(ents.FindByClass("npc_*")) do
+				SetNPCTraits(ent)
+			end
 		else
 			BroadcastMessage(VOTE_FAILED)
 		end
@@ -116,6 +119,9 @@ votingTypes["VoteEasy"] = {
 				["Message"] = translate.Get("VOTE_DIFF") .. UPDATE_DIFF_MESSAGE[GetConVar("hl2cr_difficulty"):GetInt()]
 			}
 			BroadcastMessage(SUCCESS_VOTE)
+			for _, ent in ipairs(ents.FindByClass("npc_*")) do
+				SetNPCTraits(ent)
+			end
 		else
 			BroadcastMessage(VOTE_FAILED)
 		end
@@ -133,6 +139,9 @@ votingTypes["VoteMedium"] = {
 				["Message"] = translate.Get("VOTE_DIFF") .. UPDATE_DIFF_MESSAGE[GetConVar("hl2cr_difficulty"):GetInt()]
 			}
 			BroadcastMessage(SUCCESS_VOTE)
+			for _, ent in ipairs(ents.FindByClass("npc_*")) do
+				SetNPCTraits(ent)
+			end
 		else
 			BroadcastMessage(VOTE_FAILED)
 		end
@@ -150,6 +159,9 @@ votingTypes["VoteHard"] = {
 				["Message"] = translate.Get("VOTE_DIFF") .. UPDATE_DIFF_MESSAGE[GetConVar("hl2cr_difficulty"):GetInt()]
 			}
 			BroadcastMessage(SUCCESS_VOTE)
+			for _, ent in ipairs(ents.FindByClass("npc_*")) do
+				SetNPCTraits(ent)
+			end
 		else
 			BroadcastMessage(VOTE_FAILED)
 		end
@@ -167,6 +179,9 @@ votingTypes["VoteVHard"] = {
 				["Message"] = translate.Get("VOTE_DIFF") .. UPDATE_DIFF_MESSAGE[GetConVar("hl2cr_difficulty"):GetInt()]
 			}
 			BroadcastMessage(SUCCESS_VOTE)
+			for _, ent in ipairs(ents.FindByClass("npc_*")) do
+				SetNPCTraits(ent)
+			end
 		else
 			BroadcastMessage(VOTE_FAILED)
 		end

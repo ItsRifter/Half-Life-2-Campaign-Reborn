@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 GM.PlayerSkills = {}
 
-local function CreateSkill(name, desc, class, level, icon, maxLevel)
+function CreateSkill(name, desc, class, level, icon, maxLevel)
 	
 	local skill = {
 		["Name"] = name,
@@ -14,7 +14,7 @@ local function CreateSkill(name, desc, class, level, icon, maxLevel)
 		["Max"] = maxLevel
 	}
 	
-	return skill
+	table.insert(GM.PlayerSkills, skill)
 end
 
 local passive_health = CreateSkill("Health Boost", "Increase life\nexpectancy", "Passive", 1, "materials/hl2cr/skill_health.jpg", 10)
@@ -22,14 +22,7 @@ local passive_armor = CreateSkill("Armor Boost", "Your armor\ncan sustain\nmore 
 
 local medic_heal = CreateSkill("Healing", "Heal more\neffectively", "Medic", 5, "materials/hl2cr/skill_healing.jpg", 5)
 local medic_revive = CreateSkill("Revival", "Revive the fallen", "Medic", 10, "materials/hl2cr/skill_revival.jpg", 1)
-
-table.insert(GM.PlayerSkills, passive_health)
-table.insert(GM.PlayerSkills, passive_armor)
-
-table.insert(GM.PlayerSkills, medic_heal)
-table.insert(GM.PlayerSkills, medic_revive)
-
-local testTbl = {}
+local medic_recharge = CreateSkill("Health Recharging", "Recharge and\nget back in\nthe fight", "Medic", 6, "materials/hl2cr/skill_healing_eff.jpg", 5)
 
 if SERVER then
 	net.Receive("HL2CR_SkillObtain", function(len, ply)
@@ -37,29 +30,29 @@ if SERVER then
 		
 		local skillToAdd = net.ReadString()
 		local classAssign = net.ReadString()
+		local skillToInsert = nil
+		local skillIndex = -1
 		
 		for i, v in ipairs(GAMEMODE.PlayerSkills) do
-			if v.Name == skillToAdd and v.Class == classAssign then
-
-				--ply.hl2cr.Skills[classAssign]["Invested"] = ply.hl2cr.Skills[classAssign]["Invested"] + 1
-				
-				if IsValid(testTbl) and table.HasValue(testTbl, v) then
-				--if IsValid(ply.hl2cr.Skills[classAssign]) and table.HasValue(ply.hl2cr.Skills[classAssign].Name, v.Name) then
-					print("Has skill already")
-					--table.Merge(ply.hl2cr.Skills[classAssign])
-				else
-					print("Doesn't have skill already")
-					table.insert(testTbl, v)
-					
-					PrintTable(testTbl)
-				end
-				
-				--if ply.hl2cr.Skills[classAssign]["Invested"] < v.Max then
-					--ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints - 1
-				--end
-		
-				ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)
+			if v.Name == skillToAdd then
+				skillToInsert = v
+				skillIndex = i
 			end
-		end	
+		end
+		
+		if not skillIndex or not skillToInsert then return end
+		
+		if ply.hl2cr.Skills[skillIndex] and ply.hl2cr.Skills[skillIndex].Invested >= skillToInsert.Max then return end
+		
+		if ply.hl2cr.Skills[skillIndex] then
+			ply.hl2cr.Skills[skillIndex].Invested = ply.hl2cr.Skills[skillIndex].Invested + 1
+		else
+			table.insert(ply.hl2cr.Skills, skillIndex, skillToInsert)
+			ply.hl2cr.Skills[skillIndex].Invested = 1
+		end
+		
+		ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints - 1
+
+		ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)
 	end)
 end

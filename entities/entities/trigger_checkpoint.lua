@@ -40,6 +40,13 @@ function ENT:StartTouch(ent)
 		if self.Func then
 			self.Func()
 		end
+		local CHECKPOINT_HIT = {
+			["Colour"] = Color(235, 135, 55),
+			["Message"] = "CHECKPOINT_HIT",
+			["Other"] = {
+				["Player"] = ent:Nick()
+			},
+		}
 		
 		BroadcastMessage(CHECKPOINT_HIT)
 		BroadcastSound("hl2cr/standardbeep.wav")

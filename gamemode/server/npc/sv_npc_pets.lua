@@ -9,16 +9,8 @@ function SpawnPet(ply)
 	pet:SetPos(tr.HitPos)
 	pet:Spawn()
 	pet:SetOwner(ply)
-	pet:SetCustomCollisionCheck( true )
 	
-	pet:AddFlags( FL_OBJECT )
-	
-	local petstats = {
-		["speed"] = 30 + (ply.hl2cr.Pets.CurrentPet["baseSpeed"] or 0),
-		["damage"] = 5 + (ply.hl2cr.Pets.CurrentPet["baseDMG"] or 0),
-	}
-	
-	pet:SetUpStats(petstats)
+	pet:SetUpStats(ply.hl2cr.Pets.CurrentPet["stats"])
 	
 	ply:SetNWInt("pet_level", ply.hl2cr.Pets.CurrentPet["level"])
 	ply:SetNWInt("pet_curxp", ply.hl2cr.Pets.CurrentPet["xp"])
@@ -26,11 +18,11 @@ function SpawnPet(ply)
 	
 	ply:SetNWInt("pet_skillpoints", ply.hl2cr.Pets.CurrentPet["skillpoints"])
 	
-	ply:SetNWInt("pet_health", pet:Health())
-	ply:SetNWInt("pet_maxhealth", pet:Health())
+	ply:SetNWInt("pet_health", ply.hl2cr.Pets.CurrentPet["stats"]["health"])
+	ply:SetNWInt("pet_maxhealth", ply.hl2cr.Pets.CurrentPet["stats"]["health"])
 	
 	ply.pet = pet
-	ply.spawnCooldown = 5 + CurTime()
+	ply.petcool = 5 + CurTime()
 	
 	net.Start("HL2CR_SpawnPet")
 		net.WriteBool(true)
@@ -43,7 +35,7 @@ function RemovePet(ply)
 		net.WriteBool(false)
 	net.Send(ply)
 	
-	ply.spawnCooldown = 5 + CurTime()
+	ply.petcool = 5 + CurTime()
 	ply.pet:Remove()
 	ply.pet = nil
 	

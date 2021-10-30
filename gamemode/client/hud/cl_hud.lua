@@ -223,6 +223,8 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 			continue
 		end
 		
+		if pl:Team() == 2 or pl:Team() == 5 then continue end
+
 		if not pl:Alive() and (pl:GetNWEntity("hl2cr_grave") and pl:GetNWEntity("hl2cr_grave"):IsValid()) then 
 			local distGrave = LocalPlayer():GetPos():Distance(pl:GetNWEntity("hl2cr_grave"):GetPos())
 			local posGrave = pl:GetNWEntity("hl2cr_grave"):GetPos()
@@ -244,8 +246,6 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 			pos.z = pl:GetPos().z + 45 + (dist * 0.0325)
 
 		local ScrPos = pos:ToScreen()
-		
-		
 		
 		local hpStatus = "nil"
 		local hpColour = Color(255, 255, 255)
@@ -504,14 +504,15 @@ net.Receive("HL2CR_Message", function()
 	if not string.find(translate.Get(messages["Message"]), "@") and not messages["Other"] then
 		chat.AddText(messages["Colour"], translate.Get(messages["Message"]))
 	elseif messages["Other"] then
-		if messages["Other"]["CurCompleted"] and translate.Get(messages["Other"]["CurCompleted"]) then
+		if messages["Other"]["Player"] and not messages["Other"]["Time"] then
+			chat.AddText(messages["Colour"], messages["Other"]["Player"] .. translate.Get(messages["Message"]))
+		elseif messages["Other"]["CurCompleted"] and translate.Get(messages["Other"]["CurCompleted"]) then
 			if messages["Other"]["CurCompleted"]["Total"] then
 			
 				chat.AddText(messages["Colour"], messages["Other"]["Player"] .. translate.Get(messages["Message"]) .. messages["Other"]["Time"] .. translate.Get(messages["Other"]["CurCompleted"]))
 				return
 			end
-			
-			
+
 			chat.AddText(messages["Colour"], messages["Other"]["Player"] .. translate.Get(messages["Message"]) .. messages["Other"]["Time"] .. translate.Get(messages["Other"]["CurCompleted"]))
 			
 		elseif messages["Other"]["Total"] then
@@ -584,5 +585,36 @@ net.Receive("HL2CR_OpenCustomMap", function()
 			net.WriteString("BeginNightmareHouse")
 		net.SendToServer()
 		customFrame:Close()
+	end
+end)
+
+net.Receive("HL2CR_StatusEffect", function()
+	local effect = net.ReadString()
+	local timeLeft = net.ReadInt(16) + CurTime()
+	local isActive = net.ReadBool()
+	
+	if effect == "HealthRegen" then
+		if isActive then
+			if IsValid(effectIcon) then
+				effectIcon:Remove()
+			end
+			effectIcon = vgui.Create("DImage")
+			effectIcon:SetSize(64, 64)
+			effectIcon:SetImage("materials/hl2cr/skill_health.jpg")
+			effectIcon:SetPos(ScrW() / 5.65, ScrH() / 1.20)
+			
+			local effectTimer = vgui.Create("DLabel", effectIcon)
+			effectTimer:SetPos(12, 24)
+			effectTimer:SetFont("HL2CR_StatusFont")
+			effectTimer.Think = function(pnl)
+				pnl:SetText(math.Round(timeLeft - CurTime(), 1))
+			end
+			
+		else
+			print("Effect done")
+			if IsValid(effectIcon) then
+				effectIcon:Remove()
+			end
+		end
 	end
 end)

@@ -343,10 +343,10 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 			return ""
 		end
 		
-		if ply.spawnCooldown and ply.spawnCooldown > CurTime() then
+		if ply.petcool and ply.petcool > CurTime() then
 			local ERROR_PET_COOLDOWN = {
 				["Colour"] = Color(215, 50, 50),
-				["Message"] = "Slow down! please wait " .. math.Round(ply.spawnCooldown - CurTime()) .. " seconds"
+				["Message"] = "Slow down! please wait " .. math.Round(ply.petcool - CurTime()) .. " seconds"
 			}
 						
 			BroadcastMessage(ERROR_PET_COOLDOWN, ply)
@@ -426,10 +426,10 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 			return ""
 		end
 		
-		if ply.spawnCooldown > CurTime() then
+		if ply.petcool > CurTime() then
 			local ERROR_PET_COOLDOWN = {
 				["Colour"] = Color(215, 50, 50),
-				["Message"] = "Slow down! please wait " .. math.Round(ply.spawnCooldown - CurTime()) .. " seconds"
+				["Message"] = "Slow down! please wait " .. math.Round(ply.petcool - CurTime()) .. " seconds"
 			}
 						
 			BroadcastMessage(ERROR_PET_COOLDOWN, ply)
@@ -540,10 +540,10 @@ concommand.Add("hl2cr_petremove", function(ply, cmd, args)
 		return
 	end
 	
-	if ply.spawnCooldown and ply.spawnCooldown > CurTime() then
+	if ply.petcool and ply.petcool > CurTime() then
 		local ERROR_PET_COOLDOWN = {
 			["Colour"] = Color(215, 50, 50),
-			["Message"] = "Slow down! please wait " .. math.Round(ply.spawnCooldown - CurTime()) .. " seconds"
+			["Message"] = "Slow down! please wait " .. math.Round(ply.petcool - CurTime()) .. " seconds"
 		}
 					
 		BroadcastMessage(ERROR_PET_COOLDOWN, ply)
@@ -575,10 +575,10 @@ concommand.Add("hl2cr_petsummon", function(ply, cmd, args)
 		return 
 	end
 	
-	if ply.spawnCooldown and ply.spawnCooldown > CurTime() then
+	if ply.petcool and ply.petcool > CurTime() then
 		local ERROR_PET_COOLDOWN = {
 			["Colour"] = Color(215, 50, 50),
-			["Message"] = "Slow down! please wait " .. math.Round(ply.spawnCooldown - CurTime()) .. " seconds"
+			["Message"] = "Slow down! please wait " .. math.Round(ply.petcool - CurTime()) .. " seconds"
 		}
 					
 		BroadcastMessage(ERROR_PET_COOLDOWN, ply)
@@ -615,8 +615,60 @@ concommand.Add("hl2cr_addxp", function(ply, cmd, args)
 	AddXP(ply, args[1])
 end)
 
+concommand.Add("hl2cr_addpetxp", function(ply, cmd, args)
+	if not ply:IsAdmin() then return end
+	
+	AddPetXP(ply, args[1])
+end)
+
+concommand.Add("hl2cr_givexp", function(ply, cmd, args)
+	if not ply:IsAdmin() then return end
+	
+	local target = nil
+	
+	for _, v in ipairs(player.GetAll()) do
+		if target and string.find(target:Nick(), string.lower(string.sub(v:Nick(), 0, #args[1]))) then
+			BroadcastMessage(ERROR_VOTEKICK_MULTINAME, ply)
+			return
+		end
+		
+		if string.find(string.lower(v:Nick()), string.lower(args[1])) then
+			target = v
+		end
+	end
+	
+	if target then
+		AddXP(target, args[2])
+		target:ChatPrint("You were given " .. args[2] .. "XP by an admin")
+		ply:ChatPrint(args[2] .. "XP given to " .. target:Nick())
+	end
+end)
+
 concommand.Add("hl2cr_addresin", function(ply, cmd, args)
 	if not ply:IsAdmin() then return end
 	
 	AddResin(ply, args[1])
+end)
+
+concommand.Add("hl2cr_giveresin", function(ply, cmd, args)
+	if not ply:IsAdmin() then return end
+	
+	local target = nil
+	
+	for _, v in ipairs(player.GetAll()) do
+		if target and string.find(target:Nick(), string.lower(string.sub(v:Nick(), 0, #args[1]))) then
+			BroadcastMessage(ERROR_VOTEKICK_MULTINAME, ply)
+			return
+		end
+		
+		if string.find(string.lower(v:Nick()), string.lower(args[1])) then
+			target = v
+		end
+	end
+	
+	if target then
+		AddResin(target, args[2])
+		target:ChatPrint("You were given " .. args[2] .. " Resin by an admin")
+		ply:ChatPrint(args[2] .. " Resin given to " .. target:Nick())
+	end
 end)

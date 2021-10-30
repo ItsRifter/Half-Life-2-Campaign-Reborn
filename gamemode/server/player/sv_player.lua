@@ -156,31 +156,12 @@ hook.Add("PlayerInitialSpawn", "HL2CR_InitialPlayerSpawn", function(ply, transit
 	}
 end)
 
---Applies the skill that the player has on spawn
-local APPLY_SKILLS_HEALTH = {
-	["Health Boost"] = 5,
-	["Health Boost II"] = 10,
-	["Health Boost III"] = 25
-}
-
-local APPLY_SKILLS_CLASS_MEDIC = {
-	["Healing Efficiency"] = 10,
-	["Healing Efficiency II"] = 20,
-	["Healing Efficiency III"] = 40,
-}
-
-local APPLY_SKILLS_CLASS_MEDIC_RECHARGE = {
-	["Heal Recharge"] = 5,
-	["Heal Recharge II"] = 15,
-	["Heal Recharge III"] = 30,
-}
-
 local APPLY_SKILLS_DEPLOYABLE_MECH = {
 	["Controllable Drone"] = "weapon_controllable_drone"
 }
 
 local APPLY_ARMOR_RESIST_POINTS = {
-	
+	--TODO
 }
 
 --Player spawning
@@ -215,7 +196,7 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	local newMaxHP = 0
 	local ArmorCount = 0
 	local healing = 0
-	local recharge = 0
+	local HPrecharge = 0
 	
 	ply.totalArmorRes = 0
 	
@@ -223,7 +204,6 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 		if skill.Name == "Revival" then
 			ply:SetNWBool("CanRevive", true)
 		end
-		
 		if skill.Name == "Health Boost" and ply.hl2cr.Skills[k].Invested then
 			for i = 1, ply.hl2cr.Skills[k].Invested do 
 				newMaxHP = newMaxHP + 5
@@ -232,6 +212,16 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 		if skill.Name == "Armor Boost" and ply.hl2cr.Skills[k].Invested then
 			for i = 1, ply.hl2cr.Skills[k].Invested do 
 				ArmorCount = ArmorCount + 15
+			end
+		end
+		if skill.Name == "Healing" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
+				healing = healing + 5
+			end
+		end
+		if skill.Name == "Health Recharging" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
+				HPrecharge = HPrecharge + 5
 			end
 		end
 	end
@@ -259,7 +249,7 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
 
 	ply:SetNWInt("skill_healing", healing)
-	ply:SetNWInt("skill_recharge", recharge)
+	ply:SetNWInt("skill_healthrecharge", HPrecharge)
 	
 	ply:SetMaxHealth(100 + newMaxHP)
 	ply:SetHealth(100 + newMaxHP)
@@ -289,7 +279,9 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	end
 	
 	for i, items in pairs(SPAWNING_ITEMS) do
-		for k, _ in pairs(items) do		
+		for k, _ in pairs(items) do	
+			if SPAWNING_ITEMS[i][k].Amount == nil or SPAWNING_ITEMS[i][k].Type == nil then continue end
+			
 			if SPAWNING_ITEMS[i][k].Type == "Armor" then
 				ply:SetArmor(SPAWNING_ITEMS[i][k].Amount)
 			else
@@ -592,6 +584,29 @@ hook.Add( "CanPlayerSuicide", "HL2CR_CanSuicide", function( ply )
 	return true
 end)
 
+function AddStatus(ply, effect)
+	
+	if effect == "HealthRegen" then
+		net.Start("HL2CR_StatusEffect")
+			net.WriteString(effect)
+			net.WriteInt(10, 16)
+			net.WriteBool(true)
+		net.Send(ply)
+		
+		timer.Create("HL2CR_StimHealth_" .. ply:Nick(), 1, 10, function()
+			ply:SetHealth(math.min(ply:GetMaxHealth(), ply:Health() + 1))
+			
+			if timer.Exists("HL2CR_StimHealth_" .. ply:Nick()) and timer.RepsLeft("HL2CR_StimHealth_" .. ply:Nick()) <= 0 then
+				net.Start("HL2CR_StatusEffect")
+					net.WriteString(effect)
+					net.WriteInt(0, 16)
+				net.Send(ply)
+			end
+		end)
+		
+		
+	end
+end
 
 local function createIndicator(rewardAmount, position, player, isPet)
 	
@@ -610,21 +625,21 @@ local function createIndicator(rewardAmount, position, player, isPet)
 end
 
 RANDOM_XP_BASED_NPC = {
-	["npc_headcrab"] = {xpMin = 5, xpMax = 15},
-	["npc_headcrab_fast"] = {xpMin = 12, xpMax = 27},
-	["npc_headcrab_black"] = {xpMin = 13, xpMax = 28},
-	["npc_headcrab_poison"] = {xpMin = 13, xpMax = 28},
-	["npc_zombie_torso"] = {xpMin = 10, xpMax = 35},
-	["npc_zombie"] = {xpMin = 25, xpMax = 65},
-	["npc_fastzombie"] = {xpMin = 32, xpMax = 75},
-	["npc_poisonzombie"] = {xpMin = 40, xpMax = 90},
+	["npc_headcrab"] = {xpMin = 2, xpMax = 12},
+	["npc_headcrab_fast"] = {xpMin = 3, xpMax = 15},
+	["npc_headcrab_black"] = {xpMin = 5, xpMax = 20},
+	["npc_headcrab_poison"] = {xpMin = 5, xpMax = 20},
+	["npc_zombie_torso"] = {xpMin = 10, xpMax = 30},
+	["npc_zombie"] = {xpMin = 25, xpMax = 60},
+	["npc_fastzombie"] = {xpMin = 33, xpMax = 70},
+	["npc_poisonzombie"] = {xpMin = 35, xpMax = 85},
 	["npc_cscanner"] = {xpMin = 15, xpMax = 30},
 	["npc_metropolice"] = {xpMin = 30, xpMax = 80},
 	["npc_manhack"] = {xpMin = 25, xpMax = 70},
 	["npc_combine_s"] = {xpMin = 40, xpMax = 135},
 	["npc_antlionguard"] = {xpMin = 125, xpMax = 275},
 	["npc_antlionguardian"] = {xpMin = 125, xpMax = 275},
-	["npc_barnacle"] = {xpMin = 5, xpMax = 25},
+	["npc_barnacle"] = {xpMin = 1, xpMax = 25},
 	["npc_turret_ground"] = {xpMin = 5, xpMax = 25},
 }
 
@@ -688,7 +703,7 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 	elseif attacker:IsNextBot() and attacker:GetOwner():IsPlayer() then
 		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
 		
-		local totalXP = CalculateXP(attacker:GetOwner(), math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin * npc.level, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax * npc.level))
+		local totalXP = CalculateXP(attacker:GetOwner(), math.random((RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin / 2) * npc.level, (RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax / 2) * npc.level))
 		
 		if totalXP <= 0 then return end
 		
@@ -712,18 +727,6 @@ hook.Add("PlayerEnteredVehicle", "HL2CR_EnableVehicleOnEnter", function(ply, veh
 	end	
 end)
 
-hook.Add("ShouldCollide", "HL2CR_IgnoreCollisionGravePet", function( ply, other )
-	if ply:IsPlayer() and other:IsPet() then
-		return false
-	end
-	
-	if ply:IsPlayer() and other.player then
-		return false
-	end
-	
-	return true
-end)
-
 local PROJ_IGNORE = {
 	["grenade_ar2"] = true,
 	["crossbow_bolt"] = true,
@@ -731,10 +734,28 @@ local PROJ_IGNORE = {
 	["rpg_missile"] = true,
 	["npc_grenade_frag"] = true
 }
-hook.Add("ShouldCollide", "HL2CR_IgnoreCollisionProjectile", function( ent, other )
+
+hook.Add("ShouldCollide", "HL2CR_IgnoreCollisions", function( ent, other )
+	if ent:IsPlayer() and other:IsPet() then
+		return false
+	end
+	
 	if ent:IsPlayer() and PROJ_IGNORE[other:GetClass()] then
 		return false
 	end
+	
+	if ent:IsPlayer() and other:IsPet() then
+		return false
+	end
+	
+	if ent:IsPlayer() and other.player then
+		return false
+	end
+	
+	if ent:IsPlayer() and other:IsNPC() and (other:IsFriendly() or other:GetClass() == "npc_citizen") then
+		return false
+	end
+	return true
 end)
 
 hook.Add("EntityTakeDamage", "HL2CR_VehicleFix", function( target, dmgInfo )
@@ -753,7 +774,7 @@ hook.Add("EntityTakeDamage", "HL2CR_SlashDMGBuff", function( target, dmgInfo )
 	local att = dmgInfo:GetAttacker()
 	local dmgType = dmgInfo:GetDamageType()
 	
-	if target:IsPlayer() and att:IsNPC() then
+	if (target:IsPlayer() or target:IsPet()) and att:IsNPC() then
 		if dmgType == DMG_SLASH and (att:GetClass() ~= "npc_headcrab_black" or att:GetClass() ~= "npc_headcrab_poison") then
 			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * 1.25)
 		end
@@ -763,18 +784,19 @@ end)
 hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup, dmgInfo )
 		
 	local hitMulti = GetConVar("hl2cr_difficulty"):GetInt() - 1
-	local hitMultiSkill = GetConVar("hl2cr_difficulty"):GetInt()
 	
 	if hitMulti <= 0 then return end
-	    if hitgroup == HITGROUP_HEAD then
-		    hitMulti = hitMulti * 1.25
-	    elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
-		    hitMulti = hitMulti * 1
-	    elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-		    hitMulti = hitMulti * 0.5
-	    elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-		    hitMulti = hitMulti * 0.25	
-	    end
+	
+	if hitgroup == HITGROUP_HEAD then
+		hitMulti = hitMulti * 2
+	elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
+		hitMulti = hitMulti * 1.5
+	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+		hitMulti = hitMulti * 1.25
+	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+		hitMulti = hitMulti * 1.25
+	end
+	
 	dmgInfo:ScaleDamage(hitMulti)
 end)
 

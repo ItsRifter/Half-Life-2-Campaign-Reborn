@@ -13,7 +13,7 @@ function CreateClass(name, desc, desc2, level, icon, weapons)
 		["Weapons"] = weapons,
 	}
 	
-	return class
+	table.insert(GM.PlayStyleClass, class)
 end
 
 local medicWeps = {
@@ -56,13 +56,6 @@ local mechanic = CreateClass("Mechanic", "A mechanic filled with\ndesigns ideas\
 local grenadier = CreateClass("Grenadier", "Become more effective with\ngrenades", "EQUIPMENT:\nPack of grenades\nGrenade Belt", 10, "materials/hl2cr/class_grenadier.jpg", grenadierWeps)
 
 local dropout = CreateClass("Combine Dropout", "After rethinking their\ncareer choices\nit was time to dropout\nand help the resistance", "EQUIPMENT:\nMan-Hack\nStunstick", 10, "materials/hl2cr/class_dropout.jpg", dropoutWeps)
-
-table.insert(GM.PlayStyleClass, fieldMedic)
-table.insert(GM.PlayStyleClass, repairMan)
-table.insert(GM.PlayStyleClass, supplier)
-table.insert(GM.PlayStyleClass, grenadier)
-table.insert(GM.PlayStyleClass, mechanic)
-table.insert(GM.PlayStyleClass, dropout)
 
 if SERVER then
 	net.Receive("HL2CR_SelectClass", function(len, ply)

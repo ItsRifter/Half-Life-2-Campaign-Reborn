@@ -22,9 +22,6 @@ SWEP.AllowSprintAttack = true
 SWEP.FiresUnderwater = true
 
 SWEP.Primary.Damage = 20
-SWEP.RecoverTime = 0.25
-
-
 
 SWEP.Primary.ClipSize				= 1
 SWEP.Primary.DefaultClip			= 1	
@@ -74,12 +71,10 @@ function SWEP:PrimaryAttack()
 				self.Owner:EmitSound("physics/flesh/flesh_impact_bullet" .. math.random(1, 5) .. ".wav")
 				self.Owner:EmitSound("items/smallmedkit1.wav")
 				self.Owner:SetHealth(math.min(self:GetOwner():GetMaxHealth(), self:GetOwner():Health() + self.Primary.Damage))
+				AddStatus(self.Owner, "HealthRegen")
 				self:TakePrimaryAmmo(1)
+				self.Owner:StripWeapon(self:GetClass())
 				
-				timer.Create("HL2CR_StimHealth_" .. self.Owner:Nick(), self.RecoverTime, 15, function()
-					self.Owner:SetHealth(math.min(self:GetOwner():GetMaxHealth(), self:GetOwner():Health() + 1))
-					
-				end)
 			end)
 		end
 		

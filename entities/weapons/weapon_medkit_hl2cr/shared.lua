@@ -40,7 +40,7 @@ function SWEP:Initialize()
 		local healer = self.Owner
 		
 		timer.Create( "medkit_ammo" .. self:EntIndex(), 20, 0, function()
-			if ( self:Clip1() < self.MaxAmmo ) then self:SetClip1( math.min( self:Clip1() + (5 + healer:GetNWInt("skill_recharge")), self.MaxAmmo ) ) end
+			if ( self:Clip1() < self.MaxAmmo ) then self:SetClip1( math.min( self:Clip1() + (5 + healer:GetNWInt("skill_healthrecharge")), self.MaxAmmo ) ) end
 		end )
 	end)
 end

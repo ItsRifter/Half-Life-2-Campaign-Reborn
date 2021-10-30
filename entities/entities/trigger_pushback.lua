@@ -28,10 +28,13 @@ function ENT:Initialize()
 	self:SetTrigger(true)
 end
 
-function ENT:Touch(ent)	
-
+function ENT:StartTouch(ent)	
+	
 	if ent:IsValid() and ent:IsPlayer() then
 		ent:SetPos(self.TPSpot)
 	end
-	
+end
+
+function ENT:SetTPSpot(vec)
+	self.TPSpot = vec
 end

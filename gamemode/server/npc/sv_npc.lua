@@ -25,7 +25,7 @@ function meta:IsFriendly()
 end
 
 function SetNPCTraits(npc)
-	if not npc:IsNPC() then return end
+	if not npc or not npc:IsNPC() then return end
 	
 	if GetConVar("hl2cr_difficulty"):GetInt() == 1 then
 		npc.level = math.random(1, 3)
@@ -40,7 +40,13 @@ function SetNPCTraits(npc)
 	end
 	
 	npc:SetNWInt("HL2CR_NPC_Level", npc.level)
-	npc:SetHealth(npc:Health() + (npc.level * 15) )
+	local newHealth = npc:Health() + (npc.level * 15)
+
+	timer.Simple(0.1, function()
+		npc:SetMaxHealth(newHealth)
+		npc:SetHealth(newHealth)
+	end)
+	
 	--npc:SetNWBool("HL2CR_Special", true)
 	--npc:SetNWString("HL2CR_NPC_Name", "Riot Shield Cop")
 end
@@ -73,18 +79,13 @@ end)
 
 hook.Add("EntityTakeDamage", "HL2CR_FriendlyOrHostile", function(ent, dmgInfo)
 	local att = dmgInfo:GetAttacker()
-	
+
 	if ent:IsFriendly() or (ent:GetClass() == "npc_citizen" and att:IsPlayer()) then
 		dmgInfo:SetDamage(0)
 		return
 	end
 	
 	if ent:GetClass() == "npc_citizen" and att:GetClass() == "prop_vehicle_jeep" then
-		dmgInfo:SetDamage(0)
-		return
-	end
-	
-	if ent:GetClass() == "npc_vortigaunt" and att:IsPlayer() and HOSTILE_VORTS == false then
 		dmgInfo:SetDamage(0)
 		return
 	end
@@ -110,24 +111,12 @@ hook.Add("OnEntityCreated", "HL2CR_NPCCreated", function(ent)
 	SetNPCTraits(ent)
 end)
 
---[[
-hook.Add( "ScaleNPCDamage", "HL2CR_PlayerToNPCDMG", function( npc, hitgroup, dmgInfo )
+hook.Add( "ScaleNPCDamage", "HL2CR_NPCDMGScale", function( npc, hitgroup, dmgInfo )
 	
 	if npc:IsFriendly() or npc:GetClass() == "npc_citizen" then return end
 	
-	local hitDivide = GetConVar("hl2cr_difficulty"):GetInt()
+	local damage = dmgInfo:GetDamage()
 	
-	if hitgroup == HITGROUP_HEAD then
-		hitDivide = hitDivide + 0.75
-	elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
-		hitDivide = hitDivide + 1
-	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-		hitDivide = hitDivide + 1.25
-	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-		hitDivide = hitDivide + 1.50
-	end
-	
-	local finalDMG = dmgInfo:GetDamage() / hitDivide
+	local finalDMG = math.Clamp(damage, 1, 999)
 	dmgInfo:SetDamage(finalDMG)
 end)
---]]

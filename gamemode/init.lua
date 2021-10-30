@@ -56,7 +56,8 @@ include("shared/misc/sh_voting.lua")
 include("shared/playerclass/sh_player_classes.lua")
 include("shared/playerclass/sh_player_skills.lua")
 include("shared/playerclass/sh_player_pets.lua")
-include("shared/playerclass/sh_player_pets_skills.lua")
+include("shared/petskills/sh_pets_skills_base.lua")
+include("shared/petskills/sh_pets_headcrab_skills.lua")
 
 ----Achievements
 include("shared/ach/sh_player_ach.lua")
@@ -115,6 +116,7 @@ util.AddNetworkString("HL2CR_EquipPet")
 util.AddNetworkString("HL2CR_UpdatePet")
 util.AddNetworkString("HL2CR_UpdatePetSkill")
 util.AddNetworkString("HL2CR_SpawnPet")
+util.AddNetworkString("HL2CR_StatusEffect")
 
 hook.Add("PrePACConfigApply", "HL2CR_DisablePac3Autoload", function(ply, outfit_data)
 	ply:SetModel(ply.hl2cr.Model)
@@ -270,11 +272,6 @@ ERROR_VOTEKICK_ADMIN = {
 ERROR_VOTEKICK_SELF = {
 	["Colour"] = Color(215, 50, 50),
 	["Message"] = "ERROR_VOTEKICK_SELF"
-}
-
-CHECKPOINT_HIT = {
-	["Colour"] = Color(235, 135, 55),
-	["Message"] = "CHECKPOINT_HIT"
 }
 
 ENABLED_AIRBOAT = {

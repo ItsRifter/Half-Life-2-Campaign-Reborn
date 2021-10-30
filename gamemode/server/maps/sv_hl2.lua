@@ -180,8 +180,15 @@ local function SetCheckpoints()
 			Vector(-10337, -4717, 328)
 		}
 		
+		TRIGGER_PUSHBACK = {
+			Vector(-7071, -1469, 2), 		Vector(-6980, -1289, 134)
+		}
+		
+		TRIGGER_PUSHBACK_SPOT = {
+			Vector(-7201, -1376, 30)
+		}
+		
 		CHECKPOINT_FUNC_1 = function()
-			
 			for _, b in ipairs(ents.FindByClass("prop_physics")) do
 				if b:GetModel() == "models/props_c17/doll01.mdl" then
 					for _, v in ipairs(player.GetAll()) do
@@ -189,6 +196,10 @@ local function SetCheckpoints()
 					end
 				end	
 			end
+		end
+		
+		CHECKPOINT_FUNC_2 = function()
+			ents.FindByClass("trigger_pushback")[1]:Fire("Enable")
 		end
 	elseif game.GetMap() == "d1_trainstation_06" then
 		TRIGGER_CHANGELEVEL = {
@@ -415,7 +426,7 @@ local function SetCheckpoints()
 		}
 		
 		TRIGGER_PUSHBACK = {
-			Vector(-2361, -1592, -3450), 		Vector(-2576, -1224, -3237)
+			Vector(-2361, -1211, -3436), 		Vector(-2563, -1586, -3232)
 		}
 		
 		TRIGGER_PUSHBACK_SPOT = {
@@ -427,7 +438,7 @@ local function SetCheckpoints()
 		}
 		
 		TRIGGER_CHECKPOINT = {
-			Vector(-4516, 800, -3061),		Vector(-4722, 982, -2954)
+			Vector(-4737, 952, -3085),		Vector(-4531, 800, -3255)
 		}
 		
 		CHECKPOINT_POS = {
@@ -648,7 +659,7 @@ local function SetCheckpoints()
 		}
 		
 		CHECKPOINT_POS = {
-			Vector(1559, 678, -186),		Vector(310, -410, -54),
+			Vector(1564, 677, -197),		Vector(310, -410, -54),
 			Vector(576, -928, 9)
 		}
 	elseif game.GetMap() == "d2_prison_07" then
@@ -4012,6 +4023,11 @@ local function SetUpMisc()
 	local MapLua = ents.Create("lua_run")
 	MapLua:SetName("triggerhook")
 	MapLua:Spawn()
+	local npc_vortigaunt = {
+		["npc_vortigaunt"] = true
+	}
+	
+	table.Merge(FRIENDLY_NPCS, npc_vortigaunt)
 	
 	timer.Simple(0.1, function()
 		for _, ent in ipairs(ents.GetAll()) do
@@ -4030,8 +4046,7 @@ local function SetUpMisc()
 	if HL2_EQUIPMENT[game.GetMap()] then
 		table.insert(SPAWNING_ITEMS, HL2_EQUIPMENT[game.GetMap()])
 	end
-	HOSTILE_VORTS = false
-	
+
 	for _, portal in ipairs(ents.FindByClass("func_areaportal")) do
 		portal:SetKeyValue("StartOpen", "1")
 	end
@@ -4105,6 +4120,10 @@ local function SetUpMisc()
 		baby:SetModel("models/props_c17/doll01.mdl")
 		baby:SetPos(spawnpoint:GetPos() + Vector(30, 30, 0))
 		baby:Spawn()
+	end
+	
+	if game.GetMap() == "d1_trainstation_05" then
+		ents.FindByClass("trigger_pushback")[1]:Fire("Disable")
 	end
 	
 	if file.Exists("hl2cr_data/ballcheck.txt", "DATA") then
@@ -4531,10 +4550,13 @@ function TrainSodaCan(hasSubmissive)
 	end
 end
 
-local function FailSandAchievement(ply)		
+function FailSandAchievement(ply)		
 	local FAILER = {
 		["Colour"] = Color(215, 50, 50),
 		["Message"] = "ACH_FAILED_SAND",
+		["Other"] = {
+			["Player"] = ply:Nick()
+		}
 	}
 	
 	BroadcastMessage(FAILER)

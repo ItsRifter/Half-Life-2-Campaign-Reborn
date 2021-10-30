@@ -279,7 +279,8 @@ net.Receive("HL2CR_QMenuUpdate", function()
 end)
 
 function StartQMenu(shouldOpen, skillsTbl)
-
+	if not LocalPlayer():Alive() or (LocalPlayer():Team() == 2 or LocalPlayer():Team() == 5) then return end
+	
 	if shouldOpen then 
 		qMenuTabs = vgui.Create("HL2CR_Tab")
 		qMenuTabs:SetSize(ScrW() / 1.5, ScrH() / 1.5)
@@ -693,6 +694,8 @@ function StartQMenu(shouldOpen, skillsTbl)
 		
 		local mechSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		mechSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
+
+		local skillPoints = LocalPlayer():GetNWInt("stat_skillpoints")
 		
 		for i, skill in pairs(GAMEMODE.PlayerSkills) do
 			
@@ -740,8 +743,8 @@ function StartQMenu(shouldOpen, skillsTbl)
 			skillPnlLevel:SetTextColor(Color(0, 0, 0, 255))
 			skillPnlLevel:SetText("0/" .. skill.Max)
 			
-			if skill.Name == skillsTbl[skill.Class].Name then
-				skillPnlLevel:SetText( (skillsTbl[skill.Class].Invested ) .. "/" .. skill.Max)
+			if skillsTbl[i] then
+				skillPnlLevel:SetText( (skillsTbl[i].Invested ) .. "/" .. skill.Max)
 			end
 			skillPnlLevel:SizeToContents()
 			
@@ -758,15 +761,13 @@ function StartQMenu(shouldOpen, skillsTbl)
 			
 			skillBtn:SetImage(skill.Icon)
 			
-			local skillPoints = LocalPlayer():GetNWInt("stat_skillpoints")
-			
 			skillBtn.DoClick = function(pnl)
 				if LocalPlayer():GetNWInt("stat_level") < skill.LevelReq then
 					surface.PlaySound("buttons/button16.wav")
 					return
 				end
 
-				if (skillsTbl[skill.Class].Invested or 0) >= skill.Max then 
+				if skillsTbl[i] and (skillsTbl[i].Invested or skill.Invested) >= skill.Max then 
 					surface.PlaySound("buttons/button16.wav")
 					return
 				end
@@ -775,17 +776,22 @@ function StartQMenu(shouldOpen, skillsTbl)
 					surface.PlaySound("buttons/button16.wav")
 					return
 				end
-
-				net.Start("HL2CR_SkillObtain")
-					net.WriteString(skill.Name)
-					net.WriteString(skill.Class)
-				net.SendToServer()
 				
 				skillPoints = skillPoints - 1
-
-				skillsTbl[skill.Class].Invested = (skillsTbl[skill.Class].Invested or 0) + 1
-				skillPnlLevel:SetText( (skillsTbl[skill.Class].Invested or 0 ) .. "/" .. skill.Max)
-				skillPnlLevel:SizeToContents()
+				
+				net.Start("HL2CR_SkillObtain")
+					net.WriteString(skill.Name)
+				net.SendToServer()
+				
+				if skillsTbl[i] then
+					skillsTbl[i].Invested = (skillsTbl[i].Invested or 0) + 1
+					skillPnlLevel:SetText( (skillsTbl[i].Invested or 0 ) .. "/" .. skill.Max)
+					skillPnlLevel:SizeToContents()
+				else
+					skill.Invested = skill.Invested + 1
+					skillPnlLevel:SetText( (skill.Invested) .. "/" .. skill.Max)
+					skillPnlLevel:SizeToContents()
+				end
 				
 				surface.PlaySound("buttons/button5.wav")
 			end

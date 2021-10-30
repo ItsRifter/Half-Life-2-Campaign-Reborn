@@ -1,6 +1,6 @@
 net.Receive("HL2CR_OpenPets", function()
 	local curPlayerPets = net.ReadTable()
-	
+
 	local petTabs = vgui.Create("HL2CR_Tab")
 	petTabs:SetSize(ScrW() / 1.5, ScrH() / 2.5)
 	petTabs:Center()
@@ -12,27 +12,20 @@ net.Receive("HL2CR_OpenPets", function()
 	local petsPnl = vgui.Create("DPanel", petTabs)
 	petsPnl:SetSize(petTabs:GetWide(), petTabs:GetTall())
 	petsPnl:SetPos(0, 100)
-	
-	local petsPnlBG = vgui.Create("DPanel", petsPnl)
-	petsPnlBG:SetSize(petsPnl:GetWide(), petsPnl:GetTall())
-	petsPnlBG.Paint = function(self, w, h)
-		surface.SetDrawColor(HL2CR.Theme.qMenu)
-		surface.DrawRect(0, 0, w, h)
-	end
 
 	local petScroll = vgui.Create("DHorizontalScroller", petsPnl)
 	petScroll:Dock(FILL)
 	petScroll:SetOverlap( -75 )
 		
 	local petLayout = vgui.Create("DIconLayout", petScroll)
-	petLayout:SetPos(0, 75)
+	petLayout:SetPos(0, petsPnl:GetTall()/8)
 	petLayout:SetSize(petTabs:GetWide(), petTabs:GetTall())
 	petLayout:SetSpaceX(25)
 	
 	for _, p in ipairs(curPlayerPets) do
 		local petPanel = petLayout:Add("DPanel")
 		
-		petPanel:SetSize(petsPnl:GetWide() / 4.55, petsPnl:GetTall() / 2.5)
+		petPanel:SetSize(petTabs:GetWide() / 2.8, petTabs:GetTall() / 2.5)
 		petPanel.Paint = function(self, w, h)
 			surface.SetDrawColor(HL2CR.Theme.skillFill)
 			surface.DrawRect(0, 0, w, h)
@@ -53,8 +46,8 @@ net.Receive("HL2CR_OpenPets", function()
 		petNameDesc:SizeToContents()
 		
 		local petModel = vgui.Create("DModelPanel", petPanel)
-		petModel:SetSize(350, 350)
-		petModel:SetPos(50, -175)
+		petModel:SetSize(petPanel:GetWide(), petPanel:GetWide())
+		petModel:SetPos(petPanel:GetWide()/4, -petPanel:GetWide()/1.7368)
 		petModel:SetDirectionalLight(BOX_RIGHT, Color(255, 160, 80, 255))
 		petModel:SetDirectionalLight(BOX_LEFT, Color(80, 160, 255, 255))
 		petModel:SetAmbientLight(Vector(-64, -64, -64))
@@ -98,20 +91,13 @@ net.Receive("HL2CR_OpenPets", function()
 	local adoptionPnl = vgui.Create("DPanel", petTabs)
 	adoptionPnl:SetSize(petTabs:GetWide(), petTabs:GetTall())
 	adoptionPnl:SetPos(0, 100)
-	
-	local adoptionPnlBG = vgui.Create("DPanel", adoptionPnl)
-	adoptionPnlBG:SetSize(adoptionPnl:GetWide(), adoptionPnl:GetTall())
-	adoptionPnlBG.Paint = function(self, w, h)
-		surface.SetDrawColor(HL2CR.Theme.qMenu)
-		surface.DrawRect(0, 0, w, h)
-	end
 
 	local adoptionScroll = vgui.Create("DHorizontalScroller", adoptionPnl)
 	adoptionScroll:Dock(FILL)
 	adoptionScroll:SetOverlap( -75 )
 		
 	local adoptionLayout = vgui.Create("DIconLayout", adoptionScroll)
-	adoptionLayout:SetPos(0, 75)
+	adoptionLayout:SetPos(0, adoptionPnl:GetTall()/8)
 	adoptionLayout:SetSize(adoptionPnl:GetWide(), adoptionPnl:GetTall())
 	adoptionLayout:SetSpaceX(25)
 	
@@ -122,7 +108,7 @@ net.Receive("HL2CR_OpenPets", function()
 		
 		local petPanel = adoptionLayout:Add("DPanel")
 		
-		petPanel:SetSize(petsPnl:GetWide() / 4.55, petsPnl:GetTall() / 2.5)
+		petPanel:SetSize(petsPnl:GetWide() / 2.8, petsPnl:GetTall() / 2.5)
 		petPanel.Paint = function(self, w, h)
 			surface.SetDrawColor(HL2CR.Theme.skillFill)
 			surface.DrawRect(0, 0, w, h)
@@ -143,8 +129,8 @@ net.Receive("HL2CR_OpenPets", function()
 		petNameDesc:SizeToContents()
 		
 		local petModel = vgui.Create("DModelPanel", petPanel)
-		petModel:SetSize(350, 350)
-		petModel:SetPos(50, -175)
+		petModel:SetSize(petPanel:GetWide(), petPanel:GetWide())
+		petModel:SetPos(petPanel:GetWide()/4, -petPanel:GetWide()/1.7368)
 		petModel:SetDirectionalLight(BOX_RIGHT, Color(255, 160, 80, 255))
 		petModel:SetDirectionalLight(BOX_LEFT, Color(80, 160, 255, 255))
 		petModel:SetAmbientLight(Vector(-64, -64, -64))
@@ -203,12 +189,20 @@ net.Receive("HL2CR_OpenPets", function()
 	enhancePnl:SetPos(0, 100)
 	
 	local enchanceSkillLabel = vgui.Create("DLabel", enhancePnl)
-	enchanceSkillLabel:SetText(LocalPlayer():GetNWString("pet_name") .. "'s Skillpoints: " .. curPlayerPets.CurrentPet["skillpoints"])
+	
+	if not curPlayerPets.CurrentPet or LocalPlayer():GetNWString("pet_name") == "" then
+		enchanceSkillLabel:SetText("Your pet's Skillpoints: 0")
+	else
+		enchanceSkillLabel:SetText(LocalPlayer():GetNWString("pet_name") .. "'s Skillpoints: " .. curPlayerPets.CurrentPet["skillpoints"])
+	end
+	
 	enchanceSkillLabel:SetFont("HL2CR_Pets_Points")
 	enchanceSkillLabel:SizeToContents()
 	
-	if curPlayerPets.CurrentPet["class"] then
+	if curPlayerPets.CurrentPet then
 		for i, s in ipairs(GAMEMODE.PlayerPetSkills) do
+			if curPlayerPets.CurrentPet["class"] ~= s["Class"] then continue end
+			
 			local skillPanel = vgui.Create("DPanel", enhancePnl)
 			skillPanel:SetSize(64, 64)
 			skillPanel:SetPos(s["Pos"]["x"], s["Pos"]["y"])
@@ -218,7 +212,9 @@ net.Receive("HL2CR_OpenPets", function()
 			skillBtnIcon:SetSize(skillPanel:GetWide(), skillPanel:GetTall())
 			
 			skillBtnIcon.DoClick = function()
-				
+				net.Start("HL2CR_UpdatePetSkill")
+					net.WriteString(s["Name"])
+				net.SendToServer()
 			end
 			
 		end

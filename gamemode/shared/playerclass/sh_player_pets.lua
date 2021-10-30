@@ -18,7 +18,7 @@ end
 
 GM.PlayerPets = {}
 
-local function CreatePet(name, className, desc, model, cost)
+function CreatePet(name, className, desc, model, cost, stats)
 	
 	local pet = {
 		["name"] = name,
@@ -29,17 +29,27 @@ local function CreatePet(name, className, desc, model, cost)
 		["class"] = className,
 		["desc"] = desc,
 		["model"] = model,
-		["cost"] = cost
+		["cost"] = cost,
+		["stats"] = stats
 	}
 	
-	return pet
+	table.insert(GM.PlayerPets, pet)
 end
 
-local headcrab = CreatePet("Headcrab", "npc_hl2cr_pet_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000)
-local fastheadcrab = CreatePet("Fast Headcrab", "npc_hl2cr_pet_fastheadcrab", "A mutated version of the\noriginal headcrab\nfaster but weaker", "models/headcrab.mdl", 11500)
+local headcrabStats = {
+	["health"] = 100,
+	["speed"] = 30,
+	["damage"] = 5,
+}
 
-table.insert(GM.PlayerPets, headcrab)
-table.insert(GM.PlayerPets, fastheadcrab)
+local fastheadcrabStats = {
+	["health"] = 75,
+	["speed"] = 75,
+	["damage"] = 3,
+}
+
+local headcrab = CreatePet("Headcrab", "npc_hl2cr_pet_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000, headcrabStats)
+local fastheadcrab = CreatePet("Fast Headcrab", "npc_hl2cr_pet_fastheadcrab", "A mutated version of the\noriginal headcrab\nfaster but weaker", "models/headcrab.mdl", 11500, fastheadcrabStats)
 
 if SERVER then
 	net.Receive("HL2CR_EquipPet", function(len, ply)
@@ -68,8 +78,6 @@ if SERVER then
 		if not ply then return end
 		
 		local newPet = net.ReadString()
-		
-		
 		
 		for i, v in ipairs(GAMEMODE.PlayerPets) do
 			if v.name == newPet then 

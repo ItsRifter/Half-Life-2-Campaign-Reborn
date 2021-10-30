@@ -412,8 +412,6 @@ surface.CreateFont( "HL2CR_Config_Option", {
 	outline = false,
 } )
 
-
-
 surface.CreateFont( "HL2CR_Voices", {
 	font = "Roboto",
 	extended = false,
@@ -557,3 +555,23 @@ surface.CreateFont( "HL2CR_FancyShmancy", {
 	additive = false,
 	outline = false,
 } )
+
+
+surface.CreateFont( "HL2CR_StatusFont", {
+	font = "Roboto",
+	extended = false,
+	size = 32,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
