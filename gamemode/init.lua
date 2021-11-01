@@ -21,6 +21,7 @@ include("server/maps/sv_hl2.lua")
 include("server/maps/sv_lobby.lua")
 include("server/maps/sv_map_manager.lua")
 include("server/maps/sv_custom_coop.lua")
+include("server/maps/sv_ep1.lua")
 
 ----Data Saving
 include("server/filesaving/sv_data_filebased.lua")
@@ -119,8 +120,12 @@ util.AddNetworkString("HL2CR_SpawnPet")
 util.AddNetworkString("HL2CR_StatusEffect")
 
 hook.Add("PrePACConfigApply", "HL2CR_DisablePac3Autoload", function(ply, outfit_data)
-	ply:SetModel(ply.hl2cr.Model)
-	return false
+	if not ply:IsAdmin() then
+		ply:SetModel(ply.hl2cr.Model)
+		return false
+	end
+	
+	return true
 end)
 
 hook.Add("PrePACEditorOpen", "HL2CR_DisablePacEditor", function(ply)

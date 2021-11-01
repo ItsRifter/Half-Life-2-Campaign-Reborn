@@ -26,3 +26,7 @@ include("shared/petskills/sh_pets_headcrab_skills.lua")
 include("shared/shop/sh_shop_items.lua")
 include("shared/shop/sh_craftable_items.lua")
 include("shared/sh_translate.lua")
+
+net.Receive("HL2CR_Discord", function()
+	gui.OpenURL("https://discord.gg/zvvZ2ugHQY")
+end)

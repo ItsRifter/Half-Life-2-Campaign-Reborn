@@ -87,7 +87,7 @@ hook.Add("DoPlayerDeath", "HL2CR_RevivalStone", function(ply, att, dmgInfo )
 	gravestone:SetName(ply:Nick() .. " gravestone")
 	gravestone:Spawn()
 	gravestone:PhysicsInit(SOLID_VPHYSICS)
-	
+	gravestone:GetPhysicsObject():EnableMotion( false )
 	gravestone.player = ply
 	
 	ply:SetNWEntity("hl2cr_grave", gravestone)
@@ -683,7 +683,7 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 		
 		player.rewards.bonus["Pacifist"] = false
 		
-		if player:GetActiveWeapon():GetClass() ~= "weapon_crowbar" then
+		if player and player:GetActiveWeapon() and player:GetActiveWeapon():GetClass() ~= "weapon_crowbar" then
 			player.rewards.bonus["Crowbar Only"] = false
 		end
 		

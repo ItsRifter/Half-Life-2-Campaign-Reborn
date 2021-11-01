@@ -16,6 +16,25 @@ FRIENDLY_NPCS = {
 	["npc_breen"] = true
 }
 
+HOSTILE_NPCS = {
+	["npc_headcrab"] = true,
+	["npc_headcrab_fast"] = true,
+	["npc_headcrab_black"] = true,
+	["npc_headcrab_poison"] = true,
+	["npc_zombie_torso"] = true,
+	["npc_zombie"] = true,
+	["npc_fastzombie"] = true,
+	["npc_poisonzombie"] = true,
+	["npc_cscanner"] = true,
+	["npc_metropolice"] = true,
+	["npc_manhack"] = true,
+	["npc_combine_s"] = true,
+	["npc_antlionguard"] = true,
+	["npc_antlionguardian"] = true,
+	["npc_barnacle"] = true,
+	["npc_turret_ground"] = true,
+}
+
 function meta:IsFriendly()
 	if self:IsValid() and self:IsNPC() and FRIENDLY_NPCS[self:GetClass()] then
 		return true
@@ -24,9 +43,16 @@ function meta:IsFriendly()
 	end
 end
 
+function meta:IsHostile()
+	if self:IsValid() and self:IsNPC() and HOSTILE_NPCS[self:GetClass()] then
+		return true
+	else
+		return false
+	end
+end
+
 function SetNPCTraits(npc)
-	if not npc or not npc:IsNPC() then return end
-	
+	if not npc or not npc:IsNPC() or not npc:IsHostile() then return end
 	if GetConVar("hl2cr_difficulty"):GetInt() == 1 then
 		npc.level = math.random(1, 3)
 	elseif GetConVar("hl2cr_difficulty"):GetInt() == 2 then
@@ -40,9 +66,10 @@ function SetNPCTraits(npc)
 	end
 	
 	npc:SetNWInt("HL2CR_NPC_Level", npc.level)
-	local newHealth = npc:Health() + (npc.level * 15)
+	local newHealth = npc:Health() + (npc.level * 3)
 
 	timer.Simple(0.1, function()
+		if not npc or not npc:IsHostile() then return end
 		npc:SetMaxHealth(newHealth)
 		npc:SetHealth(newHealth)
 	end)

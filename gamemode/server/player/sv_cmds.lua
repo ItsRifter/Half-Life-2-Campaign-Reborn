@@ -81,7 +81,7 @@ local DIFF_VOTES = {
 hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	
 	--Enables AFK mode on the player
-	if text == "!afk" and (ply:Team() ~= TEAM_AFK and ply:Team() ~= TEAM_COMPLETED_MAP) then
+	if text == "!afk" and (ply:Team() ~= TEAM_AFK and ply:Team() ~= TEAM_COMPLETED_MAP and ply:Team() ~= TEAM_DEAD) then
 		ply:SetTeam(TEAM_AFK)
 		BroadcastMessage(ENABLE_AFK, ply)
 		EnableSpectateAFK(ply)

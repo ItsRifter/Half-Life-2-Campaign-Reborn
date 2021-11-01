@@ -205,6 +205,8 @@ function InitMap()
 		StartLobby()
 	elseif string.find(game.GetMap(), "d1_") or string.find(game.GetMap(), "d2_") or string.find(game.GetMap(), "d3_") then
 		StartHL2()
+	elseif string.find(game.GetMap(), "ep1_") then
+		StartEP1()
 	else
 		StartCoop()
 	end
