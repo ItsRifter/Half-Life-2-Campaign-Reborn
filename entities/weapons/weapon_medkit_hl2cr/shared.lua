@@ -69,6 +69,11 @@ function SWEP:PrimaryAttack()
 	
 	local need = self.HealAmount
 	
+	if IsValid(ent) and ent.hl2cr.CurClass.Name == "Robot" then
+		self.Owner:EmitSound( DenySound )
+		return
+	end
+	
 	if ( IsValid( ent ) ) then need = math.min( ent:GetMaxHealth() - ent:Health(), self.HealAmount ) end
 
 	if ( IsValid( ent ) && self:Clip1() >= need && ( ent:IsPlayer() or ent:IsNPC() ) && ent:Health() < ent:GetMaxHealth() ) then
@@ -78,11 +83,12 @@ function SWEP:PrimaryAttack()
 		ent:SetHealth( math.min( ent:GetMaxHealth(), ent:Health() + (need + healer:GetNWInt("skill_healing") )) )
 		ent:EmitSound( HealSound )
 		
-		AddXP(self.Owner, need + self.Owner:GetNWInt("skill_healing") * 2)
+		AddXP(self.Owner, need + self.Owner:GetNWInt("skill_healing") * 2 * GetConVar("hl2cr_difficulty"):GetInt())
 			
 		net.Start("HL2CR_SpawnIndicators")
 			net.WriteInt((need + self.Owner:GetNWInt("skill_healing")) * 2, 32)
 			net.WriteVector(tr.Entity:GetPos())
+			net.WriteBool(false)
 		net.Send(self.Owner)
 		
 		self.Owner.rewards.bonus["Teamplayer"] = true

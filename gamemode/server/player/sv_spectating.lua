@@ -51,6 +51,7 @@ function EnableSpectateAFK(ply)
 			net.WriteBool(true)
 			net.WriteBool(false)
 			net.WriteInt(0, 8)
+			net.WriteBool(false)
 		net.Send(ply)
 		ply.IsSpectating = true
 	end
@@ -66,6 +67,7 @@ function DisableSpectate(ply)
 		net.WriteBool(false)
 		net.WriteBool(false)
 		net.WriteInt(0, 8)
+		net.WriteBool(false)
 	net.Send(ply)
 	
 	ply:UnLock()

@@ -78,6 +78,8 @@ local waitForRespawn = 0
 local waitDeath = 0
 
 hook.Add("DoPlayerDeath", "HL2CR_RevivalStone", function(ply, att, dmgInfo )
+
+	if ply.hl2cr.CurClass.Name == "Robot" then return end
 	
 	local gravestone = ents.Create("prop_dynamic")
 	gravestone:SetModel("models/props_c17/gravestone003a.mdl")
@@ -111,6 +113,14 @@ hook.Add("PostPlayerDeath", "HL2CR_HandlePlayerDeath", function(victim)
 		net.WriteBool(true)
 		net.WriteBool(true)
 		net.WriteInt(GetConVar("hl2cr_difficulty"):GetInt(), 8)
+		
+		if GetConVar("hl2cr_survival"):GetInt() == 1 then
+			net.WriteBool(true)
+			net.Send(victim)
+			return
+		else
+			net.WriteBool(false)
+		end
 	net.Send(victim)
 	
 	victim.waitForRespawn = CurTime() + GetConVar("hl2cr_difficulty"):GetInt() * 10
@@ -164,69 +174,87 @@ local APPLY_ARMOR_RESIST_POINTS = {
 	--TODO
 }
 
---Player spawning
-hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
-
-	if ply:SteamID() == "STEAM_0:1:19822252" then
-		for _, v in ipairs(player.GetAll()) do
-			GrantAchievement(v, "Misc", "Leiftiger")
-		end
-	end
-
-	if ply:GetNWEntity("hl2cr_grave", gravestone) and ply:GetNWEntity("hl2cr_grave", gravestone):IsValid() then
-		ply:GetNWEntity("hl2cr_grave", gravestone):Remove()
-	end
-
-	net.Start("HL2CR_ShouldClientSpectate")
-		net.WriteBool(false)
-		net.WriteBool(false)
-		net.WriteInt(0, 8)
-	net.Send(ply)
-	
-	ply:SetModel(ply.hl2cr.Model)
-	ply:SetupHands()
-	ply:SetTeam(TEAM_ALIVE)
-	
-	ply:SetCustomCollisionCheck(true)
-	ply:SetNoCollideWithTeammates(true)
-	
-	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
-	ply:SetNWBool("CanRevive", false)
+function SetUpPlayerStats(ply)
 	
 	local newMaxHP = 0
 	local ArmorCount = 0
 	local healing = 0
 	local HPrecharge = 0
+	local regenHP = 0
+	
+	local repairing = 0
+	local repairRecharge = 0
+	local regenArmor = 0
+	local repairGroup = 0
 	
 	ply.totalArmorRes = 0
+	
+	if ply.hl2cr.CurClass.Name == "Field Medic" then
+		newMaxHP = newMaxHP + 25
+		ArmorCount = ArmorCount - 50
+	elseif ply.hl2cr.CurClass.Name == "Repairman" then
+		newMaxHP = newMaxHP - 20
+		ArmorCount = ArmorCount + 25
+	elseif ply.hl2cr.CurClass.Name == "Robot" then
+		ply.totalArmorRes = ply.totalArmorRes + 4
+	end
 	
 	for k, skill in pairs(ply.hl2cr.Skills) do
 		if skill.Name == "Revival" then
 			ply:SetNWBool("CanRevive", true)
 		end
+		
 		if skill.Name == "Health Boost" and ply.hl2cr.Skills[k].Invested then
 			for i = 1, ply.hl2cr.Skills[k].Invested do 
 				newMaxHP = newMaxHP + 5
 			end
 		end
+		
 		if skill.Name == "Armor Boost" and ply.hl2cr.Skills[k].Invested then
 			for i = 1, ply.hl2cr.Skills[k].Invested do 
 				ArmorCount = ArmorCount + 15
 			end
 		end
+		
 		if skill.Name == "Healing" and ply.hl2cr.Skills[k].Invested then
 			for i = 1, ply.hl2cr.Skills[k].Invested do 
 				healing = healing + 5
 			end
 		end
+		
 		if skill.Name == "Health Recharging" and ply.hl2cr.Skills[k].Invested then
 			for i = 1, ply.hl2cr.Skills[k].Invested do 
 				HPrecharge = HPrecharge + 5
 			end
 		end
+		
+		if skill.Name == "Recharge" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
+				repairRecharge = repairRecharge + 5
+			end
+		end
+		
+		if skill.Name == "Regeneration" and ply.hl2cr.CurClass.Name == "Field Medic" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
+				regenHP = regenHP + 5
+			end
+		end
+		
+		if skill.Name == "Group Repair" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
+				repairGroup = repairGroup + 2
+			end
+		end
+		
+		if skill.Name == "Armor Regen" and ply.hl2cr.CurClass.Name == "Repairman" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
+				regenArmor = regenArmor + 5
+			end
+		end
 	end
 
 	if ply:GetNWString("inv_itemslot") == "Suit_PWR_Boost" then
+		--TODO: Increase suit energy
 	end
 
 	if game.GetMap() == "d3_citadel_03" and not ON_CITADEL_MAPS then		
@@ -246,14 +274,53 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	elseif ply.hl2cr.CurClass.Name == "Combine Dropout" then
 		ply.hl2cr.StunDamage = ply.hl2cr.StunDamage + 10
 	end
+	
 	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
-
+	
 	ply:SetNWInt("skill_healing", healing)
+	ply:SetNWInt("skill_regen", regenHP)
 	ply:SetNWInt("skill_healthrecharge", HPrecharge)
+	
+	ply:SetNWInt("skill_repairing", repairing)
+	ply:SetNWInt("skill_repairrate", repairRecharge)
+	ply:SetNWInt("skill_grouprepair", repairGroup)
 	
 	ply:SetMaxHealth(100 + newMaxHP)
 	ply:SetHealth(100 + newMaxHP)
-	ply:SetArmor(ply:Armor() + ArmorCount)
+	ply:SetMaxArmor(100 + ArmorCount)
+end
+
+--Player spawning
+hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
+
+	if ply:SteamID() == "STEAM_0:1:19822252" then
+		for _, v in ipairs(player.GetAll()) do
+			GrantAchievement(v, "Misc", "Leiftiger")
+		end
+	end
+
+	if ply:GetNWEntity("hl2cr_grave", gravestone) and ply:GetNWEntity("hl2cr_grave", gravestone):IsValid() then
+		ply:GetNWEntity("hl2cr_grave", gravestone):Remove()
+	end
+
+	net.Start("HL2CR_ShouldClientSpectate")
+		net.WriteBool(false)
+		net.WriteBool(false)
+		net.WriteInt(0, 8)
+		net.WriteBool(false)
+	net.Send(ply)
+	
+	ply:SetModel(ply.hl2cr.Model)
+	ply:SetupHands()
+	ply:SetTeam(TEAM_ALIVE)
+	
+	ply:SetCustomCollisionCheck(true)
+	ply:SetNoCollideWithTeammates(true)
+	
+	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
+	ply:SetNWBool("CanRevive", false)
+	
+	SetUpPlayerStats(ply)
 
 	if CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot] and not (NOSUIT_MAPS[game.GetMap()] or SUPERGRAVGUN_MAPS[game.GetMap()] or game.GetMap() == "d1_trainstation_05") and not ON_CITADEL_MAPS then
 		ply:Give(CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot])
@@ -291,8 +358,10 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	end
 	
 	if not table.IsEmpty(ply.hl2cr.CurClass) and not ( NOSUIT_MAPS[game.GetMap()] or SUPERGRAVGUN_MAPS[game.GetMap()] or game.GetMap() == "d1_trainstation_05") then
-		for _, classWep in ipairs(ply.hl2cr.CurClass.Weapons) do
-			ply:Give(classWep)
+		if ply.hl2cr.CurClass.Weapons then 
+			for _, classWep in ipairs(ply.hl2cr.CurClass.Weapons) do
+				ply:Give(classWep)
+			end
 		end
 	end
 end)
@@ -433,13 +502,15 @@ hook.Add("EntityTakeDamage", "HL2CR_PVPOff", function(ent, dmgInfo)
 		dmgInfo:SetDamage(0)
 	end
 	
-	if ent:GetClass() == "sent_controllable_manhack" and att:IsPlayer() then
+	if (ent:GetClass() == "sent_controllable_manhack" or ent:GetClass() == "sent_controllable_drone") and att:IsPlayer() then
 		dmgInfo:SetDamage(0)
 	end
 end)
 
 hook.Add("Tick", "HL2CR_AmmoLimiter", function()
 	for k, p in ipairs(player.GetAll()) do
+		if p:IsBot() then break end
+		
 		if p:GetAmmoCount("357") > GetConVar("hl2cr_max_357"):GetInt() then		
 			p:RemoveAmmo( p:GetAmmoCount("357") -GetConVar("hl2cr_max_357"):GetInt(), "357" )
 		end
@@ -486,7 +557,23 @@ hook.Add("Tick", "HL2CR_AmmoLimiter", function()
 	end
 end)
 
-hook.Add("PlayerCanPickupItem", "HL2CR_AmmoPickup", function(ply, item)
+hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
+	
+	if item:GetClass() == "item_healthkit" and ply.hl2cr.CurClass.Name == "Robot" then
+		return false
+	elseif item:GetClass() == "item_battery" and ply.hl2cr.CurClass.Name == "Robot" and ply:Health() < ply:GetMaxHealth() and not item.robotPicked then
+		item.robotPicked = true
+		item:Remove()
+		ply:EmitSound("items/battery_pickup.wav")
+		
+		ply:SetHealth(ply:Health() + 25)
+		if ply:Health() > ply:GetMaxHealth() then
+			ply:SetHealth(ply:GetMaxHealth())
+		end
+		
+		return false
+	end
+	
 	if (item:GetClass() == "item_ammo_357" or item:GetClass() == "item_ammo_357_large" or item:GetClass() == "weapon_357") and ply:GetAmmoCount("357") >= GetConVar("hl2cr_max_357"):GetInt() then
 		ply:RemoveAmmo( ply:GetAmmoCount("357") -GetConVar("hl2cr_max_357"):GetInt(), "357" )
 		return false
@@ -633,6 +720,7 @@ RANDOM_XP_BASED_NPC = {
 	["npc_zombie"] = {xpMin = 25, xpMax = 60},
 	["npc_fastzombie"] = {xpMin = 33, xpMax = 70},
 	["npc_poisonzombie"] = {xpMin = 35, xpMax = 85},
+	["npc_zombine"] = {xpMin = 45, xpMax = 65},
 	["npc_cscanner"] = {xpMin = 15, xpMax = 30},
 	["npc_metropolice"] = {xpMin = 30, xpMax = 80},
 	["npc_manhack"] = {xpMin = 25, xpMax = 70},
@@ -774,6 +862,10 @@ hook.Add("EntityTakeDamage", "HL2CR_SlashDMGBuff", function( target, dmgInfo )
 	local att = dmgInfo:GetAttacker()
 	local dmgType = dmgInfo:GetDamageType()
 	
+	if att:IsPlayer() and target:IsPlayer() then
+		target:SetArmor(target:Armor() - 1)
+	end
+	
 	if (target:IsPlayer() or target:IsPet()) and att:IsNPC() then
 		if dmgType == DMG_SLASH and (att:GetClass() ~= "npc_headcrab_black" or att:GetClass() ~= "npc_headcrab_poison") then
 			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * 1.25)
@@ -782,7 +874,7 @@ hook.Add("EntityTakeDamage", "HL2CR_SlashDMGBuff", function( target, dmgInfo )
 end)
 
 hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup, dmgInfo )
-		
+	local damage = dmgInfo:GetDamage()
 	local hitMulti = GetConVar("hl2cr_difficulty"):GetInt() - 1
 	
 	if hitMulti <= 0 then return end
@@ -796,8 +888,12 @@ hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup
 	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
 		hitMulti = hitMulti * 1.25
 	end
+	damage = damage * hitMulti
+	if ply.totalArmorRes ~= 0 then
+		damage = damage - ply.totalArmorRes
+	end
 	
-	dmgInfo:ScaleDamage(hitMulti)
+	dmgInfo:SetDamage(damage)
 end)
 
 function BroadcastMessage(msgTbl, player)
@@ -926,5 +1022,17 @@ hook.Add("PlayerButtonUp", "HL2CR_CloseQMenu", function(ply, btn)
 			net.WriteTable(ply.hl2cr.Skills)
 			net.WriteBool(false)
 		net.Send(ply)
+	end
+end)
+
+hook.Add("PlayerHurt", "HL2CR_PlayerRegenHP", function(victim, attacker, healthRemaining, damageTaken)
+	if victim:GetNWInt("skill_regen") and victim.hl2cr.CurClass.Name == "Field Medic" then	
+		timer.Create("HL2CR_Regen_" .. victim:Nick(), 15, 999, function()
+			victim:SetHealth(victim:Health() + victim:GetNWInt("skill_regen"))
+			if victim:Health() > victim:GetMaxHealth() then
+				victim:SetHealth(victim:GetMaxHealth())
+				timer.Remove("HL2CR_Regen_" .. victim:Nick())
+			end
+		end)
 	end
 end)

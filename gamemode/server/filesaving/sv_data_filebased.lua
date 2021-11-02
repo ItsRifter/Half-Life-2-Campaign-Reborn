@@ -69,7 +69,6 @@ local function InitData(ply)
 	
 	--Classes
 	ply.hl2cr.CurClass = ply.hl2cr.CurClass or {}
-	ply.hl2cr.ClassCount = ply.hl2cr.ClassCount or 0
 
 	--Quests
 	ply.hl2cr.Quests = ply.hl2cr.Quests or {}
@@ -82,11 +81,11 @@ local function InitData(ply)
 	ply:SetNWInt("stat_exp", ply.hl2cr.Exp)
 	ply:SetNWInt("stat_reqexp", ply.hl2cr.ReqExp)
 	ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)
-	ply:SetNWInt("stat_curclasses", ply.hl2cr.ClassCount)
 	ply:SetNWInt("stat_kills", ply.hl2cr.Kills)
 	ply:SetNWInt("stat_deaths", ply.hl2cr.Deaths)
 	ply:SetNWInt("stat_quests_completed", ply.hl2cr.Quests.Completed)
 	ply:SetNWString("stat_achievements", table.concat(ply.hl2cr.Achievements, " "))
+	ply:SetNWString("stat_curclass", ply.hl2cr.CurClass.Name)
 	
 	ply:SetNWString("stat_model", ply.hl2cr.Model)
 	

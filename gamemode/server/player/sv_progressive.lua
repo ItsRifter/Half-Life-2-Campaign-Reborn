@@ -76,6 +76,7 @@ local IMPOSSIBLE_PACIFIST = {
 	["d1_eli_01"] = true,
 	["d1_eli_02"] = true,
 	["d3_c17_01"] = true,
+	["ep1_citadel_00"] = true,
 	["level_1a"] = true,
 	["level_1b"] = true,
 	["level_2"] = true,
@@ -90,6 +91,7 @@ function ShowMapResults(ply)
 			net.WriteBool(true)
 			net.WriteBool(false)
 			net.WriteInt(0, 8)
+			net.WriteBool(false)
 		net.Send(ply)
 		return
 	end

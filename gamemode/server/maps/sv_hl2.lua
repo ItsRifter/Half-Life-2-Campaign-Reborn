@@ -181,7 +181,7 @@ local function SetCheckpoints()
 		}
 		
 		TRIGGER_PUSHBACK = {
-			Vector(-7071, -1469, 2), 		Vector(-6980, -1289, 134)
+			Vector(-7035, -1479, 5), 		Vector(-6940, -1280, 150)
 		}
 		
 		TRIGGER_PUSHBACK_SPOT = {
@@ -676,6 +676,15 @@ local function SetCheckpoints()
 			Vector(-440, -2915, -237),		Vector(1505, -3317, -672),
 			Vector(4152, -3989, -536)
 		}
+		
+		TRIGGER_PUSHBACK = {
+			Vector(524, -4014, -293), 		Vector(-881, -3848, -96)
+		}
+		
+		TRIGGER_PUSHBACK_SPOT = {
+			Vector(-421, -3328, -127)
+		}
+		
 		
 		CHANGELEVEL_FUNC = function()
 			for _, v in ipairs(player.GetAll()) do
@@ -4101,7 +4110,7 @@ local function SetUpMisc()
 
 	if game.GetMap() == "d1_eli_02" then
 		for k, g in ipairs( ents.FindByName( "trigger_Get_physgun" )) do
-			g:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:hook.Run( 'GiveGravgun' ):0:-1" )
+			g:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:hook.Run( 'GiveGravgunHL2' ):0:-1" )
 		end
 		
 		for k, basket in ipairs(ents.FindByName("trigger_BBall_score_top")) do
@@ -4288,6 +4297,10 @@ local function SetUpMisc()
 		end
 	end
 	
+	if game.GetMap() == "d2_prison_07" then
+		ents.FindByName("logic_finished_betrayal")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:RemovePushTrigger()")
+	end
+	
 	if game.GetMap() == "d3_c17_10b" then
 		ents.FindByName("s_room_detected_relay")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:hook.Run( 'ResetLaserTrap' ):15:-1" )
 	end
@@ -4305,6 +4318,8 @@ local function SetUpMisc()
 			spawn:SetPos(Vector(-2183, 836, 587))
 		end
 		ents.FindByClass("item_suit")[1]:SetPos(Vector(-2183, 836, 587))
+		
+		ents.FindByClass("player_loadsaved")[1]:Remove()
 		
 		ents.FindByName("logic_swap")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:hook.Run( 'FinishHL2' ):10:-1" )
 	end
@@ -4514,7 +4529,7 @@ hook.Add("GiveBallAch", "HL2CR_GiveTwoPoints", function()
 	end
 end)
 
-hook.Add("GiveGravgun", "HL2CR_GrantGravgun", function()
+hook.Add("GiveGravgunHL2", "HL2CR_GrantGravgun", function()
 	for k, v in ipairs(player.GetAll()) do
 		v:Give("weapon_physcannon")
 		GrantAchievement(v, "HL2", "Zero_Point_Energy")

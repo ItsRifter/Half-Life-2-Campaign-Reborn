@@ -4,6 +4,7 @@ local NOTIFY_MESSAGES = {
 	[5] = "Classes Unlocked",
 	[8] = "Pets Unlocked, use !pet / !petmenu",
 	[10] = "Mechanic | Grenadier | Combine Dropout Class Unlocked",
+	[20] = "Robot Class Unlocked",
 }
 
 net.Receive("HL2CR_LevelUpSound", function()
@@ -283,6 +284,14 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 		end
 	
 		if dist <= LocalPlayer():GetNWInt("config_playerdrawdist", 250) then
+			--Classes
+			if pl:GetNWString("class_icon") ~= "" then
+				local icon = Material(pl:GetNWString("class_icon"))
+				surface.SetMaterial( icon )
+				surface.SetDrawColor( 255, 255, 255 )
+				surface.DrawTexturedRect(ScrPos.x - 20, ScrPos.y + 75, 48, 48)
+			end
+			
 			local font = "HL2CR_HoverPlayer"
 			local fixFontSpacing = FIX_FONT_SPACING[font]
 			
@@ -303,26 +312,31 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 			
 			--Status
 			
-			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_medic.jpg" then
-				draw.SimpleText(translate.Get("HUDPlayerHealth") .. pl:Health(), font, ScrPos.x, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			if LocalPlayer():GetNWString("stat_curclass") == "Field Medic" then
+				
+				if pl:GetNWString("stat_curclass") == "Robot" then
+					draw.SimpleText(hpStatus, font, ScrPos.x, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					return
+				else
+					draw.SimpleText(translate.Get("HUDPlayerHealth") .. pl:Health(), font, ScrPos.x, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					return
+				end
+			elseif not pl:GetNWString("stat_curclass") == "Robot" then
+				draw.SimpleText(hpStatus, font, ScrPos.x - 50 + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				return
+			elseif LocalPlayer():GetNWString("class_icon") == "Supporter" then
+				--Niik fix this please
+				
+			elseif LocalPlayer():GetNWString("stat_curclass") == "Repairman" then
+				if pl:GetNWString("stat_curclass") == "Robot" then
+					draw.SimpleText("State: " .. pl:Health(), font, ScrPos.x - 50 + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(translate.Get("HUDPlayerArmor") .. pl:Armor(), font, ScrPos.x + 75 + hpSpacing, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				else
+					draw.SimpleText(hpStatus, font, ScrPos.x - 50 + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(translate.Get("HUDPlayerArmor") .. pl:Armor(), font, ScrPos.x + 70 + hpSpacing, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				end
 			else
 				draw.SimpleText(hpStatus, font, ScrPos.x - 50 + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			end
-			
-			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_supporter.jpg" then
-				--Niik fix this please
-			end
-			
-			if LocalPlayer():GetNWString("class_icon") == "materials/hl2cr/class_repairman.jpg" then
-				draw.SimpleText(translate.Get("HUDPlayerArmor") .. pl:Armor(), font, ScrPos.x + 65, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-			end
-			
-			--Classes
-			if pl:GetNWString("class_icon") ~= "" then
-				local icon = Material(pl:GetNWString("class_icon"))
-				surface.SetMaterial( icon )
-				surface.SetDrawColor( 255, 255, 255 )
-				surface.DrawTexturedRect(ScrPos.x - 20, ScrPos.y + 75, 48, 48)
 			end
 		end
 	end

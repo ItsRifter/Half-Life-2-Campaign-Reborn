@@ -77,6 +77,23 @@ MAPS_HL2 = {
 	"d3_breen_01",
 }
 
+MAPS_EP1 = {
+	"ep1_citadel_00",
+	"ep1_citadel_01",
+	"ep1_citadel_02",
+	"ep1_citadel_02b",
+	"ep1_citadel_03",
+	"ep1_citadel_04",
+	"ep1_c17_00",
+	"ep1_c17_00a",
+	"ep1_c17_01",
+	"ep1_c17_02",
+	"ep1_c17_02b",
+	"ep1_c17_02a",
+	"ep1_c17_05",
+	"ep1_c17_06"
+}
+
 MAPS_COOP_SYNB2 = {
 	"level01_synb2_entryway_of_doom",
 	"level02_synb2_tricks_and_traps",
@@ -153,6 +170,15 @@ function StartMapCountdown()
 					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
 				end
 				RunConsoleCommand("changelevel", MAPS_HL2[k+1])
+			end
+		end
+		
+		for k = 1, #MAPS_EP1 do
+			if game.GetMap() == MAPS_EP1[k] then
+				if not MAPS_EP1[k+1] then
+					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+				end
+				RunConsoleCommand("changelevel", MAPS_EP1[k+1])
 			end
 		end
 

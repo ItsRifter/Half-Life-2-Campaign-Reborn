@@ -292,6 +292,41 @@ GM.Achievements = {
 		},
 	},
 	
+	EP1 = {
+		Citadel_Lift = {
+			Name = "Watch your head!",
+			Mat = "vgui/achievements/ep1_beat_mainelevator.png", 
+			Desc = "Make it to the bottom\nof the Citadel's\nmain elevator shaft in one piece",
+			Rewards = {
+				XP = 1000,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Containment = {
+			Name = "Containment",
+			Mat = "vgui/achievements/ep1_beat_citadelcore.png", 
+			Desc = "Contain the Citadel core",
+			Rewards = {
+				XP = 1000,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Pacifist_Stalkers = {
+			Name = "Pacifist",
+			Mat = "vgui/achievements/ep1_beat_citadelcore_nostalkerkills.png", 
+			Desc = "Contain the Citadel core\nwithout killing any stalkers",
+			Rewards = {
+				XP = 4500,
+				Item = nil
+			},
+			IsRare = false
+		},
+	},
+	
 	Misc = {
 		New_Arrival = {
 			Name = "New Arrival",

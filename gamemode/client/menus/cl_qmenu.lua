@@ -234,7 +234,7 @@ local CONVERT_DESC_TRANSLATION = {
 }
 
 local PLAYERMODELS = {
-	[0] = {
+	["Standard"] = {
 		[1] = "models/player/Group01/male_01.mdl",
 		[2] = "models/player/Group01/male_02.mdl",
 		[3] = "models/player/Group01/male_03.mdl",
@@ -251,7 +251,7 @@ local PLAYERMODELS = {
 		[14] = "models/player/Group01/female_06.mdl"
 	},
 	
-	[5] = {
+	["Field Medic"] = {
 		[1] = "models/player/Group03m/male_01.mdl",
 		[2] = "models/player/Group03m/male_02.mdl",
 		[3] = "models/player/Group03m/male_03.mdl",
@@ -267,10 +267,14 @@ local PLAYERMODELS = {
 		[13] = "models/player/Group03m/female_06.mdl",
 	},
 	
-	[10] = {
+	["Combine Dropout"] = {
 		[1] = "models/player/police.mdl",
 		[2] = "models/player/police_fem.mdl"
-	}
+	},
+	
+	["Robot"] = {
+		[1] = "models/player/mc/robo/Robo.mdl"
+	},
 }
 
 net.Receive("HL2CR_QMenuUpdate", function()
@@ -632,14 +636,17 @@ function StartQMenu(shouldOpen, skillsTbl)
 		local modelHorizontalScroll = vgui.Create("DHorizontalScroller", invPnl)
 		modelHorizontalScroll:SetSize(qMenuTabs:GetWide() / 2.22, 64)
 		modelHorizontalScroll:SetPos(0, invPnl:GetTall() - 168)
-		for level, v in pairs(PLAYERMODELS) do
+		
+		local curClass = LocalPlayer():GetNWString("stat_curclass")
+		for name, v in pairs(PLAYERMODELS) do
 			for i, p in ipairs(v) do
-				if LocalPlayer():GetNWInt("stat_level") >= level then
-					local playermodelBtn = vgui.Create("SpawnIcon", modelHorizontalScroll)
+				if name == curClass or name == "Standard" then
+					local playermodelBtn = modelHorizontalScroll:Add("SpawnIcon")
 					playermodelBtn:SetModel(v[i])
 					playermodelBtn:SetSize(64, 64)
+					
 					modelHorizontalScroll:AddPanel(playermodelBtn)
-
+					
 					playermodelBtn.DoClick = function(pnl)
 						net.Start("HL2CR_UpdateModel")
 							net.WriteString(v[i])
@@ -682,15 +689,32 @@ function StartQMenu(shouldOpen, skillsTbl)
 		local medicSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		medicSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.60, skillsSelectionPnl:GetTall())
 
-		local skillHorizontalScroll = vgui.Create("DHorizontalScroller", medicSkillsPnl) -- panels still required for 2+ skills lmao
-		skillHorizontalScroll:Dock(FILL)
-		skillHorizontalScroll:SetOverlap( 0 )
+		local medicHorizontalScroll = vgui.Create("DHorizontalScroller", medicSkillsPnl)
+		medicHorizontalScroll:Dock(FILL)
+		medicHorizontalScroll:SetOverlap( 0 )
 		
-		local medicSkillsLayout = vgui.Create("DIconLayout", skillHorizontalScroll)
+		local medicSkillsLayout = vgui.Create("DIconLayout", medicHorizontalScroll)
 		medicSkillsLayout:Dock(FILL)
 		
 		local repairSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		repairSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
+		
+		local repairHorizontalScroll = vgui.Create("DHorizontalScroller", repairSkillsPnl)
+		repairHorizontalScroll:Dock(FILL)
+		repairHorizontalScroll:SetOverlap( 0 )
+		
+		local repairSkillsLayout = vgui.Create("DIconLayout", repairHorizontalScroll)
+		repairSkillsLayout:Dock(FILL)
+		
+		local robotSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
+		robotSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
+		
+		local robotHorizontalScroll = vgui.Create("DHorizontalScroller", robotSkillsPnl)
+		robotHorizontalScroll:Dock(FILL)
+		robotHorizontalScroll:SetOverlap( 0 )
+		
+		local robotSkillsLayout = vgui.Create("DIconLayout", robotHorizontalScroll)
+		robotSkillsLayout:Dock(FILL)
 		
 		local mechSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		mechSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
@@ -704,21 +728,18 @@ function StartQMenu(shouldOpen, skillsTbl)
 			if skill.Class == "Passive" then
 				statusPnl = vgui.Create("DPanel", passiveSkillsLayout)
 				statusPnl:SetSize(passiveSkillsPnl:GetWide() / 5, passiveSkillsPnl:GetTall())
-			elseif skill.Class == "Armor" then
-				statusPnl = vgui.Create("DPanel", passiveSkillsLayout)
-				statusPnl:SetSize(passiveSkillsPnl:GetWide() / 5, passiveSkillsPnl:GetTall())
 			elseif skill.Class == "Medic" then
 				statusPnl = vgui.Create("DPanel", medicSkillsLayout)
 				statusPnl:SetSize(medicSkillsPnl:GetWide() / 8, medicSkillsPnl:GetTall())
-			elseif skill.Class == "Revival" then
-				statusPnl = vgui.Create("DPanel", medicSkillsLayout)
-				statusPnl:SetSize(medicSkillsPnl:GetWide() / 8, medicSkillsPnl:GetTall())
 			elseif skill.Class == "Repair" then
-				statusPnl = vgui.Create("DPanel", repairSkillsPnl)
+				statusPnl = vgui.Create("DPanel", repairSkillsLayout)
 				statusPnl:SetSize(repairSkillsPnl:GetWide() / 8, repairSkillsPnl:GetTall())
 			elseif skill.Class == "Mechanic" then
 				statusPnl = vgui.Create("DPanel", mechSkillsPnl)
 				statusPnl:SetSize(mechSkillsPnl:GetWide() / 8, mechSkillsPnl:GetTall())
+			elseif skill.Class == "Robot" then
+				statusPnl = vgui.Create("DPanel", robotSkillsPnl)
+				statusPnl:SetSize(robotSkillsPnl:GetWide() / 8, robotSkillsPnl:GetTall())
 			end
 			
 			local skillPnlShowcase = vgui.Create("DLabel", statusPnl)
@@ -800,6 +821,7 @@ function StartQMenu(shouldOpen, skillsTbl)
 		skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_PASSIVE"), passiveSkillsPnl)
 		skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_MEDIC"), medicSkillsPnl)
 		skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_REPAIRMAN"), repairSkillsPnl)
+		skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_ROBOT"), robotSkillsPnl)
 	    skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_MECHANIC"), mechSkillsPnl)
 		skillsSelectionPnl.navbar:SetActive(1)
 		
@@ -1014,7 +1036,7 @@ function StartQMenu(shouldOpen, skillsTbl)
 				classPnlShowcase:SetTextColor(Color(0, 0, 0, 255))
 				
 				local classPnlDesc = vgui.Create("DLabel", classShowPanel)
-				classPnlDesc:SetText(class.Desc .. "\n\n" .. class.EquipmentDesc)
+				classPnlDesc:SetText(class.Desc .. "\n" .. class.EquipmentDesc .. "\n" .. class.StrWeak)
 				classPnlDesc:SetPos( (classShowPanel:GetWide() / classPnlDesc:GetWide() ) + 25, 50)
 				classPnlDesc:SetFont("HL2CR_Class_DescFont")
 				classPnlDesc:SizeToContents()
@@ -1023,7 +1045,7 @@ function StartQMenu(shouldOpen, skillsTbl)
 				local classIcon = vgui.Create("DImage", classShowPanel)
 				classIcon:SetImage(class.Icon)
 				classIcon:SetSize(138, 138)
-				classIcon:SetPos(classShowPanel:GetWide() / 5, ScrH() / 5)
+				classIcon:SetPos(classShowPanel:GetWide() / 5, ScrH() / 3.5)
 				
 				local classBtn = vgui.Create("DButton", classShowPanel)
 				classBtn:SetText(translate.Get("PickClass"))
@@ -1039,6 +1061,21 @@ function StartQMenu(shouldOpen, skillsTbl)
 				end
 				
 				classHorizontalScroll:AddPanel(classShowPanel)
+				
+				local curClassCount = 0
+				
+				for i, v in ipairs(player.GetAll()) do
+					if v:GetNWString("stat_curclass") == class.Name then
+						curClassCount = curClassCount + 1
+					end
+				end
+				
+				local curSessionClasses = vgui.Create("DLabel", classShowPanel)
+				curSessionClasses:SetText(curClassCount .. " " .. class.Name)
+				curSessionClasses:SetPos(classShowPanel:GetWide() / 3 - 10, classShowPanel:GetTall() )
+				curSessionClasses:SetFont("HL2CR_Class_DescFont")
+				curSessionClasses:SizeToContents()
+				curSessionClasses:SetTextColor(Color(0, 0, 0, 255))
 			end
 		else
 			local classPnlLocked = vgui.Create("DLabel", classPnl)

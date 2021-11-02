@@ -3,7 +3,7 @@ local isSpectating = false
 local wasKilled = false
 local timeForRespawn = 0
 
-function StartClientSpectate(shouldSpectate)
+function StartClientSpectate(shouldSpectate, isSurvivalOn)
 	if shouldSpectate then
 		specFrame = vgui.Create("DFrame")
 		specFrame:SetSize(ScrW(), ScrH())
@@ -29,12 +29,15 @@ function StartClientSpectate(shouldSpectate)
 		
 		specTime = vgui.Create("DLabel", specPanel)
 		specTime:SetText("")
+		specTime.Survival = isSpectating
 		
-		if wasKilled then
+		if wasKilled and not isSurvivalOn then
 			specTime:SetText(translate.Get("Respawn") .. math.Round(timeForRespawn - CurTime()))
 			specTime:SetFont("HL2CR_SpectatePlayer")
 			specTime:SizeToContents()
 			specTime:SetPos(specPanel:GetWide() - 400, 12.5)
+		else
+		
 		end
 	else
 		if specFrame and specFrame:IsValid() then
@@ -52,6 +55,8 @@ hook.Add("Think", "HL2CR_SpectateThink", function()
 		specUser:SetText(translate.Get("Spectate") .. specUsername)
 	end
 	specUser:SizeToContents()
+	
+	if specTime.Survival then return end
 	
 	specTime:SetText(translate.Get("Respawn") .. math.Round(timeForRespawn - CurTime()))
 	specTime:SizeToContents()
@@ -74,11 +79,12 @@ net.Receive("HL2CR_ShouldClientSpectate", function()
 	isSpectating = net.ReadBool()
 	wasKilled = net.ReadBool()
 	local difficulty = net.ReadInt(8)
+	local isSurvival = net.ReadBool()
 	
-	if wasKilled then
+	if wasKilled and not isSurvival then
 		timeForRespawn = CurTime() + 10 * difficulty
 	end
 	
-	StartClientSpectate(isSpectating)
+	StartClientSpectate(isSpectating, isSurvival)
 	
 end)

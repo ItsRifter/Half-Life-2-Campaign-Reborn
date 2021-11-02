@@ -23,6 +23,11 @@ local passive_armor = CreateSkill("Armor Boost", "Your armor\ncan sustain\nmore 
 local medic_heal = CreateSkill("Healing", "Heal more\neffectively", "Medic", 5, "materials/hl2cr/skill_healing.jpg", 5)
 local medic_revive = CreateSkill("Revival", "Revive the fallen", "Medic", 10, "materials/hl2cr/skill_revival.jpg", 1)
 local medic_recharge = CreateSkill("Health Recharging", "Recharge and\nget back in\nthe fight", "Medic", 6, "materials/hl2cr/skill_healing_eff.jpg", 5)
+local medic_regen = CreateSkill("Regeneration", "Taking care of yourself", "Medic", 12, "materials/hl2cr/skill_regen.jpg", 2)
+
+local repair_recharge = CreateSkill("Recharge", "Recharge and keep charging people", "Repair", 5, "materials/hl2cr/skill_armor_regen.jpg", 5)
+local repair_group = CreateSkill("Group Repair", "Take care of multiple\npeople at the same time", "Repair", 7, "materials/hl2cr/skill_recharge_group.jpg", 5)
+local repair_regen = CreateSkill("Armor Regen", "Recharges suit power", "Repair", 10, "materials/hl2cr/skill_recharge.jpg", 3)
 
 if SERVER then
 	net.Receive("HL2CR_SkillObtain", function(len, ply)

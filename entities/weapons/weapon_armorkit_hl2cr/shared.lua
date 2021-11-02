@@ -39,10 +39,10 @@ function SWEP:Initialize()
 
 	self.TimerName = "armorkit_ammo" .. self:EntIndex()
 	local wep = self
-	timer.Create(self.TimerName, 5, 0, function()
+	timer.Create(self.TimerName, 20, 0, function()
 		if IsValid(wep) then
 			if wep:Clip1() < wep.MaxAmmo then
-				wep:SetClip1(math.min(wep:Clip1() + 1, wep.MaxAmmo))
+				wep:SetClip1(math.min(wep:Clip1() + 5 + self.Owner:GetNWInt("skill_repairrate"), wep.MaxAmmo))
 			end
 		else
 			timer.Remove(wep.TimerName)
@@ -99,11 +99,10 @@ end
 function SWEP:PrimaryAttack()
 	if not self:CanAttack() then return end
 
-	self:SetNextFire(CurTime() + 2)
-
 	local tr = self:GetHitTrace()
 	local need = (IsValid(tr.Entity) and tr.Entity:IsPlayer()) and math.min(100-tr.Entity:Armor(),self.ArmorAmount) or self.ArmorAmount
 	if self:Clip1() >= need and tr.Hit and IsValid(tr.Entity) and tr.Entity:IsPlayer() and tr.Entity:Armor() < 100 then
+		self:SetNextFire(CurTime() + 2)
 		self.Owner:SetAnimation(PLAYER_ATTACK1) --DoAttackEvent()
 		self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 		self.IdleAnimation = CurTime() + self:SequenceDuration()
@@ -111,20 +110,37 @@ function SWEP:PrimaryAttack()
 		if SERVER then
 			self:TakePrimaryAmmo(need)
 			self.Owner:SetAnimation(PLAYER_ATTACK1)
-			tr.Entity:SetArmor(math.min(100,tr.Entity:Armor()+need))
+			
+			if tr.Entity.hl2cr.CurClass.Name == "Robot" and tr.Entity:Health() < tr.Entity:GetMaxHealth() then
+				tr.Entity:SetHealth(math.min(tr.Entity:GetMaxHealth(), tr.Entity:Health()+need + 15) )
+			else
+				tr.Entity:SetArmor(math.min(tr.Entity:GetMaxArmor(), tr.Entity:Armor()+need) )
+			end
+			
+			
 			tr.Entity:EmitSound("items/battery_pickup.wav")
 			
-			AddXP(self.Owner, need * 2)
+			if self.Owner:GetNWInt("skill_grouprepair") > 0 then
+				for i, v in ipairs(ents.FindInSphere(tr.Entity:GetPos(), 250) ) do
+					if not v:IsPlayer() or v == tr.Entity then continue end
+					v:SetArmor(math.min(v:GetMaxArmor(), v:Armor() + self.Owner:GetNWInt("skill_grouprepair") ) )
+					AddXP(self.Owner, self.Owner:GetNWInt("skill_grouprepair") * 2 * GetConVar("hl2cr_difficulty"):GetInt())
+				end
+			end
+			
+			AddXP(self.Owner, need + self.Owner:GetNWInt("skill_repairing") * 2 * GetConVar("hl2cr_difficulty"):GetInt())
 			
 			net.Start("HL2CR_SpawnIndicators")
-				net.WriteInt(need * 2, 32)
+				net.WriteInt((need + self.Owner:GetNWInt("skill_repairing")) * 2, 32)
 				net.WriteVector(tr.Entity:GetPos())
+				net.WriteBool(false)
 			net.Send(self.Owner)
 			
 			self.Owner.rewards.bonus["Teamplayer"] = true
 		end
 	elseif SERVER then
 		self.Owner:EmitSound("items/suitchargeno1.wav")
+		self:SetNextFire(CurTime() + 0.5)
 	end
 end
 

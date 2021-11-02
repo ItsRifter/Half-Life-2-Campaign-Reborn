@@ -25,9 +25,11 @@ HOSTILE_NPCS = {
 	["npc_zombie"] = true,
 	["npc_fastzombie"] = true,
 	["npc_poisonzombie"] = true,
+	["npc_zombine"] = true,
 	["npc_cscanner"] = true,
 	["npc_metropolice"] = true,
 	["npc_manhack"] = true,
+	["npc_combine_s"] = true,
 	["npc_combine_s"] = true,
 	["npc_antlionguard"] = true,
 	["npc_antlionguardian"] = true,
@@ -66,10 +68,10 @@ function SetNPCTraits(npc)
 	end
 	
 	npc:SetNWInt("HL2CR_NPC_Level", npc.level)
-	local newHealth = npc:Health() + (npc.level * 3)
 
-	timer.Simple(0.1, function()
+	timer.Simple(0.15, function()
 		if not npc or not npc:IsHostile() then return end
+		local newHealth = npc:Health() + (npc.level * 3)
 		npc:SetMaxHealth(newHealth)
 		npc:SetHealth(newHealth)
 	end)
@@ -127,6 +129,7 @@ hook.Add("EntityTakeDamage", "HL2CR_FriendlyOrHostile", function(ent, dmgInfo)
 					ent:AddEntityRelationship(att, D_HT, 99)
 				end
 			else
+				ent:AddEntityRelationship(att, D_LI, 99)
 				dmgInfo:SetDamage(0)
 				return
 			end

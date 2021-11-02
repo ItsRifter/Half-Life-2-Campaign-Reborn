@@ -188,6 +188,42 @@ votingTypes["VoteVHard"] = {
 	end
 }
 
+votingTypes["EnableSurvival"] = {
+	Description = "Enable Survival mode?",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			GetConVar("hl2cr_survival"):SetInt(1)
+			SUCCESS_VOTE = {
+				["Colour"] = Color(50, 215, 50),
+				["Message"] = translate.Get("VOTE_SURV_ON")
+			}
+			BroadcastMessage(SUCCESS_VOTE)
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+
+votingTypes["DisableSurvival"] = {
+	Description = "Disable Survival mode?",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			GetConVar("hl2cr_survival"):SetInt(0)
+			SUCCESS_VOTE = {
+				["Colour"] = Color(50, 215, 50),
+				["Message"] = translate.Get("VOTE_SURV_OFF")
+			}
+			BroadcastMessage(SUCCESS_VOTE)
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+
 votingTypes["Custom"] = {
 	Description = "[Custom text should be here]",
 	Callback = function(state)

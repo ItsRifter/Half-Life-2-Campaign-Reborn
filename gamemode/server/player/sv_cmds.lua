@@ -231,6 +231,32 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		return ""
 	end
 	
+	if text == "!surv" or text == "!survival" then
+	
+		if (HL2CR_Voting.nextVoteTime - 120) > CurTime() then
+			local ERROR_VOTE_COOLDOWN = {
+				["Colour"] = Color(215, 50, 50),
+				["Message"] = "ERROR_VOTE_COOLDOWN1",
+				["Other"] = {
+					["Player"] = "",
+					["Time"] = string.FormattedTime((HL2CR_Voting.nextVoteTime - 120) - CurTime(), "%02i:%02i"),
+					["CurCompleted"] = "ERROR_VOTE_COOLDOWN2"
+				}
+						
+			}
+			BroadcastMessage(ERROR_VOTE_COOLDOWN, ply)
+			return ""
+		end
+
+		if GetConVar("hl2cr_survival"):GetInt() == 0 then
+			HL2CR_Voting:StartVote(ply, "EnableSurvival")
+		else
+			HL2CR_Voting:StartVote(ply, "DisableSurvival")
+		end
+		
+		return ""
+	end
+	
 	if text == "!config" or text == "!settings" then
 		net.Start("HL2CR_SettingsMenu")
 		net.Send(ply)
@@ -670,5 +696,34 @@ concommand.Add("hl2cr_giveresin", function(ply, cmd, args)
 		AddResin(target, args[2])
 		target:ChatPrint("You were given " .. args[2] .. " Resin by an admin")
 		ply:ChatPrint(args[2] .. " Resin given to " .. target:Nick())
+	end
+end)
+
+concommand.Add("hl2cr_addsp", function(ply, cmd, args)
+	if not ply:IsAdmin() then return end
+	
+	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints + args[1]
+end)
+
+concommand.Add("hl2cr_givesp", function(ply, cmd, args)
+	if not ply:IsAdmin() then return end
+	
+	local target = nil
+	
+	for _, v in ipairs(player.GetAll()) do
+		if target and string.find(target:Nick(), string.lower(string.sub(v:Nick(), 0, #args[1]))) then
+			BroadcastMessage(ERROR_VOTEKICK_MULTINAME, ply)
+			return
+		end
+		
+		if string.find(string.lower(v:Nick()), string.lower(args[1])) then
+			target = v
+		end
+	end
+	
+	if target then
+		target.hl2cr.SkillPoints = target.hl2cr.SkillPoints + args[2]
+		target:ChatPrint("You were given " .. args[2] .. " Skillpoints by an admin")
+		ply:ChatPrint(args[2] .. " Skillpoints given to " .. target:Nick())
 	end
 end)
