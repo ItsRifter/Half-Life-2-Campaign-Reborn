@@ -556,11 +556,28 @@ surface.CreateFont( "HL2CR_FancyShmancy", {
 	outline = false,
 } )
 
-
 surface.CreateFont( "HL2CR_StatusFont", {
 	font = "Roboto",
 	extended = false,
 	size = 32,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
+surface.CreateFont( "HL2CR_ArmorPoints", {
+	font = "Roboto",
+	extended = false,
+	size = 22,
 	weight = 500,
 	blursize = 0,
 	scanlines = 0,

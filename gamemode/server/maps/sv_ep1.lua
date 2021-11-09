@@ -174,11 +174,12 @@ local function SetCheckpoints()
 		}
 
 		TRIGGER_CHECKPOINT = {
+			Vector(1013, -226, 136), 		Vector(1105, -162, 18),
 			Vector(-1096, 1606, 78), 		Vector(-903, 1684, -2)
 		}
 			
 		CHECKPOINT_POS = {
-			Vector(-1008, 1758, 4)
+			Vector(1056, -235, 32),		Vector(-1008, 1758, 4)
 		}
 	elseif game.GetMap() == "ep1_c17_02b" then
 		TRIGGER_CHANGELEVEL = {
@@ -204,8 +205,27 @@ local function SetCheckpoints()
 		}
 			
 		CHECKPOINT_POS = {
-			Vector(1115, 8892, -2544),		Vector(-764, 9427, -2694)
+			Vector(1115, 8892, -2544),		Vector(-663, 9619, -2681)
 		}
+	elseif game.GetMap() == "ep1_c17_06" then
+		TRIGGER_CHANGELEVEL = {
+			Vector(-12764, -5814, -954),		Vector(-13259, -5632, -528)
+		}
+
+		TRIGGER_CHECKPOINT = {
+			Vector(10152, 8421, -758), 		Vector(10223, 8319, -650),
+			Vector(11839, 8328, -658), 		Vector(11894, 8428, -758)
+		}
+			
+		CHECKPOINT_POS = {
+			Vector(10362, 8272, -733),		Vector(11930, 8367, -739)
+		}
+		
+		CHANGELEVEL_FUNC = function()
+			for _, v in ipairs(player.GetAll()) do
+				v:SetPos(Vector(-13094, -5773, -867))
+			end
+		end
 	end
 	
 	if TRIGGER_CHECKPOINT then
@@ -322,12 +342,363 @@ local function SetCheckpoints()
 	end
 end
 
+local EP1_WEAPONS = {
+	
+	["ep1_citadel_01"] = {
+		[1] = "weapon_physcannon",
+	},
+	
+	["ep1_citadel_02"] = {
+		[1] = "weapon_physcannon",
+	},
+	
+	["ep1_citadel_02b"] = {
+		[1] = "weapon_physcannon",
+	},
+	
+	["ep1_citadel_03"] = {
+		[1] = "weapon_physcannon",
+	},
+	
+	["ep1_citadel_04"] = {
+		[1] = "weapon_physcannon",
+	},
+	
+	["ep1_c17_00"] = {
+		[1] = "weapon_physcannon",
+	},
+	
+	["ep1_c17_00a"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_pistol",
+		[3] = "weapon_shotgun",
+	},
+	
+	["ep1_c17_00a"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_pistol",
+		[3] = "weapon_shotgun",
+	},
+	
+	["ep1_c17_01"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_pistol",
+		[3] = "weapon_shotgun",
+	},
+	
+	["ep1_c17_02"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_shotgun",
+	},
+	
+	["ep1_c17_02b"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_pistol",
+		[3] = "weapon_smg1",
+		[4] = "weapon_ar2",
+		[5] = "weapon_shotgun",
+	},
+	
+	["ep1_c17_02a"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_physcannon",
+		[3] = "weapon_pistol",
+		[4] = "weapon_smg1",
+		[5] = "weapon_ar2",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_crossbow",
+	},
+	
+	["ep1_c17_05"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_physcannon",
+		[3] = "weapon_pistol",
+		[4] = "weapon_smg1",
+		[5] = "weapon_ar2",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_crossbow",
+		[8] = "weapon_rpg",
+	},
+	
+	["ep1_c17_06"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_physcannon",
+		[3] = "weapon_pistol",
+		[4] = "weapon_357",
+		[5] = "weapon_smg1",
+		[6] = "weapon_ar2",
+		[7] = "weapon_shotgun",
+		[8] = "weapon_crossbow",
+		[9] = "weapon_rpg",
+	},
+}
+
+local EP1_EQUIPMENT = {
+	["ep1_c17_00a"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		},
+		
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+	},
+	
+	["ep1_c17_01"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[3] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[4] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["ep1_c17_02"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12,
+		},
+		
+		[3] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[4] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+	},
+	
+	["ep1_c17_02b"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[5] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["ep1_c17_02a"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[5] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		},
+		
+		[6] = {
+			["Type"] = "Xbolt",
+			["Amount"] = 5,
+		},
+	},
+	
+	["ep1_c17_02a"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[5] = {
+			["Type"] = "Xbolt",
+			["Amount"] = 5,
+		},
+		
+		[6] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["ep1_c17_05"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 6,
+		},
+		
+		[4] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[5] = {
+			["Type"] = "Xbolt",
+			["Amount"] = 5,
+		},
+		
+		[6] = {
+			["Type"] = "RPG",
+			["Amount"] = 3,
+		},
+		
+		[7] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+	
+	["ep1_c17_06"] = {
+		[1] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54,
+		},
+		
+		[2] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[3] = {
+			["Type"] = "357",
+			["Amount"] = 3,
+		},
+		
+		[4] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 6,
+		},
+		
+		[5] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[6] = {
+			["Type"] = "Xbolt",
+			["Amount"] = 5,
+		},
+		
+		[7] = {
+			["Type"] = "RPG",
+			["Amount"] = 3,
+		},
+		
+		[8] = {
+			["Type"] = "Armor",
+			["Amount"] = 25,
+		}
+	},
+}
+
 local function SetUpMisc()
 	local MapLua = ents.Create("lua_run")
 	MapLua:SetName("triggerhook")
 	MapLua:Spawn()
 	
+	timer.Simple(1.5, function()
+		for _, ent in ipairs(ents.GetAll()) do
+			if (string.find(ent:GetName(), "global_newgame_spawner")) then
+				ent:Remove()
+			end
+		end
+	end)
+	
+	if EP1_WEAPONS[game.GetMap()] then
+		for i, wep in pairs(EP1_WEAPONS[game.GetMap()]) do 
+			table.insert(SPAWNING_WEAPONS, wep)
+		end
+	end
+	
+	if EP1_EQUIPMENT[game.GetMap()] then
+		table.insert(SPAWNING_ITEMS, EP1_EQUIPMENT[game.GetMap()])
+	end
+	
 	if game.GetMap() == "ep1_citadel_00" then
+		RunConsoleCommand("sv_auxpow_sprint_enabled", 1)
+		
 		ents.FindByName("relay_givegravgun_1")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:GiveGravgunEP1()" )
 		
 		ents.FindByName("ss_dog_climb")[1]:Fire("AddOutput", "OnEndSequence triggerhook:RunPassedCode:FixDog00part1()")
@@ -370,8 +741,13 @@ local function SetUpMisc()
 		end
 	end
 	
+	if game.GetMap() == "ep1_c17_02" then
+		ents.FindByName("timer_give_guard_health")[1]:Remove()
+	end
+	
 	if game.GetMap() == "ep1_c17_05" then
-		game.SetGlobalState("citizens_passive", 0)
+		ents.FindByName("trigger_citizen_boardtrain")[1]:Fire("Enable")
+		ents.FindByName("lcs_rearsoldierslock")[1]:Fire("AddOutput", "OnCompletion triggerhook:RunPassedCode:FinishMap05()")
 	end
 end
 
@@ -399,27 +775,31 @@ function CitizenFollow()
 	test:Spawn()
 end
 
-function FailedMap()
-	BroadcastSound("music/hl2_song23_suitsong3.mp3")
-	timer.Simple(10, function()
-		RunConsoleCommand("ChangeLevel", game.GetMap())
-	end)
+function FinishMap05()
+	for _, v in ipairs(player.GetAll()) do
+		v:SetTeam(TEAM_COMPLETED_MAP)
+		EnableSpectate(v)
+		ShowMapResults(v)
+	end
+	
+	StartMapCountdown()
+	net.Start("HL2CR_MapCountdown")
+	net.Broadcast()
 end
 
-hook.Add( "AcceptInput", "HL2CR_EP1_ReachedEnd", function( ent, name, activator, caller, data )
-    print(caller)
-	if ent:GetName() == "trigger_citizen_boardtrain" then
-		print("works")
-		if caller:IsNPC() then
-			caller.ReachedEnd = true
-		end
+hook.Add( "AcceptInput", "HL2CR_EP1_ReachedEnd05", function( ent, name, activator, caller, data )
+	if ent:GetName() == "trigger_citizen_boardtrain_dryrun" or ent:GetName() == "trigger_citizen_boardtrain" then
+		if activator:GetClass() ~= "npc_citizen" then return end
+		activator.ReachedEnd = true
 	end
 end )
 
 hook.Add("Tick", "HL2CR_CitizenFollow05", function()
 	if game.GetMap() == "ep1_c17_05" then
 		for _, cit in ipairs(ents.FindByClass("npc_citizen")) do
-			if cit:GetPos():Distance(player.GetAll()[1]:GetPos()) > 50 and not cit.ReachedEnd and not cit:IsCurrentSchedule(SCHED_FORCED_GO_RUN) then
+			if not cit or not string.find(cit:GetName(), "citizen_refugees_") then continue end
+			if cit.ReachedEnd == true then continue end
+			if (cit:GetPos():Distance(player.GetAll()[1]:GetPos()) > 50 and cit:GetPos():Distance(player.GetAll()[1]:GetPos()) <= 500) and not cit:IsCurrentSchedule(SCHED_FORCED_GO_RUN) then
 				cit:SetLastPosition( player.GetAll()[1]:GetPos() )
 				cit:SetSchedule(SCHED_FORCED_GO_RUN)
 			end
@@ -427,7 +807,28 @@ hook.Add("Tick", "HL2CR_CitizenFollow05", function()
 	end
 end)
 
-hook.Add("OnNPCKilled", "HL2CR_PacifistAch", function(npc, attacker, inflictor)
+hook.Add( "EntityTakeDamage", "HL2CR_EP1_SafetyFirst", function( prop, dmginfo )	
+	if game.GetMap() == "ep1_c17_02a" and prop:GetModel() == "models/gunship.mdl" then
+		if not dmginfo:GetAttacker():IsPlayer() then return end
+		
+		if dmginfo:GetAttacker():GetActiveWeapon():GetClass() ~= "weapon_crowbar" then return end
+		
+		if not dmginfo:GetAttacker().SafetyProg then
+			dmginfo:GetAttacker().SafetyProg = 1
+		end
+		
+		dmginfo:GetAttacker().SafetyProg = dmginfo:GetAttacker().SafetyProg + 1
+
+		if dmginfo:GetAttacker().SafetyProg == 6 then
+			GrantAchievement(dmginfo:GetAttacker(), "EP1", "Safety_First")
+		else 
+			return
+		end
+
+	end
+end)
+
+hook.Add("OnNPCKilled", "HL2CR_EP1_Achievements", function(npc, attacker, inflictor)
 	if game.GetMap() == "ep1_citadel_03" then
 		if npc:GetClass() == "npc_stalker" and attacker:IsPlayer() then
 			pacifistAchGlobal = false
@@ -442,6 +843,10 @@ hook.Add("OnNPCKilled", "HL2CR_PacifistAch", function(npc, attacker, inflictor)
 	
 			BroadcastMessage(FAILER)
 		end
+	end
+	
+	if game.GetMap() == "ep1_c17_02a" and ents.FindByClass("npc_combinegunship")[1] then
+		ents.FindByClass("npc_combinegunship")[1]:Fire("AddOutput", "OnDeath triggerhook:RunPassedCode:AchAll('Attica')")
 	end
 end)
 

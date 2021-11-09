@@ -32,6 +32,7 @@ LANGUAGE.HUDPlayerPets 					= "'s Pet"
 LANGUAGE.Respawn						= "Respawn in: "
 LANGUAGE.SpecNobody						= "Spectating: Nobody"
 LANGUAGE.Spectate						= "Spectating: "
+LANGUAGE.Failed_Map_Survival			= "All players are dead, restarting map"
 --Help menu
 LANGUAGE.Welcome						= "Welcome to\n'Half-Life 2-\nCampaign Reborn'"
 LANGUAGE.WelcomeBoard					= "Welcome"
@@ -124,6 +125,7 @@ LANGUAGE.Class_Bar						= "Classes"
 LANGUAGE.Statistics_Bar					= "Statistics"
 LANGUAGE.Achievements_Bar				= "Achievements"
 LANGUAGE.Close							= "Close"
+LANGUAGE.ArmorPoints					= "Armor Points: "
 --Pets Menu
 LANGUAGE.Pets_Main						= "Main"
 --Other Menu Translations

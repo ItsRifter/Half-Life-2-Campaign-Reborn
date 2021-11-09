@@ -58,7 +58,7 @@ local grenadier = CreateClass("Grenadier", "Become more effective with\ngrenades
 
 local dropout = CreateClass("Combine Dropout", "After rethinking their\ncareer choices\nit was time to dropout\nand help the resistance", "EQUIPMENT:\nMan-Hack\nStunstick", "WEAKNESSES:", 10, "materials/hl2cr/class_dropout.jpg", dropoutWeps)
 
-local robot = CreateClass("Robot", "Created by the resistance\ncares nothing else\nbut the humans", "EQUIPMENT:\nNONE", "STRENGTHS:\nMore resililent to damage\nWEAKNESSES:\n Medkits are ineffective", 20, "materials/hl2cr/class_robot.jpg", nil)
+local robot = CreateClass("Robot", "Created by the resistance\ncares nothing else\nbut the humans", "EQUIPMENT:\nNONE", "STRENGTHS:\nMore resililent to damage\nWEAKNESSES:\nMedkits are ineffective\nCannot be revived", 20, "materials/hl2cr/class_robot.jpg", nil)
 
 if SERVER then
 	net.Receive("HL2CR_SelectClass", function(len, ply)

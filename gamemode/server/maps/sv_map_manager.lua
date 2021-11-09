@@ -238,6 +238,13 @@ function InitMap()
 	end
 end
 
+function FailedMap()
+	BroadcastSound("music/hl2_song23_suitsong3.mp3")
+	timer.Simple(10, function()
+		RunConsoleCommand("ChangeLevel", game.GetMap())
+	end)
+end
+
 net.Receive("HL2CR_VoteCustomMap", function(len, ply)
 	if not ply then return end
 	

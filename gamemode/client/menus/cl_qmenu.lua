@@ -376,6 +376,12 @@ function StartQMenu(shouldOpen, skillsTbl)
 			weaponSlotImage:SetImage("materials/hl2cr/empty_weapon.jpg")
 		end
 
+		local totalArmorLabel = vgui.Create("DLabel", invPnl)
+		totalArmorLabel:SetPos(invPnl:GetWide() - 160, 25)
+		totalArmorLabel:SetText(translate.Get("ArmorPoints") .. (LocalPlayer():GetNWInt("stat_armorpoints", 0)))
+		totalArmorLabel:SetFont("HL2CR_ArmorPoints")
+		totalArmorLabel:SizeToContents()
+
         local ArmorHeadSlotPnl = vgui.Create("DPanel", invPnl)
 		ArmorHeadSlotPnl:SetPos(invPnl:GetWide() / 1.12, 150)
 		ArmorHeadSlotPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )

@@ -249,6 +249,23 @@ votingTypes["BeginHL2"] = {
 	end
 }
 
+votingTypes["BeginEP1"] = {
+	Description = "Start Episode 1?",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			BroadcastMessage(VOTE_SUCCESS_HL2)
+			BroadcastSound("hl2cr/begin_game.wav")
+			timer.Simple(10, function()
+				BeginEP1()
+			end)
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+
 votingTypes["BeginRND"] = {
 	Description = "Start Research and Development?",
 	Callback = function(state)

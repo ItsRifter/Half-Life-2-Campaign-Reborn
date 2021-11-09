@@ -233,6 +233,12 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	
 	if text == "!surv" or text == "!survival" then
 	
+		if MAPS_LOBBY[game.GetMap()] then
+			ply:ChatPrint("You can't start this vote in the lobby!")
+			--BroadcastMessage(ERROR_VOTE_COOLDOWN, ply)
+			return ""
+		end
+	
 		if (HL2CR_Voting.nextVoteTime - 120) > CurTime() then
 			local ERROR_VOTE_COOLDOWN = {
 				["Colour"] = Color(215, 50, 50),

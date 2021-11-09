@@ -1,5 +1,7 @@
 function StartLobby()
 	
+	GetConVar("hl2cr_survival"):SetInt(0)
+	
 	--Set each global state to 0
 	game.SetGlobalState("gordon_invulnerable", 0)
 	game.SetGlobalState("suit_no_sprint", 0)
@@ -37,6 +39,10 @@ function BeginHL2(chapter)
 	elseif chapter == "lostcoast" then
 		RunConsoleCommand("changelevel", "d2_lostcoast")
 	end
+end
+
+function BeginEP1()
+	RunConsoleCommand("changelevel", "ep1_citadel_00")
 end
 
 function BeginCustom(map)

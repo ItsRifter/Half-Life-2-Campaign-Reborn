@@ -77,6 +77,22 @@ end)
 local waitForRespawn = 0
 local waitDeath = 0
 
+hook.Add("DoPlayerDeath", "HL2CR_SurvialModeDeath", function(ply, att, dmgInfo )
+	if GetConVar("hl2cr_survival"):GetInt() == 0 then return end
+	
+	if #team.GetPlayers(1) <= 1 and #team.GetPlayers(2) <= 0 then
+		FAILED_MAP_SURVIVAL = {
+			["Colour"] = Color(215, 50, 50),
+			["Message"] = "Failed_Map_Survival"
+		}
+		
+		BroadcastMessage(FAILED_MAP_SURVIVAL)
+		FailedMap()
+	end
+end)
+
+
+
 hook.Add("DoPlayerDeath", "HL2CR_RevivalStone", function(ply, att, dmgInfo )
 
 	if ply.hl2cr.CurClass.Name == "Robot" then return end
@@ -171,8 +187,26 @@ local APPLY_SKILLS_DEPLOYABLE_MECH = {
 }
 
 local APPLY_ARMOR_RESIST_POINTS = {
-	--TODO
+	["Longfall_Boots"] = 0.75,
+	["Metal_Boots"] = 0.35,
+	["Light_Vest"] = 0.65,
+	["Heavy_Vest"] = 0.85,
+	["HECU_Helm"] = 0.25,
+	["Robo_Helm"] = 1.0,
+	["Exosuit_Shoulders"] = 0.65,
+	["Exosuit_Vest"] = 1.15,
+	["Exosuit_Boots"] = 0.45,
 }
+
+function SetUpPlayerArmorStats(ply)
+	for i, armor in pairs(ply.hl2cr.Inventory.ArmorSlots) do
+		if APPLY_ARMOR_RESIST_POINTS[armor] then
+			ply.totalArmorRes = math.Round(ply.totalArmorRes + APPLY_ARMOR_RESIST_POINTS[armor], 2)
+		end
+	end
+	
+	ply:SetNWInt("stat_armorpoints", ply.totalArmorRes)
+end
 
 function SetUpPlayerStats(ply)
 	
@@ -197,6 +231,8 @@ function SetUpPlayerStats(ply)
 		ArmorCount = ArmorCount + 25
 	elseif ply.hl2cr.CurClass.Name == "Robot" then
 		ply.totalArmorRes = ply.totalArmorRes + 4
+	elseif ply.hl2cr.CurClass.Name == "Supplier" then
+		ply.totalArmorRes = ply.totalArmorRes - 3
 	end
 	
 	for k, skill in pairs(ply.hl2cr.Skills) do
@@ -321,6 +357,7 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	ply:SetNWBool("CanRevive", false)
 	
 	SetUpPlayerStats(ply)
+	SetUpPlayerArmorStats(ply)
 
 	if CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot] and not (NOSUIT_MAPS[game.GetMap()] or SUPERGRAVGUN_MAPS[game.GetMap()] or game.GetMap() == "d1_trainstation_05") and not ON_CITADEL_MAPS then
 		ply:Give(CONVERT_NAME_TO_ENT[ply.hl2cr.Inventory.CurWeaponSlot])
@@ -411,6 +448,10 @@ hook.Add("PlayerCanPickupWeapon", "HL2CR_WeaponPickup", function(ply, weapon)
 	
 	if weapon:GetClass() == "weapon_physgun" and ply:IsAdmin() then
 		return true
+	end
+	
+	if weapon:GetClass() ~= "weapon_physcannon" and string.find(game.GetMap(), "ep1_citadel_") then
+		return false
 	end
 	
 	--If its a stunstick, give them armor
@@ -559,7 +600,7 @@ end)
 
 hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
 	
-	if item:GetClass() == "item_healthkit" and ply.hl2cr.CurClass.Name == "Robot" then
+	if (item:GetClass() == "item_healthkit" or item:GetClass() == "item_healthvial") and ply.hl2cr.CurClass.Name == "Robot" then
 		return false
 	elseif item:GetClass() == "item_battery" and ply.hl2cr.CurClass.Name == "Robot" and ply:Health() < ply:GetMaxHealth() and not item.robotPicked then
 		item.robotPicked = true

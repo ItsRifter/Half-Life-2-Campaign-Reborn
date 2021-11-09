@@ -625,7 +625,6 @@ net.Receive("HL2CR_StatusEffect", function()
 			end
 			
 		else
-			print("Effect done")
 			if IsValid(effectIcon) then
 				effectIcon:Remove()
 			end

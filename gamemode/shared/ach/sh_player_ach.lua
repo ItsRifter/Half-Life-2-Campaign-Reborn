@@ -325,6 +325,28 @@ GM.Achievements = {
 			},
 			IsRare = false
 		},
+		
+		Attica = {
+			Name = "Attica!",
+			Mat = "vgui/achievements/ep1_beat_hospitalatticgunship.png", 
+			Desc = "Destroy the Gunship\nin the hospital attic",
+			Rewards = {
+				XP = 1500,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Safety_First = {
+			Name = "Safety First",
+			Mat = "vgui/achievements/ep1_beat_hospitalatticgunship.png", 
+			Desc = "Whack the Gunship 5 times\nin hospital attic",
+			Rewards = {
+				XP = 1500,
+				Item = nil
+			},
+			IsRare = false
+		},
 	},
 	
 	Misc = {
