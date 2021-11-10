@@ -26,10 +26,12 @@ if SERVER then
 		local skillToAdd = net.ReadString()
 		
 		for i, v in ipairs(GAMEMODE.PlayerPetSkills) do
-			if v.Name == skillToAdd then 
+			if v.Name == skillToAdd and not table.HasValue(ply.hl2cr.Pets.CurrentPet["skills"], v.Name) then 
+				table.insert(ply.hl2cr.Pets.CurrentPet["skills"], v.Name)
 				
-				print("Yay")
-				print(skillToAdd)
+				--ply.hl2cr.Pets.CurrentPet["skillpoints"] = ply.hl2cr.Pets.CurrentPet["skillpoints"] - 1
+				
+				ply:SetNWInt("pet_skillpoints", ply.hl2cr.Pets.CurrentPet["skillpoints"])
 			end
 		end
 	end)

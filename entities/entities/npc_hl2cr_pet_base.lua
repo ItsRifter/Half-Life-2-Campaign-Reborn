@@ -9,11 +9,12 @@ function ENT:Initialize()
 	
 	self.LoseTargetDist	= 200
 	self.SearchRadius 	= 250
-	self.NextAttack = 0
-	self.followOwner = false
+	self.NextAttack 	= 0
+	self.AttackDelay 	= 0
+	self.followOwner 	= false
 	
 	self.BaseSpeed = 0
-	self.AttackDist = 175
+	self.AttackDist = 150
 	self.AttackDMG = 0
 	
 	self:SetHealth(1)
@@ -24,7 +25,6 @@ function ENT:Initialize()
 end
 
 function ENT:SetUpStats(stats)
-	
 	self.BaseHealth = stats["health"]
 	self.BaseSpeed = stats["speed"]
 	self.AttackDMG = stats["damage"]
@@ -144,7 +144,7 @@ function ENT:ChaseEnemy( options )
 					hook.Call( "OnNPCKilled", "HL2CR_NPCKilled", self:GetEnemy(), self, self:GetOwner() )
 				end
 				
-				self.NextAttack = CurTime() + 5
+				self.NextAttack = CurTime() + self.AttackDelay
 				self:Move()
 			end
 		end
@@ -275,6 +275,11 @@ function ENT:OnInjured( dmginfo )
 	
 	self:SetHealth(self:Health() - dmginfo:GetDamage())
 	self:GetOwner():SetNWInt("pet_health", self:Health())
+	
+	if self:Health() <= 0 then
+		self:OnKilled( dmginfo )
+	end
+	
 end
 
 function ENT:OnKilled( dmginfo )

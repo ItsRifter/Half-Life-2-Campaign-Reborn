@@ -18,38 +18,39 @@ end
 
 GM.PlayerPets = {}
 
-function CreatePet(name, className, desc, model, cost, stats)
+function CreatePet(name, className, desc, model, cost, stats, startReqXP)
 	
 	local pet = {
 		["name"] = name,
 		["level"] = 0,
 		["skillpoints"] = 0,
 		["xp"] = 0,
-		["reqxp"] = 1500, 
+		["reqxp"] = startReqXP, 
 		["class"] = className,
 		["desc"] = desc,
 		["model"] = model,
 		["cost"] = cost,
-		["stats"] = stats
+		["stats"] = stats,
+		["skills"] = {}
 	}
 	
 	table.insert(GM.PlayerPets, pet)
 end
 
 local headcrabStats = {
-	["health"] = 100,
+	["health"] = 150,
 	["speed"] = 30,
-	["damage"] = 5,
+	["damage"] = 8,
 }
 
 local fastheadcrabStats = {
-	["health"] = 75,
+	["health"] = 100,
 	["speed"] = 75,
-	["damage"] = 3,
+	["damage"] = 6,
 }
 
-local headcrab = CreatePet("Headcrab", "npc_hl2cr_pet_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000, headcrabStats)
-local fastheadcrab = CreatePet("Fast Headcrab", "npc_hl2cr_pet_fastheadcrab", "A mutated version of the\noriginal headcrab\nfaster but weaker", "models/headcrab.mdl", 11500, fastheadcrabStats)
+local headcrab = CreatePet("Headcrab", "npc_hl2cr_pet_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000, headcrabStats, 500)
+local fastheadcrab = CreatePet("Fast Headcrab", "npc_hl2cr_pet_fastheadcrab", "A mutated version of the\noriginal headcrab\nfaster but weaker", "models/headcrab.mdl", 11500, fastheadcrabStats, 750)
 
 if SERVER then
 	net.Receive("HL2CR_EquipPet", function(len, ply)

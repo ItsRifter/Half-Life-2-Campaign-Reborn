@@ -224,6 +224,7 @@ local function SetCheckpoints()
 		CHANGELEVEL_FUNC = function()
 			for _, v in ipairs(player.GetAll()) do
 				v:SetPos(Vector(-13094, -5773, -867))
+				GrantAchievement(v, "EP1", "Beat_EP1")
 			end
 		end
 	end
@@ -739,6 +740,10 @@ local function SetUpMisc()
 		for _, failer in ipairs(ents.FindByName("trigger_fall")) do
 			failer:Remove()
 		end
+	end
+	
+	if game.GetMap() == "ep1_c17_00" then
+		ents.FindByName("train_2_ambush_zombine")[1]:SetHealth(1)
 	end
 	
 	if game.GetMap() == "ep1_c17_02" then

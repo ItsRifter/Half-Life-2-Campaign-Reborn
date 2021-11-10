@@ -67,7 +67,7 @@ function ShowPetStatMenu(shouldOpen)
 			petStatusLabel:SetText("Pet: " .. LocalPlayer():GetNWString("pet_name") )
 			petStatusLabel:SizeToContents()
 			
-			petHealthBarFill:SetSize(math.Clamp(LocalPlayer():GetNWInt("pet_health") * petHealthBar:GetWide(), 0, LocalPlayer():GetNWInt("pet_maxhealth")), 25)
+			petHealthBarFill:SetSize(LocalPlayer():GetNWInt("pet_health"), 25)
 			
 			petXPBarFill:SetSize(math.Clamp(LocalPlayer():GetNWInt("pet_curxp") / LocalPlayer():GetNWInt("pet_curreqxp") * petXPBar:GetWide(), 0, LocalPlayer():GetNWInt("pet_curreqxp")), 25)
 		end

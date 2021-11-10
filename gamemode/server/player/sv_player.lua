@@ -929,9 +929,10 @@ hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup
 	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
 		hitMulti = hitMulti * 1.25
 	end
+	
 	damage = damage * hitMulti
 	if ply.totalArmorRes ~= 0 then
-		damage = damage - ply.totalArmorRes
+		damage = math.Clamp(damage - ply.totalArmorRes, 1, 999)
 	end
 	
 	dmgInfo:SetDamage(damage)

@@ -1,6 +1,7 @@
 net.Receive("HL2CR_OpenPets", function()
 	local curPlayerPets = net.ReadTable()
-
+	local curUsingPet = net.ReadTable()
+	
 	local petTabs = vgui.Create("HL2CR_Tab")
 	petTabs:SetSize(ScrW() / 1.5, ScrH() / 2.5)
 	petTabs:Center()
@@ -190,9 +191,7 @@ net.Receive("HL2CR_OpenPets", function()
 	
 	local enchanceSkillLabel = vgui.Create("DLabel", enhancePnl)
 	
-	if not curPlayerPets.CurrentPet or LocalPlayer():GetNWString("pet_name") == "" then
-		enchanceSkillLabel:SetText("Your pet's Skillpoints: 0")
-	else
+	if not curPlayerPets.CurrentPet or LocalPlayer():GetNWString("pet_name") ~= "" or curPlayerPets.CurrentPet["skillpoints"] then
 		enchanceSkillLabel:SetText(LocalPlayer():GetNWString("pet_name") .. "'s Skillpoints: " .. curPlayerPets.CurrentPet["skillpoints"])
 	end
 	
@@ -209,14 +208,21 @@ net.Receive("HL2CR_OpenPets", function()
 			
 			local skillBtnIcon = vgui.Create("DImageButton", skillPanel)
 			skillBtnIcon:SetImage(s["Icon"])
+			skillBtnIcon:SetToolTip(s["Desc"])
 			skillBtnIcon:SetSize(skillPanel:GetWide(), skillPanel:GetTall())
-			
+			PrintTable(curUsingPet)
 			skillBtnIcon.DoClick = function()
+				if not table.HasValue(curUsingPet["skills"], s["SkillReq"]) or (curUsingPet["skills"] and table.HasValue(curUsingPet["skills"], s["Name"])) then
+					surface.PlaySound("buttons/button16.wav")
+					return
+				end				
+				
 				net.Start("HL2CR_UpdatePetSkill")
 					net.WriteString(s["Name"])
 				net.SendToServer()
+				
+				surface.PlaySound("buttons/button5.wav")
 			end
-			
 		end
 	else
 		local noPetLabel = vgui.Create("DLabel", enhancePnl)

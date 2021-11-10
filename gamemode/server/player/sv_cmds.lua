@@ -140,6 +140,7 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		
 		net.Start("HL2CR_OpenPets")
 			net.WriteTable(ply.hl2cr.Pets)
+			net.WriteTable(ply.hl2cr.Pets.CurrentPet)
 		net.Send(ply)
 		return ""
 	end
@@ -355,6 +356,10 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	end
 	
 	if text == "!petsummon" or text == "!summonpet" then
+		if ply:Team() ~= 1 or ply:Team() == 2 then 
+			return "" 
+		end
+		
 		if table.IsEmpty(ply.hl2cr.Pets) then
 			BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
 			return ""
@@ -587,8 +592,12 @@ concommand.Add("hl2cr_petremove", function(ply, cmd, args)
 end)
 
 concommand.Add("hl2cr_petsummon", function(ply, cmd, args)
+	if ply:Team() ~= 1 or ply:Team() == 2 then 
+		return
+	end
+	
 	if table.IsEmpty(ply.hl2cr.Pets) then
-		BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
+		BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)	
 		return 
 	end
 	
@@ -651,6 +660,12 @@ concommand.Add("hl2cr_addpetxp", function(ply, cmd, args)
 	if not ply:IsAdmin() then return end
 	
 	AddPetXP(ply, args[1])
+end)
+
+concommand.Add("hl2cr_bringalyx", function(ply, cmd, args)
+	if not ply:IsAdmin() then return end
+	
+	
 end)
 
 concommand.Add("hl2cr_givexp", function(ply, cmd, args)

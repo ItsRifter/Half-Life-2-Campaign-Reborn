@@ -8,8 +8,9 @@ function ENT:Initialize()
 	
 	self.LoseTargetDist	= 200
 	self.SearchRadius 	= 250
-	self.NextAttack = 0
-	self.followOwner = false
+	self.NextAttack 	= 0
+	self.AttackDelay 	= 1
+	self.followOwner 	= false
 	
 	self.BaseSpeed = 0
 	self.AttackDist = 175

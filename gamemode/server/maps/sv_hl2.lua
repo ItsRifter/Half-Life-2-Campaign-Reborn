@@ -30,7 +30,13 @@ NO_PETS_MAPS = {
 	["d1_trainstation_03"] = true,
 	["d1_trainstation_04"] = true,
 	["d1_trainstation_05"] = true,
-	["d3_breen_01"] = true
+	["d3_breen_01"] = true,
+	["ep1_citadel_00"] = true,
+	["ep1_citadel_01"] = true,
+	["ep1_citadel_02"] = true,
+	["ep1_citadel_02b"] = true,
+	["ep1_citadel_03"] = true,
+	["ep1_citadel_04"] = true
 }
 
 AIRBOAT_GUN_MAPS = {

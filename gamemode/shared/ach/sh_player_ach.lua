@@ -315,6 +315,17 @@ GM.Achievements = {
 			IsRare = false
 		},
 		
+		Beat_EP1 = {
+			Name = "Escape from City 17",
+			Mat = "vgui/achievements/ep1_beat_game.png", 
+			Desc = "Escape City 17 with Alyx",
+			Rewards = {
+				XP = 1000,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
 		Pacifist_Stalkers = {
 			Name = "Pacifist",
 			Mat = "vgui/achievements/ep1_beat_citadelcore_nostalkerkills.png", 
