@@ -64,7 +64,6 @@ function ToggleBoard(toggle)
 			panel:SetSize(225, 75)
 			panel:SetBackgroundColor(statusColours)
 			
-			
 			local avatar = vgui.Create( "AvatarImage", panel )
 			avatar:SetSize(75, 75)
 			avatar:SetPos(0, 0)
@@ -90,6 +89,19 @@ function ToggleBoard(toggle)
 			playerStats:SetText(translate.Get("SCLevel") .. pl:GetNWInt("stat_level", -1) .. translate.Get("SCExprience") .. pl:GetNWInt("stat_exp", -1) .. "/" .. pl:GetNWInt("stat_reqexp", 0))
 			playerStats:SetTextColor( Color( 0, 0, 0) )
 			playerStats:SizeToContents()
+			
+			if pl:IsSuperAdmin() then
+				local adminBadge = vgui.Create( "DImage", panel )
+				adminBadge:SetSize(24, 24)
+				adminBadge:SetPos(panel:GetWide() - 30, 0)
+				adminBadge:SetImage( "icon16/award_star_gold_3.png" )
+				
+			elseif pl:IsAdmin() then
+				local adminBadge = vgui.Create( "DImage", panel )
+				adminBadge:SetSize(24, 24)
+				adminBadge:SetPos(panel:GetWide() - 30, 0)
+				adminBadge:SetImage( "icon16/award_star_gold_2.png" )
+			end
 			
 			if LocalPlayer() != pl then
 				local muteBtn = vgui.Create("DImageButton", panel)

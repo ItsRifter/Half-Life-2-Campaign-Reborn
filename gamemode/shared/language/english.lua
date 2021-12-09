@@ -8,13 +8,21 @@ LANGUAGE.SCExprience					= "\nXP: "
 LANGUAGE.HUDPlayerGotLevel				= "User Level is now '"
 LANGUAGE.HUDPlayerLeftTheGame			= " has left the server. REASON: "
 LANGUAGE.HUDAdminAlert2					= " - has joined the server"
+<<<<<<< Updated upstream
+=======
+LANGUAGE.HUDPlayerAlert					= " is joining the server"
+>>>>>>> Stashed changes
 LANGUAGE.HUDRifterAlert					= "The Creator - "
 LANGUAGE.HUDLeiftigerAlert				= "Someone very special is joining..."
 LANGUAGE.HUDAdminAlert					= "An admin - "
 LANGUAGE.HUDRareAch1					= " has earned a "
 LANGUAGE.HUDRareAch2					= "RARE "
 LANGUAGE.HUDRareAch3					= "achievement: "
+<<<<<<< Updated upstream
 LANGUAGE.HUDSkillPoints					= "UNUSED SKILL POINTS: "
+=======
+LANGUAGE.HUDSkillPoints					= "UNSPENT SKILL POINTS: "
+>>>>>>> Stashed changes
 LANGUAGE.HUDXP							= "XP"
 LANGUAGE.HUDDeadPlayer					= "R.I.P: "
 LANGUAGE.ReviveMe						= "Revive me!"
@@ -32,7 +40,10 @@ LANGUAGE.HUDPlayerPets 					= "'s Pet"
 LANGUAGE.Respawn						= "Respawn in: "
 LANGUAGE.SpecNobody						= "Spectating: Nobody"
 LANGUAGE.Spectate						= "Spectating: "
+<<<<<<< Updated upstream
 LANGUAGE.Failed_Map_Survival			= "All players are dead, restarting map"
+=======
+>>>>>>> Stashed changes
 --Help menu
 LANGUAGE.Welcome						= "Welcome to\n'Half-Life 2-\nCampaign Reborn'"
 LANGUAGE.WelcomeBoard					= "Welcome"
@@ -109,8 +120,13 @@ LANGUAGE.SpendToUnlock					= "Spend a skill-point to unlock"
 LANGUAGE.PickClass						= "Pick class"
 LANGUAGE.Field_Medic_Desc				= "A field medic here to help\nthe injured during combat"
 LANGUAGE.Class_Locked					= "LOCKED: Reach Level 5"
+<<<<<<< Updated upstream
 LANGUAGE.ASSIGNED_MESSAGE1				= "You have been assigned as '"
 LANGUAGE.ASSIGNED_MESSAGE2				= "'\nYou will obtain your equipment next respawn"
+=======
+LANGUAGE.ASSIGNED_MESSAGE1				= "You'll be assigned as '"
+LANGUAGE.ASSIGNED_MESSAGE2				= "' by next respawn"
+>>>>>>> Stashed changes
 --Statistics
 LANGUAGE.Kills							= "Kills: "
 LANGUAGE.Deaths							= " | Deaths: "
@@ -123,11 +139,21 @@ LANGUAGE.Skills_Bar						= "Skills"
 LANGUAGE.Shop_Bar						= "Shop"
 LANGUAGE.Class_Bar						= "Classes"
 LANGUAGE.Statistics_Bar					= "Statistics"
+LANGUAGE.Quests_Bar					= "Quests"
 LANGUAGE.Achievements_Bar				= "Achievements"
 LANGUAGE.Close							= "Close"
 LANGUAGE.ArmorPoints					= "Armor Points: "
+<<<<<<< Updated upstream
 --Pets Menu
 LANGUAGE.Pets_Main						= "Main"
+=======
+
+LANGUAGE.AssignQuest					= "Assign Quest"
+
+--Pets Menu
+LANGUAGE.Pets_Main						= "Main"
+LANGUAGE.PET_MAX_LEVEL					= "Congratulations, your pet is now at max level, your pet will no longer earn xp at this point"
+>>>>>>> Stashed changes
 --Other Menu Translations
 LANGUAGE.Ach_HL2_Bar					= "Half-Life 2"
 LANGUAGE.Ach_EP1_Bar					= "Episode 1"
@@ -155,12 +181,22 @@ LANGUAGE.Ach_Locked						= "Locked"
 --Voting
 LANGUAGE.ERROR_VOTE_COOLDOWN1			= "You must wait "
 LANGUAGE.ERROR_VOTE_COOLDOWN2			= " before calling this vote"
+<<<<<<< Updated upstream
+=======
+LANGUAGE.ERROR_VOTE_DIFF_ALREADYON		= "The difficulty is already set to this setting"
+LANGUAGE.ERROR_VOTE_LOBBY				= "You can't start this vote in the lobby"
+>>>>>>> Stashed changes
 --Callout menu (C)
 LANGUAGE.RequestMedic			= "Needs a medic"
 LANGUAGE.RequestArmor			= "Needs armor"
 LANGUAGE.RequestAmmo			= "Needs ammo"
 --Pets
 LANGUAGE.EquipPet				= "Set Current Pet"
+<<<<<<< Updated upstream
+=======
+LANGUAGE.ConfirmSell			= "Confirm?"
+LANGUAGE.SellPet				= "Sell Pet"
+>>>>>>> Stashed changes
 LANGUAGE.AdoptPnl				= "Kleiners Adoption Centre"
 LANGUAGE.AdoptPet				= "Adopt this pet"
 --Custom Maps

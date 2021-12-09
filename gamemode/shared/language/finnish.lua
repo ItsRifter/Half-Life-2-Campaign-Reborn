@@ -1,4 +1,4 @@
-translate.AddLanguage("en", "English")
+--translate.AddLanguage("en", "English")
 
 LANGUAGE.Welcome						= "Welcome to\n'Half-Life 2-\nCampaign Reborn'"
 LANGUAGE.AlphaWarning 					= "This gamemode is currently in ALPHA\nExpect bugs and things to change"
@@ -88,8 +88,8 @@ LANGUAGE.Achievements_Bar				= "Achievements"
 LANGUAGE.ERROR_VOTE_COOLDOWN1			= "You must wait "
 LANGUAGE.ERROR_VOTE_COOLDOWN2			= " before calling this vote"
 
-LANGUAGE.ASSIGNED_MESSAGE1			= "You have been assigned as '"
-LANGUAGE.ASSIGNED_MESSAGE2			= "'\nYou will obtain your equipment next respawn"
+LANGUAGE.ASSIGNED_MESSAGE1				= "You'll be assigned as '"
+LANGUAGE.ASSIGNED_MESSAGE2				= "' by next respawn"
 LANGUAGE.RequestMedic			= "Needs a medic"
 LANGUAGE.RequestArmor			= "Needs armor"
 LANGUAGE.RequestAmmo			= "Needs ammo"

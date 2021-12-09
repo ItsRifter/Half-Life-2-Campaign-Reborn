@@ -140,7 +140,10 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		
 		net.Start("HL2CR_OpenPets")
 			net.WriteTable(ply.hl2cr.Pets)
+<<<<<<< Updated upstream
 			net.WriteTable(ply.hl2cr.Pets.CurrentPet)
+=======
+>>>>>>> Stashed changes
 		net.Send(ply)
 		return ""
 	end
@@ -207,6 +210,18 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		return ""
 	end
 	
+	if text == "!svencoop" then
+		GrantAchievement(ply, "Misc", "Sven_Coop")
+		
+		if ply.hl2cr.Config.PlayerSettings["SvenSecret"] == false then
+			ply.hl2cr.Config.PlayerSettings["SvenSecret"] = true
+		else
+			ply.hl2cr.Config.PlayerSettings["SvenSecret"] = false
+		end
+		
+		return ""
+	end
+	
 	if string.find(text, "!diff ") then
 		local diffVote = string.sub(text, 7)
 	
@@ -225,7 +240,10 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 			return ""
 		end
 		
-		if DIFF_VOTES[tonumber(diffVote)] == GetConVar("hl2cr_difficulty"):GetInt() then return end
+		if tonumber(diffVote) == GetConVar("hl2cr_difficulty"):GetInt() then 
+			BroadcastMessage(ERROR_VOTE_DIFF_ALREADYON, ply)
+			return ""
+		end
 		
 		HL2CR_Voting:StartVote(ply, DIFF_VOTES[tonumber(diffVote)])
 		
@@ -235,8 +253,12 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	if text == "!surv" or text == "!survival" then
 	
 		if MAPS_LOBBY[game.GetMap()] then
+<<<<<<< Updated upstream
 			ply:ChatPrint("You can't start this vote in the lobby!")
 			--BroadcastMessage(ERROR_VOTE_COOLDOWN, ply)
+=======
+			BroadcastMessage(ERROR_VOTE_LOBBY, ply)
+>>>>>>> Stashed changes
 			return ""
 		end
 	
@@ -303,7 +325,7 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		end
 	end
 	
-	if text == "!restartmap" or text == "!vrm" then
+	if text == "!vrm" then
 		
 		if HL2CR_Voting.nextVoteTime > CurTime() then
 			local ERROR_VOTE_COOLDOWN = {
@@ -356,10 +378,13 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	end
 	
 	if text == "!petsummon" or text == "!summonpet" then
+<<<<<<< Updated upstream
 		if ply:Team() ~= 1 or ply:Team() == 2 then 
 			return "" 
 		end
 		
+=======
+>>>>>>> Stashed changes
 		if table.IsEmpty(ply.hl2cr.Pets) then
 			BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
 			return ""
@@ -413,6 +438,11 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	end	
 	
 	if string.find(text, "!petname ") or string.find(text, "!namepet ") then
+		if not ply.pet then
+			BroadcastMessage(ERROR_PET_NONEXISTS, ply)
+			return ""
+		end
+		
 		local checkName = string.sub(text, 10)
 		
 		if string.len(checkName) > 16 then
@@ -420,13 +450,20 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 			return ""
 		end	
 		
-		ply.hl2cr.Pets.Name = checkName
+		ply.hl2cr.Pets.CurrentPet["name"] = checkName
 		
-		ply:SetNWString("pet_name", ply.hl2cr.Pets.Name)
+		for i, pet in ipairs(ply.hl2cr.Pets) do
+			if ply.hl2cr.Pets.CurrentPet.class == ply.hl2cr.Pets[i].class then
+				ply.hl2cr.Pets[i].name = checkName
+			end
+			
+		end
+		
+		ply:SetNWString("pet_name", ply.hl2cr.Pets.CurrentPet.name)
 		
 		local SET_PET_NAME = {
 			["Colour"] = Color(50, 215, 50),
-			["Message"] = "Pet renamed to '" .. ply.hl2cr.Pets.Name .. "'"
+			["Message"] = "Pet renamed to '" .. ply.hl2cr.Pets.CurrentPet.name .. "'"
 		}
 		
 		BroadcastMessage(SET_PET_NAME, ply)
@@ -503,7 +540,11 @@ net.Receive("HL2CR_HelpNotify", function(len, ply)
 	end)
 	
 	if helpNeeded == "Medic" or helpNeeded == "Armor" then
-	
+		if ply.hl2cr.Config.PlayerSettings["SvenSecret"] == true then
+			ply:EmitSound("hl2cr/request/medic/classic_medic.mp3")
+			return
+		end
+		
 		if string.find(ply:GetModel(), "female") then
 			ply:EmitSound("hl2cr/request/medic/female_request_medic_" .. math.random(1, 2) .. ".wav")
 		else
@@ -592,8 +633,14 @@ concommand.Add("hl2cr_petremove", function(ply, cmd, args)
 end)
 
 concommand.Add("hl2cr_petsummon", function(ply, cmd, args)
+<<<<<<< Updated upstream
 	if ply:Team() ~= 1 or ply:Team() == 2 then 
 		return
+=======
+	if table.IsEmpty(ply.hl2cr.Pets) then
+		BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
+		return 
+>>>>>>> Stashed changes
 	end
 	
 	if table.IsEmpty(ply.hl2cr.Pets) then
@@ -662,12 +709,15 @@ concommand.Add("hl2cr_addpetxp", function(ply, cmd, args)
 	AddPetXP(ply, args[1])
 end)
 
+<<<<<<< Updated upstream
 concommand.Add("hl2cr_bringalyx", function(ply, cmd, args)
 	if not ply:IsAdmin() then return end
 	
 	
 end)
 
+=======
+>>>>>>> Stashed changes
 concommand.Add("hl2cr_givexp", function(ply, cmd, args)
 	if not ply:IsAdmin() then return end
 	

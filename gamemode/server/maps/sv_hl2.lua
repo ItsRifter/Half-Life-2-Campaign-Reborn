@@ -13,7 +13,8 @@ NO_SUICIDE_MAPS = {
 	["d1_trainstation_05"] = true,
 	["d1_eli_01"] = true,
 	["d1_eli_02"] = true,
-	["d3_breen_01"] = true
+	["d3_breen_01"] = true,
+	["ep1_citadel_00"] = true
 }
 
 AIRBOAT_MAPS = {

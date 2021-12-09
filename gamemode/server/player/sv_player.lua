@@ -80,6 +80,7 @@ local waitDeath = 0
 hook.Add("DoPlayerDeath", "HL2CR_SurvialModeDeath", function(ply, att, dmgInfo )
 	if GetConVar("hl2cr_survival"):GetInt() == 0 then return end
 	
+<<<<<<< Updated upstream
 	if #team.GetPlayers(1) <= 1 and #team.GetPlayers(2) <= 0 then
 		FAILED_MAP_SURVIVAL = {
 			["Colour"] = Color(215, 50, 50),
@@ -87,6 +88,9 @@ hook.Add("DoPlayerDeath", "HL2CR_SurvialModeDeath", function(ply, att, dmgInfo )
 		}
 		
 		BroadcastMessage(FAILED_MAP_SURVIVAL)
+=======
+	if #team.GetPlayers(1) <= 0 and #team.GetPlayers(2) <= 0 then
+>>>>>>> Stashed changes
 		FailedMap()
 	end
 end)
@@ -163,6 +167,15 @@ hook.Add("Think", "HL2CR_DeathTick", function()
 end)
 
 hook.Add("PlayerInitialSpawn", "HL2CR_InitialPlayerSpawn", function(ply, transition)
+<<<<<<< Updated upstream
+=======
+	if ply.hl2cr.Quests then
+		net.Start("HL2CR_UpdateQuests")
+			net.WriteTable(ply.hl2cr.Quests)
+		net.Send(ply)
+	end
+	
+>>>>>>> Stashed changes
 	ply.rewards = {
 		["kills"] = 0,
 		["resin"] = 0,
@@ -320,6 +333,7 @@ function SetUpPlayerStats(ply)
 	ply:SetNWInt("skill_repairing", repairing)
 	ply:SetNWInt("skill_repairrate", repairRecharge)
 	ply:SetNWInt("skill_grouprepair", repairGroup)
+<<<<<<< Updated upstream
 	
 	ply:SetMaxHealth(100 + newMaxHP)
 	ply:SetHealth(100 + newMaxHP)
@@ -356,6 +370,44 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
 	ply:SetNWBool("CanRevive", false)
 	
+=======
+	
+	ply:SetMaxHealth(100 + newMaxHP)
+	ply:SetHealth(100 + newMaxHP)
+	ply:SetMaxArmor(100 + ArmorCount)
+end
+
+--Player spawning
+hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
+
+	if ply:SteamID() == "STEAM_0:1:19822252" then
+		for _, v in ipairs(player.GetAll()) do
+			GrantAchievement(v, "Misc", "Leiftiger")
+		end
+	end
+
+	if ply:GetNWEntity("hl2cr_grave", gravestone) and ply:GetNWEntity("hl2cr_grave", gravestone):IsValid() then
+		ply:GetNWEntity("hl2cr_grave", gravestone):Remove()
+	end
+
+	net.Start("HL2CR_ShouldClientSpectate")
+		net.WriteBool(false)
+		net.WriteBool(false)
+		net.WriteInt(0, 8)
+		net.WriteBool(false)
+	net.Send(ply)
+	
+	ply:SetModel(ply.hl2cr.Model)
+	ply:SetupHands()
+	ply:SetTeam(TEAM_ALIVE)
+	
+	ply:SetCustomCollisionCheck(true)
+	ply:SetNoCollideWithTeammates(true)
+	
+	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
+	ply:SetNWBool("CanRevive", false)
+	
+>>>>>>> Stashed changes
 	SetUpPlayerStats(ply)
 	SetUpPlayerArmorStats(ply)
 
@@ -928,6 +980,7 @@ hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup
 		hitMulti = hitMulti * 1.25
 	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
 		hitMulti = hitMulti * 1.25
+<<<<<<< Updated upstream
 	end
 	
 	damage = damage * hitMulti
@@ -935,6 +988,14 @@ hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup
 		damage = math.Clamp(damage - ply.totalArmorRes, 1, 999)
 	end
 	
+=======
+	end
+	damage = damage * hitMulti
+	if ply.totalArmorRes ~= 0 then
+		damage = damage - ply.totalArmorRes
+	end
+	
+>>>>>>> Stashed changes
 	dmgInfo:SetDamage(damage)
 end)
 
@@ -1053,6 +1114,10 @@ hook.Add("PlayerButtonDown", "HL2CR_OpenQMenu", function(ply, btn)
 	if btn == KEY_Q then
 		net.Start("HL2CR_QMenuUpdate")
 			net.WriteTable(ply.hl2cr.Skills)
+<<<<<<< Updated upstream
+=======
+			net.WriteTable(ply.hl2cr.Quests)
+>>>>>>> Stashed changes
 			net.WriteBool(true)
 		net.Send(ply)
 	end
@@ -1062,6 +1127,10 @@ hook.Add("PlayerButtonUp", "HL2CR_CloseQMenu", function(ply, btn)
 	if btn == KEY_Q then
 		net.Start("HL2CR_QMenuUpdate")
 			net.WriteTable(ply.hl2cr.Skills)
+<<<<<<< Updated upstream
+=======
+			net.WriteTable(ply.hl2cr.Quests)
+>>>>>>> Stashed changes
 			net.WriteBool(false)
 		net.Send(ply)
 	end

@@ -36,7 +36,8 @@ local function InitData(ply)
 	ply.hl2cr.Config.PlayerSettings = ply.hl2cr.Config.PlayerSettings or {
 		["PlayerDrawDistance"] = 250,
 		["ShouldPlayEndMusic"] = true,
-		["PlayerFont"] = "Default"
+		["PlayerFont"] = "Default",
+		["SvenSecret"] = false
 	}
 	ply.hl2cr.Config.NPCSettings = ply.hl2cr.Config.NPCSettings or {
 		["NPCDrawDistance"] = 150,

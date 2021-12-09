@@ -10,7 +10,10 @@ function ENT:Initialize()
 	self.LoseTargetDist	= 200
 	self.SearchRadius 	= 250
 	self.NextAttack 	= 0
+<<<<<<< Updated upstream
 	self.AttackDelay 	= 3
+=======
+>>>>>>> Stashed changes
 	self.followOwner	= false
 	
 	self.BaseSpeed 		= 0

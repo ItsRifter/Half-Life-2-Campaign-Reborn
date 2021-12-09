@@ -279,10 +279,18 @@ local PLAYERMODELS = {
 
 net.Receive("HL2CR_QMenuUpdate", function()
 	local skillsTbl = net.ReadTable()
+<<<<<<< Updated upstream
 	StartQMenu(net.ReadBool(), skillsTbl)
 end)
 
 function StartQMenu(shouldOpen, skillsTbl)
+=======
+	local questTbl = net.ReadTable()
+	StartQMenu(net.ReadBool(), skillsTbl, questTbl)
+end)
+
+function StartQMenu(shouldOpen, skillsTbl, questTbl)
+>>>>>>> Stashed changes
 	if not LocalPlayer():Alive() or (LocalPlayer():Team() == 2 or LocalPlayer():Team() == 5) then return end
 	
 	if shouldOpen then 
@@ -698,6 +706,7 @@ function StartQMenu(shouldOpen, skillsTbl)
 		local medicHorizontalScroll = vgui.Create("DHorizontalScroller", medicSkillsPnl)
 		medicHorizontalScroll:Dock(FILL)
 		medicHorizontalScroll:SetOverlap( 0 )
+<<<<<<< Updated upstream
 		
 		local medicSkillsLayout = vgui.Create("DIconLayout", medicHorizontalScroll)
 		medicSkillsLayout:Dock(FILL)
@@ -715,6 +724,25 @@ function StartQMenu(shouldOpen, skillsTbl)
 		local robotSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		robotSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
 		
+=======
+		
+		local medicSkillsLayout = vgui.Create("DIconLayout", medicHorizontalScroll)
+		medicSkillsLayout:Dock(FILL)
+		
+		local repairSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
+		repairSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
+		
+		local repairHorizontalScroll = vgui.Create("DHorizontalScroller", repairSkillsPnl)
+		repairHorizontalScroll:Dock(FILL)
+		repairHorizontalScroll:SetOverlap( 0 )
+		
+		local repairSkillsLayout = vgui.Create("DIconLayout", repairHorizontalScroll)
+		repairSkillsLayout:Dock(FILL)
+		
+		local robotSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
+		robotSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
+		
+>>>>>>> Stashed changes
 		local robotHorizontalScroll = vgui.Create("DHorizontalScroller", robotSkillsPnl)
 		robotHorizontalScroll:Dock(FILL)
 		robotHorizontalScroll:SetOverlap( 0 )
@@ -751,7 +779,11 @@ function StartQMenu(shouldOpen, skillsTbl)
 			local skillPnlShowcase = vgui.Create("DLabel", statusPnl)
 			skillPnlShowcase:SetText(skill.Name)
 			skillPnlShowcase:SetFont("HL2CR_Class_TitleFont")
+<<<<<<< Updated upstream
 			skillPnlShowcase:DockMargin(10, 0, 0, 0)
+=======
+			skillPnlShowcase:DockMargin(-10, 0, 0, 0)
+>>>>>>> Stashed changes
 			skillPnlShowcase:SetPos( (statusPnl:GetWide()/skillPnlShowcase:GetWide())*14, 25)
 			skillPnlShowcase:SizeToContents()
 			skillPnlShowcase:SetTextColor(Color(0, 0, 0, 255))
@@ -770,8 +802,15 @@ function StartQMenu(shouldOpen, skillsTbl)
 			skillPnlLevel:SetTextColor(Color(0, 0, 0, 255))
 			skillPnlLevel:SetText("0/" .. skill.Max)
 			
+<<<<<<< Updated upstream
 			if skillsTbl[i] then
 				skillPnlLevel:SetText( (skillsTbl[i].Invested ) .. "/" .. skill.Max)
+=======
+			if skillsTbl[i] and skillsTbl[i].Invested < skill.Max then
+				skillPnlLevel:SetText( (skillsTbl[i].Invested ) .. "/" .. skill.Max)
+			elseif skillsTbl[i] and skillsTbl[i].Invested >= skill.Max then
+				skillPnlLevel:SetText( skill.Max .. "/" .. skill.Max)
+>>>>>>> Stashed changes
 			end
 			skillPnlLevel:SizeToContents()
 			
@@ -794,11 +833,24 @@ function StartQMenu(shouldOpen, skillsTbl)
 					return
 				end
 
+<<<<<<< Updated upstream
 				if skillsTbl[i] and (skillsTbl[i].Invested or skill.Invested) >= skill.Max then 
 					surface.PlaySound("buttons/button16.wav")
 					return
 				end
 			
+=======
+				if skill.Invested >= skill.Max then 
+					surface.PlaySound("buttons/button16.wav")
+					return
+				end
+				
+				if skillsTbl[i] and skillsTbl[i].Invested >= skill.Max then 
+					surface.PlaySound("buttons/button16.wav")
+					return
+				end
+
+>>>>>>> Stashed changes
 				if skillPoints <= 0 then
 					surface.PlaySound("buttons/button16.wav")
 					return
@@ -1036,7 +1088,7 @@ function StartQMenu(shouldOpen, skillsTbl)
 				local classPnlShowcase = vgui.Create("DLabel", classShowPanel)
 				classPnlShowcase:SetText(class.Name)
 				classPnlShowcase:SetFont("HL2CR_Class_TitleFont")
-				classPnlShowcase:DockMargin(10, 0, 0, 0)
+				classPnlShowcase:DockMargin(-10, 0, 0, 0)
 				classPnlShowcase:Dock(TOP)
 				classPnlShowcase:SizeToContents()
 				classPnlShowcase:SetTextColor(Color(0, 0, 0, 255))
@@ -1131,11 +1183,94 @@ function StartQMenu(shouldOpen, skillsTbl)
 		statsPnlLabelQuest:SetFont("HL2CR_Menu_Stats")
 		statsPnlLabelQuest:SizeToContents()
 		
+<<<<<<< Updated upstream
+=======
+		local questPnl = vgui.Create("DPanel", qMenuTabs)
+		questPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
+		questPnl:SetPos(0, 100)
+		
+		local questPnlBG = vgui.Create("DPanel", questPnl)
+		questPnlBG:SetSize(statsPnl:GetWide(), statsPnl:GetTall())
+		questPnlBG.Paint = function(self, w, h)
+			surface.SetDrawColor(HL2CR.Theme.qMenu)
+			surface.DrawRect(0, 0, w, h)
+		end
+		
+		local questList = vgui.Create("DIconLayout", questPnlBG)
+		questList:Dock(FILL)
+		
+		local questHorizontalScroll = vgui.Create("DHorizontalScroller", questList)
+		questHorizontalScroll:SetSize(questPnlBG:GetWide(), 125)
+		questHorizontalScroll:SetOverlap( -35 )
+		
+		local index = 1
+		
+		for campaign, typeQuest in pairs(GAMEMODE.QuestsSystem) do
+
+			local questShowPanel = vgui.Create("DPanel", questHorizontalScroll)
+			questShowPanel:SetSize(250, 125)
+			questShowPanel:DockMargin(25, 0, 0, 0)
+			questShowPanel:DockPadding(50, 0, 0, 0)
+			questShowPanel:Dock(LEFT)
+			questShowPanel.Paint = function(pnl, w, h)
+				surface.SetDrawColor(225, 160, 0, 255)
+				surface.DrawRect(0, 0, w, h)
+			end
+			
+			local questPnlShowcase = vgui.Create("DLabel", questShowPanel)
+			local questPnlDesc = vgui.Create("DLabel", questShowPanel)
+			local questIcon = vgui.Create("DImage", questShowPanel)
+			
+			for i = 1, #typeQuest do
+				if questTbl[i] and GAMEMODE.QuestsSystem[campaign][i].Name == questTbl[i].Name or LocalPlayer():GetNWInt("stat_level") < GAMEMODE.QuestsSystem[campaign][i].LevelReq then 
+					questShowPanel:Remove()
+					continue
+				end
+				questPnlShowcase:SetText(GAMEMODE.QuestsSystem[campaign][i].Name)
+				questPnlShowcase:SetFont("HL2CR_Class_TitleFont")
+				questPnlShowcase:DockMargin(-10, 0, 0, 0)
+				questPnlShowcase:Dock(TOP)
+				questPnlShowcase:SizeToContents()
+				questPnlShowcase:SetTextColor(Color(0, 0, 0, 255))
+				
+				questPnlDesc:SetText(GAMEMODE.QuestsSystem[campaign][i].Desc)
+				questPnlDesc:SetPos(questShowPanel:GetWide() / 8, 25)
+				questPnlDesc:SetFont("HL2CR_Quest_Description")
+				questPnlDesc:SizeToContents()
+				questPnlDesc:SetTextColor(Color(0, 0, 0, 255))
+				
+				questIcon:SetImage(GAMEMODE.QuestsSystem[campaign][i].Mat)
+				questIcon:SetSize(138, 138)
+				questIcon:SetPos(questShowPanel:GetWide() / 5, ScrH() / 3.5)
+				
+				local questBtn = vgui.Create("DButton", questShowPanel)
+				questBtn:SetText(translate.Get("AssignQuest"))
+				questBtn:SetSize(138, 35)
+				questBtn:SetPos(questIcon:GetWide() / 2.75, questShowPanel:GetTall() / 1.5)
+				
+				questBtn.DoClick = function()
+					net.Start("HL2CR_AssignQuest")
+						net.WriteInt(i, 8)
+						net.WriteString(GAMEMODE.QuestsSystem[campaign][i].Name)
+					net.SendToServer()
+					
+					surface.PlaySound("hl2cr/standardbeep.wav")
+					qMenuTabs:Remove()
+				end
+			end
+			
+			questHorizontalScroll:AddPanel(questShowPanel)
+			
+			index = index + 1
+		end
+		
+>>>>>>> Stashed changes
 		qMenuTabs.navbar:AddTab(translate.Get("Inv_Bar"), invPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Class_Bar"), classPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Skills_Bar"), skillsPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Shop_Bar"), shopPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Statistics_Bar"), statsPnl)
+		qMenuTabs.navbar:AddTab(translate.Get("Quests_Bar"), questPnl)
 		
 		qMenuTabs.navbar:SetActive(1)
 	else

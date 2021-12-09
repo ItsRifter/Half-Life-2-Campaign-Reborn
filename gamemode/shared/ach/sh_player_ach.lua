@@ -315,6 +315,7 @@ GM.Achievements = {
 			IsRare = false
 		},
 		
+<<<<<<< Updated upstream
 		Beat_EP1 = {
 			Name = "Escape from City 17",
 			Mat = "vgui/achievements/ep1_beat_game.png", 
@@ -326,6 +327,8 @@ GM.Achievements = {
 			IsRare = false
 		},
 		
+=======
+>>>>>>> Stashed changes
 		Pacifist_Stalkers = {
 			Name = "Pacifist",
 			Mat = "vgui/achievements/ep1_beat_citadelcore_nostalkerkills.png", 
@@ -336,6 +339,7 @@ GM.Achievements = {
 			},
 			IsRare = false
 		},
+<<<<<<< Updated upstream
 		
 		Attica = {
 			Name = "Attica!",
@@ -358,6 +362,8 @@ GM.Achievements = {
 			},
 			IsRare = false
 		},
+=======
+>>>>>>> Stashed changes
 	},
 	
 	Misc = {
@@ -389,6 +395,17 @@ GM.Achievements = {
 			Desc = "Plot twist:\nYou get nothing!",
 			Rewards = {
 				XP = 0,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Sven_Coop = {
+			Name = "Classic Co-Op",
+			Mat = "materials/hl2cr/ach_svensecret.jpg", 
+			Desc = "Discover the classic medical voiceline",
+			Rewards = {
+				XP = 500,
 				Item = nil
 			},
 			IsRare = false
