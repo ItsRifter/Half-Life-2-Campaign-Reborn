@@ -1,9 +1,3 @@
-<<<<<<< Updated upstream
-net.Receive("HL2CR_OpenPets", function()
-	local curPlayerPets = net.ReadTable()
-	local curUsingPet = net.ReadTable()
-	
-=======
 local REFUSE_NAMES_TBL = {
 	["Headcrab"] = true,
 	["Fast Headcrab"] = true,
@@ -12,7 +6,6 @@ local REFUSE_NAMES_TBL = {
 net.Receive("HL2CR_OpenPets", function()
 	local curPlayerPets = net.ReadTable()
 
->>>>>>> Stashed changes
 	local petTabs = vgui.Create("HL2CR_Tab")
 	petTabs:SetSize(ScrW() / 1.5, ScrH() / 2.5)
 	petTabs:Center()
@@ -30,16 +23,6 @@ net.Receive("HL2CR_OpenPets", function()
 	petScroll:SetOverlap( -75 )
 		
 	local petLayout = vgui.Create("DIconLayout", petScroll)
-<<<<<<< Updated upstream
-	petLayout:SetPos(0, petsPnl:GetTall()/8)
-	petLayout:SetSize(petTabs:GetWide(), petTabs:GetTall())
-	petLayout:SetSpaceX(25)
-	
-	for _, p in ipairs(curPlayerPets) do
-		local petPanel = petLayout:Add("DPanel")
-		
-		petPanel:SetSize(petTabs:GetWide() / 2.8, petTabs:GetTall() / 2.5)
-=======
 	petLayout:SetPos(0, petsPnl:GetTall() / 8 )
 	petLayout:SetSize(petTabs:GetWide(), petTabs:GetTall())
 	petLayout:SetSpaceX(20)
@@ -49,33 +32,22 @@ net.Receive("HL2CR_OpenPets", function()
 		local petPanel = petLayout:Add("DPanel")
 
 		petPanel:SetSize(petTabs:GetWide() / 5.2, petTabs:GetTall() / 3.5)
->>>>>>> Stashed changes
 		petPanel.Paint = function(self, w, h)
 			surface.SetDrawColor(HL2CR.Theme.skillFill)
 			surface.DrawRect(0, 0, w, h)
 		end
-<<<<<<< Updated upstream
-		
-		local petNameLabel = vgui.Create("DLabel", petPanel)
-		petNameLabel:SetText(p["name"])
-=======
 
 		local petNameLabel = vgui.Create("DLabel", petPanel)
 		
 		petNameLabel:SetText(p.name)
 		
->>>>>>> Stashed changes
 		petNameLabel:SetFont("HL2CR_Pets_Name")
 		petNameLabel:SetTextColor(Color(0, 0, 0, 255))
 		petNameLabel:SetPos(0, 0)
 		petNameLabel:SizeToContents()
 		
 		local petNameDesc = vgui.Create("DLabel", petPanel)
-<<<<<<< Updated upstream
-		petNameDesc:SetText(p["desc"])
-=======
 		petNameDesc:SetText("Level: " .. (p.level or 0))
->>>>>>> Stashed changes
 		petNameDesc:SetFont("HL2CR_Pets_Desc")
 		petNameDesc:SetTextColor(Color(0, 0, 0, 255))
 		petNameDesc:SetPos(0, 25)
@@ -88,11 +60,7 @@ net.Receive("HL2CR_OpenPets", function()
 		petModel:SetDirectionalLight(BOX_LEFT, Color(80, 160, 255, 255))
 		petModel:SetAmbientLight(Vector(-64, -64, -64))
 		petModel.Angles = Angle(0, 0, 0)
-<<<<<<< Updated upstream
-		petModel:SetModel(p["model"])
-=======
 		petModel:SetModel(p.model)
->>>>>>> Stashed changes
 		
 		function petModel:DragMousePress()
 			self.PressX, self.PressY = gui.MousePos()
@@ -125,8 +93,6 @@ net.Receive("HL2CR_OpenPets", function()
 			net.SendToServer()
 			petTabs:Remove()
 		end
-<<<<<<< Updated upstream
-=======
 		
 		local petSellBtn = vgui.Create("DButton", petPanel)
 		petSellBtn:SetSize(50, 25)
@@ -146,7 +112,6 @@ net.Receive("HL2CR_OpenPets", function()
 			end
 			
 		end
->>>>>>> Stashed changes
 	end
 	
 	
@@ -164,16 +129,10 @@ net.Receive("HL2CR_OpenPets", function()
 	adoptionLayout:SetSpaceX(25)
 	
 	local resin = LocalPlayer():GetNWInt("currency_resin")
-<<<<<<< Updated upstream
-	
-	for i, p in ipairs(GAMEMODE.PlayerPets) do
-		if curPlayerPets[i] and curPlayerPets[i].name == p["name"] then continue end
-=======
 	local skillPoints = curPlayerPets.CurrentPet["skillpoints"] or 0
 	
 	for i, p in ipairs(GAMEMODE.PlayerPets) do
 		if curPlayerPets[i] and curPlayerPets[i].class == p["class"] then continue end
->>>>>>> Stashed changes
 		
 		local petPanel = adoptionLayout:Add("DPanel")
 		
@@ -259,13 +218,7 @@ net.Receive("HL2CR_OpenPets", function()
 	
 	local enchanceSkillLabel = vgui.Create("DLabel", enhancePnl)
 	
-<<<<<<< Updated upstream
-	if not curPlayerPets.CurrentPet or LocalPlayer():GetNWString("pet_name") ~= "" or curPlayerPets.CurrentPet["skillpoints"] then
-		enchanceSkillLabel:SetText(LocalPlayer():GetNWString("pet_name") .. "'s Skillpoints: " .. curPlayerPets.CurrentPet["skillpoints"])
-	end
-=======
 	enchanceSkillLabel:SetText(LocalPlayer():GetNWString("pet_name", "???") .. "'s Skillpoints: " .. skillPoints)
->>>>>>> Stashed changes
 	
 	enchanceSkillLabel:SetFont("HL2CR_Pets_Points")
 	enchanceSkillLabel:SizeToContents()
@@ -280,16 +233,6 @@ net.Receive("HL2CR_OpenPets", function()
 			
 			local skillBtnIcon = vgui.Create("DImageButton", skillPanel)
 			skillBtnIcon:SetImage(s["Icon"])
-<<<<<<< Updated upstream
-			skillBtnIcon:SetToolTip(s["Desc"])
-			skillBtnIcon:SetSize(skillPanel:GetWide(), skillPanel:GetTall())
-			PrintTable(curUsingPet)
-			skillBtnIcon.DoClick = function()
-				if not table.HasValue(curUsingPet["skills"], s["SkillReq"]) or (curUsingPet["skills"] and table.HasValue(curUsingPet["skills"], s["Name"])) then
-					surface.PlaySound("buttons/button16.wav")
-					return
-				end				
-=======
 			skillBtnIcon:SetSize(skillPanel:GetWide(), skillPanel:GetTall())
 			skillBtnIcon:SetToolTip(s["Name"] .. "\n" .. s["Desc"])
 			
@@ -321,31 +264,21 @@ net.Receive("HL2CR_OpenPets", function()
 				
 				skillPoints = skillPoints - 1
 				enchanceSkillLabel:SetText(LocalPlayer():GetNWString("pet_name", "???") .. "'s Skillpoints: " .. skillPoints)
->>>>>>> Stashed changes
 				
 				net.Start("HL2CR_UpdatePetSkill")
 					net.WriteString(s["Name"])
 				net.SendToServer()
 				
-<<<<<<< Updated upstream
-				surface.PlaySound("buttons/button5.wav")
-			end
-=======
 				table.insert(curPlayerPets.CurrentPet["curSkills"], s["Name"])
 			end
 			
->>>>>>> Stashed changes
 		end
 	else
 		local noPetLabel = vgui.Create("DLabel", enhancePnl)
 		noPetLabel:SetFont("HL2CR_Pets_Desc")
 		noPetLabel:SetText("You don't have any current pets!")
 		noPetLabel:SetTextColor(Color(0, 0, 0, 255))
-<<<<<<< Updated upstream
-		noPetLabel:SetPos(enhancePnl:GetWide() /4 , enhancePnl:GetTall() / 4)
-=======
 		noPetLabel:SetPos(enhancePnl:GetWide() / 4 , enhancePnl:GetTall() / 4)
->>>>>>> Stashed changes
 		noPetLabel:SizeToContents()
 	end
 	

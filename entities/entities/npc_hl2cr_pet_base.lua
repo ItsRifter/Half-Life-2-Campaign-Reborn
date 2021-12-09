@@ -9,20 +9,11 @@ function ENT:Initialize()
 	
 	self.LoseTargetDist	= 200
 	self.SearchRadius 	= 250
-<<<<<<< Updated upstream:entities/entities/npc_hl2cr_pet_base.lua
-	self.NextAttack 	= 0
-	self.AttackDelay 	= 0
-	self.followOwner 	= false
-	
-	self.BaseSpeed = 0
-	self.AttackDist = 150
-=======
 	self.NextAttack = 0
 	self.followOwner = false
 	
 	self.BaseSpeed = 0
 	self.AttackDist = 175
->>>>>>> Stashed changes:entities/entities/hl2cr_pet_headcrab.lua
 	self.AttackDMG = 0
 	
 	self:SetHealth(1)
@@ -33,10 +24,7 @@ function ENT:Initialize()
 end
 
 function ENT:SetUpStats(stats)
-<<<<<<< Updated upstream:entities/entities/npc_hl2cr_pet_base.lua
-=======
 	
->>>>>>> Stashed changes:entities/entities/hl2cr_pet_headcrab.lua
 	self.BaseHealth = stats["health"]
 	self.BaseSpeed = stats["speed"]
 	self.AttackDMG = stats["damage"]
@@ -156,11 +144,7 @@ function ENT:ChaseEnemy( options )
 					hook.Call( "OnNPCKilled", "HL2CR_NPCKilled", self:GetEnemy(), self, self:GetOwner() )
 				end
 				
-<<<<<<< Updated upstream:entities/entities/npc_hl2cr_pet_base.lua
-				self.NextAttack = CurTime() + self.AttackDelay
-=======
 				self.NextAttack = CurTime() + 5
->>>>>>> Stashed changes:entities/entities/hl2cr_pet_headcrab.lua
 				self:Move()
 			end
 		end
@@ -291,14 +275,6 @@ function ENT:OnInjured( dmginfo )
 	
 	self:SetHealth(self:Health() - dmginfo:GetDamage())
 	self:GetOwner():SetNWInt("pet_health", self:Health())
-<<<<<<< Updated upstream:entities/entities/npc_hl2cr_pet_base.lua
-	
-	if self:Health() <= 0 then
-		self:OnKilled( dmginfo )
-	end
-	
-=======
->>>>>>> Stashed changes:entities/entities/hl2cr_pet_headcrab.lua
 end
 
 function ENT:OnKilled( dmginfo )

@@ -49,22 +49,6 @@ hook.Add( "player_connect_client", "HL2CR_PlayerConnect", function( data )
 	if id == "STEAM_0:0:6009886" then
 		surface.PlaySound("hl2cr/admin/supersponer_join.wav")
 		chat.AddText(Color(240, 175, 0), translate.Get("HUDRifterAlert") .. name .. translate.Get("HUDAdminAlert2"))
-<<<<<<< Updated upstream
-	end
-	
-	if id == "STEAM_0:1:7832469" then
-		surface.PlaySound("hl2cr/admin/birdman_join.wav")
-		chat.AddText(Color(240, 175, 0), translate.Get("HUDAdminAlert") .. name .. translate.Get("HUDAdminAlert2"))
-	end
-	
-	if id == "STEAM_0:0:97860967" then
-		surface.PlaySound("hl2cr/admin/sarin_join.wav")
-		chat.AddText(Color(240, 175, 0), translate.Get("HUDAdminAlert") .. name .. translate.Get("HUDAdminAlert2"))
-	end
-	
-	if id == "STEAM_0:1:19822252" then
-		chat.AddText(Color(240, 175, 0), translate.Get("HUDLeiftigerAlert") )
-=======
 	elseif id == "STEAM_0:1:7832469" then
 		surface.PlaySound("hl2cr/admin/birdman_join.wav")
 		chat.AddText(Color(240, 175, 0), translate.Get("HUDAdminAlert") .. name .. translate.Get("HUDAdminAlert2"))
@@ -75,7 +59,6 @@ hook.Add( "player_connect_client", "HL2CR_PlayerConnect", function( data )
 		chat.AddText(Color(240, 175, 0), translate.Get("HUDLeiftigerAlert") )
 	else
 		chat.AddText(Color(240, 175, 0), translate.Get("HUDPlayerAlert") )
->>>>>>> Stashed changes
 	end
 end)
 
@@ -141,21 +124,12 @@ hook.Add("HUDPaint", "HL2CR_HUD", function()
 	end
 	
 	if LocalPlayer():GetNWInt("stat_skillpoints") > 0 then
-<<<<<<< Updated upstream
-		draw.DrawText(translate.Get("HUDSkillPoints") .. LocalPlayer():GetNWInt("stat_skillpoints"), "HL2CR_Stats", 250, ScrH() - 240, color_white, TEXT_ALIGN_LEFT)
-	end
-
-	draw.RoundedBox( 4, 50, ScrH() - 240, barW, barH, color_black )
-	draw.RoundedBox( 4, 50, ScrH() - 240, math.max( 0, smoothXPLerp ) / maxXP * barW, barH, Color(235, 180, 52, 255) )
-	draw.DrawText(translate.Get("HUDXP"), "HL2CR_Stats", 50, ScrH() - 240, color_white, TEXT_ALIGN_LEFT)
-=======
 		draw.DrawText(translate.Get("HUDSkillPoints") .. LocalPlayer():GetNWInt("stat_skillpoints"), "HL2CR_Stats", 525, ScrH() - 200, Color(255, 0, 0), TEXT_ALIGN_LEFT)
 	end
 
 	draw.RoundedBox( 4, 325, ScrH() - 200, barW, barH, color_black )
 	draw.RoundedBox( 4, 325, ScrH() - 200, math.max( 0, smoothXPLerp ) / maxXP * barW, barH, Color(235, 180, 52, 255) )
 	draw.DrawText(translate.Get("HUDXP"), "HL2CR_Stats", 325, ScrH() - 200, color_white, TEXT_ALIGN_LEFT)
->>>>>>> Stashed changes
 	
 end)
 
@@ -569,12 +543,9 @@ net.Receive("HL2CR_MsgSound", function()
 	surface.PlaySound(sound)
 end)
 
-<<<<<<< Updated upstream
-=======
 net.Receive("HL2CR_UpdateQuests", function()
 	
 end)
->>>>>>> Stashed changes
 
 --This is temporary
 net.Receive("HL2CR_OpenCustomMap", function()

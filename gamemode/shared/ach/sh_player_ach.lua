@@ -315,20 +315,6 @@ GM.Achievements = {
 			IsRare = false
 		},
 		
-<<<<<<< Updated upstream
-		Beat_EP1 = {
-			Name = "Escape from City 17",
-			Mat = "vgui/achievements/ep1_beat_game.png", 
-			Desc = "Escape City 17 with Alyx",
-			Rewards = {
-				XP = 1000,
-				Item = nil
-			},
-			IsRare = false
-		},
-		
-=======
->>>>>>> Stashed changes
 		Pacifist_Stalkers = {
 			Name = "Pacifist",
 			Mat = "vgui/achievements/ep1_beat_citadelcore_nostalkerkills.png", 
@@ -339,31 +325,6 @@ GM.Achievements = {
 			},
 			IsRare = false
 		},
-<<<<<<< Updated upstream
-		
-		Attica = {
-			Name = "Attica!",
-			Mat = "vgui/achievements/ep1_beat_hospitalatticgunship.png", 
-			Desc = "Destroy the Gunship\nin the hospital attic",
-			Rewards = {
-				XP = 1500,
-				Item = nil
-			},
-			IsRare = false
-		},
-		
-		Safety_First = {
-			Name = "Safety First",
-			Mat = "vgui/achievements/ep1_beat_hospitalatticgunship.png", 
-			Desc = "Whack the Gunship 5 times\nin hospital attic",
-			Rewards = {
-				XP = 1500,
-				Item = nil
-			},
-			IsRare = false
-		},
-=======
->>>>>>> Stashed changes
 	},
 	
 	Misc = {

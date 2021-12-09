@@ -29,19 +29,14 @@ function StartClientSpectate(shouldSpectate, isSurvivalOn)
 		
 		specTime = vgui.Create("DLabel", specPanel)
 		specTime:SetText("")
-		specTime.Survival = isSurvivalOn
 		
 		if wasKilled and not isSurvivalOn then
 			specTime:SetText(translate.Get("Respawn") .. math.Round(timeForRespawn - CurTime()))
 			specTime:SetFont("HL2CR_SpectatePlayer")
 			specTime:SizeToContents()
-<<<<<<< Updated upstream
-			specTime:SetPos(specPanel:GetWide() - 400, 12.5)			
-=======
 			specTime:SetPos(specPanel:GetWide() - 400, 12.5)
 		else
 			specTime:SetText("???")
->>>>>>> Stashed changes
 		end
 	else
 		if specFrame and specFrame:IsValid() then
@@ -59,13 +54,7 @@ hook.Add("Think", "HL2CR_SpectateThink", function()
 		specUser:SetText(translate.Get("Spectate") .. specUsername)
 	end
 	specUser:SizeToContents()
-<<<<<<< Updated upstream
-	
-	if specTime.Survival == true then return end
-	
-=======
 
->>>>>>> Stashed changes
 	specTime:SetText(translate.Get("Respawn") .. math.Round(timeForRespawn - CurTime()))
 	specTime:SizeToContents()
 	

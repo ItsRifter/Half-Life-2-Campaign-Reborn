@@ -376,8 +376,6 @@ surface.CreateFont( "HL2CR_Class_DescFont", {
 	outline = false,
 } )
 
-<<<<<<< Updated upstream
-=======
 surface.CreateFont( "HL2CR_Quest_Description", {
 	font = "Arial",
 	extended = false,
@@ -396,7 +394,6 @@ surface.CreateFont( "HL2CR_Quest_Description", {
 	outline = false,
 } )
 
->>>>>>> Stashed changes
 surface.CreateFont( "HL2CR_Skill_Level", {
 	font = "Arial",
 	extended = false,

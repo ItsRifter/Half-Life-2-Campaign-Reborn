@@ -44,11 +44,8 @@ end
 
 function AddPetXP(ply, XP)
 
-<<<<<<< Updated upstream
-=======
 	if ply.hl2cr.Pets.CurrentPet["level"] >= ply.hl2cr.Pets.CurrentPet["maxLevel"] then return end
 
->>>>>>> Stashed changes
 	ply.hl2cr.Pets.CurrentPet["xp"] = ply.hl2cr.Pets.CurrentPet["xp"] + XP
 	
 	local notifyLevelUp = false
@@ -67,8 +64,6 @@ function AddPetXP(ply, XP)
 		ply:SetNWInt("pet_skillpoints", ply.hl2cr.Pets.CurrentPet["skillpoints"])
 		ply:SetNWInt("pet_curxp", ply.hl2cr.Pets.CurrentPet["xp"])
 		ply:SetNWInt("pet_curreqxp", ply.hl2cr.Pets.CurrentPet["reqxp"])
-<<<<<<< Updated upstream
-=======
 		
 		if ply.hl2cr.Pets.CurrentPet["level"] >= ply.hl2cr.Pets.CurrentPet["maxLevel"] then
 			BroadcastMessage(PET_MAX_LEVEL, ply)
@@ -79,7 +74,6 @@ function AddPetXP(ply, XP)
 				ply.hl2cr.Pets[i].level = ply.hl2cr.Pets.CurrentPet["level"]
 			end
 		end
->>>>>>> Stashed changes
 	end
 	
 	ply:SetNWInt("pet_curxp", ply.hl2cr.Pets.CurrentPet["xp"])

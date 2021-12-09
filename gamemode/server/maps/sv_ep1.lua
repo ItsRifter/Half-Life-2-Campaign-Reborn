@@ -174,19 +174,11 @@ local function SetCheckpoints()
 		}
 
 		TRIGGER_CHECKPOINT = {
-<<<<<<< Updated upstream
-			Vector(1013, -226, 136), 		Vector(1105, -162, 18),
-=======
->>>>>>> Stashed changes
 			Vector(-1096, 1606, 78), 		Vector(-903, 1684, -2)
 		}
 			
 		CHECKPOINT_POS = {
-<<<<<<< Updated upstream
-			Vector(1056, -235, 32),		Vector(-1008, 1758, 4)
-=======
 			Vector(-1008, 1758, 4)
->>>>>>> Stashed changes
 		}
 	elseif game.GetMap() == "ep1_c17_02b" then
 		TRIGGER_CHANGELEVEL = {
@@ -212,11 +204,7 @@ local function SetCheckpoints()
 		}
 			
 		CHECKPOINT_POS = {
-<<<<<<< Updated upstream
-			Vector(1115, 8892, -2544),		Vector(-663, 9619, -2681)
-=======
 			Vector(1115, 8892, -2544),		Vector(-764, 9427, -2694)
->>>>>>> Stashed changes
 		}
 	elseif game.GetMap() == "ep1_c17_06" then
 		TRIGGER_CHANGELEVEL = {
@@ -235,10 +223,6 @@ local function SetCheckpoints()
 		CHANGELEVEL_FUNC = function()
 			for _, v in ipairs(player.GetAll()) do
 				v:SetPos(Vector(-13094, -5773, -867))
-<<<<<<< Updated upstream
-				GrantAchievement(v, "EP1", "Beat_EP1")
-=======
->>>>>>> Stashed changes
 			end
 		end
 	end
@@ -358,10 +342,6 @@ local function SetCheckpoints()
 end
 
 local EP1_WEAPONS = {
-<<<<<<< Updated upstream
-	
-=======
->>>>>>> Stashed changes
 	["ep1_citadel_01"] = {
 		[1] = "weapon_physcannon",
 	},
@@ -715,15 +695,6 @@ local function SetUpMisc()
 	end
 	
 	if game.GetMap() == "ep1_citadel_00" then
-<<<<<<< Updated upstream
-		RunConsoleCommand("sv_auxpow_sprint_enabled", 1)
-		
-		ents.FindByName("relay_givegravgun_1")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:GiveGravgunEP1()" )
-		
-		ents.FindByName("ss_dog_climb")[1]:Fire("AddOutput", "OnEndSequence triggerhook:RunPassedCode:FixDog00part1()")
-		ents.FindByName("ss_alyx_climb")[1]:Fire("AddOutput", "OnEndSequence triggerhook:RunPassedCode:FixAlyx00()")
-		ents.FindByName("relay_Van_crash_gate_1")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:FixDog00part2()")
-=======
 		ents.FindByName("relay_givegravgun_1")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:GiveGravgunEP1()" )
 		ents.FindByName("ss_dog_climb")[1]:Fire("AddOutput", "OnEndSequence triggerhook:RunPassedCode:FixDog00part1()")
 		ents.FindByName("ss_alyx_climb")[1]:Fire("AddOutput", "OnEndSequence triggerhook:RunPassedCode:FixAlyx00()")
@@ -732,7 +703,6 @@ local function SetUpMisc()
 		for _, fall in ipairs(ents.FindByName("trigger_falldeath")) do
 			fall:Remove()
 		end
->>>>>>> Stashed changes
 	end
 	
 	if game.GetMap() == "ep1_citadel_01" then
@@ -770,17 +740,6 @@ local function SetUpMisc()
 		end
 	end
 	
-<<<<<<< Updated upstream
-	if game.GetMap() == "ep1_c17_00" then
-		ents.FindByName("train_2_ambush_zombine")[1]:SetHealth(1)
-	end
-	
-	if game.GetMap() == "ep1_c17_02" then
-		ents.FindByName("timer_give_guard_health")[1]:Remove()
-	end
-	
-=======
->>>>>>> Stashed changes
 	if game.GetMap() == "ep1_c17_05" then
 		ents.FindByName("trigger_citizen_boardtrain")[1]:Fire("Enable")
 		ents.FindByName("lcs_rearsoldierslock")[1]:Fire("AddOutput", "OnCompletion triggerhook:RunPassedCode:FinishMap05()")
@@ -843,32 +802,7 @@ hook.Add("Tick", "HL2CR_CitizenFollow05", function()
 	end
 end)
 
-<<<<<<< Updated upstream
-hook.Add( "EntityTakeDamage", "HL2CR_EP1_SafetyFirst", function( prop, dmginfo )	
-	if game.GetMap() == "ep1_c17_02a" and prop:GetModel() == "models/gunship.mdl" then
-		if not dmginfo:GetAttacker():IsPlayer() then return end
-		
-		if dmginfo:GetAttacker():GetActiveWeapon():GetClass() ~= "weapon_crowbar" then return end
-		
-		if not dmginfo:GetAttacker().SafetyProg then
-			dmginfo:GetAttacker().SafetyProg = 1
-		end
-		
-		dmginfo:GetAttacker().SafetyProg = dmginfo:GetAttacker().SafetyProg + 1
-
-		if dmginfo:GetAttacker().SafetyProg == 6 then
-			GrantAchievement(dmginfo:GetAttacker(), "EP1", "Safety_First")
-		else 
-			return
-		end
-
-	end
-end)
-
-hook.Add("OnNPCKilled", "HL2CR_EP1_Achievements", function(npc, attacker, inflictor)
-=======
 hook.Add("OnNPCKilled", "HL2CR_PacifistAch", function(npc, attacker, inflictor)
->>>>>>> Stashed changes
 	if game.GetMap() == "ep1_citadel_03" then
 		if npc:GetClass() == "npc_stalker" and attacker:IsPlayer() then
 			pacifistAchGlobal = false
@@ -884,13 +818,6 @@ hook.Add("OnNPCKilled", "HL2CR_PacifistAch", function(npc, attacker, inflictor)
 			BroadcastMessage(FAILER)
 		end
 	end
-<<<<<<< Updated upstream
-	
-	if game.GetMap() == "ep1_c17_02a" and ents.FindByClass("npc_combinegunship")[1] then
-		ents.FindByClass("npc_combinegunship")[1]:Fire("AddOutput", "OnDeath triggerhook:RunPassedCode:AchAll('Attica')")
-	end
-=======
->>>>>>> Stashed changes
 end)
 
 function GiveGravgunEP1()

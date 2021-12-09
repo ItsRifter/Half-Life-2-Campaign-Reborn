@@ -140,10 +140,6 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		
 		net.Start("HL2CR_OpenPets")
 			net.WriteTable(ply.hl2cr.Pets)
-<<<<<<< Updated upstream
-			net.WriteTable(ply.hl2cr.Pets.CurrentPet)
-=======
->>>>>>> Stashed changes
 		net.Send(ply)
 		return ""
 	end
@@ -253,12 +249,7 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	if text == "!surv" or text == "!survival" then
 	
 		if MAPS_LOBBY[game.GetMap()] then
-<<<<<<< Updated upstream
-			ply:ChatPrint("You can't start this vote in the lobby!")
-			--BroadcastMessage(ERROR_VOTE_COOLDOWN, ply)
-=======
 			BroadcastMessage(ERROR_VOTE_LOBBY, ply)
->>>>>>> Stashed changes
 			return ""
 		end
 	
@@ -378,13 +369,6 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	end
 	
 	if text == "!petsummon" or text == "!summonpet" then
-<<<<<<< Updated upstream
-		if ply:Team() ~= 1 or ply:Team() == 2 then 
-			return "" 
-		end
-		
-=======
->>>>>>> Stashed changes
 		if table.IsEmpty(ply.hl2cr.Pets) then
 			BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
 			return ""
@@ -633,18 +617,8 @@ concommand.Add("hl2cr_petremove", function(ply, cmd, args)
 end)
 
 concommand.Add("hl2cr_petsummon", function(ply, cmd, args)
-<<<<<<< Updated upstream
-	if ply:Team() ~= 1 or ply:Team() == 2 then 
-		return
-=======
 	if table.IsEmpty(ply.hl2cr.Pets) then
 		BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
-		return 
->>>>>>> Stashed changes
-	end
-	
-	if table.IsEmpty(ply.hl2cr.Pets) then
-		BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)	
 		return 
 	end
 	
@@ -709,15 +683,6 @@ concommand.Add("hl2cr_addpetxp", function(ply, cmd, args)
 	AddPetXP(ply, args[1])
 end)
 
-<<<<<<< Updated upstream
-concommand.Add("hl2cr_bringalyx", function(ply, cmd, args)
-	if not ply:IsAdmin() then return end
-	
-	
-end)
-
-=======
->>>>>>> Stashed changes
 concommand.Add("hl2cr_givexp", function(ply, cmd, args)
 	if not ply:IsAdmin() then return end
 	

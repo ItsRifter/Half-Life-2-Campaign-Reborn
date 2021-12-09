@@ -279,18 +279,11 @@ local PLAYERMODELS = {
 
 net.Receive("HL2CR_QMenuUpdate", function()
 	local skillsTbl = net.ReadTable()
-<<<<<<< Updated upstream
-	StartQMenu(net.ReadBool(), skillsTbl)
-end)
-
-function StartQMenu(shouldOpen, skillsTbl)
-=======
 	local questTbl = net.ReadTable()
 	StartQMenu(net.ReadBool(), skillsTbl, questTbl)
 end)
 
 function StartQMenu(shouldOpen, skillsTbl, questTbl)
->>>>>>> Stashed changes
 	if not LocalPlayer():Alive() or (LocalPlayer():Team() == 2 or LocalPlayer():Team() == 5) then return end
 	
 	if shouldOpen then 
@@ -706,7 +699,6 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		local medicHorizontalScroll = vgui.Create("DHorizontalScroller", medicSkillsPnl)
 		medicHorizontalScroll:Dock(FILL)
 		medicHorizontalScroll:SetOverlap( 0 )
-<<<<<<< Updated upstream
 		
 		local medicSkillsLayout = vgui.Create("DIconLayout", medicHorizontalScroll)
 		medicSkillsLayout:Dock(FILL)
@@ -724,25 +716,6 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		local robotSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		robotSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
 		
-=======
-		
-		local medicSkillsLayout = vgui.Create("DIconLayout", medicHorizontalScroll)
-		medicSkillsLayout:Dock(FILL)
-		
-		local repairSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
-		repairSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
-		
-		local repairHorizontalScroll = vgui.Create("DHorizontalScroller", repairSkillsPnl)
-		repairHorizontalScroll:Dock(FILL)
-		repairHorizontalScroll:SetOverlap( 0 )
-		
-		local repairSkillsLayout = vgui.Create("DIconLayout", repairHorizontalScroll)
-		repairSkillsLayout:Dock(FILL)
-		
-		local robotSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
-		robotSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
-		
->>>>>>> Stashed changes
 		local robotHorizontalScroll = vgui.Create("DHorizontalScroller", robotSkillsPnl)
 		robotHorizontalScroll:Dock(FILL)
 		robotHorizontalScroll:SetOverlap( 0 )
@@ -779,11 +752,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			local skillPnlShowcase = vgui.Create("DLabel", statusPnl)
 			skillPnlShowcase:SetText(skill.Name)
 			skillPnlShowcase:SetFont("HL2CR_Class_TitleFont")
-<<<<<<< Updated upstream
-			skillPnlShowcase:DockMargin(10, 0, 0, 0)
-=======
 			skillPnlShowcase:DockMargin(-10, 0, 0, 0)
->>>>>>> Stashed changes
 			skillPnlShowcase:SetPos( (statusPnl:GetWide()/skillPnlShowcase:GetWide())*14, 25)
 			skillPnlShowcase:SizeToContents()
 			skillPnlShowcase:SetTextColor(Color(0, 0, 0, 255))
@@ -802,15 +771,10 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			skillPnlLevel:SetTextColor(Color(0, 0, 0, 255))
 			skillPnlLevel:SetText("0/" .. skill.Max)
 			
-<<<<<<< Updated upstream
-			if skillsTbl[i] then
-				skillPnlLevel:SetText( (skillsTbl[i].Invested ) .. "/" .. skill.Max)
-=======
 			if skillsTbl[i] and skillsTbl[i].Invested < skill.Max then
 				skillPnlLevel:SetText( (skillsTbl[i].Invested ) .. "/" .. skill.Max)
 			elseif skillsTbl[i] and skillsTbl[i].Invested >= skill.Max then
 				skillPnlLevel:SetText( skill.Max .. "/" .. skill.Max)
->>>>>>> Stashed changes
 			end
 			skillPnlLevel:SizeToContents()
 			
@@ -833,13 +797,6 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 					return
 				end
 
-<<<<<<< Updated upstream
-				if skillsTbl[i] and (skillsTbl[i].Invested or skill.Invested) >= skill.Max then 
-					surface.PlaySound("buttons/button16.wav")
-					return
-				end
-			
-=======
 				if skill.Invested >= skill.Max then 
 					surface.PlaySound("buttons/button16.wav")
 					return
@@ -850,7 +807,6 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 					return
 				end
 
->>>>>>> Stashed changes
 				if skillPoints <= 0 then
 					surface.PlaySound("buttons/button16.wav")
 					return
@@ -1183,8 +1139,6 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		statsPnlLabelQuest:SetFont("HL2CR_Menu_Stats")
 		statsPnlLabelQuest:SizeToContents()
 		
-<<<<<<< Updated upstream
-=======
 		local questPnl = vgui.Create("DPanel", qMenuTabs)
 		questPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
 		questPnl:SetPos(0, 100)
@@ -1264,7 +1218,6 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			index = index + 1
 		end
 		
->>>>>>> Stashed changes
 		qMenuTabs.navbar:AddTab(translate.Get("Inv_Bar"), invPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Class_Bar"), classPnl)
 		qMenuTabs.navbar:AddTab(translate.Get("Skills_Bar"), skillsPnl)

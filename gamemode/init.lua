@@ -25,12 +25,9 @@ include("server/maps/sv_lobby.lua")
 include("server/maps/sv_map_manager.lua")
 include("server/maps/sv_custom_coop.lua")
 include("server/maps/sv_ep1.lua")
-<<<<<<< Updated upstream
-=======
 
 ----Quests
 include("server/sv_quests.lua")
->>>>>>> Stashed changes
 
 ----Data Saving
 include("server/filesaving/sv_data_filebased.lua")
@@ -57,10 +54,7 @@ AddCSLuaFile("client/hud/cl_hitboxrender.lua")
 AddCSLuaFile("client/hud/cl_ach.lua")
 AddCSLuaFile("client/menus/cl_pet_menu.lua")
 AddCSLuaFile("client/menus/cl_pet_statmenu.lua")
-<<<<<<< Updated upstream
-=======
 AddCSLuaFile("client/chat/cl_leifchat.lua")
->>>>>>> Stashed changes
 
 --Shared
 ----Voting
@@ -71,10 +65,6 @@ include("shared/playerclass/sh_player_classes.lua")
 include("shared/playerclass/sh_player_skills.lua")
 include("shared/playerclass/sh_player_pets.lua")
 include("shared/petskills/sh_pets_skills_base.lua")
-<<<<<<< Updated upstream
-include("shared/petskills/sh_pets_headcrab_skills.lua")
-=======
->>>>>>> Stashed changes
 
 ----Achievements
 include("shared/ach/sh_player_ach.lua")
@@ -82,12 +72,9 @@ include("shared/ach/sh_player_ach.lua")
 ----Shops
 include("shared/shop/sh_shop_items.lua")
 include("shared/shop/sh_craftable_items.lua")
-<<<<<<< Updated upstream
-=======
 
 ----Quests
 include("shared/quests/sh_quest_system.lua")
->>>>>>> Stashed changes
 
 ----Misc
 include("shared/sh_translate.lua")
@@ -142,17 +129,12 @@ util.AddNetworkString("HL2CR_ResetContent")
 util.AddNetworkString("HL2CR_EquipPet")
 util.AddNetworkString("HL2CR_UpdatePet")
 util.AddNetworkString("HL2CR_UpdatePetSkill")
-<<<<<<< Updated upstream
-util.AddNetworkString("HL2CR_SpawnPet")
-util.AddNetworkString("HL2CR_StatusEffect")
-=======
 util.AddNetworkString("HL2CR_SellPet")
 util.AddNetworkString("HL2CR_SpawnPet")
 util.AddNetworkString("HL2CR_StatusEffect")
 util.AddNetworkString("HL2CR_AssignQuest")
 util.AddNetworkString("HL2CR_UpdateQuests")
 util.AddNetworkString("HL2CR_RemoveQuest")
->>>>>>> Stashed changes
 
 hook.Add("PrePACConfigApply", "HL2CR_DisablePac3Autoload", function(ply, outfit_data)
 	if not ply:IsAdmin() then
@@ -314,16 +296,12 @@ ERROR_VOTEKICK_SELF = {
 	["Message"] = "ERROR_VOTEKICK_SELF"
 }
 
-<<<<<<< Updated upstream
-ENABLED_AIRBOAT = {
-=======
 PET_MAX_LEVEL = {
 	["Colour"] = Color(250, 230, 45),
 	["Message"] = "PET_MAX_LEVEL"
 }
 
 ENABLED_AIRBOAT_GUN = {
->>>>>>> Stashed changes
 	["Colour"] = Color(50, 215, 50),
 	["Message"] = "ENABLED_AIRBOAT_GUN"
 }

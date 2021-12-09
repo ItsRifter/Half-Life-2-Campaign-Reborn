@@ -3,11 +3,7 @@ function ShowPetStatMenu(shouldOpen)
 	
 	if shouldOpen then
 		petFrame = vgui.Create("DFrame")
-<<<<<<< Updated upstream
-		petFrame:SetSize(150, 150)
-=======
 		petFrame:SetSize(200, 150)
->>>>>>> Stashed changes
 		petFrame:SetPos(0, ScrH() / 2.25)
 		petFrame:SetTitle("")
 		petFrame:ShowCloseButton(false)
@@ -42,10 +38,6 @@ function ShowPetStatMenu(shouldOpen)
 		petHealthLabel:SetPos(0, petHealthBar:GetTall() / 6)
 		petHealthLabel:SetFont("HL2CR_Pets_Desc")
 		petHealthLabel:SetText("Health")
-<<<<<<< Updated upstream
-		--petHealthLabel:SetTextColor(Color(0, 0, 0))
-=======
->>>>>>> Stashed changes
 		petHealthLabel:SizeToContents()
 		
 		local petXPBar = vgui.Create("DPanel", petFrame)
@@ -74,12 +66,8 @@ function ShowPetStatMenu(shouldOpen)
 			petStatusLabel:SetText("Pet: " .. LocalPlayer():GetNWString("pet_name") )
 			petStatusLabel:SizeToContents()
 			
-<<<<<<< Updated upstream
-			petHealthBarFill:SetSize(LocalPlayer():GetNWInt("pet_health"), 25)
-=======
 			petHealthBarFill:SetSize(math.Clamp(LocalPlayer():GetNWInt("pet_health"), 0, petHealthBar:GetWide()), 25)
 			--petHealthBarFill:SetSize(math.Clamp(LocalPlayer():GetNWInt("pet_health") * petHealthBar:GetWide(), 0, LocalPlayer():GetNWInt("pet_maxhealth")), 25)
->>>>>>> Stashed changes
 			
 			petXPBarFill:SetSize(math.Clamp(LocalPlayer():GetNWInt("pet_curxp") / LocalPlayer():GetNWInt("pet_curreqxp") * petXPBar:GetWide(), 0, LocalPlayer():GetNWInt("pet_curreqxp")), 25)
 		end

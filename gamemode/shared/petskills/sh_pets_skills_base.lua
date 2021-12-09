@@ -3,10 +3,6 @@ AddCSLuaFile()
 GM.PlayerPetSkills = {}
 
 function CreatePetSkill(name, desc, class, skillNeeded, icon, xPos, yPos)
-<<<<<<< Updated upstream
-	
-=======
->>>>>>> Stashed changes
 	local petSkill = {
 		["Name"] = name,
 		["Desc"] = desc,
@@ -18,16 +14,8 @@ function CreatePetSkill(name, desc, class, skillNeeded, icon, xPos, yPos)
 			["y"] = yPos,
 		}
 	}
-<<<<<<< Updated upstream
-	
-	table.insert(GM.PlayerPetSkills, petSkill)
-end
 
-if SERVER then
-=======
-	if SERVER then
-		table.insert(GAMEMODE.PlayerPetSkills, petSkill)
-	end
+	table.insert(GM.PlayerPetSkills, petSkill)
 end
 
 if SERVER then
@@ -94,21 +82,10 @@ if SERVER then
 		end
 	end
 	
->>>>>>> Stashed changes
 	net.Receive("HL2CR_UpdatePetSkill", function(len, ply)
 		if not ply then return end
 	
 		local skillToAdd = net.ReadString()
-<<<<<<< Updated upstream
-		
-		for i, v in ipairs(GAMEMODE.PlayerPetSkills) do
-			if v.Name == skillToAdd and not table.HasValue(ply.hl2cr.Pets.CurrentPet["skills"], v.Name) then 
-				table.insert(ply.hl2cr.Pets.CurrentPet["skills"], v.Name)
-				
-				--ply.hl2cr.Pets.CurrentPet["skillpoints"] = ply.hl2cr.Pets.CurrentPet["skillpoints"] - 1
-				
-				ply:SetNWInt("pet_skillpoints", ply.hl2cr.Pets.CurrentPet["skillpoints"])
-=======
 
 		for i, v in ipairs(GAMEMODE.PlayerPetSkills) do
 			if v.Name == skillToAdd then 
@@ -119,7 +96,6 @@ if SERVER then
 				ply.hl2cr.Pets.CurrentPet["skillpoints"] = ply.hl2cr.Pets.CurrentPet["skillpoints"] - 1
 				
 				UpdatePetSkills(ply)
->>>>>>> Stashed changes
 			end
 		end
 	end)
