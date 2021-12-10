@@ -95,8 +95,8 @@ net.Receive("HL2CR_OpenAch", function()
 		achIcon:SetImage("materials/hl2cr/locked.jpg")
 			
 		if string.find(LocalPlayer():GetNWString("stat_achievements"), v.Name) then
-			achName:SetText(v.Name)
-			achDesc:SetText(v.Desc)
+			achName:SetText(translate.Get(v.Name))
+			achDesc:SetText(translate.Get(v.Desc))
 			achIcon:SetImage(v.Mat)
 		end
 
@@ -143,8 +143,8 @@ net.Receive("HL2CR_OpenAch", function()
 		achIcon:SetImage("materials/hl2cr/locked.jpg")
 
 		if string.find(LocalPlayer():GetNWString("stat_achievements"), v.Name) then
-			achName:SetText(v.Name)
-			achDesc:SetText(v.Desc)
+			achName:SetText(translate.Get(v.Name))
+			achDesc:SetText(translate.Get(v.Desc))
 			achIcon:SetImage(v.Mat)
 		end
 			
@@ -191,8 +191,8 @@ net.Receive("HL2CR_OpenAch", function()
 		achIcon:SetImage("materials/hl2cr/locked.jpg")
 			
 		if string.find(LocalPlayer():GetNWString("stat_achievements"), v.Name) then
-			achName:SetText(v.Name)
-			achDesc:SetText(v.Desc)
+			achName:SetText(translate.Get(v.Name))
+			achDesc:SetText(translate.Get(v.Desc))
 			achIcon:SetImage(v.Mat)
 		end
 

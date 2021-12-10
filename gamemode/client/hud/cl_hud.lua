@@ -58,7 +58,7 @@ hook.Add( "player_connect_client", "HL2CR_PlayerConnect", function( data )
 	elseif id == "STEAM_0:1:19822252" then
 		chat.AddText(Color(240, 175, 0), translate.Get("HUDLeiftigerAlert") )
 	else
-		chat.AddText(Color(240, 175, 0), translate.Get("HUDPlayerAlert") )
+		chat.AddText(Color(240, 175, 0), name .. translate.Get("HUDPlayerAlert") )
 	end
 end)
 
@@ -66,10 +66,11 @@ net.Receive("HL2CR_AchievementNotifyAll", function()
 	local achiever = net.ReadString()
 	local achName = net.ReadString()
 	local isRareAch = net.ReadBool()
+	
 	if not isRareAch then
-		chat.AddText(Color(240, 175, 0), achiever .. translate.Get("EarnedAchievement") .. achName)
+		chat.AddText(Color(240, 175, 0), achiever .. translate.Get("EarnedAchievement") .. translate.Get(achName))
 	else
-		chat.AddText(Color(240, 175, 0), achiever .. translate.Get("HUDRareAch1"), Color(255, 238, 0), translate.Get("HUDRareAch2"), Color(240, 175, 0), translate.Get("HUDRareAch3") .. achName)
+		chat.AddText(Color(240, 175, 0), achiever .. translate.Get("HUDRareAch1"), Color(255, 238, 0), translate.Get("HUDRareAch2"), Color(240, 175, 0), translate.Get("HUDRareAch3") .. translate.Get(achName))
 	end
 end)
 
@@ -346,7 +347,7 @@ end)
 
 hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 	for k, ent in pairs(ents.FindByClass("npc_*")) do
-		if (ent:IsNPC() or (ent:IsNextBot() and not ent:IsPet())) and not CLIENT_FRIENDLY_NPCS[ent:GetClass()] then
+		if ent:IsNPC() and not ent:IsPet() and not CLIENT_FRIENDLY_NPCS[ent:GetClass()] then
 			local dist = LocalPlayer():GetPos():Distance(ent:GetPos())
 			local pos = ent:GetPos()
 			if string.find(ent:GetClass(), "headcrab") then
@@ -387,12 +388,14 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 				end
 				
 				draw.SimpleText("LEVEL " .. ent:GetNWInt("HL2CR_NPC_Level"), font, ScrPos.x, ScrPos.y + 30, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				
+				--draw.SimpleText("HP Debug " .. ent:Health(), font, ScrPos.x, ScrPos.y + 60, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 	end
 	
-	for k, entPet in pairs(ents.FindByClass("npc_hl2cr_pet_*")) do
-		if entPet:IsNextBot() and entPet:IsPet() then
+	for k, entPet in pairs(ents.FindByClass("npc_vj_hl2cr_*")) do
+		if entPet:IsPet() then
 			local dist = LocalPlayer():GetPos():Distance(entPet:GetPos())
 			local pos = entPet:GetPos()
 				pos.z = entPet:GetPos().z + 20 + (dist * 0.0325)

@@ -3,6 +3,8 @@ AddCSLuaFile()
 local PET_CLASS = {
 	["npc_hl2cr_pet_headcrab"] = true,
 	["npc_hl2cr_pet_fastheadcrab"] = true,
+	["npc_vj_hl2cr_headcrab"] = true,
+	["npc_vj_hl2cr_fastheadcrab"] = true
 }
 
 local meta = FindMetaTable( "Entity" )
@@ -40,18 +42,20 @@ end
 
 local headcrabStats = {
 	["health"] = 100,
-	["speed"] = 30,
+	["speed"] = 25,
 	["damage"] = 5,
+	["attDelay"] = 6,
 }
 
 local fastheadcrabStats = {
 	["health"] = 75,
-	["speed"] = 75,
+	["speed"] = 35,
 	["damage"] = 3,
+	["attDelay"] = 4,
 }
 
-local headcrab = CreatePet("Headcrab", 6, "npc_hl2cr_pet_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000, headcrabStats)
-local fastheadcrab = CreatePet("Fast Headcrab", 6, "npc_hl2cr_pet_fastheadcrab", "A mutated version of the\noriginal headcrab\nfaster but weaker", "models/headcrab.mdl", 11500, fastheadcrabStats)
+local vj_headcrab = CreatePet("Headcrab", 6, "npc_vj_hl2cr_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000, headcrabStats)
+local fastheadcrab = CreatePet("Fast Headcrab", 6, "npc_vj_hl2cr_fastheadcrab", "An alternate version of the\noriginal headcrab\nfaster but weaker", "models/headcrab.mdl", 11500, fastheadcrabStats)
 
 if SERVER then
 	net.Receive("HL2CR_EquipPet", function(len, ply)

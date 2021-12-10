@@ -69,7 +69,10 @@ function SWEP:PrimaryAttack()
 	
 	local need = self.HealAmount
 	
-	if IsValid(ent) and ent.hl2cr.CurClass.Name == "Robot" then
+	if IsValid(ent) and ent:IsPlayer() and ent.hl2cr.CurClass.Name == "Robot" then
+		self.Owner:EmitSound( DenySound )
+		return
+	elseif IsValid(ent) and (ent:IsPet() or ent:IsHostile()) then
 		self.Owner:EmitSound( DenySound )
 		return
 	end

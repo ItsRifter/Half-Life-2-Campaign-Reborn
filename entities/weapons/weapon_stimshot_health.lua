@@ -66,15 +66,23 @@ function SWEP:PrimaryAttack()
 	if self:Clip1() > 0 then
 		self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+		
 		if SERVER then
+			if self:GetOwner().hl2cr.CurClass.Name == "Robot" then
+				timer.Simple(0.55, function()
+					self.Owner:EmitSound("physics/metal/metal_box_impact_bullet" .. math.random(1, 3) .. ".wav")
+					self.Owner:StripWeapon(self:GetClass())
+					return
+				end)
+			end
 			timer.Simple(0.55, function()
 				self.Owner:EmitSound("physics/flesh/flesh_impact_bullet" .. math.random(1, 5) .. ".wav")
+				
 				self.Owner:EmitSound("items/smallmedkit1.wav")
 				self.Owner:SetHealth(math.min(self:GetOwner():GetMaxHealth(), self:GetOwner():Health() + self.Primary.Damage))
 				AddStatus(self.Owner, "HealthRegen")
 				self:TakePrimaryAmmo(1)
 				self.Owner:StripWeapon(self:GetClass())
-				
 			end)
 		end
 		

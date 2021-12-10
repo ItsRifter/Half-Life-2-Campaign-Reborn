@@ -470,6 +470,11 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		
 		if not ply.pet.teleport then
 			ply.pet.teleport = true
+			ply.pet:SetPos(ply:GetPos())
+			ply.pet:SetAngles(ply:GetAngles())
+			timer.Create("hl2cr_petbringcool_" .. ply:Nick(), 6, 1, function()
+				ply.pet.teleport = false
+			end)
 		else
 			BroadcastMessage(ERROR_PET_BRINGING, ply)
 			return ""
@@ -589,6 +594,11 @@ concommand.Add("hl2cr_petbring", function(ply, cmd, args)
 	
 	if not ply.pet.teleport then
 		ply.pet.teleport = true
+		ply.pet:SetPos(ply:GetPos())
+		ply.pet:SetAngles(ply:GetAngles())
+		timer.Create("hl2cr_petbringcool_" .. ply:Nick(), 6, 1, function()
+			ply.pet.teleport = false
+		end)
 	else
 		BroadcastMessage(ERROR_PET_BRINGING, ply)
 		return

@@ -36,6 +36,7 @@ if SERVER then
 			
 			["Agility Increase"] = function(ply)
 				ply.hl2cr.Pets.CurrentPet["stats"]["speed"] = ply.hl2cr.Pets.CurrentPet["stats"]["speed"] + 15
+				ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] = ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] - 1
 			end,
 			
 			["Strength Buff II"] = function(ply)
@@ -50,10 +51,12 @@ if SERVER then
 		["npc_hl2cr_pet_fastheadcrab"] = {
 			["Agility Increase"] = function(ply)
 				ply.hl2cr.Pets.CurrentPet["stats"]["speed"] = ply.hl2cr.Pets.CurrentPet["stats"]["speed"] + 7
+				ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] = ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] - 1
 			end,
 			
 			["Agility Increase II"] = function(ply)
 				ply.hl2cr.Pets.CurrentPet["stats"]["speed"] = ply.hl2cr.Pets.CurrentPet["stats"]["speed"] + 10
+				ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] = ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] - 1
 			end,
 			
 			["Health Boost"] = function(ply)

@@ -503,7 +503,7 @@ function StoreWeapons(newWeapon)
 end
 
 hook.Add("GravGunPunt", "HL2CR_PreventPunting", function(ply, ent)
-	if ent and ent:GetClass() == "sent_controllable_manhack" or ent.player then
+	if ent and ent:GetClass() == "sent_controllable_manhack" or ent.player or ent:IsPet() then
 		return false
 	end
 end)
@@ -771,12 +771,12 @@ RANDOM_XP_BASED_NPC = {
 hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 	
 	local player = nil
-	
+
 	if attacker:IsPlayer() then
 		player = attacker
 	end
 	
-	if player and not attacker:IsNextBot() then
+	if player and not inflictor:IsPet() then
 	
 		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
 		
@@ -825,16 +825,16 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 		end
 		
 		
-	elseif attacker:IsNextBot() and attacker:GetOwner():IsPlayer() then
+	elseif inflictor:IsPet() and inflictor:GetOwner():IsPlayer() then
 		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
 		
-		local totalXP = CalculateXP(attacker:GetOwner(), math.random((RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin / 2) * npc.level, (RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax / 2) * npc.level))
+		local totalXP = CalculateXP(inflictor:GetOwner(), math.random((RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin / 2.25) * npc.level, (RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax / 2.25) * npc.level))
 		
 		if totalXP <= 0 then return end
 		
-		AddPetXP(attacker:GetOwner(), totalXP)
+		AddPetXP(inflictor:GetOwner(), totalXP)
 
-		createIndicator(totalXP, npc:GetPos(), attacker:GetOwner(), true)
+		createIndicator(totalXP, npc:GetPos(), inflictor:GetOwner(), true)
 	end
 end)
 

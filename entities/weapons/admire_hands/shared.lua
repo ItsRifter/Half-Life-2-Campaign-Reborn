@@ -6,7 +6,7 @@ SWEP.PrintName = nil
 SWEP.Instructions = nil
 
 SWEP.UseHands = false
-SWEP.WorldModel = "models/props_junk/popcan01a.mdl"
+SWEP.WorldModel = ""
 SWEP.ViewModel = "models/weapons/v_hands.mdl"
 
 SWEP.WepSelectIcon = Material("materials/icons/suit.vtf")

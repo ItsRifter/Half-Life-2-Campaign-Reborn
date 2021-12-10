@@ -2,13 +2,13 @@ AddCSLuaFile()
 --When creating an achievement, the following must in place
 --List = Where does this be listed in?
 --Achievement = The achievement, must be named accordingly E.G Test_Ach
-	--Name = The name of the achievement
+	--Name = The name of the achievement, doesn't need to be defined in language files
 	--Mat = the icon
-	--Desc = Description of the achievement
+	--Desc = Description, should be defined in the language file
 	-- Rewards = what to give to the player when they unlock it
 		--XP = XP to give
 		-- Item = Items to give the player, leave nil if no item is given
-	--IsRare = is it a rare to obtain achievement?
+	--IsRare = is it rare to obtain this achievement?
 	--Value = Initial value for progressive achievements
 	--Update = Every time the value is met, send an update notification to the player E.G (every 5 values of progress = notify player)
 	--Max = Maximum value for progress achievements, will be given when max is met
@@ -19,7 +19,7 @@ AddCSLuaFile()
 		Breens_Benefactors = {
 			Name = "Breens Benefactors",
 			Mat = "vgui/achievements/hl2_get_crowbar.png",
-			Desc = "Become loyal to Dr. Breen"
+			Desc = "Breens_Benefactors_Desc"
 			Rewards = {
 				XP = 1,
 				Item = nil
@@ -35,7 +35,7 @@ GM.Achievements = {
 		Malcontent = {
 			Name = "Malcontent",
 			Mat = "vgui/achievements/hl2_escape_apartmentraid.png", 
-			Desc = "Escape the apartment\nblock raid",
+			Desc = "Malcontent_Desc",
 			Rewards = {
 				XP = 500,
 				Item = nil
@@ -46,7 +46,7 @@ GM.Achievements = {
 		Submissive = {
 			Name = "Submissive",
 			Mat = "vgui/achievements/hl2_put_canintrash.png", 
-			Desc = "Put the can\nin the trash",
+			Desc = "Submissive_Desc",
 			Rewards = {
 				XP = 500,
 				Item = nil
@@ -57,7 +57,7 @@ GM.Achievements = {
 		Defiant = {
 			Name = "Defiant",
 			Mat = "vgui/achievements/hl2_hit_cancop_withcan.png", 
-			Desc = "Hit the trashcan\ncop with the can",
+			Desc = "Defiant_Desc",
 			Rewards = {
 				XP = 500,
 				Item = nil
@@ -66,9 +66,9 @@ GM.Achievements = {
 		},
 		
 		Barney_Wish = {
-			Name = "Wish Granted", 
+			Name = "Barney_Wish", 
 			Mat = "vgui/achievements/hl2_beat_game.png", 
-			Desc = "Fulfil Barney's request",
+			Desc = "Barney_Wish_Desc",
 			Rewards = {
 				XP = 500,
 				Item = nil
@@ -77,9 +77,9 @@ GM.Achievements = {
 		},
 		
 		Trusty_Hardware = {
-			Name = "Trusty Hardware", 
+			Name = "Trusty_Hardware", 
 			Mat = "vgui/achievements/hl2_get_crowbar.png", 
-			Desc = "Acquire the crowbar",
+			Desc = "Trusty_Hardware_Desc",
 			Rewards = {
 				XP = 500,
 				Item = nil
@@ -88,9 +88,9 @@ GM.Achievements = {
 		},
 		
 		Keep_Off_Sand = {
-			Name = "Keep off the Sand", 
+			Name = "Keep_Off_Sand", 
 			Mat = "vgui/achievements/hl2_beat_donttouchsand.png", 
-			Desc = "Cross the antlion beach\nwithout touching the sand",
+			Desc = "Keep_Off_Sand_Desc",
 			Rewards = {
 				XP = 5000,
 				Item = nil
@@ -99,9 +99,9 @@ GM.Achievements = {
 		},
 		
 		Warden_Freeman = {
-			Name = "Warden Freeman", 
+			Name = "Warden_Freeman", 
 			Mat = "vgui/achievements/hl2_beat_turretstandoff2.png", 
-			Desc = "Survive the second turret\nstandoff in Nova Prospekt",
+			Desc = "Warden_Freeman_Desc",
 			Rewards = {
 				XP = 1500,
 				Item = nil
@@ -110,9 +110,9 @@ GM.Achievements = {
 		},
 		
 		Follow_Freeman = {
-			Name = "Follow Freeman", 
+			Name = "Follow_Freeman", 
 			Mat = "vgui/achievements/hl2_followfreeman.png", 
-			Desc = "Gain command of a squad\nof rebels in the uprising",
+			Desc = "Follow_Freeman_Desc",
 			Rewards = {
 				XP = 1500,
 				Item = nil
@@ -121,9 +121,9 @@ GM.Achievements = {
 		},
 		
 		Cubbage = {
-			Name = "Where Cubbage Fears to Tread", 
+			Name = "Cubbage", 
 			Mat = "vgui/achievements/hl2_kill_odessagunship.png", 
-			Desc = "Defend Little Odessa\nfrom the gunship attack",
+			Desc = "Cubbage_Desc",
 			Rewards = {
 				XP = 2500,
 				Item = nil
@@ -132,9 +132,9 @@ GM.Achievements = {
 		},
 		
 		Radiation_Levels = {
-			Name = "Radiation Levels Detected",
+			Name = "Radiation_Levels",
 			Mat = "vgui/achievements/hl2_beat_toxictunnel.png", 
-			Desc = "Get through thetoxic tunnel\nunder City 17 in Half-Life 2",
+			Desc = "Radiation_Levels_Desc",
 			Rewards = {
 				XP = 1500,
 				Item = nil
@@ -143,9 +143,9 @@ GM.Achievements = {
 		},
 		
 		Red_Letter_Baby = {
-			Name = "Red Letter... Baby?",	
+			Name = "Red_Letter_Baby",	
 			Mat = "vgui/achievements/hl2_beat_game.png", 
-			Desc = "Take the baby from the\nplayground to Dr.Kleiner's lab",
+			Desc = "Red_Letter_Baby_Desc",
 			Rewards = {
 				XP = 2250,
 				Item = nil
@@ -155,9 +155,9 @@ GM.Achievements = {
 		},
 		
 		Zero_Point_Energy = {
-			Name = "Zero Point Energy",
+			Name = "Zero_Point_Energy",
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
-			Desc = "Acquire the Gravity Gun\nin Black Mesa East",
+			Desc = "Zero_Point_Energy_Desc",
 			Rewards = {
 				XP = 1000,
 				Item = nil
@@ -166,9 +166,9 @@ GM.Achievements = {
 		},
 		
 		Two_Points = {
-			Name = "Two Points",
+			Name = "Two_Points",
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
-			Desc = "Use DOG's ball\nto make a basket",
+			Desc = "Two_Points_Desc",
 			Rewards = {
 				XP = 2500,
 				Item = nil
@@ -177,9 +177,9 @@ GM.Achievements = {
 		},
 		
 		Hallowed_Ground = {
-			Name = "Hallowed Ground",
+			Name = "Hallowed_Ground",
 			Mat = "vgui/achievements/hl2_beat_cemetery.png", 
-			Desc = "Escort Gregori safely\nthrough the church cemetery",
+			Desc = "Hallowed_Ground_Desc",
 			Rewards = {
 				XP = 1250,
 				Item = nil
@@ -189,9 +189,9 @@ GM.Achievements = {
 		
 		
 		Barnacle_Bowling = {
-			Name = "Barnacle Bowling",
+			Name = "Barnacle_Bowling",
 			Mat = "vgui/achievements/hl2_kill_barnacleswithbarrel.png", 
-			Desc = "Kill five barnacles\nwith one barrel",
+			Desc = "Barnacle_Bowling_Desc",
 			Rewards = {
 				XP = 3500,
 				Item = nil
@@ -200,9 +200,9 @@ GM.Achievements = {
 		},
 		
 		Raven_Ball = {
-			Name = "Raven Ball",
+			Name = "Raven_Ball",
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
-			Desc = "Escort DOG's ball to\nthe end of Ravenholm's mine",
+			Desc = "Raven_Ball_Desc",
 			Rewards = {
 				XP = 12500,
 				Item = nil
@@ -213,7 +213,7 @@ GM.Achievements = {
 		Flushed = {
 			Name = "Flushed",
 			Mat = "vgui/achievements/hl2_kill_enemy_withtoilet.png", 
-			Desc = "Kill an enemy\nwith a toilet",
+			Desc = "Flushed_Desc",
 			Rewards = {
 				XP = 2500,
 				Item = nil
@@ -222,9 +222,9 @@ GM.Achievements = {
 		},
 		
 		Hack_Attack = {
-			Name = "Hack Attack!",
+			Name = "Hack_Attack",
 			Mat = "vgui/achievements/hlx_kill_enemies_withmanhack.png", 
-			Desc = "Kill five enemies\nwith a Manhack",
+			Desc = "Hack_Attack_Desc",
 			Rewards = {
 				XP = 3500,
 				Item = nil
@@ -233,9 +233,9 @@ GM.Achievements = {
 		},
 		
 		What_Cat = {
-			Name = "What Cat?", 
+			Name = "What_Cat", 
 			Mat = "vgui/achievements/hl2_beat_game.png", 
-			Desc = "Break Dr.Kleiner's\nmini-teleporter",
+			Desc = "What_Cat_Desc",
 			Rewards = {
 				XP = 2500,
 				Item = nil
@@ -244,9 +244,9 @@ GM.Achievements = {
 		},
 		
 		Blast_From_The_Past = {
-			Name = "Blast from the past",
+			Name = "Blast_From_The_Past",
 			Mat = "vgui/achievements/hl2_find_hevfaceplate.png", 
-			Desc = "Find the old\nH.E.V suit charger",
+			Desc = "Blast_From_The_Past_Desc",
 			Rewards = {
 				XP = 1750,
 				Item = nil
@@ -255,9 +255,9 @@ GM.Achievements = {
 		},
 		
 		Beat_HL2 = {
-			Name = "Singularity Collapse",
+			Name = "Beat_HL2",
 			Mat = "vgui/achievements/hl2_beat_game.png", 
-			Desc = "Destroy the Citadel's\nreactor core",
+			Desc = "Beat_HL2_Desc",
 			Rewards = {
 				XP = 5000,
 				Item = nil
@@ -266,9 +266,9 @@ GM.Achievements = {
 		},
 		
 		Giant_Killer = {
-			Name = "Giant Killer",
+			Name = "Giant_Killer",
 			Mat = "vgui/achievements/hl2_beat_c1713striderstandoff.png", 
-			Desc = "Survive the rooftop\nstrider battle in\nthe ruins of City 17",
+			Desc = "Giant_Killer_Desc",
 			Rewards = {
 				XP = 2500,
 				Item = nil
@@ -277,9 +277,9 @@ GM.Achievements = {
 		},
 		
 		Lambda_Locator = {
-			Name = "Lambda Locator",
+			Name = "Lambda_Locator",
 			Mat = "vgui/achievements/hl2_find_alllambdas.png", 
-			Desc = "Find all Lambda Caches",
+			Desc = "Lambda_Locator_Desc",
 			Rewards = {
 				XP = 17500,
 				Item = nil
@@ -294,9 +294,9 @@ GM.Achievements = {
 	
 	EP1 = {
 		Citadel_Lift = {
-			Name = "Watch your head!",
+			Name = "Citadel_Lift!",
 			Mat = "vgui/achievements/ep1_beat_mainelevator.png", 
-			Desc = "Make it to the bottom\nof the Citadel's\nmain elevator shaft in one piece",
+			Desc = "Citadel_Lift_Desc",
 			Rewards = {
 				XP = 1000,
 				Item = nil
@@ -307,7 +307,7 @@ GM.Achievements = {
 		Containment = {
 			Name = "Containment",
 			Mat = "vgui/achievements/ep1_beat_citadelcore.png", 
-			Desc = "Contain the Citadel core",
+			Desc = "Containment_Desc",
 			Rewards = {
 				XP = 1000,
 				Item = nil
@@ -316,9 +316,9 @@ GM.Achievements = {
 		},
 		
 		Pacifist_Stalkers = {
-			Name = "Pacifist",
+			Name = "Pacifist_Stalkers",
 			Mat = "vgui/achievements/ep1_beat_citadelcore_nostalkerkills.png", 
-			Desc = "Contain the Citadel core\nwithout killing any stalkers",
+			Desc = "Pacifist_Stalkers_Desc",
 			Rewards = {
 				XP = 4500,
 				Item = nil
@@ -329,9 +329,9 @@ GM.Achievements = {
 	
 	Misc = {
 		New_Arrival = {
-			Name = "New Arrival",
+			Name = "New_Arrival",
 			Mat = "materials/hl2cr/ach_arrival.jpg", 
-			Desc = "Play the gamemode\nfor the first time",
+			Desc = "New_Arrival_Desc",
 			Rewards = {
 				XP = 0,
 				Item = nil
@@ -340,9 +340,9 @@ GM.Achievements = {
 		},
 		
 		Leiftiger = {
-			Name = "The return of the Leiftiger",
+			Name = "Leiftiger",
 			Mat = "materials/hl2cr/ach_leif.jpg", 
-			Desc = "Met the original creator\nof HL2-C",
+			Desc = "Leiftiger_Desc",
 			Rewards = {
 				XP = 0,
 				Item = nil
@@ -351,9 +351,9 @@ GM.Achievements = {
 		},
 		
 		Unpleasant_Secret = {
-			Name = "Unpleasant Secret",
+			Name = "Unpleasant_Secret",
 			Mat = "materials/hl2cr/ach_gimmeasecret.jpg", 
-			Desc = "Plot twist:\nYou get nothing!",
+			Desc = "Unpleasant_Secret_Desc",
 			Rewards = {
 				XP = 0,
 				Item = nil
@@ -362,9 +362,9 @@ GM.Achievements = {
 		},
 		
 		Sven_Coop = {
-			Name = "Classic Co-Op",
+			Name = "Sven_Coop",
 			Mat = "materials/hl2cr/ach_svensecret.jpg", 
-			Desc = "Discover the classic medical voiceline",
+			Desc = "Sven_Coop_Desc",
 			Rewards = {
 				XP = 500,
 				Item = nil
@@ -373,9 +373,9 @@ GM.Achievements = {
 		},
 		
 		Craft_1 = {
-			Name = "Crafted it yourself!",
+			Name = "Craft_1!",
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 
-			Desc = "Craft an item for\nthe first time",
+			Desc = "Craft_1_Desc",
 			Rewards = {
 				XP = 2500,
 				Item = nil
@@ -386,9 +386,9 @@ GM.Achievements = {
 	
 	Custom = {
 		The_Beginning = {
-			Name = "The Beginning", 
+			Name = "The_Beginning", 
 			Mat = "materials/hl2cr/ach_nightmare.jpg", 
-			Desc = "Escape the nightmare...\nor did you?",
+			Desc = "The_Beginning_Desc",
 			Rewards = {
 				XP = 500,
 				Item = nil
@@ -397,9 +397,9 @@ GM.Achievements = {
 		},
 		
 		The_End = {
-			Name = "A bad nightmare",
+			Name = "The_End",
 			Mat = "materials/hl2cr/ach_losehope.jpg",
-			Desc = "Escape the hospital\nand the nightmare",
+			Desc = "The_End_Desc",
 			Rewards = {
 				XP = 2000,
 				Item = nil
@@ -408,9 +408,9 @@ GM.Achievements = {
 		},
 		
 		Carts_Journey = {
-			Name = "A Carts Journey", 
+			Name = "Carts_Journey", 
 			Mat = "vgui/achievements/ep2_kill_enemies_withcar.png", 
-			Desc = "Successfully ride the cart\nwithout dying",
+			Desc = "Carts_Journey_Desc",
 			Rewards = {
 				XP = 1500,
 				Item = nil
@@ -419,9 +419,9 @@ GM.Achievements = {
 		},
 		
 		Science_Squared = {
-			Name = "Science²",
+			Name = "Science_Squared",
 			Mat = "vgui/achievements/hl2_beat_game.png", 
-			Desc = "Complete Research and Development",
+			Desc = "Science_Squared_Desc",
 			Rewards = {
 				XP = 5000,
 				Item = nil

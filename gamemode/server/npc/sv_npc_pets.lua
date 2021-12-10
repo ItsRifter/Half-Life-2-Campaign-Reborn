@@ -7,6 +7,7 @@ function SpawnPet(ply)
 
 	local pet = ents.Create(ply.hl2cr.Pets.CurrentPet["class"])
 	pet:SetPos(tr.HitPos)
+	pet:SetAngles(ply:GetAngles())
 	pet:Spawn()
 	pet:SetOwner(ply)
 
