@@ -1,9 +1,11 @@
 AddCSLuaFile()
 
 local PET_CLASS = {
-	["npc_hl2cr_pet_headcrab"] = true,
-	["npc_hl2cr_pet_fastheadcrab"] = true,
+	--Standard Zombie
 	["npc_vj_hl2cr_headcrab"] = true,
+	["npc_vj_hl2cr_torsozombie"] = true,
+	
+	--Fast Zombie
 	["npc_vj_hl2cr_fastheadcrab"] = true
 }
 
@@ -41,20 +43,20 @@ function CreatePet(name, maxLevel, className, desc, model, cost, stats)
 end
 
 local headcrabStats = {
-	["health"] = 100,
+	["health"] = 350,
 	["speed"] = 25,
-	["damage"] = 5,
+	["damage"] = 10,
 	["attDelay"] = 6,
 }
 
 local fastheadcrabStats = {
-	["health"] = 75,
+	["health"] = 250,
 	["speed"] = 35,
-	["damage"] = 3,
+	["damage"] = 6,
 	["attDelay"] = 4,
 }
 
-local vj_headcrab = CreatePet("Headcrab", 6, "npc_vj_hl2cr_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000, headcrabStats)
+local headcrab = CreatePet("Headcrab", 6, "npc_vj_hl2cr_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000, headcrabStats)
 local fastheadcrab = CreatePet("Fast Headcrab", 6, "npc_vj_hl2cr_fastheadcrab", "An alternate version of the\noriginal headcrab\nfaster but weaker", "models/headcrab.mdl", 11500, fastheadcrabStats)
 
 if SERVER then
@@ -66,16 +68,16 @@ if SERVER then
 		local updatePet = net.ReadString()
 		
 		for i, v in ipairs(ply.hl2cr.Pets) do
-			if v.name == updatePet then 
-				
+			
+			if ply.hl2cr.Pets.CurrentPet.name == v.name then
+				v.xp = ply.hl2cr.Pets.CurrentPet.xp
+				v.skillpoints = ply.hl2cr.Pets.CurrentPet.skillpoints
+			end
+		end
+		
+		for i, v in ipairs(ply.hl2cr.Pets) do	
+			if v.class == updatePet then 
 				if not table.IsEmpty(ply.hl2cr.Pets.CurrentPet) then
-					for _, s in ipairs(ply.hl2cr.Pets.CurrentPet) do
-						if v.class == s.class then
-							v.xp = s.xp
-							v.reqxp = s.reqxp
-							v.level = s.level
-						end
-					end
 					table.Empty(ply.hl2cr.Pets.CurrentPet)
 				end
 				
@@ -101,12 +103,18 @@ if SERVER then
 				
 				ply.hl2cr.Resin = ply.hl2cr.Resin - v.cost
 				ply:SetNWInt("currency_resin", ply.hl2cr.Resin)
+				
+				net.Start("HL2CR_OpenPets")
+					net.WriteTable(ply.hl2cr.Pets)
+				net.Send(ply)
 			end
 		end
 	end)
 	
 	net.Receive("HL2CR_SellPet", function(len, ply)
 		if not ply then return end
+		
+		if ply.pet then return end
 		
 		local soldPet = net.ReadString()
 
@@ -121,7 +129,50 @@ if SERVER then
 				
 				ply.hl2cr.Resin = ply.hl2cr.Resin + math.Round(v.cost / 2)
 				ply:SetNWInt("currency_resin", ply.hl2cr.Resin)
+				
+				net.Start("HL2CR_OpenPets")
+					net.WriteTable(ply.hl2cr.Pets)
+				net.Send(ply)
 			end
 		end
+	end)
+	
+	local EVOLVE_TREE = {
+		["npc_vj_hl2cr_headcrab"] = "npc_vj_hl2cr_torsozombie"
+	}
+	
+	net.Receive("HL2CR_MutatePet", function(len, ply)
+		if not ply then return end
+		
+		local classEvolvingFrom = net.ReadString()
+		
+		if not ply.pet then
+			MISSING_PET = {
+				["Colour"] = Color(250, 230, 45),
+				["Message"] = "MissingPetEvolve"
+			}
+			
+			BroadcastMessage(MISSING_PET, ply)
+			return 
+		end
+		
+		ply.pet:EmitSound("npc/vort/health_charge.wav", 100, 100)
+	
+		timer.Create("HL2CR_Mutate_" .. ply:Nick(), 5, 1, function()
+			local effect = ParticleEffect( "vortigaunt_beam", ply.pet:GetPos(), Angle( 0, 0, 0 ) )
+			ply.pet:EmitSound("beams/beamstart5.wav", 100, 75)
+			RemovePet(ply)
+			
+			--table.Empty(ply.hl2cr.Pets.CurrentPet)
+			
+			timer.Simple(0.1, function()
+			
+			end)
+		end)
+		
+		
+		--vortigaunt_hand_glow
+		--vortigaunt_beam
+		print(EVOLVE_TREE[classEvolvingFrom])
 	end)
 end

@@ -104,6 +104,7 @@ local nextRestock = 0
 function SWEP:PrimaryAttack()
 
 	if self.Next < CurTime() and self.Primary.ClipSize > 0 then
+		
 		self.Next = CurTime() + self.Primary.Delay
 		self.Owner:LagCompensation( true )
 		
@@ -114,22 +115,41 @@ function SWEP:PrimaryAttack()
 
 		if self.Owner:GetEyeTrace().Entity and self.Owner:GetEyeTrace().Entity:IsPlayer() then
 			local player = self.Owner:GetEyeTrace().Entity
-			local ammoType = player:GetActiveWeapon():GetPrimaryAmmoType()
-			if not ammoType then return end
+			local ammoType = player:GetActiveWeapon():GetPrimaryAmmoType() 
+
+			if not ammoType or ammoType == -1 or ammoType == 12 then return end
 			
 			local amount = GIVE_AMMO[ammoType]
 			
+			if self.Owner:GetNWInt("skill_stocksupply") ~= nil then
+				amount = amount * self.Owner:GetNWInt("skill_stocksupply", 0)
+			end
 			if player:GetAmmoCount(ammoType) and AMMO_LIMIT[ammoType] and player:GetAmmoCount(ammoType) < AMMO_LIMIT[ammoType] then
 				player:SetAmmo(player:GetAmmoCount(ammoType) + amount, ammoType)
 				
 				if player:GetAmmoCount(ammoType) >= AMMO_LIMIT[ammoType] then
 					player:SetAmmo(AMMO_LIMIT[ammoType], ammoType)
 				end
+				
 				if nextRestock < CurTime() then
 					nextRestock = CurTime() + 30
 				end	
 				
-				
+				if self.Owner:GetNWInt("skill_stocksupply") > 0 then
+					for i, v in ipairs(ents.FindInSphere(tr.Entity:GetPos(), 250) ) do
+						
+						if not v:IsPlayer() or v == tr.Entity then continue end
+						
+						local ammoType = v:GetActiveWeapon():GetPrimaryAmmoType() 
+						
+						if not ammoType or ammoType == -1 or ammoType == 12 then continue end
+						if SERVER then
+							v:GiveAmmo(GIVE_AMMO[ammoType], ammoType)
+							AddXP(self.Owner, self.Owner:GetNWInt("skill_stocksupply") * 2 * GetConVar("hl2cr_difficulty"):GetInt())
+						end
+					end
+				end
+					
 				player:EmitSound("items/ammo_pickup.wav")
 				
 				if SERVER then
@@ -150,10 +170,8 @@ function SWEP:PrimaryAttack()
 		else
 			return
 		end
-		
-		self.Primary.ClipSize = self.Primary.ClipSize - 1
-		
-		self:SetClip1(self.Primary.ClipSize)
+			
+		self:SetClip1(self.Primary.ClipSize - 1)
 		self.Owner:LagCompensation( false )
 	end
 end

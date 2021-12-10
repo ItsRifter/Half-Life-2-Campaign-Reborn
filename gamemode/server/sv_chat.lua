@@ -1,5 +1,4 @@
 
-
 -- Usermessage for Content Download
 hook.Add( "PlayerSay", "HL2CR_Sites", function( ply, text )
 	if string.sub(text, 1, 8) == "!content" then
@@ -20,8 +19,4 @@ hook.Add( "PlayerSay", "HL2CR_BringNPC", function( ply, text )
 		local offset = Vector( 10, 0, 30 )
 		ents.FindByClass("npc_barney")[1]:SetPos(hit)
 	end
-end)
-
-net.Receive("HL2CR_Discord", function()
-	gui.OpenURL("https://discord.gg/zvvZ2ugHQY")
 end)

@@ -91,16 +91,47 @@ function ToggleBoard(toggle)
 			playerStats:SizeToContents()
 			
 			if pl:IsSuperAdmin() then
-				local adminBadge = vgui.Create( "DImage", panel )
+				local adminBadge = vgui.Create( "DImageButton", panel )
 				adminBadge:SetSize(24, 24)
 				adminBadge:SetPos(panel:GetWide() - 30, 0)
 				adminBadge:SetImage( "icon16/award_star_gold_3.png" )
+				adminBadge:SetToolTip(translate.Get("SuperAdmin"))
 				
 			elseif pl:IsAdmin() then
-				local adminBadge = vgui.Create( "DImage", panel )
+				local adminBadge = vgui.Create( "DImageButton", panel )
 				adminBadge:SetSize(24, 24)
 				adminBadge:SetPos(panel:GetWide() - 30, 0)
 				adminBadge:SetImage( "icon16/award_star_gold_2.png" )
+				adminBadge:SetToolTip(translate.Get("Admin"))
+			end
+			if pl:GetUserGroup() == "donator" then
+				local donatorBadge = vgui.Create( "DImageButton", panel )
+				donatorBadge:SetSize(24, 24)
+				donatorBadge:SetPos(panel:GetWide() - 30, 0)
+				donatorBadge:SetImage( "icon16/medal_bronze_3.png" )
+				donatorBadge:SetToolTip(translate.Get("Donator"))
+				
+			elseif pl:GetUserGroup() == "vip" then
+				local vipBadge = vgui.Create( "DImageButton", panel )
+				vipBadge:SetSize(24, 24)
+				vipBadge:SetPos(panel:GetWide() - 30, 0)
+				vipBadge:SetImage( "icon16/medal_silver_3.png" )
+				vipBadge:SetToolTip(translate.Get("VIP"))
+			
+			elseif pl:GetUserGroup() == "vip+" then
+				local vipExtraBadge = vgui.Create( "DImageButton", panel )
+				vipExtraBadge:SetSize(24, 24)
+				vipExtraBadge:SetPos(panel:GetWide() - 30, 0)
+				vipExtraBadge:SetImage( "icon16/medal_gold_3.png" )
+				vipExtraBadge:SetToolTip(translate.Get("VIPExtra"))
+			end
+			
+			if ALPHA_TESTERS[pl:SteamID()] then
+				local testerBadge = vgui.Create( "DImageButton", panel )
+				testerBadge:SetSize(24, 24)
+				testerBadge:SetPos(panel:GetWide() - 60, 0)
+				testerBadge:SetImage( "icon16/bug.png" )
+				testerBadge:SetToolTip(translate.Get("AlphaTester"))
 			end
 			
 			if LocalPlayer() != pl then

@@ -713,6 +713,16 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		local repairSkillsLayout = vgui.Create("DIconLayout", repairHorizontalScroll)
 		repairSkillsLayout:Dock(FILL)
 		
+		local supplierSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
+		supplierSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
+		
+		local supplierHorizontalScroll = vgui.Create("DHorizontalScroller", supplierSkillsPnl)
+		supplierHorizontalScroll:Dock(FILL)
+		supplierHorizontalScroll:SetOverlap( 0 )
+		
+		local supplierSkillsLayout = vgui.Create("DIconLayout", supplierHorizontalScroll)
+		supplierSkillsLayout:Dock(FILL)
+		
 		local robotSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		robotSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
 		
@@ -726,6 +736,13 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		local mechSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		mechSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
 
+		local mechHorizontalScroll = vgui.Create("DHorizontalScroller", mechSkillsPnl)
+		mechHorizontalScroll:Dock(FILL)
+		mechHorizontalScroll:SetOverlap( 0 )
+		
+		local mechSkillsLayout = vgui.Create("DIconLayout", mechHorizontalScroll)
+		mechSkillsLayout:Dock(FILL)
+
 		local skillPoints = LocalPlayer():GetNWInt("stat_skillpoints")
 		
 		for i, skill in pairs(GAMEMODE.PlayerSkills) do
@@ -734,38 +751,46 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			
 			if skill.Class == "Passive" then
 				statusPnl = vgui.Create("DPanel", passiveSkillsLayout)
-				statusPnl:SetSize(passiveSkillsPnl:GetWide() / 5, passiveSkillsPnl:GetTall())
+				statusPnl:SetSize(passiveSkillsPnl:GetWide() / 6, passiveSkillsPnl:GetTall())
+				
 			elseif skill.Class == "Medic" then
 				statusPnl = vgui.Create("DPanel", medicSkillsLayout)
 				statusPnl:SetSize(medicSkillsPnl:GetWide() / 8, medicSkillsPnl:GetTall())
+				
 			elseif skill.Class == "Repair" then
 				statusPnl = vgui.Create("DPanel", repairSkillsLayout)
 				statusPnl:SetSize(repairSkillsPnl:GetWide() / 8, repairSkillsPnl:GetTall())
+				
+			elseif skill.Class == "Supplier" then
+				statusPnl = vgui.Create("DPanel", supplierSkillsLayout)
+				statusPnl:SetSize(supplierSkillsPnl:GetWide() / 8, supplierSkillsPnl:GetTall())
+				
 			elseif skill.Class == "Mechanic" then
-				statusPnl = vgui.Create("DPanel", mechSkillsPnl)
+				statusPnl = vgui.Create("DPanel", mechSkillsLayout)
 				statusPnl:SetSize(mechSkillsPnl:GetWide() / 8, mechSkillsPnl:GetTall())
+				
 			elseif skill.Class == "Robot" then
-				statusPnl = vgui.Create("DPanel", robotSkillsPnl)
+				statusPnl = vgui.Create("DPanel", robotSkillsLayout)
 				statusPnl:SetSize(robotSkillsPnl:GetWide() / 8, robotSkillsPnl:GetTall())
+				
 			end
 			
 			local skillPnlShowcase = vgui.Create("DLabel", statusPnl)
 			skillPnlShowcase:SetText(skill.Name)
 			skillPnlShowcase:SetFont("HL2CR_Class_TitleFont")
-			skillPnlShowcase:DockMargin(-10, 0, 0, 0)
-			skillPnlShowcase:SetPos( (statusPnl:GetWide()/skillPnlShowcase:GetWide())*14, 25)
+			skillPnlShowcase:SetPos(75, 25)
 			skillPnlShowcase:SizeToContents()
 			skillPnlShowcase:SetTextColor(Color(0, 0, 0, 255))
 			
 			local skillPnlDesc = vgui.Create("DLabel", statusPnl)
 			skillPnlDesc:SetText(skill.Desc)
-			skillPnlDesc:SetPos((statusPnl:GetWide()/skillPnlDesc:GetWide())*15, 62.5)
+			skillPnlDesc:SetPos(75, 62.5)
 			skillPnlDesc:SetFont("HL2CR_Class_DescFont")
 			skillPnlDesc:SizeToContents()
 			skillPnlDesc:SetTextColor(Color(0, 0, 0, 255))
 			
 			local skillPnlLevel = vgui.Create("DLabel", statusPnl)
-			skillPnlLevel:SetPos((statusPnl:GetWide()/skillPnlDesc:GetWide())*35, 125)
+			skillPnlLevel:SetPos(100, 125)
 			skillPnlLevel:SetFont("HL2CR_Skill_Level")
 			skillPnlLevel:SizeToContents()
 			skillPnlLevel:SetTextColor(Color(0, 0, 0, 255))
@@ -782,7 +807,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			
 			skillBtn = vgui.Create("DImageButton", statusPnl)
 			skillBtn:SetSize(92, 92)
-			skillBtn:SetPos(statusPnl:GetWide() / 4, statusPnl:GetWide())
+			skillBtn:SetPos(75, statusPnl:GetWide() * 0.85)
 		
 			if LocalPlayer():GetNWInt("stat_level") < skill.LevelReq then
 				skillBtn:SetImage("materials/hl2cr/locked.jpg")
@@ -835,6 +860,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_PASSIVE"), passiveSkillsPnl)
 		skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_MEDIC"), medicSkillsPnl)
 		skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_REPAIRMAN"), repairSkillsPnl)
+		skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_SUPPLIER"), supplierSkillsPnl)
 		skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_ROBOT"), robotSkillsPnl)
 	    skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_MECHANIC"), mechSkillsPnl)
 		skillsSelectionPnl.navbar:SetActive(1)

@@ -3,8 +3,7 @@ local REFUSE_NAMES_TBL = {
 	["Fast Headcrab"] = true,
 }
 
-net.Receive("HL2CR_OpenPets", function()
-	local curPlayerPets = net.ReadTable()
+function OpenPetsMenu(curPlayerPets)
 
 	local petTabs = vgui.Create("HL2CR_Tab")
 	petTabs:SetSize(ScrW() / 1.5, ScrH() / 2.5)
@@ -89,7 +88,7 @@ net.Receive("HL2CR_OpenPets", function()
 		
 		petUseBtn.DoClick = function(self)
 			net.Start("HL2CR_EquipPet")
-				net.WriteString(p["name"])
+				net.WriteString(p["class"])
 			net.SendToServer()
 			petTabs:Remove()
 		end
@@ -130,9 +129,17 @@ net.Receive("HL2CR_OpenPets", function()
 	
 	local resin = LocalPlayer():GetNWInt("currency_resin")
 	local skillPoints = curPlayerPets.CurrentPet["skillpoints"] or 0
+	local hasPet = false
 	
 	for i, p in ipairs(GAMEMODE.PlayerPets) do
-		if curPlayerPets[i] and curPlayerPets[i].class == p["class"] then continue end
+		hasPet = false
+		for l, k in ipairs(curPlayerPets) do
+			if p.class == k.class then
+				hasPet = true
+			end
+		end		
+		
+		if hasPet then continue end
 		
 		local petPanel = adoptionLayout:Add("DPanel")
 		
@@ -242,7 +249,7 @@ net.Receive("HL2CR_OpenPets", function()
 				skillObtainedTick:SetPos(42, 0)
 				skillObtainedTick:SetSize(24, 24)
 			end
-			
+					
 			skillBtnIcon.DoClick = function()
 				
 				if skillPoints <= 0 then
@@ -271,7 +278,20 @@ net.Receive("HL2CR_OpenPets", function()
 				
 				table.insert(curPlayerPets.CurrentPet["curSkills"], s["Name"])
 			end
-			
+		end
+		
+		if curPlayerPets.CurrentPet["curSkills"] and table.HasValue(curPlayerPets.CurrentPet["curSkills"], "Genetic Evolution") then
+			local mutateBtn = vgui.Create("DButton", enhancePnl)
+			mutateBtn:SetText("MUTATE")
+			mutateBtn:SetSize(128, 64)
+			mutateBtn:SetPos(enhancePnl:GetWide() / 2.5, 250)
+			mutateBtn.DoClick = function()
+				net.Start("HL2CR_MutatePet")
+					net.WriteString(curPlayerPets.CurrentPet["class"])
+				net.SendToServer()
+				
+				petTabs:Remove()
+			end
 		end
 	else
 		local noPetLabel = vgui.Create("DLabel", enhancePnl)
@@ -288,7 +308,7 @@ net.Receive("HL2CR_OpenPets", function()
 	
 	petTabs.navbar:AddTab(translate.Get("Pets_Bar"), petsPnl)
 	petTabs.navbar:AddTab(translate.Get("AdoptPnl"), adoptionPnl)
-	petTabs.navbar:AddTab("Enhancement Centre", enhancePnl)
+	petTabs.navbar:AddTab(translate.Get("EnchancePnl"), enhancePnl)
 	petTabs.navbar:AddTab(translate.Get("Close"), closePnl)
 	petTabs.navbar:SetActive(1)
 	
@@ -297,4 +317,9 @@ net.Receive("HL2CR_OpenPets", function()
 			petTabs:Remove()
 		end
 	end
+end
+
+net.Receive("HL2CR_OpenPets", function()
+	local curPlayerPets = net.ReadTable()
+	OpenPetsMenu(curPlayerPets)
 end)

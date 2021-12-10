@@ -121,8 +121,7 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	end
 	
 	if text == "!discord" then
-		net.Start("HL2CR_Discord")
-		net.Send(ply)
+		ply:SendLua( [[ gui.OpenURL("https://discord.gg/zvvZ2ugHQY") ]] )
 		return ""
 	end
 	
@@ -434,15 +433,8 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 			return ""
 		end	
 		
-		ply.hl2cr.Pets.CurrentPet["name"] = checkName
-		
-		for i, pet in ipairs(ply.hl2cr.Pets) do
-			if ply.hl2cr.Pets.CurrentPet.class == ply.hl2cr.Pets[i].class then
-				ply.hl2cr.Pets[i].name = checkName
-			end
-			
-		end
-		
+		ply.hl2cr.Pets.CurrentPet.name = checkName
+				
 		ply:SetNWString("pet_name", ply.hl2cr.Pets.CurrentPet.name)
 		
 		local SET_PET_NAME = {
@@ -668,7 +660,7 @@ concommand.Add("hl2cr_forcevote", function(ply, cmd, args)
 end)
 
 concommand.Add("hl2cr_customvote", function(ply, cmd, args)
-	if not ply:IsAdmin() then return end
+	if not ply:IsAdmin() and not (string.find(ply:GetUserGroup(), "vip") or string.find(ply:GetUserGroup(), "vip+")) then return end
 	
 	HL2CR_Voting:CustomVote(ply, args[1])
 end)

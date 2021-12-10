@@ -25,9 +25,16 @@ local medic_revive = CreateSkill("Revival", "Revive the fallen", "Medic", 10, "m
 local medic_recharge = CreateSkill("Health Recharging", "Recharge and\nget back in\nthe fight", "Medic", 6, "materials/hl2cr/skill_healing_eff.jpg", 5)
 local medic_regen = CreateSkill("Regeneration", "Taking care of yourself", "Medic", 12, "materials/hl2cr/skill_regen.jpg", 2)
 
-local repair_recharge = CreateSkill("Recharge", "Recharge and keep charging people", "Repair", 5, "materials/hl2cr/skill_armor_regen.jpg", 5)
+local repair_recharge = CreateSkill("Recharge", "Recharge and keep\ncharging people", "Repair", 5, "materials/hl2cr/skill_armor_regen.jpg", 5)
 local repair_group = CreateSkill("Group Repair", "Take care of multiple\npeople at the same time", "Repair", 7, "materials/hl2cr/skill_recharge_group.jpg", 5)
 local repair_regen = CreateSkill("Armor Regen", "Recharges suit power", "Repair", 10, "materials/hl2cr/skill_recharge.jpg", 3)
+
+local supply_stock = CreateSkill("Ammo Stock", "Hold more ammo", "Supplier", 5, "materials/hl2cr/class_supporter.jpg", 5)
+local supply_biggerstock = CreateSkill("Bigger Supply", "Resupply people\nmore effectively", "Supplier", 7, "materials/hl2cr/class_supporter.jpg", 4)
+local supply_group = CreateSkill("Group Resupply", "Resupply multiple people\nat the same time", "Supplier", 9, "materials/hl2cr/skill_recharge_group.jpg", 4)
+
+local robot_scanner = CreateSkill("Enhanced Exosuit", "Stronger and more powerful", "Robot", 21, "materials/hl2cr/chest_exo.jpg", 3)
+local robot_scanner = CreateSkill("Entity Scanner", "Scan Hostiles status", "Robot", 24, "materials/hl2cr/skill_targetstats.jpg", 1)
 
 if SERVER then
 	net.Receive("HL2CR_SkillObtain", function(len, ply)
@@ -59,5 +66,6 @@ if SERVER then
 		ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints - 1
 
 		ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)
+		SetUpPlayerStats(ply)
 	end)
 end

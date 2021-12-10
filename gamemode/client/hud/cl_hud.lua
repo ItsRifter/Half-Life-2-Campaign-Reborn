@@ -317,14 +317,12 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 				
 				if pl:GetNWString("stat_curclass") == "Robot" then
 					draw.SimpleText(hpStatus, font, ScrPos.x, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-					return
 				else
 					draw.SimpleText(translate.Get("HUDPlayerHealth") .. pl:Health(), font, ScrPos.x, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-					return
 				end
 			elseif not pl:GetNWString("stat_curclass") == "Robot" then
 				draw.SimpleText(hpStatus, font, ScrPos.x - 50 + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-				return
+
 			elseif LocalPlayer():GetNWString("class_icon") == "Supporter" then
 				--Niik fix this please
 				
@@ -389,7 +387,13 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 				
 				draw.SimpleText("LEVEL " .. ent:GetNWInt("HL2CR_NPC_Level"), font, ScrPos.x, ScrPos.y + 30, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				
-				--draw.SimpleText("HP Debug " .. ent:Health(), font, ScrPos.x, ScrPos.y + 60, Color(255, 255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				if LocalPlayer():GetNWBool("CanScanEnemies") then
+					if ent:Health() > 0 then
+						draw.SimpleText("HEALTH: " .. ent:Health(), font, ScrPos.x, ScrPos.y + 60, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					elseif ent:Health() <= 0 then
+						draw.SimpleText("HEALTH: DEAD", font, ScrPos.x, ScrPos.y + 60, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					end
+				end
 			end
 		end
 	end

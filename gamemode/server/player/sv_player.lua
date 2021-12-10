@@ -77,16 +77,6 @@ end)
 local waitForRespawn = 0
 local waitDeath = 0
 
-hook.Add("DoPlayerDeath", "HL2CR_SurvialModeDeath", function(ply, att, dmgInfo )
-	if GetConVar("hl2cr_survival"):GetInt() == 0 then return end
-	
-	if #team.GetPlayers(1) <= 0 and #team.GetPlayers(2) <= 0 then
-		FailedMap()
-	end
-end)
-
-
-
 hook.Add("DoPlayerDeath", "HL2CR_RevivalStone", function(ply, att, dmgInfo )
 
 	if ply.hl2cr.CurClass.Name == "Robot" then return end
@@ -110,7 +100,20 @@ hook.Add("DoPlayerDeath", "HL2CR_RevivalStone", function(ply, att, dmgInfo )
 	models/props_combine/portalball001_sheet
 	models/shadertest/shader3
 	--]]
+	
+	if GetConVar("hl2cr_survival"):GetInt() == 0 then return end
+	
+	if #team.GetPlayers(1) <= 0 and #team.GetPlayers(2) <= 0 then
+		FailedMap()
+	end
+	
 end)
+
+local VIP_GROUPS_SERVER = {
+	["donator"] = true,
+	["vip"] = true,
+	["vip+"] = true
+}
 
 hook.Add("PostPlayerDeath", "HL2CR_HandlePlayerDeath", function(victim)
 	victim:SetTeam(TEAM_DEAD)
@@ -133,7 +136,13 @@ hook.Add("PostPlayerDeath", "HL2CR_HandlePlayerDeath", function(victim)
 		end
 	net.Send(victim)
 	
-	victim.waitForRespawn = CurTime() + GetConVar("hl2cr_difficulty"):GetInt() * 10
+	if VIP_GROUPS_SERVER[victim:GetUserGroup()] then
+		victim.waitForRespawn = CurTime() + GetConVar("hl2cr_difficulty"):GetInt() * 5
+	else
+		victim.waitForRespawn = CurTime() + GetConVar("hl2cr_difficulty"):GetInt() * 10
+	end
+	
+	
 	victim.waitDeath = CurTime() + 5
 	
 end)
@@ -180,6 +189,9 @@ hook.Add("PlayerInitialSpawn", "HL2CR_InitialPlayerSpawn", function(ply, transit
 		["items"] = {},
 		["achs"] = {},
 	}
+	
+	ply:SetNWString("pet_name", ply.hl2cr.Pets.CurrentPet.name)
+	
 end)
 
 local APPLY_SKILLS_DEPLOYABLE_MECH = {
@@ -199,6 +211,14 @@ local APPLY_ARMOR_RESIST_POINTS = {
 }
 
 function SetUpPlayerArmorStats(ply)
+	ply.totalArmorRes = 0
+	
+	if ply.hl2cr.CurClass.Name == "Robot" then
+		ply.totalArmorRes = ply.totalArmorRes + 4
+	elseif ply.hl2cr.CurClass.Name == "Supplier" then
+		ply.totalArmorRes = ply.totalArmorRes - 3
+	end
+	
 	for i, armor in pairs(ply.hl2cr.Inventory.ArmorSlots) do
 		if APPLY_ARMOR_RESIST_POINTS[armor] then
 			ply.totalArmorRes = math.Round(ply.totalArmorRes + APPLY_ARMOR_RESIST_POINTS[armor], 2)
@@ -220,8 +240,9 @@ function SetUpPlayerStats(ply)
 	local repairRecharge = 0
 	local regenArmor = 0
 	local repairGroup = 0
-	
-	ply.totalArmorRes = 0
+	local resupplyGroup = 0
+	local ammoStock = 1
+	local biggerStock = 1
 	
 	if ply.hl2cr.CurClass.Name == "Field Medic" then
 		newMaxHP = newMaxHP + 25
@@ -229,10 +250,6 @@ function SetUpPlayerStats(ply)
 	elseif ply.hl2cr.CurClass.Name == "Repairman" then
 		newMaxHP = newMaxHP - 20
 		ArmorCount = ArmorCount + 25
-	elseif ply.hl2cr.CurClass.Name == "Robot" then
-		ply.totalArmorRes = ply.totalArmorRes + 4
-	elseif ply.hl2cr.CurClass.Name == "Supplier" then
-		ply.totalArmorRes = ply.totalArmorRes - 3
 	end
 	
 	for k, skill in pairs(ply.hl2cr.Skills) do
@@ -282,10 +299,38 @@ function SetUpPlayerStats(ply)
 			end
 		end
 		
+		if skill.Name == "Group Resupply" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
+				resupplyGroup = resupplyGroup + 1
+			end
+		end
+		
+		if skill.Name == "Ammo Stock" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
+				ammoStock = ammoStock + 0.15
+			end
+		end
+		
+		if skill.Name == "Bigger Supply" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
+				biggerStock = biggerStock + 0.25
+			end
+		end
+		
 		if skill.Name == "Armor Regen" and ply.hl2cr.CurClass.Name == "Repairman" and ply.hl2cr.Skills[k].Invested then
 			for i = 1, ply.hl2cr.Skills[k].Invested do 
 				regenArmor = regenArmor + 5
 			end
+		end
+		
+		if skill.Name == "Enhanced Exo-skeleton" and ply.hl2cr.CurClass.Name == "Robot" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
+				ply.totalArmorRes = ply.totalArmorRes + 2
+			end
+		end
+		
+		if skill.Name == "Entity Scanner" and ply.hl2cr.CurClass.Name == "Robot" then
+			ply:SetNWBool("CanScanEnemies", true)
 		end
 	end
 
@@ -304,6 +349,7 @@ function SetUpPlayerStats(ply)
 	
 	ply.hl2cr.AmmoGrenade = 0
 	ply.hl2cr.StunDamage = 0
+	ply.hl2cr.MaxAmmoStock = ammoStock
 	
 	if ply.hl2cr.CurClass.Name == "Grenadier" then
 		ply.hl2cr.AmmoGrenade = ply.hl2cr.AmmoGrenade + 5
@@ -314,12 +360,15 @@ function SetUpPlayerStats(ply)
 	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
 	
 	ply:SetNWInt("skill_healing", healing)
-	ply:SetNWInt("skill_regen", regenHP)
+	ply:SetNWInt("skill_hpregen", regenHP)
+	ply:SetNWInt("skill_armorregen", regenArmor)
 	ply:SetNWInt("skill_healthrecharge", HPrecharge)
 	
 	ply:SetNWInt("skill_repairing", repairing)
+	ply:SetNWInt("skill_stocksupply", biggerStock)
 	ply:SetNWInt("skill_repairrate", repairRecharge)
 	ply:SetNWInt("skill_grouprepair", repairGroup)
+	ply:SetNWInt("skill_groupresupply", resupplyGroup)
 	
 	ply:SetMaxHealth(100 + newMaxHP)
 	ply:SetHealth(100 + newMaxHP)
@@ -473,6 +522,7 @@ hook.Add("PlayerCanPickupWeapon", "HL2CR_WeaponPickup", function(ply, weapon)
 		StoreWeapons(weapon:GetClass())
 	end
 	
+	RespawnWeapon(ply, weapon)
 	return true
 end)
 
@@ -548,48 +598,48 @@ hook.Add("Tick", "HL2CR_AmmoLimiter", function()
 	for k, p in ipairs(player.GetAll()) do
 		if p:IsBot() then break end
 		
-		if p:GetAmmoCount("357") > GetConVar("hl2cr_max_357"):GetInt() then		
-			p:RemoveAmmo( p:GetAmmoCount("357") -GetConVar("hl2cr_max_357"):GetInt(), "357" )
+		if p:GetAmmoCount("357") > GetConVar("hl2cr_max_357"):GetInt() * p.hl2cr.MaxAmmoStock then		
+			p:RemoveAmmo( p:GetAmmoCount("357") -GetConVar("hl2cr_max_357"):GetInt() * p.hl2cr.MaxAmmoStock, "357" )
 		end
 
-		if p:GetAmmoCount("AR2") > GetConVar("hl2cr_max_AR2"):GetInt() then		
-			p:RemoveAmmo( p:GetAmmoCount("AR2") -GetConVar("hl2cr_max_AR2"):GetInt(), "AR2" )
+		if p:GetAmmoCount("AR2") > GetConVar("hl2cr_max_AR2"):GetInt() * p.hl2cr.MaxAmmoStock then		
+			p:RemoveAmmo( p:GetAmmoCount("AR2") -GetConVar("hl2cr_max_AR2"):GetInt() * p.hl2cr.MaxAmmoStock, "AR2" )
 		end
 
-		if p:GetAmmoCount("AR2AltFire") > GetConVar("hl2cr_max_ar2_ball"):GetInt() then		
-			p:RemoveAmmo( p:GetAmmoCount("AR2AltFire") -GetConVar("hl2cr_max_ar2_ball"):GetInt(), "AR2AltFire" )
+		if p:GetAmmoCount("AR2AltFire") > GetConVar("hl2cr_max_ar2_ball"):GetInt() * p.hl2cr.MaxAmmoStock then		
+			p:RemoveAmmo( p:GetAmmoCount("AR2AltFire") -GetConVar("hl2cr_max_ar2_ball"):GetInt() * p.hl2cr.MaxAmmoStock, "AR2AltFire" )
 		end
 
-		if p:GetAmmoCount("Buckshot") > GetConVar("hl2cr_max_Buckshot"):GetInt() then		
-			p:RemoveAmmo( p:GetAmmoCount("Buckshot") -GetConVar("hl2cr_max_Buckshot"):GetInt(), "Buckshot" )
+		if p:GetAmmoCount("Buckshot") > GetConVar("hl2cr_max_Buckshot"):GetInt() * p.hl2cr.MaxAmmoStock then		
+			p:RemoveAmmo( p:GetAmmoCount("Buckshot") -GetConVar("hl2cr_max_Buckshot"):GetInt() * p.hl2cr.MaxAmmoStock, "Buckshot" )
 		end
 
-		if p:GetAmmoCount("XBowBolt") > GetConVar("hl2cr_max_crossbowbolt"):GetInt() then		
-			p:RemoveAmmo( p:GetAmmoCount("XBowBolt") -GetConVar("hl2cr_max_crossbowbolt"):GetInt(), "XBowBolt" )
+		if p:GetAmmoCount("XBowBolt") > GetConVar("hl2cr_max_crossbowbolt"):GetInt() * p.hl2cr.MaxAmmoStock then		
+			p:RemoveAmmo( p:GetAmmoCount("XBowBolt") -GetConVar("hl2cr_max_crossbowbolt"):GetInt() * p.hl2cr.MaxAmmoStock, "XBowBolt" )
 		end
 		
-		if p:GetAmmoCount("slam") > GetConVar("hl2cr_max_slam"):GetInt() then		
-			p:RemoveAmmo( p:GetAmmoCount("slam") -GetConVar("hl2cr_max_slam"):GetInt(), "slam" )
+		if p:GetAmmoCount("slam") > GetConVar("hl2cr_max_slam"):GetInt() * p.hl2cr.MaxAmmoStock then		
+			p:RemoveAmmo( p:GetAmmoCount("slam") -GetConVar("hl2cr_max_slam"):GetInt() * p.hl2cr.MaxAmmoStock, "slam" )
 		end
 
-		if p:GetAmmoCount("Pistol") > GetConVar("hl2cr_max_Pistol"):GetInt() then		
-			p:RemoveAmmo( p:GetAmmoCount("Pistol") -GetConVar("hl2cr_max_Pistol"):GetInt(), "Pistol" )
+		if p:GetAmmoCount("Pistol") > GetConVar("hl2cr_max_Pistol"):GetInt() * p.hl2cr.MaxAmmoStock then		
+			p:RemoveAmmo( p:GetAmmoCount("Pistol") -GetConVar("hl2cr_max_Pistol"):GetInt() * p.hl2cr.MaxAmmoStock, "Pistol" )
 		end
 
-		if p:GetAmmoCount("RPG_Round") > GetConVar("hl2cr_max_RPG_Round"):GetInt() then		
-			p:RemoveAmmo( p:GetAmmoCount("RPG_Round") -GetConVar("hl2cr_max_RPG_Round"):GetInt(), "RPG_Round" )
+		if p:GetAmmoCount("RPG_Round") > GetConVar("hl2cr_max_RPG_Round"):GetInt() * p.hl2cr.MaxAmmoStock then		
+			p:RemoveAmmo( p:GetAmmoCount("RPG_Round") -GetConVar("hl2cr_max_RPG_Round"):GetInt() * p.hl2cr.MaxAmmoStock, "RPG_Round" )
 		end
 
-		if p:GetAmmoCount("SMG1") > GetConVar("hl2cr_max_SMG1"):GetInt() then		
-			p:RemoveAmmo( p:GetAmmoCount("SMG1") -GetConVar("hl2cr_max_SMG1"):GetInt(), "SMG1" )
+		if p:GetAmmoCount("SMG1") > GetConVar("hl2cr_max_SMG1"):GetInt() * p.hl2cr.MaxAmmoStock then		
+			p:RemoveAmmo( p:GetAmmoCount("SMG1") -GetConVar("hl2cr_max_SMG1"):GetInt() * p.hl2cr.MaxAmmoStock, "SMG1" )
 		end
 
-		if p:GetAmmoCount("SMG1_Grenade") > GetConVar("hl2cr_max_SMG1_Grenade"):GetInt() then		
-			p:RemoveAmmo( p:GetAmmoCount("SMG1_Grenade") - GetConVar("hl2cr_max_SMG1_Grenade"):GetInt(), "SMG1_Grenade" )
+		if p:GetAmmoCount("SMG1_Grenade") > GetConVar("hl2cr_max_SMG1_Grenade"):GetInt() * p.hl2cr.MaxAmmoStock then		
+			p:RemoveAmmo( p:GetAmmoCount("SMG1_Grenade") - GetConVar("hl2cr_max_SMG1_Grenade"):GetInt() * p.hl2cr.MaxAmmoStock, "SMG1_Grenade" )
 		end
 		
-		if p:GetAmmoCount("Grenade") > (GetConVar("hl2cr_max_frags"):GetInt() + p.hl2cr.AmmoGrenade) then
-			p:RemoveAmmo( p:GetAmmoCount("Grenade") - (GetConVar("hl2cr_max_frags"):GetInt() + p.hl2cr.AmmoGrenade), "Grenade" )
+		if p:GetAmmoCount("Grenade") > ((GetConVar("hl2cr_max_frags"):GetInt() * p.hl2cr.MaxAmmoStock) + p.hl2cr.AmmoGrenade)   then
+			p:RemoveAmmo( p:GetAmmoCount("Grenade") - (GetConVar("hl2cr_max_frags"):GetInt() + p.hl2cr.AmmoGrenade) * p.hl2cr.MaxAmmoStock, "Grenade" )
 		end
 	end
 end)
@@ -611,57 +661,57 @@ hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
 		return false
 	end
 	
-	if (item:GetClass() == "item_ammo_357" or item:GetClass() == "item_ammo_357_large" or item:GetClass() == "weapon_357") and ply:GetAmmoCount("357") >= GetConVar("hl2cr_max_357"):GetInt() then
-		ply:RemoveAmmo( ply:GetAmmoCount("357") -GetConVar("hl2cr_max_357"):GetInt(), "357" )
+	if (item:GetClass() == "item_ammo_357" or item:GetClass() == "item_ammo_357_large" or item:GetClass() == "weapon_357") and ply:GetAmmoCount("357") >= GetConVar("hl2cr_max_357"):GetInt() * ply.hl2cr.MaxAmmoStock then
+		ply:RemoveAmmo( ply:GetAmmoCount("357") -GetConVar("hl2cr_max_357"):GetInt() * p.hl2cr.MaxAmmoStock, "357" )
 		return false
 	end
 	
-	if (item:GetClass() == "item_ammo_ar2" or item:GetClass() == "item_ammo_ar2_large" or item:GetClass() == "weapon_ar2") and ply:GetAmmoCount("AR2") >= GetConVar("hl2cr_max_AR2"):GetInt() then		
-		ply:RemoveAmmo( ply:GetAmmoCount("AR2") -GetConVar("hl2cr_max_AR2"):GetInt(), "AR2" )
+	if (item:GetClass() == "item_ammo_ar2" or item:GetClass() == "item_ammo_ar2_large" or item:GetClass() == "weapon_ar2") and ply:GetAmmoCount("AR2") >= GetConVar("hl2cr_max_AR2"):GetInt() * ply.hl2cr.MaxAmmoStock then		
+		ply:RemoveAmmo( ply:GetAmmoCount("AR2") -GetConVar("hl2cr_max_AR2"):GetInt() * ply.hl2cr.MaxAmmoStock, "AR2" )
 		return false
 	end
 	
-	if item:GetClass() == "item_ammo_ar2_altfire" and ply:GetAmmoCount("AR2AltFire") >= GetConVar("hl2cr_max_ar2_ball"):GetInt() then		
-		ply:RemoveAmmo( ply:GetAmmoCount("AR2AltFire") -GetConVar("hl2cr_max_ar2_ball"):GetInt(), "AR2AltFire" )
+	if item:GetClass() == "item_ammo_ar2_altfire" and ply:GetAmmoCount("AR2AltFire") >= GetConVar("hl2cr_max_ar2_ball"):GetInt() * ply.hl2cr.MaxAmmoStock then		
+		ply:RemoveAmmo( ply:GetAmmoCount("AR2AltFire") -GetConVar("hl2cr_max_ar2_ball"):GetInt() * ply.hl2cr.MaxAmmoStock, "AR2AltFire" )
 		return false
 	end
 	
-	if (item:GetClass() == "item_box_buckshot" or item:GetClass() == "item_ammo_buckshot_large" or item:GetClass() == "weapon_shotgun") and ply:GetAmmoCount("Buckshot") >= (GetConVar("hl2cr_max_Buckshot"):GetInt() or 30) then		
-		ply:RemoveAmmo( ply:GetAmmoCount("Buckshot") -GetConVar("hl2cr_max_Buckshot"):GetInt(), "Buckshot" )
+	if (item:GetClass() == "item_box_buckshot" or item:GetClass() == "item_ammo_buckshot_large" or item:GetClass() == "weapon_shotgun") and ply:GetAmmoCount("Buckshot") >= GetConVar("hl2cr_max_Buckshot"):GetInt() * ply.hl2cr.MaxAmmoStock then		
+		ply:RemoveAmmo( ply:GetAmmoCount("Buckshot") -GetConVar("hl2cr_max_Buckshot"):GetInt() * ply.hl2cr.MaxAmmoStock, "Buckshot" )
 		return false
 	end
 	
-	if item:GetClass() == ("item_ammo_crossbow" or item:GetClass() == "weapon_crossbow") and ply:GetAmmoCount("XBowBolt") >= GetConVar("hl2cr_max_crossbowbolt"):GetInt() then		
-		ply:RemoveAmmo( ply:GetAmmoCount("XBowBolt") -GetConVar("hl2cr_max_crossbowbolt"):GetInt(), "XBowBolt" )
+	if item:GetClass() == ("item_ammo_crossbow" or item:GetClass() == "weapon_crossbow") and ply:GetAmmoCount("XBowBolt") >= GetConVar("hl2cr_max_crossbowbolt"):GetInt() * ply.hl2cr.MaxAmmoStock then		
+		ply:RemoveAmmo( ply:GetAmmoCount("XBowBolt") -GetConVar("hl2cr_max_crossbowbolt"):GetInt() * ply.hl2cr.MaxAmmoStock, "XBowBolt" )
 		return false
 	end
 
-	if item:GetClass() == "weapon_frag" and ply:GetAmmoCount("Grenade") >= (GetConVar("hl2cr_max_frags"):GetInt() or 5) then		
+	if item:GetClass() == "weapon_frag" and ply:GetAmmoCount("Grenade") >= GetConVar("hl2cr_max_frags"):GetInt() * ply.hl2cr.MaxAmmoStock  then		
 		return false
 	end
 
-	if item:GetClass() == "weapon_slam" and ply:GetAmmoCount("slam") >= GetConVar("hl2cr_max_slam"):GetInt() then		
-		ply:RemoveAmmo( ply:GetAmmoCount("slam") -GetConVar("hl2cr_max_slam"):GetInt(), "slam" )
+	if item:GetClass() == "weapon_slam" and ply:GetAmmoCount("slam") >= GetConVar("hl2cr_max_slam"):GetInt() * ply.hl2cr.MaxAmmoStock then		
+		ply:RemoveAmmo( ply:GetAmmoCount("slam") -GetConVar("hl2cr_max_slam"):GetInt() * ply.hl2cr.MaxAmmoStock, "slam" )
 		return false
 	end
 	
-	if (item:GetClass() == "item_ammo_pistol" or item:GetClass() == "item_ammo_pistol_large" or item:GetClass() == "weapon_pistol") and ply:GetAmmoCount("Pistol") >= GetConVar("hl2cr_max_Pistol"):GetInt() then		
-		ply:RemoveAmmo( ply:GetAmmoCount("Pistol") -GetConVar("hl2cr_max_Pistol"):GetInt(), "Pistol" )
+	if (item:GetClass() == "item_ammo_pistol" or item:GetClass() == "item_ammo_pistol_large" or item:GetClass() == "weapon_pistol") and ply:GetAmmoCount("Pistol") >= GetConVar("hl2cr_max_Pistol"):GetInt() * ply.hl2cr.MaxAmmoStock then		
+		ply:RemoveAmmo( ply:GetAmmoCount("Pistol") -GetConVar("hl2cr_max_Pistol"):GetInt() * ply.hl2cr.MaxAmmoStock, "Pistol" )
 		return false
 	end
 	
-	if (item:GetClass() == "item_rpg_round" or item:GetClass() == "weapon_rpg") and ply:GetAmmoCount("RPG_Round") >= GetConVar("hl2cr_max_RPG_Round"):GetInt() then		
-		ply:RemoveAmmo( ply:GetAmmoCount("RPG_Round") -GetConVar("hl2cr_max_RPG_Round"):GetInt(), "RPG_Round" )
+	if (item:GetClass() == "item_rpg_round" or item:GetClass() == "weapon_rpg") and ply:GetAmmoCount("RPG_Round") >= GetConVar("hl2cr_max_RPG_Round"):GetInt() * ply.hl2cr.MaxAmmoStock then		
+		ply:RemoveAmmo( ply:GetAmmoCount("RPG_Round") -GetConVar("hl2cr_max_RPG_Round"):GetInt() * ply.hl2cr.MaxAmmoStock, "RPG_Round" )
 		return false
 	end
 	
-	if (item:GetClass() == "item_ammo_smg1" or item:GetClass() == "item_ammo_smg1_large" or item:GetClass() == "weapon_smg1") and ply:GetAmmoCount("SMG1") >= GetConVar("hl2cr_max_SMG1"):GetInt() then		
-		ply:RemoveAmmo( ply:GetAmmoCount("SMG1") -GetConVar("hl2cr_max_SMG1"):GetInt(), "SMG1" )
+	if (item:GetClass() == "item_ammo_smg1" or item:GetClass() == "item_ammo_smg1_large" or item:GetClass() == "weapon_smg1") and ply:GetAmmoCount("SMG1") >= GetConVar("hl2cr_max_SMG1"):GetInt() * ply.hl2cr.MaxAmmoStock then		
+		ply:RemoveAmmo( ply:GetAmmoCount("SMG1") -GetConVar("hl2cr_max_SMG1"):GetInt() * ply.hl2cr.MaxAmmoStock, "SMG1" )
 		return false
 	end
 	
-	if item:GetClass() == "item_ammo_smg1_grenade" and ply:GetAmmoCount("SMG1_Grenade") >= GetConVar("hl2cr_max_SMG1_Grenade"):GetInt() then		
-		ply:RemoveAmmo( ply:GetAmmoCount("SMG1_Grenade") - GetConVar("hl2cr_max_SMG1_Grenade"):GetInt(), "SMG1_Grenade" )
+	if item:GetClass() == "item_ammo_smg1_grenade" and ply:GetAmmoCount("SMG1_Grenade") >= GetConVar("hl2cr_max_SMG1_Grenade"):GetInt() * ply.hl2cr.MaxAmmoStock then		
+		ply:RemoveAmmo( ply:GetAmmoCount("SMG1_Grenade") - GetConVar("hl2cr_max_SMG1_Grenade"):GetInt() * ply.hl2cr.MaxAmmoStock, "SMG1_Grenade" )
 		return false
 	end
 
@@ -694,6 +744,7 @@ hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
 		end
 	end
 
+	RespawnItem(ply, item)
 	return true
 end)
 
@@ -766,6 +817,8 @@ RANDOM_XP_BASED_NPC = {
 	["npc_antlionguardian"] = {xpMin = 125, xpMax = 275},
 	["npc_barnacle"] = {xpMin = 1, xpMax = 25},
 	["npc_turret_ground"] = {xpMin = 5, xpMax = 25},
+	
+	["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
 }
 
 hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
@@ -1064,12 +1117,23 @@ hook.Add("PlayerButtonUp", "HL2CR_CloseQMenu", function(ply, btn)
 	end
 end)
 
-hook.Add("PlayerHurt", "HL2CR_PlayerRegenHP", function(victim, attacker, healthRemaining, damageTaken)
-	if victim:GetNWInt("skill_regen") and victim.hl2cr.CurClass.Name == "Field Medic" then	
+hook.Add("PlayerHurt", "HL2CR_PlayerRegen", function(victim, attacker, healthRemaining, damageTaken)
+	
+	if victim:GetNWInt("skill_hpregen") and victim.hl2cr.CurClass.Name == "Field Medic" then	
 		timer.Create("HL2CR_Regen_" .. victim:Nick(), 15, 999, function()
-			victim:SetHealth(victim:Health() + victim:GetNWInt("skill_regen"))
+			victim:SetHealth(victim:Health() + victim:GetNWInt("skill_hpregen"))
 			if victim:Health() > victim:GetMaxHealth() then
 				victim:SetHealth(victim:GetMaxHealth())
+				timer.Remove("HL2CR_Regen_" .. victim:Nick())
+			end
+		end)
+	end
+	
+	if victim:GetNWInt("skill_armorregen") and victim.hl2cr.CurClass.Name == "Repairman" then	
+		timer.Create("HL2CR_Regen_" .. victim:Nick(), 15, 999, function()
+			victim:SetArmor(victim:Armor() + victim:GetNWInt("skill_armorregen"))
+			if victim:Armor() > victim:GetMaxArmor() then
+				victim:SetArmor(victim:GetMaxArmor())
 				timer.Remove("HL2CR_Regen_" .. victim:Nick())
 			end
 		end)

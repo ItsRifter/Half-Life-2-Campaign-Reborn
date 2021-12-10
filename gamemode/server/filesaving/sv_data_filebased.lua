@@ -17,7 +17,6 @@ local function InitData(ply)
 	ply.hl2cr.Exp = ply.hl2cr.Exp or 0
 	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 3000
 	
-	--Skills (Blanks are for later skills adds, just not to wipe player data every time, when new stuff are added)
 	ply.hl2cr.Skills = ply.hl2cr.Skills or {}
 
 	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints or 0

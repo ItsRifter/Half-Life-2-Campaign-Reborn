@@ -394,7 +394,7 @@ function chat.AddText( ... )
 	local arg = { ... }
 	local b_flashing = false
 
-	if arg[ 1 ] == "PINC:" then
+	if arg[ 1 ] == "PING:" then
 		b_flashing = true
 		table.remove( arg, 1 )
 	end
@@ -576,7 +576,7 @@ function Administrator.Chat.DrawChatBox( )
 		Administrator.Chat.Chat.Fade = Administrator.Chat.Chat.Fade + ( ( 0 - Administrator.Chat.Chat.Fade ) * FrameTime( ) * 5 )
 	end
 
-	local xPos, yPos, chatWidth, chatHeight = ScrW( ) * 0.05, ScrH( ) * 0.80, ScrW( ) * 0.4, 0
+	local xPos, yPos, chatWidth, chatHeight = ScrW( ) * 0.025, ScrH( ) * 0.80, ScrW( ) * 0.4, 0
 	local r, g, b = Administrator.Chat.Chat.ColorR:GetInt( ), Administrator.Chat.Chat.ColorG:GetInt( ), Administrator.Chat.Chat.ColorB:GetInt( )
 	surface.SetFont( Administrator.Chat.Chat.Font )
 	local size = Administrator.Chat.Chat.Size:GetInt( )
@@ -1042,12 +1042,17 @@ function GM:OnPlayerChat( ply, strText, bTeamOnly, bPlayerIsDead )
 	--
 	local tab = { }
 
-	if ( IsValid( ply ) ) and ( ply:Team( ) == TEAM_DEAD ) then
+	if ( IsValid( ply ) ) and ( ply:Team( ) == 3 ) then
 		table.insert( tab, Color( 255, 30, 40 ) )
 		table.insert( tab, "[DEAD] " )
 	end
+	
+	if ( IsValid( ply ) ) and ( ply:Team( ) == 1 ) then
+		table.insert( tab, Color( 30, 255, 40 ) )
+		table.insert( tab, "[ALIVE] " )
+	end
 
-	if ( IsValid( ply ) ) and ( ply:Team( ) == TEAM_COMPLETED_MAP ) then
+	if ( IsValid( ply ) ) and ( ply:Team( ) == 2 ) then
 		table.insert( tab, Color( 255, 255, 40 ) )
 		table.insert( tab, "[COMPLETED MAP] " )
 	end

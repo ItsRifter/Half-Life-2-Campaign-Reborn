@@ -117,7 +117,6 @@ function SWEP:PrimaryAttack()
 				tr.Entity:SetArmor(math.min(tr.Entity:GetMaxArmor(), tr.Entity:Armor()+need) )
 			end
 			
-			
 			tr.Entity:EmitSound("items/battery_pickup.wav")
 			
 			if self.Owner:GetNWInt("skill_grouprepair") > 0 then

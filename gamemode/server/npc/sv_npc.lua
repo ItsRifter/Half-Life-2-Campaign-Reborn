@@ -96,6 +96,8 @@ end
 hook.Add("EntityTakeDamage", "HL2CR_PlayerToNPCDmgMisc", function(ent, dmgInfo)
 	local dmg = dmgInfo:GetDamage()
 	local att = dmgInfo:GetAttacker()
+	if not ent:IsValid() then return end
+	
 	if att:IsPlayer() then 
 		if att:GetActiveWeapon():GetClass() == "weapon_stunstick" and not (ent:IsFriendly() or ent:GetClass() == "npc_citizen") then
 			if att.hl2cr.StunDamage and not ent:IsPlayer() then
@@ -108,8 +110,8 @@ end)
 
 hook.Add("EntityTakeDamage", "HL2CR_FriendlyOrHostile", function(ent, dmgInfo)
 	local att = dmgInfo:GetAttacker()
-
-	if ent:IsFriendly() or (ent:GetClass() == "npc_citizen" and att:IsPlayer()) then
+	
+	if (ent:IsFriendly() or ent:IsPet()) or (ent:GetClass() == "npc_citizen" and att:IsPlayer()) then
 		dmgInfo:SetDamage(0)
 		return
 	end

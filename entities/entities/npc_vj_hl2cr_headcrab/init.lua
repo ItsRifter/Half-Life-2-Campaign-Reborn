@@ -58,6 +58,7 @@ ENT.DisableLeapAttackAnimation = false -- if true, it will disable the animation
 
 ENT.HasDamageByPlayer = false
 ENT.IdleAlwaysWander = true
+ENT.FollowPlayer = false
 
 ENT.SoundTbl_FootStep = {}
 ENT.SoundTbl_Breath = {}

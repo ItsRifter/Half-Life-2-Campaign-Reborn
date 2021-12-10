@@ -13,7 +13,6 @@ function ENT:Initialize()
 	self:SetCollisionGroup(COLLISION_GROUP_NONE)
 	self:SetOwner(self.Owner)
 	self:DropToFloor()
-
 	
 	self.npc = ents.Create("npc_zombie")
 	self.npc:SetPos(self:GetPos())

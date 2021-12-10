@@ -162,9 +162,10 @@ if SERVER then
 			elseif v.Name == slotToUpdate and v.Type == "Boots" then
 				ply.hl2cr.Inventory.ArmorSlots["Boots"] = v.Name
 				ply:SetNWString("inv_armorslot_boots", ply.hl2cr.Inventory.ArmorSlots["Boots"])
-				
 			end
 		end
+		
+		SetUpPlayerArmorStats(ply)
 	end)
 	
 	net.Receive("HL2CR_ObtainItem", function(len, ply)

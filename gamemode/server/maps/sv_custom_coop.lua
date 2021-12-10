@@ -235,6 +235,10 @@ local function SetCheckpoints()
 			Vector(-2431, -2751, 2576)
 		}
 
+		CHECKPOINT_FUNC_1 = function()
+			ents.FindByClass("info_player_start")[1]:SetParent(nil)
+		end
+
 		CHANGELEVEL_COOP_FUNC = function()
 			for _, v in ipairs(player.GetAll()) do
 				v:SetPos(Vector(-410, -3688, 3919))
@@ -431,6 +435,12 @@ local COOP_WEAPONS = {
 		[2] = "weapon_nh_colt",
 	},
 	
+	["nh2c4_v2"] = {
+		[1] = "weapon_nh_hatchet",
+		[2] = "weapon_nh_colt",
+		[3] = "weapon_nh_revolver",
+	},
+	
 }
 
 local REMOVE_WEAPONS = {
@@ -438,63 +448,23 @@ local REMOVE_WEAPONS = {
 }
 
 local MAP_LOGIC = {
-	["level01_synb2_entryway_of_doom"] = function(MapLua)
-		local npc_vortigaunt = {
-			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
-		}
-		local npc_antlion = {
-			["npc_antlion"] = {xpMin = 12, xpMax = 27},
-		}
-		
-		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
-		table.Merge(RANDOM_XP_BASED_NPC, npc_antlion)
-		
+	["level01_synb2_entryway_of_doom"] = function(MapLua)		
 		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		ents.FindByName("bouton10")[1]:Fire("AddOutput", "OnPressed triggerhook:RunCode")
 	end,
 	
 	["level02_synb2_tricks_and_traps"] = function(MapLua)
-		local npc_vortigaunt = {
-			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
-		}
-		local npc_antlion = {
-			["npc_antlion"] = {xpMin = 12, xpMax = 27},
-		}
-		
-		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
-		table.Merge(RANDOM_XP_BASED_NPC, npc_antlion)
-		
-		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
+				MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		ents.FindByName("m_g1")[1]:Fire("AddOutput", "OnAllSpawnedDead triggerhook:RunCode")
 	end,
 	
 	["level03_synb2_underground"] = function(MapLua)
-		local npc_vortigaunt = {
-			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
-		}
-		local npc_antlion = {
-			["npc_antlion"] = {xpMin = 12, xpMax = 27},
-		}
-		
-		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
-		table.Merge(RANDOM_XP_BASED_NPC, npc_antlion)
-		
 		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		ents.FindByName("craps1")[1]:Fire("AddOutput", "OnDeath triggerhook:RunCode")
 		
 	end,
 	
 	["level04_synb2_across_the_darkness"] = function(MapLua)
-		local npc_vortigaunt = {
-			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
-		}
-		local npc_antlion = {
-			["npc_antlion"] = {xpMin = 12, xpMax = 27},
-		}
-		
-		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
-		table.Merge(RANDOM_XP_BASED_NPC, npc_antlion)
-		
 		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		ents.FindByClass("trigger_once")[18]:Fire("AddOutput", "OnStartTouch triggerhook:RunCode")
 	end,
@@ -514,7 +484,6 @@ local MAP_LOGIC = {
 	end,
 	
 	["level06_synb2_base"] = function(MapLua)
-		
 		local booster = ents.Create("prop_dynamic")
 		booster:SetModel("models/props_borealis/bluebarrel001.mdl")
 		booster:SetPos(Vector(59, 99, -205))
@@ -528,31 +497,14 @@ local MAP_LOGIC = {
 	end,
 	
 	["level07_synb2_scary_dark_house"] = function(MapLua)
-		
-		local npc_vortigaunt = {
-			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
-		}
-		
 		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
 		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
 		ents.FindByName("count")[1]:Fire("AddOutput", "OnHitMax triggerhook:RunCode")
 	
 	end,
 	
-	["level08_synb2_a_place_to_die"] = function(MapLua)
-		
-		local npc_vortigaunt = {
-			["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
-		}
-		local npc_antlion = {
-			["npc_antlion"] = {xpMin = 12, xpMax = 27},
-		}
-		
-		table.Merge(RANDOM_XP_BASED_NPC, npc_vortigaunt)
-		table.Merge(RANDOM_XP_BASED_NPC, npc_antlion)
-		
+	["level08_synb2_a_place_to_die"] = function(MapLua)	
 		MapLua:SetKeyValue("Code", "hook.Run('EndCoopMap')")
-		
 		ents.FindByName("ag1")[1]:Fire("AddOutput", "OnDeath triggerhook:RunCode")
 	end,
 	
@@ -752,10 +704,14 @@ local WEAPONS = {
 
 }
 
+local isCoopMap = false
+
 local function SetUpMisc()
 	local MapLua = ents.Create("lua_run")
 	MapLua:SetName("triggerhook")
 	MapLua:Spawn()
+	
+	isCoopMap = true
 	
 	for _, cl in ipairs(ents.FindByClass("trigger_changelevel")) do
 		cl:Remove()
@@ -785,43 +741,44 @@ local function SetUpMisc()
 	if MAP_LOGIC[game.GetMap()] then
 		MAP_LOGIC[game.GetMap()](MapLua)
 	end
-	
-	hook.Add("PlayerCanPickupItem", "HL2CR_COOP_ItemRespawn", function(ply, item)
-	
-		if not timer.Exists("respawn_" .. item:EntIndex()) then
+end
 
-			local class = item:GetClass()
-			local oldPos = item:GetPos()
-			timer.Create("respawn_" .. item:EntIndex(), GetConVar("hl2cr_coop_respawnrate"):GetInt(), 1, function()
-			
-				if item:IsValid() then return end
-				if not ITEMS[class] then return end
-				
-				local newItem = ents.Create(ITEMS[class])
-				newItem:SetPos(oldPos)
-				newItem:Spawn()
-				newItem:EmitSound("AlyxEMP.Discharge")
-			end)
-		end
-	end)
+function RespawnItem(ply, item)
+	if not isCoopMap then return end
 
-	hook.Add("PlayerCanPickupWeapon", "HL2CR_COOP_WeaponRespawn", function(ply, weapon)
+	local class = item:GetClass()
+	local oldPos = item:GetPos()
+	timer.Create("respawn_" .. item:EntIndex(), GetConVar("hl2cr_coop_respawnrate"):GetInt(), 1, function()
+	
+		if item:IsValid() then return end
+		if not ITEMS[class] then return end
 		
-		if not timer.Exists("respawn_" .. weapon:EntIndex()) then
-			local class = weapon:GetClass()
-			local oldPos = weapon:GetPos()
-			timer.Create("respawn_" .. weapon:EntIndex(), GetConVar("hl2cr_coop_respawnrate"):GetInt(), 1, function()
-			
-				if weapon:IsValid() then return end
-				if not WEAPONS[class] then return end
-				
-				local newItem = ents.Create(WEAPONS[class])
-				newItem:SetPos(oldPos)
-				newItem:Spawn()
-				newItem:EmitSound("AlyxEMP.Discharge")
-			end)
-		end
+		local newItem = ents.Create(ITEMS[class])
+		newItem:SetPos(oldPos)
+		newItem:Spawn()
+		newItem:EmitSound("AlyxEMP.Discharge")
 	end)
+	
+	return true
+end
+
+function RespawnWeapon(ply, weapon)
+	if not isCoopMap then return end
+	
+	local class = weapon:GetClass()
+	local oldPos = weapon:GetPos()
+	timer.Create("respawn_" .. weapon:EntIndex(), GetConVar("hl2cr_coop_respawnrate"):GetInt(), 1, function()
+
+		if weapon:IsValid() then return end
+		if not WEAPONS[class] then return end
+		
+		local newItem = ents.Create(WEAPONS[class])
+		newItem:SetPos(oldPos)
+		newItem:Spawn()
+		newItem:EmitSound("AlyxEMP.Discharge")
+	end)
+	
+	return true
 end
 
 hook.Add("ReduceSpeed", "HL2CR_NH2_ReduceSpeed", function()
