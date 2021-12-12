@@ -112,9 +112,11 @@ function SWEP:PrimaryAttack()
 			self.Owner:SetAnimation(PLAYER_ATTACK1)
 			
 			if tr.Entity.hl2cr.CurClass.Name == "Robot" and tr.Entity:Health() < tr.Entity:GetMaxHealth() then
-				tr.Entity:SetHealth(math.min(tr.Entity:GetMaxHealth(), tr.Entity:Health()+need + 15) )
+				tr.Entity:SetHealth(math.min(tr.Entity:GetMaxHealth(), tr.Entity:Health() + need + self.Owner:GetNWInt("skill_repairing") + 15) )
+				SendNotificaton(self.Owner:Nick() .. translate.Get("Repaired") .. need + self.Owner:GetNWInt("skill_repairing"), Color(45, 255, 0), tr.Entity)
 			else
-				tr.Entity:SetArmor(math.min(tr.Entity:GetMaxArmor(), tr.Entity:Armor()+need) )
+				tr.Entity:SetArmor(math.min(tr.Entity:GetMaxArmor(), tr.Entity:Armor() + need + self.Owner:GetNWInt("skill_repairing")) )
+				SendNotificaton(self.Owner:Nick() .. translate.Get("ArmorCharged") .. need + self.Owner:GetNWInt("skill_repairing"), Color(45, 255, 0), tr.Entity)
 			end
 			
 			tr.Entity:EmitSound("items/battery_pickup.wav")
@@ -124,13 +126,14 @@ function SWEP:PrimaryAttack()
 					if not v:IsPlayer() or v == tr.Entity then continue end
 					v:SetArmor(math.min(v:GetMaxArmor(), v:Armor() + self.Owner:GetNWInt("skill_grouprepair") ) )
 					AddXP(self.Owner, self.Owner:GetNWInt("skill_grouprepair") * 2 * GetConVar("hl2cr_difficulty"):GetInt())
+					SendNotificaton(self.Owner:Nick() .. translate.Get("ArmorCharged") .. need + self.Owner:GetNWInt("skill_repairing"), Color(45, 255, 0), v)
 				end
 			end
 			
-			AddXP(self.Owner, need + self.Owner:GetNWInt("skill_repairing") * 2 * GetConVar("hl2cr_difficulty"):GetInt())
+			AddXP(self.Owner, need + self.Owner:GetNWInt("skill_repairing") * (10 * GetConVar("hl2cr_difficulty"):GetInt()))
 			
 			net.Start("HL2CR_SpawnIndicators")
-				net.WriteInt((need + self.Owner:GetNWInt("skill_repairing")) * 2, 32)
+				net.WriteInt((need + self.Owner:GetNWInt("skill_repairing")) * (10 * GetConVar("hl2cr_difficulty"):GetInt()), 32)
 				net.WriteVector(tr.Entity:GetPos())
 				net.WriteBool(false)
 			net.Send(self.Owner)
@@ -144,7 +147,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-
+	return false
 end
 
 function SWEP:Holster()

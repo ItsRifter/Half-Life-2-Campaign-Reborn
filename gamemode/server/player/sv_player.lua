@@ -94,6 +94,8 @@ hook.Add("DoPlayerDeath", "HL2CR_RevivalStone", function(ply, att, dmgInfo )
 	
 	ply:SetNWEntity("hl2cr_grave", gravestone)
 	
+	gravestone:PhysicsDestroy()
+	
 	--[[
 	models/props_combine/stasisshield_sheet
 	models/props_combine/com_shield001a
@@ -103,7 +105,7 @@ hook.Add("DoPlayerDeath", "HL2CR_RevivalStone", function(ply, att, dmgInfo )
 	
 	if GetConVar("hl2cr_survival"):GetInt() == 0 then return end
 	
-	if #team.GetPlayers(1) <= 0 and #team.GetPlayers(2) <= 0 then
+	if #team.GetPlayers(1) <= 1 and #team.GetPlayers(2) <= 0 then
 		FailedMap()
 	end
 	
@@ -142,9 +144,7 @@ hook.Add("PostPlayerDeath", "HL2CR_HandlePlayerDeath", function(victim)
 		victim.waitForRespawn = CurTime() + GetConVar("hl2cr_difficulty"):GetInt() * 10
 	end
 	
-	
 	victim.waitDeath = CurTime() + 5
-	
 end)
 
 
@@ -217,16 +217,20 @@ function SetUpPlayerArmorStats(ply)
 		ply.totalArmorRes = ply.totalArmorRes + 4
 	elseif ply.hl2cr.CurClass.Name == "Supplier" then
 		ply.totalArmorRes = ply.totalArmorRes - 3
+	elseif ply.hl2cr.CurClass.Name == "Rocketeer" then
+		ply.totalArmorRes = ply.totalArmorRes - 5
 	end
 	
 	for i, armor in pairs(ply.hl2cr.Inventory.ArmorSlots) do
 		if APPLY_ARMOR_RESIST_POINTS[armor] then
-			ply.totalArmorRes = math.Round(ply.totalArmorRes + APPLY_ARMOR_RESIST_POINTS[armor], 2)
+			ply.totalArmorRes = math.Round(ply.totalArmorRes + APPLY_ARMOR_RESIST_POINTS[armor], 1)
 		end
 	end
 	
-	ply:SetNWInt("stat_armorpoints", ply.totalArmorRes)
+	ply:SetNWInt("stat_armorpoints", math.Round(ply.totalArmorRes))
 end
+
+local jetPlayer = nil
 
 function SetUpPlayerStats(ply)
 	
@@ -243,6 +247,7 @@ function SetUpPlayerStats(ply)
 	local resupplyGroup = 0
 	local ammoStock = 1
 	local biggerStock = 1
+	local jetFuel = 0
 	
 	if ply.hl2cr.CurClass.Name == "Field Medic" then
 		newMaxHP = newMaxHP + 25
@@ -250,6 +255,11 @@ function SetUpPlayerStats(ply)
 	elseif ply.hl2cr.CurClass.Name == "Repairman" then
 		newMaxHP = newMaxHP - 20
 		ArmorCount = ArmorCount + 25
+	elseif ply.hl2cr.CurClass.Name == "Rocketeer" then
+		newMaxHP = newMaxHP - 35
+		jetFuel = 10
+		ply.jetThrust = jetFuel
+		jetPlayer = ply
 	end
 	
 	for k, skill in pairs(ply.hl2cr.Skills) do
@@ -284,6 +294,12 @@ function SetUpPlayerStats(ply)
 		if skill.Name == "Recharge" and ply.hl2cr.Skills[k].Invested then
 			for i = 1, ply.hl2cr.Skills[k].Invested do 
 				repairRecharge = repairRecharge + 5
+			end
+		end
+		
+		if skill.Name == "Effective Charge" and ply.hl2cr.Skills[k].Invested then
+			for i = 1, ply.hl2cr.Skills[k].Invested do 
+				repairing = repairing + 5
 			end
 		end
 		
@@ -374,6 +390,29 @@ function SetUpPlayerStats(ply)
 	ply:SetHealth(100 + newMaxHP)
 	ply:SetMaxArmor(100 + ArmorCount)
 end
+
+function GetThrust(ply)
+	return ply.jetThrust
+end
+
+function SetThrust(ply, newThrust)
+	ply.jetThrust = newThrust
+end
+
+hook.Add("Think", "HL2CR_JetpackThink", function()
+	if not jetPlayer then return end
+	
+	if ( IsValid(jetPlayer) and jetPlayer:IsPlayer() ) then
+		if (jetPlayer:KeyDown(IN_JUMP) and jetPlayer:WaterLevel() == 0) and GetThrust(jetPlayer) > 0 then
+			SetThrust(jetPlayer, math.Clamp(GetThrust(jetPlayer) - 1.5, 0, 75) )
+			jetPlayer:SetVelocity( jetPlayer:GetAimVector() * ( (GetThrust(jetPlayer) / 100) ) + Vector(0, 0, GetThrust(jetPlayer) * 0.15) )
+			jetPlayer:EmitSound("ambient/gas/cannister_loop.wav", 100, GetThrust(jetPlayer) - 10, 0.45)
+		else
+			jetPlayer:StopSound( "ambient/gas/cannister_loop.wav" )
+			SetThrust(jetPlayer, math.Clamp(GetThrust(jetPlayer) + 2.5, 0, 100) )
+		end
+	end
+end)
 
 --Player spawning
 hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
@@ -475,7 +514,7 @@ end
 --Bullet Ignoring player code collision so players can't block bullets
 hook.Add("EntityFireBullets", "HL2CR_NoBulletPlayer", function(ent, data)
 	if ent:IsNPC() then return true end 
-	
+
 	if ent:IsPlayer() then
 		local tr = util.TraceHull( {
 			start = ent:GetShootPos(),
@@ -487,8 +526,8 @@ hook.Add("EntityFireBullets", "HL2CR_NoBulletPlayer", function(ent, data)
 		if tr.Entity:IsPlayer() then
 			data.IgnoreEntity = tr.Entity
 		end
-		
 	end
+	
 	return true
 end)
 
@@ -662,7 +701,7 @@ hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
 	end
 	
 	if (item:GetClass() == "item_ammo_357" or item:GetClass() == "item_ammo_357_large" or item:GetClass() == "weapon_357") and ply:GetAmmoCount("357") >= GetConVar("hl2cr_max_357"):GetInt() * ply.hl2cr.MaxAmmoStock then
-		ply:RemoveAmmo( ply:GetAmmoCount("357") -GetConVar("hl2cr_max_357"):GetInt() * p.hl2cr.MaxAmmoStock, "357" )
+		ply:RemoveAmmo( ply:GetAmmoCount("357") -GetConVar("hl2cr_max_357"):GetInt() * ply.hl2cr.MaxAmmoStock, "357" )
 		return false
 	end
 	
@@ -831,7 +870,7 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 	
 	if player and not inflictor:IsPet() then
 	
-		if not RANDOM_XP_BASED_NPC[npc:GetClass()] then return end
+		if not RANDOM_XP_BASED_NPC[npc:GetClass()] or not npc.level then return end
 		
 		local totalXP = CalculateXP(player, math.random(RANDOM_XP_BASED_NPC[npc:GetClass()].xpMin * npc.level, RANDOM_XP_BASED_NPC[npc:GetClass()].xpMax * npc.level))
 		
@@ -914,25 +953,15 @@ local PROJ_IGNORE = {
 }
 
 hook.Add("ShouldCollide", "HL2CR_IgnoreCollisions", function( ent, other )
-	if ent:IsPlayer() and other:IsPet() then
-		return false
-	end
 	
 	if ent:IsPlayer() and PROJ_IGNORE[other:GetClass()] then
-		return false
-	end
-	
-	if ent:IsPlayer() and other:IsPet() then
-		return false
-	end
-	
-	if ent:IsPlayer() and other.player then
 		return false
 	end
 	
 	if ent:IsPlayer() and other:IsNPC() and (other:IsFriendly() or other:GetClass() == "npc_citizen") then
 		return false
 	end
+	
 	return true
 end)
 
@@ -952,13 +981,13 @@ hook.Add("EntityTakeDamage", "HL2CR_SlashDMGBuff", function( target, dmgInfo )
 	local att = dmgInfo:GetAttacker()
 	local dmgType = dmgInfo:GetDamageType()
 	
-	if att:IsPlayer() and target:IsPlayer() then
-		target:SetArmor(target:Armor() - 1)
-	end
-	
-	if (target:IsPlayer() or target:IsPet()) and att:IsNPC() then
+	if target:IsPlayer() and att:IsNPC() then
 		if dmgType == DMG_SLASH and (att:GetClass() ~= "npc_headcrab_black" or att:GetClass() ~= "npc_headcrab_poison") then
-			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * 1.25)
+			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * math.random(0.75, 1.25))
+		end
+		
+		if dmgType == DMG_SHOCK and att:GetClass() == "npc_vortigaunt" then
+			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * math.random(0.15, 1))
 		end
 	end
 end)
@@ -1006,6 +1035,20 @@ function BroadcastSound(soundPath, player)
 	else
 		net.Start("HL2CR_MsgSound")
 			net.WriteString(soundPath)
+		net.Send(player)
+	end
+end
+
+function SendNotificaton(message, msgColor, player)
+	if player == nil then
+		net.Start("HL2CR_Notify")
+			net.WriteString(message)
+			net.WriteColor(msgColor)
+		net.Broadcast()
+	else
+		net.Start("HL2CR_Notify")
+			net.WriteString(message)
+			net.WriteColor(msgColor)
 		net.Send(player)
 	end
 end

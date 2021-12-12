@@ -83,6 +83,8 @@ include("shared/sh_translate.lua")
 include("shared/petskills/sh_pets_headcrab_skills.lua")
 include("shared/petskills/sh_pets_fastheadcrab_skills.lua")
 
+include("shared/petskills/sh_pets_torsozombie_skills.lua")
+
 --Networks
 util.AddNetworkString("HL2CR_HelpMenu")
 util.AddNetworkString("HL2CR_SettingsMenu")
@@ -112,6 +114,7 @@ util.AddNetworkString("HL2CR_SelectClass")
 util.AddNetworkString("HL2CR_SkillObtain")
 util.AddNetworkString("HL2CR_ObtainItem")
 util.AddNetworkString("HL2CR_Message")
+util.AddNetworkString("HL2CR_Notify")
 util.AddNetworkString("HL2CR_HelpNotify")
 util.AddNetworkString("HL2CR_OpenAchs")
 util.AddNetworkString("HL2CR_MsgSound")

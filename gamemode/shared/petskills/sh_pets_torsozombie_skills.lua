@@ -2,71 +2,86 @@ AddCSLuaFile()
 --[[ SKILL TEMPLATES
 	local health = CreatePetSkill("Health Boost", 
 		"Your pet can live\nfor longer", 
-		"npc_hl2cr_pet_headcrab", nil, 
+		"npc_vj_hl2cr_torsozombie", nil, 
 		"materials/hl2cr/skill_pet_health.jpg", 
-		50, 100
+		0, 0
 	)
 
 	local dmg = CreatePetSkill("Strength Buff", 
 		"Your pet deals more\ndamage to opponents", 
-		"npc_hl2cr_pet_headcrab", nil, 
+		"npc_vj_hl2cr_torsozombie", nil, 
 		"materials/hl2cr/skill_pet_dmg.jpg", 
-		250, 100
+		0, 0
 	)
 
 	local speed = CreatePetSkill("Agility Increase", 
 		"Your pet can move\nand attack faster", 
-		"npc_hl2cr_pet_headcrab", nil, 
+		"npc_vj_hl2cr_torsozombie", nil, 
 		"materials/hl2cr/skill_pet_speed.jpg", 
-		350, 100
+		0, 0
 	)
 
 	local genEvo = CreatePetSkill("Genetic Evolution", 
 		"Mutate your pet into\nsomething better", 
-		"npc_hl2cr_pet_headcrab", nil, 
+		"npc_vj_hl2cr_torsozombie", nil, 
 		"materials/hl2cr/skill_pet_genetics.jpg", 
-		550, 100
+		0, 0
 	)
 --]]
 
-local speed_1 = CreatePetSkill("Agility Increase", 
-	"Your pet can move\nand attack faster", 
-	"npc_vj_hl2cr_fastheadcrab", nil, 
-	"materials/hl2cr/skill_pet_speed.jpg", 
+local dmg_1 = CreatePetSkill("Strength Buff", 
+	"Your pet deals more\ndamage to opponents", 
+	"npc_vj_hl2cr_torsozombie", nil, 
+	"materials/hl2cr/skill_pet_dmg.jpg", 
 	50, 100
 )
 
-local speed_2 = CreatePetSkill("Agility Increase II", 
-	"Your pet can move\nand attack faster", 
-	"npc_vj_hl2cr_fastheadcrab", "Agility Increase", 
-	"materials/hl2cr/skill_pet_speed.jpg", 
+local dmg_2 = CreatePetSkill("Strength Buff II", 
+	"Your pet deals more\ndamage to opponents", 
+	"npc_vj_hl2cr_torsozombie", "Strength Buff", 
+	"materials/hl2cr/skill_pet_dmg.jpg", 
 	125, 100
+)
+
+local speed = CreatePetSkill("Agility Increase", 
+	"Your pet can move\nand attack faster", 
+	"npc_vj_hl2cr_torsozombie", "Strength Buff II", 
+	"materials/hl2cr/skill_pet_speed.jpg", 
+	200, 100
 )
 
 local health_1 = CreatePetSkill("Health Boost", 
 	"Your pet can live\nfor longer", 
-	"npc_vj_hl2cr_fastheadcrab", "Agility Increase II", 
+	"npc_vj_hl2cr_torsozombie", "Agility Increase", 
 	"materials/hl2cr/skill_pet_health.jpg", 
-	200, 100
+	275, 100
 )
 
-local dmg_1 = CreatePetSkill("Strength Buff", 
+
+local dmg_3 = CreatePetSkill("Strength Buff III", 
 	"Your pet deals more\ndamage to opponents", 
-	"npc_vj_hl2cr_fastheadcrab", "Health Boost", 
+	"npc_vj_hl2cr_torsozombie", "Health Boost", 
 	"materials/hl2cr/skill_pet_dmg.jpg", 
-	275, 100
+	350, 100
 )
 
 local health_2 = CreatePetSkill("Health Boost II", 
 	"Your pet can live\nfor longer", 
-	"npc_vj_hl2cr_fastheadcrab", "Strength Buff", 
+	"npc_vj_hl2cr_torsozombie", "Strength Buff III", 
 	"materials/hl2cr/skill_pet_health.jpg", 
-	350, 100
+	425, 100
+)
+
+local health_3 = CreatePetSkill("Health Boost III", 
+	"Your pet can live\nfor longer", 
+	"npc_vj_hl2cr_torsozombie", "Health Boost II", 
+	"materials/hl2cr/skill_pet_health.jpg", 
+	500, 100
 )
 
 local genEvo = CreatePetSkill("Genetic Evolution", 
 	"Mutate your pet into\nsomething better", 
-	"npc_vj_hl2cr_fastheadcrab", "Health Boost II", 
+	"npc_vj_hl2cr_torsozombie", "Health Boost III", 
 	"materials/hl2cr/skill_pet_genetics.jpg", 
-	425, 100
+	575, 100
 )

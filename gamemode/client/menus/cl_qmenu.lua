@@ -116,120 +116,120 @@ local CONVERT_NAME_TRANSLATION = {
 	end,
 
 	["Exosuit_Boots"] = function()
-		return translate.Get("SuitPower")
+		return translate.Get("Exosuit_Boots")
 	end,
 	["Longfall_Boots"] = function()
-		return translate.Get("SuitPower")
+		return translate.Get("Longfall_Boots")
 	end,
 	["Metal_Boots"] = function()
-		return translate.Get("SuitPower")
+		return translate.Get("Metal_Boots")
 	end,
 	["Exosuit_Vest"] = function()
-		return translate.Get("SuitPower")
+		return translate.Get("Exosuit_Vest")
 	end,
 	["Heavy_Vest"] = function()
-		return translate.Get("SuitPower")
+		return translate.Get("Heavy_Vest")
 	end,
 	["Light_Vest"] = function()
-		return translate.Get("SuitPower")
+		return translate.Get("Light_Vest")
 	end,
 	["HECU_Helm"] = function()
-		return translate.Get("SuitPower")
+		return translate.Get("HECU_Helm")
 	end,
 	["Robo_Helm"] = function()
-		return translate.Get("SuitPower")
+		return translate.Get("Robo_Helm")
 	end,
 	["Exosuit_Shoulders"] = function()
-		return translate.Get("SuitPower")
+		return translate.Get("Exosuit_Shoulders")
 	end,
 }
 
 local CONVERT_DESC_TRANSLATION = {
 	["Flare_Gun"] = function()
-		return translate.Get("Flare_Gun_desc")
+		return translate.Get("Flare_Gun_Desc")
 	end,
 	
 	["Automatic_Pistol"] = function()
-		return translate.Get("Automatic_Pistol_desc")
+		return translate.Get("Automatic_Pistol_Desc")
 	end,
 	
 	["Shredding_Assault_Rifle"] = function()
-		return translate.Get("Shredding_Assault_Rifle_desc")
+		return translate.Get("Shredding_Assault_Rifle_Desc")
 	end,
 	
 	["Multi_Grenade_Launcher"] = function()
-		return translate.Get("Multi_Grenade_Launcher_desc")
+		return translate.Get("Multi_Grenade_Launcher_Desc")
 	end,
 	
 	["Unstable_Electric_Shotgun"] = function()
-		return translate.Get("Unstable_Electric_Shotgun_desc")
+		return translate.Get("Unstable_Electric_Shotgun_Desc")
 	end,
 	
 	["The_Nailer_Gun"] = function()
-		return translate.Get("The_Nailer_Gun_desc")
+		return translate.Get("The_Nailer_Gun_Desc")
 	end,
 	
 	["BMG_Heavy_Sniper"] = function()
-		return translate.Get("BMG_Heavy_Sniper_desc")
+		return translate.Get("BMG_Heavy_Sniper_Desc")
 	end,
 	
 	["Test"] = function()
-		return translate.Get("Flare_Gun_desc")
+		return translate.Get("Flare_Gun_Desc")
 	end,
 
 	["Suit_PWR_Boost"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("SuitPower_Desc")
 	end,
 
 	["Exosuit_Boots"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("Exosuit_Boots_Desc")
 	end,
 	
 	["Longfall_Boots"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("Longfall_Boots_Desc")
 	end,
 	
 	["Metal_Boots"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("Metal_Boots_Desc")
 	end,
 	["Exosuit_Vest"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("Exosuit_Vest_Desc")
 	end,
 	
 	["Heavy_Vest"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("Heavy_Vest_Desc")
 	end,
 	
 	["Light_Vest"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("Light_Vest_Desc")
 	end,
 	
 	["HECU_Helm"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("HECU_Helm_Desc")
 	end,
 	
 	["Robo_Helm"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("Robo_Helm_Desc")
 	end,
 	
 	["Exosuit_Shoulders"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("Exosuit_Shoulders_Desc")
 	end,
 	
 	["Test_Mat_1"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("Test_Mat_1_Desc")
 	end,
 	
 	["Test_Mat_2"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("SuitPower_Desc")
 	end,
 	
 	["Test_Mat_3"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("SuitPower_Desc")
 	end,
 	
 	["Test_Result"] = function()
-		return translate.Get("SuitPower_desc")
+		return translate.Get("SuitPower_Desc")
 	end,
 }
 
@@ -666,7 +666,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		end
 			
 		local skillsPnl = vgui.Create("DPanel", qMenuTabs)
-		skillsPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
+		skillsPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall() / 1.5)
 		skillsPnl:SetPos(0, 100)
 		
 		local skillsPnlBG = vgui.Create("DPanel", skillsPnl)
@@ -692,6 +692,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		
 		local passiveSkillsLayout = vgui.Create("DIconLayout", skillHorizontalScroll)
 		passiveSkillsLayout:Dock(FILL)
+		passiveSkillsLayout:SetSpaceX(20)
 		
 		local medicSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		medicSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.60, skillsSelectionPnl:GetTall())
@@ -702,6 +703,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		
 		local medicSkillsLayout = vgui.Create("DIconLayout", medicHorizontalScroll)
 		medicSkillsLayout:Dock(FILL)
+		medicSkillsLayout:SetSpaceX(20)
 		
 		local repairSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		repairSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
@@ -712,6 +714,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		
 		local repairSkillsLayout = vgui.Create("DIconLayout", repairHorizontalScroll)
 		repairSkillsLayout:Dock(FILL)
+		repairSkillsLayout:SetSpaceX(20)
 		
 		local supplierSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		supplierSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
@@ -722,6 +725,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		
 		local supplierSkillsLayout = vgui.Create("DIconLayout", supplierHorizontalScroll)
 		supplierSkillsLayout:Dock(FILL)
+		supplierSkillsLayout:SetSpaceX(20)
 		
 		local robotSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		robotSkillsPnl:SetSize(skillsSelectionPnl:GetWide() * 1.6, skillsSelectionPnl:GetTall())
@@ -732,6 +736,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		
 		local robotSkillsLayout = vgui.Create("DIconLayout", robotHorizontalScroll)
 		robotSkillsLayout:Dock(FILL)
+		robotSkillsLayout:SetSpaceX(20)
 		
 		local mechSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
 		mechSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
@@ -742,6 +747,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		
 		local mechSkillsLayout = vgui.Create("DIconLayout", mechHorizontalScroll)
 		mechSkillsLayout:Dock(FILL)
+		mechSkillsLayout:SetSpaceX(20)
 
 		local skillPoints = LocalPlayer():GetNWInt("stat_skillpoints")
 		
@@ -751,50 +757,45 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			
 			if skill.Class == "Passive" then
 				statusPnl = vgui.Create("DPanel", passiveSkillsLayout)
-				statusPnl:SetSize(passiveSkillsPnl:GetWide() / 6, passiveSkillsPnl:GetTall())
 				
 			elseif skill.Class == "Medic" then
 				statusPnl = vgui.Create("DPanel", medicSkillsLayout)
-				statusPnl:SetSize(medicSkillsPnl:GetWide() / 8, medicSkillsPnl:GetTall())
 				
 			elseif skill.Class == "Repair" then
 				statusPnl = vgui.Create("DPanel", repairSkillsLayout)
-				statusPnl:SetSize(repairSkillsPnl:GetWide() / 8, repairSkillsPnl:GetTall())
 				
 			elseif skill.Class == "Supplier" then
 				statusPnl = vgui.Create("DPanel", supplierSkillsLayout)
-				statusPnl:SetSize(supplierSkillsPnl:GetWide() / 8, supplierSkillsPnl:GetTall())
 				
 			elseif skill.Class == "Mechanic" then
 				statusPnl = vgui.Create("DPanel", mechSkillsLayout)
-				statusPnl:SetSize(mechSkillsPnl:GetWide() / 8, mechSkillsPnl:GetTall())
 				
 			elseif skill.Class == "Robot" then
 				statusPnl = vgui.Create("DPanel", robotSkillsLayout)
-				statusPnl:SetSize(robotSkillsPnl:GetWide() / 8, robotSkillsPnl:GetTall())
 				
 			end
+			statusPnl:SetSize(250, 150)
 			
 			local skillPnlShowcase = vgui.Create("DLabel", statusPnl)
 			skillPnlShowcase:SetText(skill.Name)
 			skillPnlShowcase:SetFont("HL2CR_Class_TitleFont")
-			skillPnlShowcase:SetPos(75, 25)
+			skillPnlShowcase:SetPos(0, 5)
 			skillPnlShowcase:SizeToContents()
 			skillPnlShowcase:SetTextColor(Color(0, 0, 0, 255))
 			
 			local skillPnlDesc = vgui.Create("DLabel", statusPnl)
 			skillPnlDesc:SetText(skill.Desc)
-			skillPnlDesc:SetPos(75, 62.5)
+			skillPnlDesc:SetPos(0, 30)
 			skillPnlDesc:SetFont("HL2CR_Class_DescFont")
 			skillPnlDesc:SizeToContents()
 			skillPnlDesc:SetTextColor(Color(0, 0, 0, 255))
-			
+						
 			local skillPnlLevel = vgui.Create("DLabel", statusPnl)
-			skillPnlLevel:SetPos(100, 125)
 			skillPnlLevel:SetFont("HL2CR_Skill_Level")
-			skillPnlLevel:SizeToContents()
+			skillPnlLevel:SetPos(0, 100)
 			skillPnlLevel:SetTextColor(Color(0, 0, 0, 255))
 			skillPnlLevel:SetText("0/" .. skill.Max)
+			
 			
 			if skillsTbl[i] and skillsTbl[i].Invested < skill.Max then
 				skillPnlLevel:SetText( (skillsTbl[i].Invested ) .. "/" .. skill.Max)
@@ -803,13 +804,25 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			end
 			skillPnlLevel:SizeToContents()
 			
-			statusPnl.Paint = function() return end
+			statusPnl.Paint = function(self, w, h) 
+				surface.SetDrawColor(HL2CR.Theme.qMenuSkills)
+				surface.DrawRect(0, 0, w, h)
+			end
 			
 			skillBtn = vgui.Create("DImageButton", statusPnl)
-			skillBtn:SetSize(92, 92)
-			skillBtn:SetPos(75, statusPnl:GetWide() * 0.85)
+			skillBtn:SetSize(76, 76)
+			skillBtn:SetPos(175, 75)
 		
 			if LocalPlayer():GetNWInt("stat_level") < skill.LevelReq then
+				skillPnlLevel:SetText("")
+				
+				local skillReq = vgui.Create("DLabel", statusPnl)
+				skillReq:SetFont("HL2CR_Skill_Levellocked")
+				skillReq:SetPos(0, 125)
+				skillReq:SetTextColor(Color(0, 0, 0, 255))
+				skillReq:SetText("Level Required: " .. skill.LevelReq)
+				skillReq:SizeToContents()
+				
 				skillBtn:SetImage("materials/hl2cr/locked.jpg")
 				continue
 			end

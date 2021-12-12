@@ -32,7 +32,7 @@ local function SetCheckpoints()
 		}
 	
 		CHECKPOINT_POS = {
-			Vector(945, 910, -1555),		Vector(4934, 5940, -1632),
+			Vector(945, 910, -1555),		Vector(4945, 5716, -1471),
 			Vector(-2522, 1505, -117),		Vector(-4691, 4867, -812),
 			Vector(-4022, 1189, -114)
 		}
@@ -712,6 +712,12 @@ local function SetUpMisc()
 	MapLua:Spawn()
 	
 	isCoopMap = true
+	
+	local npc_vortigaunt = {
+		["npc_vortigaunt"] = true
+	}
+	
+	table.Merge(HOSTILE_NPCS, npc_vortigaunt)
 	
 	for _, cl in ipairs(ents.FindByClass("trigger_changelevel")) do
 		cl:Remove()

@@ -217,6 +217,21 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		return ""
 	end
 	
+	if text == "!diff" then
+		local CHECK_DIFF_SETTING = {
+			["Colour"] = Color(50, 215, 50),
+			["Message"] = "CHECK_DIFF_SETTING",
+			["Other"] = {
+				["Player"] = "",
+				["Time"] = "",
+				["CurCompleted"] = "CHECK_DIFF_SETTING_" .. GetConVar("hl2cr_difficulty"):GetInt()
+			}
+		}
+	
+		BroadcastMessage(CHECK_DIFF_SETTING, ply)
+		return ""
+	end
+	
 	if string.find(text, "!diff ") then
 		local diffVote = string.sub(text, 7)
 	
@@ -460,18 +475,11 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 			return ""
 		end	
 		
-		if not ply.pet.teleport then
-			ply.pet.teleport = true
-			ply.pet:SetPos(ply:GetPos())
-			ply.pet:SetAngles(ply:GetAngles())
-			timer.Create("hl2cr_petbringcool_" .. ply:Nick(), 6, 1, function()
-				ply.pet.teleport = false
-			end)
-		else
-			BroadcastMessage(ERROR_PET_BRINGING, ply)
-			return ""
-		end
-		
+		ply.pet.teleport = true
+		ply.pet:SetPos(ply:GetPos())
+		ply.pet:SetAngles(ply:GetAngles())
+		ply.bringCooldown = CurTime() + 6
+	
 		return ""
 	end
 	
@@ -584,17 +592,10 @@ concommand.Add("hl2cr_petbring", function(ply, cmd, args)
 		return
 	end
 	
-	if not ply.pet.teleport then
-		ply.pet.teleport = true
-		ply.pet:SetPos(ply:GetPos())
-		ply.pet:SetAngles(ply:GetAngles())
-		timer.Create("hl2cr_petbringcool_" .. ply:Nick(), 6, 1, function()
-			ply.pet.teleport = false
-		end)
-	else
-		BroadcastMessage(ERROR_PET_BRINGING, ply)
-		return
-	end
+	ply.pet:SetPos(ply:GetPos())
+	ply.pet:SetAngles(ply:GetAngles())
+	ply.bringCooldown = CurTime() + 6
+
 	
 end)
 

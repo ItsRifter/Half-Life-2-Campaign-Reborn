@@ -165,9 +165,11 @@ function SWEP:PrimaryAttack()
 					self.Owner.rewards.bonus["Teamplayer"] = true
 				end
 			else
+				self.Owner:LagCompensation( false )
 				return
 			end
 		else
+			self.Owner:LagCompensation( false )
 			return
 		end
 			

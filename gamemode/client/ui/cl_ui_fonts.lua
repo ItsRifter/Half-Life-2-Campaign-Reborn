@@ -16,6 +16,25 @@ surface.CreateFont( "HL2CR_Title", {
 	outline = false,
 } )
 
+surface.CreateFont( "HL2CR_Notification", {
+	font = "Roboto",
+	extended = false,
+	size = 32,
+	weight = 750,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = true,
+} )
+
+
 surface.CreateFont( "HL2CR_ButtonText", {
 	font = "Tahoma",
 	extended = false,
@@ -361,8 +380,8 @@ surface.CreateFont( "HL2CR_Class_TitleFont", {
 surface.CreateFont( "HL2CR_Class_DescFont", {
 	font = "Arial",
 	extended = false,
-	size = 18,
-	weight = 500,
+	size = 20,
+	weight = 350,
 	blursize = 0,
 	scanlines = 0,
 	antialias = true,
@@ -397,7 +416,25 @@ surface.CreateFont( "HL2CR_Quest_Description", {
 surface.CreateFont( "HL2CR_Skill_Level", {
 	font = "Arial",
 	extended = false,
-	size = 26,
+	size = 48,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
+
+surface.CreateFont( "HL2CR_Skill_Levellocked", {
+	font = "Arial",
+	extended = false,
+	size = 22,
 	weight = 500,
 	blursize = 0,
 	scanlines = 0,

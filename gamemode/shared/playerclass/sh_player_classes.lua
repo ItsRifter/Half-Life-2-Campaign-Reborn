@@ -50,13 +50,15 @@ local fieldMedic = CreateClass("Field Medic", "A field medic here to help\nthe i
 
 local repairMan = CreateClass("Repairman", "A repair-man who can restore\nlost armor points", "EQUIPMENT:\nArmorKit", "STRENGTHS:\n25 Armor Capacity Increase\nWEAKNESSES:\n20 Health Decrease", 5, "materials/hl2cr/class_repairman.jpg", repairWeps)
 
-local supplier = CreateClass("Supplier", "An ammo supplier that gives\nammo for the\ncurrent active weapon", "EQUIPMENT:\nAmmo Box", "WEAKNESSES:\nYou are less resilient to damage", 5, "materials/hl2cr/class_supporter.jpg",supplierWeps)
+local supplier = CreateClass("Supplier", "An ammo supplier that gives\nammo for the\ncurrent active weapon", "EQUIPMENT:\nAmmo Box", "WEAKNESSES:\nLess resilient to damage", 5, "materials/hl2cr/class_supporter.jpg",supplierWeps)
 
 local mechanic = CreateClass("Mechanic", "A mechanic filled with\ndesigns ideas\nincluding his weapon of choice", "EQUIPMENT:\nElectric Chain-Blade", "WEAKNESSES:", 10,"materials/hl2cr/class_mechanic.jpg", mechanicWeps)
 
 local grenadier = CreateClass("Grenadier", "Become more effective with\ngrenades", "EQUIPMENT:\nPack of grenades\nGrenade Belt", "WEAKNESSES:", 10, "materials/hl2cr/class_grenadier.jpg", grenadierWeps)
 
 local dropout = CreateClass("Combine Dropout", "After rethinking their\ncareer choices\nit was time to dropout\nand help the resistance", "EQUIPMENT:\nMan-Hack\nStunstick", "WEAKNESSES:", 10, "materials/hl2cr/class_dropout.jpg", dropoutWeps)
+
+local rocketeer = CreateClass("Rocketeer", "A jetpack rebel that\ncan reach the unreachable", "EQUIPMENT:\nJetpack", "WEAKNESSES:\n35 Health Decrease\nLess resilient to damage", 20, "materials/hl2cr/class_rocketeer.jpg", nil)
 
 local robot = CreateClass("Robot", "Created by the resistance\ncares nothing else\nbut the humans", "EQUIPMENT:\nNONE", "STRENGTHS:\nMore resililent to damage\nWEAKNESSES:\nMedkits are ineffective\nCannot be revived", 20, "materials/hl2cr/class_robot.jpg", nil)
 

@@ -35,6 +35,8 @@ HOSTILE_NPCS = {
 	["npc_antlionguardian"] = true,
 	["npc_barnacle"] = true,
 	["npc_turret_ground"] = true,
+	["sent_controllable_manhack"] = true,
+	["sent_controllable_drone"] = true
 }
 
 function meta:IsFriendly()
@@ -96,9 +98,8 @@ end
 hook.Add("EntityTakeDamage", "HL2CR_PlayerToNPCDmgMisc", function(ent, dmgInfo)
 	local dmg = dmgInfo:GetDamage()
 	local att = dmgInfo:GetAttacker()
-	if not ent:IsValid() then return end
 	
-	if att:IsPlayer() then 
+	if att:IsPlayer() and ent:IsValid() then 
 		if att:GetActiveWeapon():GetClass() == "weapon_stunstick" and not (ent:IsFriendly() or ent:GetClass() == "npc_citizen") then
 			if att.hl2cr.StunDamage and not ent:IsPlayer() then
 				local totalStun = dmg + att.hl2cr.StunDamage
@@ -111,9 +112,18 @@ end)
 hook.Add("EntityTakeDamage", "HL2CR_FriendlyOrHostile", function(ent, dmgInfo)
 	local att = dmgInfo:GetAttacker()
 	
-	if (ent:IsFriendly() or ent:IsPet()) or (ent:GetClass() == "npc_citizen" and att:IsPlayer()) then
+	if att:IsPlayer() and ent:IsPlayer() then
 		dmgInfo:SetDamage(0)
 		return
+	end
+	
+	if (ent:IsFriendly() or ent:IsPet() or ent:GetClass() == "npc_citizen") and att:IsPlayer() then
+		dmgInfo:SetDamage(0)
+		return
+	end
+	
+	if (ent:IsPet() and ent:GetOwner()) and att:IsHostile() then
+		ent:GetOwner():SetNWInt("pet_health", ent:Health())
 	end
 	
 	if ent:GetClass() == "npc_citizen" and att:GetClass() == "prop_vehicle_jeep" then

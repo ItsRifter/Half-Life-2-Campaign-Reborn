@@ -12,7 +12,7 @@ function CreateShopItem(name, desc, cost, icon, typeItem)
 		["Type"] = typeItem
 	}
 	
-	return item
+	table.insert(GM.ShopItems, item)
 end
 
 local flaregun = CreateShopItem("Flare_Gun", "Used for emergencies...\nso it was", 7500, "materials/hl2cr/weapon_flaregun.jpg", "Weapon")
@@ -38,34 +38,6 @@ local exo_boots = CreateShopItem("Exosuit_Boots", "Part of an Exosuit\nRESIST: 0
 local test_mat1 = CreateShopItem("Test_Mat_1", "Test Item\nYou shouldn't be buying this", 1, "materials/hl2cr/mat_iron.jpg", "Material")
 local test_mat2 = CreateShopItem("Test_Mat_2", "Test Item\nYou shouldn't be buying this", 1, "materials/hl2cr/mat_scrap.jpg", "Material")
 local test_mat3 = CreateShopItem("Test_Mat_3", "Test Item\nYou shouldn't be buying this", 1, "materials/hl2cr/mat_morphine.jpg", "Material")
-
---Weapons
-table.insert(GM.ShopItems, flaregun)
-table.insert(GM.ShopItems, automatic_pistol)
-table.insert(GM.ShopItems, grenade_launcher)
-table.insert(GM.ShopItems, shred_ar)
-table.insert(GM.ShopItems, nailer)
-table.insert(GM.ShopItems, unstable_shotgun)
-table.insert(GM.ShopItems, heavy_sniper)
-
---Items
-table.insert(GM.ShopItems, suit_buff)
-
---Armor
-table.insert(GM.ShopItems, exo_boots)
-table.insert(GM.ShopItems, long_boots)
-table.insert(GM.ShopItems, metal_boots)
-table.insert(GM.ShopItems, exo_vest)
-table.insert(GM.ShopItems, hvy_vest)
-table.insert(GM.ShopItems, lgt_vest)
-table.insert(GM.ShopItems, hecu_helm)
-table.insert(GM.ShopItems, robo_helm)
-table.insert(GM.ShopItems, exo_pads)
-
---Materials
-table.insert(GM.ShopItems, test_mat1)
-table.insert(GM.ShopItems, test_mat2)
-table.insert(GM.ShopItems, test_mat3)
 
 if SERVER then
 	

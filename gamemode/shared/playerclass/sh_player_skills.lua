@@ -17,24 +17,30 @@ function CreateSkill(name, desc, class, level, icon, maxLevel)
 	table.insert(GM.PlayerSkills, skill)
 end
 
-local passive_health = CreateSkill("Health Boost", "Increase life\nexpectancy", "Passive", 1, "materials/hl2cr/skill_health.jpg", 10)
-local passive_armor = CreateSkill("Armor Boost", "Your armor\ncan sustain\nmore damage", "Passive", 1, "materials/hl2cr/skill_armor.jpg", 3)
+--Passive
+CreateSkill("Health Boost", "Increase life expectancy", "Passive", 1, "materials/hl2cr/skill_health.jpg", 10)
+CreateSkill("Armor Boost", "Your armor can sustain\nmore damage", "Passive", 1, "materials/hl2cr/skill_armor.jpg", 3)
 
-local medic_heal = CreateSkill("Healing", "Heal more\neffectively", "Medic", 5, "materials/hl2cr/skill_healing.jpg", 5)
-local medic_revive = CreateSkill("Revival", "Revive the fallen", "Medic", 10, "materials/hl2cr/skill_revival.jpg", 1)
-local medic_recharge = CreateSkill("Health Recharging", "Recharge and\nget back in\nthe fight", "Medic", 6, "materials/hl2cr/skill_healing_eff.jpg", 5)
-local medic_regen = CreateSkill("Regeneration", "Taking care of yourself", "Medic", 12, "materials/hl2cr/skill_regen.jpg", 2)
+--Field Medic
+CreateSkill("Healing", "Heal more effectively", "Medic", 5, "materials/hl2cr/skill_healing.jpg", 5)
+CreateSkill("Revival", "Revive the fallen", "Medic", 10, "materials/hl2cr/skill_revival.jpg", 1)
+CreateSkill("Health Recharging", "Recharge and get back\nin the fight", "Medic", 6, "materials/hl2cr/skill_healing_eff.jpg", 5)
+CreateSkill("Regeneration", "Taking care of yourself", "Medic", 12, "materials/hl2cr/skill_regen.jpg", 2)
 
-local repair_recharge = CreateSkill("Recharge", "Recharge and keep\ncharging people", "Repair", 5, "materials/hl2cr/skill_armor_regen.jpg", 5)
-local repair_group = CreateSkill("Group Repair", "Take care of multiple\npeople at the same time", "Repair", 7, "materials/hl2cr/skill_recharge_group.jpg", 5)
-local repair_regen = CreateSkill("Armor Regen", "Recharges suit power", "Repair", 10, "materials/hl2cr/skill_recharge.jpg", 3)
+--Repairman
+CreateSkill("Recharge", "Recharge and keep\ncharging people", "Repair", 5, "materials/hl2cr/skill_armor_regen.jpg", 5)
+CreateSkill("Effective Charge", "Charge armor more effectively", "Repair", 6, "materials/hl2cr/skill_recharge_faster.jpg", 3)
+CreateSkill("Group Repair", "Take care of multiple\npeople at the same time", "Repair", 7, "materials/hl2cr/skill_recharge_group.jpg", 5)
+CreateSkill("Armor Regen", "Recharges suit power", "Repair", 10, "materials/hl2cr/skill_recharge.jpg", 3)
 
-local supply_stock = CreateSkill("Ammo Stock", "Hold more ammo", "Supplier", 5, "materials/hl2cr/class_supporter.jpg", 5)
-local supply_biggerstock = CreateSkill("Bigger Supply", "Resupply people\nmore effectively", "Supplier", 7, "materials/hl2cr/class_supporter.jpg", 4)
-local supply_group = CreateSkill("Group Resupply", "Resupply multiple people\nat the same time", "Supplier", 9, "materials/hl2cr/skill_recharge_group.jpg", 4)
+--Supplier
+CreateSkill("Ammo Stock", "Hold more ammo", "Supplier", 5, "materials/hl2cr/skill_ammo_stock.jpg", 5)
+CreateSkill("Bigger Supply", "Resupply people\nmore effectively", "Supplier", 7, "materials/hl2cr/skill_ammo_supply.jpg", 4)
+CreateSkill("Group Resupply", "Resupply multiple people\nat the same time", "Supplier", 9, "materials/hl2cr/skill_ammo_group.jpg", 4)
 
-local robot_scanner = CreateSkill("Enhanced Exosuit", "Stronger and more powerful", "Robot", 21, "materials/hl2cr/chest_exo.jpg", 3)
-local robot_scanner = CreateSkill("Entity Scanner", "Scan Hostiles status", "Robot", 24, "materials/hl2cr/skill_targetstats.jpg", 1)
+--Robot
+CreateSkill("Enhanced Exosuit", "Stronger and more powerful", "Robot", 21, "materials/hl2cr/chest_exo.jpg", 3)
+CreateSkill("Entity Scanner", "Scan Hostiles status", "Robot", 24, "materials/hl2cr/skill_targetstats.jpg", 1)
 
 if SERVER then
 	net.Receive("HL2CR_SkillObtain", function(len, ply)

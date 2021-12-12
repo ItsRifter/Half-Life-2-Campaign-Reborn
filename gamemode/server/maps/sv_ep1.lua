@@ -174,11 +174,12 @@ local function SetCheckpoints()
 		}
 
 		TRIGGER_CHECKPOINT = {
+			Vector(1105, -273, 134), 		Vector(1012, -162, 17),
 			Vector(-1096, 1606, 78), 		Vector(-903, 1684, -2)
 		}
 			
 		CHECKPOINT_POS = {
-			Vector(-1008, 1758, 4)
+			Vector(1057, -212, 32),			Vector(-1008, 1758, 4)
 		}
 	elseif game.GetMap() == "ep1_c17_02b" then
 		TRIGGER_CHANGELEVEL = {
@@ -204,7 +205,7 @@ local function SetCheckpoints()
 		}
 			
 		CHECKPOINT_POS = {
-			Vector(1115, 8892, -2544),		Vector(-764, 9427, -2694)
+			Vector(1115, 8892, -2544),		Vector(-690, 9561, -2688)
 		}
 	elseif game.GetMap() == "ep1_c17_06" then
 		TRIGGER_CHANGELEVEL = {
@@ -217,7 +218,7 @@ local function SetCheckpoints()
 		}
 			
 		CHECKPOINT_POS = {
-			Vector(10362, 8272, -733),		Vector(11930, 8367, -739)
+			Vector(10362, 8272, -733),		Vector(11460, 8355, -613)
 		}
 		
 		CHANGELEVEL_FUNC = function()
@@ -740,6 +741,14 @@ local function SetUpMisc()
 		end
 	end
 	
+	if game.GetMap() == "ep1_c17_00" then
+		ents.FindByName("train_2_door_trigger")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:FixZombineTrain()")
+	end
+	
+	if game.GetMap() == "ep1_c17_02" then
+		ents.FindByName("timer_give_guard_health")[1]:Remove()
+	end
+	
 	if game.GetMap() == "ep1_c17_05" then
 		ents.FindByName("trigger_citizen_boardtrain")[1]:Fire("Enable")
 		ents.FindByName("lcs_rearsoldierslock")[1]:Fire("AddOutput", "OnCompletion triggerhook:RunPassedCode:FinishMap05()")
@@ -830,6 +839,13 @@ function AchAll(achName)
 	for _, v in ipairs(player.GetAll()) do	
 		GrantAchievement(v, "EP1", achName)
 	end
+end
+
+function FixZombineTrain()
+	timer.Simple(3, function()
+		ents.FindByName("train_2_ambush_zombine")[1]:Remove()
+		ents.FindByName("brush_combine_train_door")[1]:Remove()
+	end)
 end
 
 function StartEP1()

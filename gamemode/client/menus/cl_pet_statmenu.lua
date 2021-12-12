@@ -28,7 +28,7 @@ function ShowPetStatMenu(shouldOpen)
 		end
 		
 		local petHealthBarFill = vgui.Create("DPanel", petHealthBar)
-		petHealthBarFill:SetSize(0, petHealthBar:GetTall())
+		petHealthBarFill:SetSize(petHealthBar:GetWide(), petHealthBar:GetTall())
 		petHealthBarFill.Paint = function(self, w, h)
 			surface.SetDrawColor(0, 170, 0, 255)
 			surface.DrawRect(0, 0, w, h)
@@ -63,10 +63,11 @@ function ShowPetStatMenu(shouldOpen)
 		petXPLabel:SizeToContents()
 		
 		petFrame.Think = function(pnl)
+			if LocalPlayer():GetNWInt("pet_health") <= 0 then pnl:Close() end
 			petStatusLabel:SetText("Pet: " .. LocalPlayer():GetNWString("pet_name") )
 			petStatusLabel:SizeToContents()
 			
-			petHealthBarFill:SetSize(math.Clamp(LocalPlayer():GetNWInt("pet_health"), 0, petHealthBar:GetWide()), 25)
+			petHealthBarFill:SetSize(LocalPlayer():GetNWInt("pet_health"), 25)
 			--petHealthBarFill:SetSize(math.Clamp(LocalPlayer():GetNWInt("pet_health") * petHealthBar:GetWide(), 0, LocalPlayer():GetNWInt("pet_maxhealth")), 25)
 			
 			petXPBarFill:SetSize(math.Clamp(LocalPlayer():GetNWInt("pet_curxp") / LocalPlayer():GetNWInt("pet_curreqxp") * petXPBar:GetWide(), 0, LocalPlayer():GetNWInt("pet_curreqxp")), 25)
@@ -77,9 +78,9 @@ function ShowPetStatMenu(shouldOpen)
 		end
 	end
 end
-
 net.Receive("HL2CR_SpawnPet", function()
 	local shouldOpen = net.ReadBool()
 	ShowPetStatMenu(shouldOpen)
 end)
+
 

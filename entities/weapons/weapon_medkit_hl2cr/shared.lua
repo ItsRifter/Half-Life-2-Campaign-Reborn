@@ -85,11 +85,13 @@ function SWEP:PrimaryAttack()
 
 		ent:SetHealth( math.min( ent:GetMaxHealth(), ent:Health() + (need + healer:GetNWInt("skill_healing") )) )
 		ent:EmitSound( HealSound )
+
+		SendNotificaton(self.Owner:Nick() .. translate.Get("Healed") .. need + healer:GetNWInt("skill_healing"), Color(45, 255, 0), ent)
 		
-		AddXP(self.Owner, need + self.Owner:GetNWInt("skill_healing") * 2 * GetConVar("hl2cr_difficulty"):GetInt())
+		AddXP(self.Owner, need + self.Owner:GetNWInt("skill_healing") * (10 * GetConVar("hl2cr_difficulty"):GetInt()))
 			
 		net.Start("HL2CR_SpawnIndicators")
-			net.WriteInt((need + self.Owner:GetNWInt("skill_healing")) * 2, 32)
+			net.WriteInt((need + self.Owner:GetNWInt("skill_healing")) * (10 * GetConVar("hl2cr_difficulty"):GetInt()), 32)
 			net.WriteVector(tr.Entity:GetPos())
 			net.WriteBool(false)
 		net.Send(self.Owner)
@@ -145,6 +147,8 @@ function SWEP:SecondaryAttack()
 		
 		self.Owner:EmitSound("items/suitchargeok1.wav")
 		
+		SendNotificaton(self.Owner:Nick() .. translate.Get("BeingRevived"), Color(45, 255, 0), ent.player)
+		
 		timer.Create("revive_" .. self:EntIndex(), 3, 1, function()
 			
 			local tr2 = util.TraceLine( {
@@ -171,6 +175,8 @@ function SWEP:SecondaryAttack()
 				net.WriteInt( need  * 2, 32)
 				net.WriteVector(ent.player:GetPos())
 			net.Send(self.Owner)
+			
+			SendNotificaton(self.Owner:Nick() .. translate.Get("Revived"), Color(45, 255, 0), ent.player)
 			
 		end)
 			

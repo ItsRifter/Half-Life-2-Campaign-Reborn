@@ -4,7 +4,7 @@ local NOTIFY_MESSAGES = {
 	[5] = "Classes Unlocked",
 	[8] = "Pets Unlocked, use !pet / !petmenu",
 	[10] = "Mechanic | Grenadier | Combine Dropout Class Unlocked",
-	[20] = "Robot Class Unlocked",
+	[20] = "Robot | Rocketeer Class Unlocked",
 }
 
 net.Receive("HL2CR_LevelUpSound", function()
@@ -518,9 +518,36 @@ hook.Add( "PostDrawTranslucentRenderables", "HL2CR_DrawRewards", function()
 	end
 end)
 
+net.Receive("HL2CR_Notify", function()
+	local message = net.ReadString()
+	local colour = net.ReadColor()
+	
+	local notifyPopup = vgui.Create("DNotify")
+	notifyPopup:SetSize(400, 100)
+	notifyPopup:SetPos((ScrW() / 2.4) - string.len(message) / 2, ScrH() / 1.75)
+	notifyPopup:SetLife(6)
+	notifyPopup:SetAlpha(0)
+	
+	local text = vgui.Create("DLabel", notifyPopup)
+	text:SetPos(0, 0)
+	text:SetText(message)
+	text:SetTextColor(colour)
+	text:SetFont("HL2CR_Notification")
+	text:SizeToContents()
+	
+	notifyPopup:AlphaTo(255, 2, 0, nil)
+	notifyPopup:AlphaTo(0, 2, 3, nil)
+	
+	notifyPopup:MoveTo(ScrW() / 2.4 - string.len(message) / 2, ScrH() / 1.75 - 25, 2, 0, -1, function()
+		notifyPopup:MoveTo(ScrW() / 2.4 - string.len(message) / 2, ScrH() / 1.75 + 35, 2, 1, -1, function() 
+			notifyPopup:Remove()
+		end)
+	end)
+	
+end)
+
 net.Receive("HL2CR_Message", function()
 	local messages = net.ReadTable()
-	
 	
 	if not string.find(translate.Get(messages["Message"]), "@") and not messages["Other"] then
 		chat.AddText(messages["Colour"], translate.Get(messages["Message"]))

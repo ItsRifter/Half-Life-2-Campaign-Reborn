@@ -17,6 +17,7 @@ HL2CR.Theme = {
 	qMenu = Color(215, 130, 45, 125),
 	qMenu2 = Color(138, 87, 43, 155),
 	qMenu3 = Color(168, 104, 50, 255),
+	qMenuSkills = Color(255, 128, 0, 255),
 	
 	skillPnl = Color(212, 116, 0, 125),
 	skillFill = Color(255, 140, 0, 255),

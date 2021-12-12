@@ -132,6 +132,8 @@ function OpenPetsMenu(curPlayerPets)
 	local hasPet = false
 	
 	for i, p in ipairs(GAMEMODE.PlayerPets) do
+		if p.isBuyable == false then continue end
+		
 		hasPet = false
 		for l, k in ipairs(curPlayerPets) do
 			if p.class == k.class then

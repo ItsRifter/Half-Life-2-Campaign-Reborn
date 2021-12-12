@@ -111,6 +111,7 @@ LANGUAGE.SKILLS_PASSIVE					= "Passive"
 LANGUAGE.SKILLS_MEDIC					= "Field Medic"
 LANGUAGE.SKILLS_REPAIRMAN				= "Repairman"
 LANGUAGE.SKILLS_SUPPLIER				= "Supplier"
+LANGUAGE.SKILLS_ROCKETEER				= "Rocketeer"
 LANGUAGE.SKILLS_ROBOT					= "Robot"
 LANGUAGE.SKILLS_MECHANIC				= "Mechanic"
 LANGUAGE.SpendToUnlock					= "Spend a skill-point to unlock"
@@ -155,6 +156,30 @@ LANGUAGE.Automatic_Pistol				= "Automatic Pistol"
 LANGUAGE.Shredding_Assault_Rifle		= "'Shredding' Assault Rifle"
 LANGUAGE.Unstable_Electric_Shotgun		= "'Unstable' Electric Shotgun"
 LANGUAGE.The_Nailer_Gun					= "The 'Nailer' Gun"
+
+--Item Names
+LANGUAGE.Longfall_Boots 				= "Longfall Boots"
+LANGUAGE.Metal_Boots 					= "Metal Boots"
+LANGUAGE.Light_Vest 					= "Light Vest"
+LANGUAGE.Heavy_Vest 					= "Heavy Vest"
+LANGUAGE.HECU_Helm 						= "H.E.C.U Helmet"
+LANGUAGE.Robo_Helm 						= "Robot Helmet"
+LANGUAGE.Exosuit_Shoulders 				= "Exosuit Shoulders"
+LANGUAGE.Exosuit_Vest 					= "Exosuit Vest"
+LANGUAGE.Exosuit_Boots 					= "Exosuit Boots"
+--Item Desc
+LANGUAGE.Longfall_Boots_Desc 			= "Stolen from Black Mesa's peers\nRESIST: 0.75"
+LANGUAGE.Metal_Boots_Desc				= "Metal and bulky\nRESIST: 0.35"
+LANGUAGE.Light_Vest_Desc				= "Lighter alternative than the heavy vest\nRESIST: 0.65"
+LANGUAGE.Heavy_Vest_Desc				= "Made to stop a bullet\nRESIST: 0.85"
+LANGUAGE.HECU_Helm_Desc					= "Military grade Gasmask\nRESIST: 0.25"
+LANGUAGE.Robo_Helm_Desc					= "Disasembled and safe to use for humans\nRESIST: 1"
+LANGUAGE.Exosuit_Shoulders 				= "Part of an Exosuit\nRESIST: 0.65"
+LANGUAGE.Exosuit_Vest_Desc 				= "Part of an Exosuit\nRESIST: 1.15"
+LANGUAGE.Exosuit_Boots_Desc 			= "Part of an Exosuit\nRESIST: 0.45"
+
+
+
 --Weapon Descriptions
 LANGUAGE.Flare_Gun_desc					= "Used for emergencies... so it was"
 LANGUAGE.Automatic_Pistol_desc			= "A pistol that is automatic no questions"
@@ -184,8 +209,15 @@ LANGUAGE.MissingPetEvolve		= "You should summon your pet first"
 --Custom Maps
 LANGUAGE.MAPS_RND_FINISHED		= "Congratulations on finishing Research and Development, Returning to lobby in 40 seconds"
 
---Achievements
+--Checks
+LANGUAGE.CHECK_DIFF_SETTING				= "The difficulty is set to: "
+LANGUAGE.CHECK_DIFF_SETTING_1			= "Very Easy"
+LANGUAGE.CHECK_DIFF_SETTING_2			= "Easy"
+LANGUAGE.CHECK_DIFF_SETTING_3			= "Medium"
+LANGUAGE.CHECK_DIFF_SETTING_4			= "Hard"
+LANGUAGE.CHECK_DIFF_SETTING_5			= "Very Hard"
 
+--Achievements
 LANGUAGE.Ach_Locked						= "Locked"						
 
 ---Names
@@ -240,7 +272,7 @@ LANGUAGE.Cubbage_Desc					= "Defend Little Odessa from the gunship attack"
 LANGUAGE.Radiation_Levels_Desc			= "Get through the toxic tunnel under City 17 in Half-Life 2"
 LANGUAGE.Red_Letter_Baby_Desc			= "Take the baby from the playground to Dr.Kleiner's lab"
 LANGUAGE.Zero_Point_Energy_Desc			= "Acquire the Gravity Gun in Black Mesa East"
-LANGUAGE.Two_Points_Desc_Desc			= "Use DOG's ball to make a basket"
+LANGUAGE.Two_Points_Desc				= "Use DOG's ball to make a basket"
 LANGUAGE.Hallowed_Ground_Desc			= "Escort Gregori safely through the church cemetery"
 LANGUAGE.Barnacle_Bowling_Desc			= "Kill five barnacles with one barrel"
 LANGUAGE.Raven_Ball_Desc				= "Escort DOG's ball to the end of Ravenholm's mine"
@@ -266,3 +298,11 @@ LANGUAGE.The_Beginning_Desc				= "Escape the nightmare... or did you?"
 LANGUAGE.The_End_Desc					= "Escape the hospital and the nightmare"
 LANGUAGE.Carts_Journey_Desc				= "Successfully ride the cart without dying"
 LANGUAGE.Science_Squared_Desc			= "Complete Research and Development"
+
+--Notifications
+LANGUAGE.BeingRevived					= " is reviving you"
+LANGUAGE.Revived						= " revived you"
+LANGUAGE.Healed							= " healed you for "
+LANGUAGE.ArmorCharged					= " charged you for "
+LANGUAGE.Repaired						= " repaired you for "
+LANGUAGE.Restocked						= " supplied you"

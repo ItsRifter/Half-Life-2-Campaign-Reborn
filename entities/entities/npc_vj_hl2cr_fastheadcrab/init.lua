@@ -103,8 +103,9 @@ function ENT:SetUpStats(stats)
 	
 	self.StartHealth = stats["health"]
 	self.TurningSpeed = stats["speed"]
-	self.AA_MoveAccelerate = stats["speed"]
-	self.NextMeleeAttackTime = stats["attDelay"]
+	self.AA_MoveAccelerate = stats["speed"]	
+	self.NextMeleeAttackTime = 1
+	self.NextMeleeAttackTime_DoRand = stats["attDelay"]
 	self.LeapAttackDamage = stats["damage"]
 	self.MeleeAttackDamage = stats["damage"]
 end

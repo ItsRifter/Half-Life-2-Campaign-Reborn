@@ -1,7 +1,7 @@
 AddCSLuaFile("shared.lua")
 include('shared.lua')
 
-ENT.Model = "models/classic_torso.mdl" -- The game will pick a random model from the table when the SNPC is spawned | Add as many as you want
+ENT.Model = "models/zombie/classic_torso.mdl" -- The game will pick a random model from the table when the SNPC is spawned | Add as many as you want
 
 ENT.MovementType = VJ_MOVETYPE_GROUND
 ENT.PlayerFriendly = true
@@ -49,26 +49,26 @@ ENT.SoundTbl_MedicReceiveHeal = {}
 ENT.SoundTbl_OnPlayerSight = {}
 ENT.SoundTbl_Investigate = {}
 ENT.SoundTbl_LostEnemy = {}
-ENT.SoundTbl_Alert = {"npc/headcrab/alert1.wav"}
+ENT.SoundTbl_Alert = {"npc/zombie/zombie_alert1.wav", "npc/zombie/zombie_alert2.wav", "npc/zombie/zombie_alert3.wav",}
 ENT.SoundTbl_CallForHelp = {}
 ENT.SoundTbl_BecomeEnemyToPlayer = {}
 ENT.SoundTbl_BeforeMeleeAttack = {}
-ENT.SoundTbl_MeleeAttack = {}
+ENT.SoundTbl_MeleeAttack = {"npc/zombie/claw_strike1.wav", "npc/zombie/claw_strike2.wav", "npc/zombie/claw_strike3.wav"}
 ENT.SoundTbl_MeleeAttackExtra = {}
-ENT.SoundTbl_MeleeAttackMiss = {}
+ENT.SoundTbl_MeleeAttackMiss = {"npc/zombie/claw_miss1.wav", "npc/zombie/claw_miss2.wav"}
 ENT.SoundTbl_MeleeAttackSlowPlayer = {"vj_player/heartbeat.wav"}
 ENT.SoundTbl_BeforeRangeAttack = {}
-ENT.SoundTbl_RangeAttack = {"npc/headcrab/attack1.wav", "npc/headcrab/attack2.wav", "npc/headcrab/attack3.wav"}
+ENT.SoundTbl_RangeAttack = {}
 ENT.SoundTbl_BeforeLeapAttack = {}
 ENT.SoundTbl_LeapAttackJump = {}
 ENT.SoundTbl_LeapAttackDamage = {}
 ENT.SoundTbl_LeapAttackDamageMiss = {}
 ENT.SoundTbl_OnKilledEnemy = {}
 ENT.SoundTbl_AllyDeath = {}
-ENT.SoundTbl_Pain = {"npc/headcrab/pain1.wav", "npc/headcrab/pain2.wav", "npc/headcrab/pain3.wav"}
+ENT.SoundTbl_Pain = {"npc/zombie/zombie_pain1.wav", "npc/zombie/zombie_pain2.wav", "npc/zombie/zombie_pain3.wav"}
 ENT.SoundTbl_Impact = {}
 ENT.SoundTbl_DamageByPlayer = {}
-ENT.SoundTbl_Death = {}
+ENT.SoundTbl_Death = {"npc/zombie/zombie_die1.wav", "npc/zombie/zombie_die2.wav", "npc/zombie/zombie_die3.wav"}
 ENT.SoundTbl_SoundTrack = {}
 
 function ENT:SetUpStats(stats)
@@ -76,8 +76,8 @@ function ENT:SetUpStats(stats)
 	self.StartHealth = stats["health"]
 	self.TurningSpeed = stats["speed"]
 	self.AA_MoveAccelerate = stats["speed"]
-	self.NextMeleeAttackTime = stats["attDelay"]
-	self.LeapAttackDamage = stats["damage"]
+	self.NextMeleeAttackTime = 2
+	self.NextMeleeAttackTime_DoRand = stats["attDelay"]
 	self.MeleeAttackDamage = stats["damage"]
 end
 

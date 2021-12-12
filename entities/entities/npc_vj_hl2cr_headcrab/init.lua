@@ -24,7 +24,7 @@ ENT.VJ_NPC_Class = {"HL2CR_PETS", "CLASS_PLAYER_ALLY"}
 
 ENT.HasMeleeAttack = true
 ENT.AnimTbl_MeleeAttack = {ACT_MELEE_ATTACK1}
-
+ENT.HullType = HULL_MEDIUM
 ENT.HasLeapAttack = true -- Should the SNPC have a leap attack?
 ENT.LeapAttackDamageType = DMG_SLASH -- Type of Damage
 	-- ====== Animation Variables ====== --
@@ -79,14 +79,14 @@ ENT.SoundTbl_LostEnemy = {}
 ENT.SoundTbl_Alert = {"npc/headcrab/alert1.wav"}
 ENT.SoundTbl_CallForHelp = {}
 ENT.SoundTbl_BecomeEnemyToPlayer = {}
-ENT.SoundTbl_BeforeMeleeAttack = {}
-ENT.SoundTbl_MeleeAttack = {}
+ENT.SoundTbl_BeforeMeleeAttack = {"npc/headcrab/attack1.wav", "npc/headcrab/attack2.wav", "npc/headcrab/attack3.wav"}
+ENT.SoundTbl_MeleeAttack = {"npc/headcrab/headbite.wav"}
 ENT.SoundTbl_MeleeAttackExtra = {}
 ENT.SoundTbl_MeleeAttackMiss = {}
 ENT.SoundTbl_MeleeAttackSlowPlayer = {"vj_player/heartbeat.wav"}
 ENT.SoundTbl_BeforeRangeAttack = {}
-ENT.SoundTbl_RangeAttack = {"npc/headcrab/attack1.wav", "npc/headcrab/attack2.wav", "npc/headcrab/attack3.wav"}
-ENT.SoundTbl_BeforeLeapAttack = {}
+ENT.SoundTbl_RangeAttack = {"npc/headcrab/headbite.wav"}
+ENT.SoundTbl_BeforeLeapAttack = {"npc/headcrab/attack1.wav", "npc/headcrab/attack2.wav", "npc/headcrab/attack3.wav"}
 ENT.SoundTbl_LeapAttackJump = {}
 ENT.SoundTbl_LeapAttackDamage = {}
 ENT.SoundTbl_LeapAttackDamageMiss = {}
@@ -95,7 +95,7 @@ ENT.SoundTbl_AllyDeath = {}
 ENT.SoundTbl_Pain = {"npc/headcrab/pain1.wav", "npc/headcrab/pain2.wav", "npc/headcrab/pain3.wav"}
 ENT.SoundTbl_Impact = {}
 ENT.SoundTbl_DamageByPlayer = {}
-ENT.SoundTbl_Death = {}
+ENT.SoundTbl_Death = {"npc/headcrab/die1.wav", "npc/headcrab/die2.wav"}
 ENT.SoundTbl_SoundTrack = {}
 
 function ENT:SetUpStats(stats)
@@ -103,7 +103,8 @@ function ENT:SetUpStats(stats)
 	self.StartHealth = stats["health"]
 	self.TurningSpeed = stats["speed"]
 	self.AA_MoveAccelerate = stats["speed"]
-	self.NextMeleeAttackTime = stats["attDelay"]
+	self.NextMeleeAttackTime = 1
+	self.NextMeleeAttackTime_DoRand = stats["attDelay"]
 	self.LeapAttackDamage = stats["damage"]
 	self.MeleeAttackDamage = stats["damage"]
 end

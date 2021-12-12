@@ -22,7 +22,7 @@ end
 
 GM.PlayerPets = {}
 
-function CreatePet(name, maxLevel, className, desc, model, cost, stats)
+function CreatePet(name, maxLevel, reqExp, className, desc, model, cost, stats, buyable)
 	
 	local pet = {
 		["name"] = name,
@@ -30,13 +30,14 @@ function CreatePet(name, maxLevel, className, desc, model, cost, stats)
 		["maxLevel"] = maxLevel,
 		["skillpoints"] = 0,
 		["xp"] = 0,
-		["reqxp"] = 1500, 
+		["reqxp"] = reqExp, 
 		["class"] = className,
 		["desc"] = desc,
 		["model"] = model,
 		["cost"] = cost,
 		["stats"] = stats,
-		["curSkills"] = {}
+		["curSkills"] = {},
+		["isBuyable"] = buyable or false
 	}
 	
 	table.insert(GM.PlayerPets, pet)
@@ -49,15 +50,24 @@ local headcrabStats = {
 	["attDelay"] = 6,
 }
 
+local torsoStats = {
+	["health"] = 500,
+	["speed"] = 30,
+	["damage"] = 15,
+	["attDelay"] = 5,
+}
+
 local fastheadcrabStats = {
 	["health"] = 250,
 	["speed"] = 35,
 	["damage"] = 6,
-	["attDelay"] = 4,
+	["attDelay"] = 3,
 }
 
-local headcrab = CreatePet("Headcrab", 6, "npc_vj_hl2cr_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000, headcrabStats)
-local fastheadcrab = CreatePet("Fast Headcrab", 6, "npc_vj_hl2cr_fastheadcrab", "An alternate version of the\noriginal headcrab\nfaster but weaker", "models/headcrab.mdl", 11500, fastheadcrabStats)
+local headcrab = CreatePet("Headcrab", 6, 1500, "npc_vj_hl2cr_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000, headcrabStats, true)
+local fastheadcrab = CreatePet("Fast Headcrab", 6, 1250, "npc_vj_hl2cr_fastheadcrab", "An alternate version of the\noriginal headcrab\nfaster but weaker", "models/headcrab.mdl", 11500, fastheadcrabStats, true)
+
+local torsoZombie = CreatePet("Torso Zombie", 8, 3000, "npc_vj_hl2cr_torsozombie", "A mutated version of\nthe standard headcrab", "models/zombie/classic_torso.mdl", 20000, torsoStats)
 
 if SERVER then
 	net.Receive("HL2CR_EquipPet", function(len, ply)
@@ -157,22 +167,34 @@ if SERVER then
 		end
 		
 		ply.pet:EmitSound("npc/vort/health_charge.wav", 100, 100)
-	
+		ply.pet:SetMaterial("models/props_combine/com_shield001a")
+		
 		timer.Create("HL2CR_Mutate_" .. ply:Nick(), 5, 1, function()
-			local effect = ParticleEffect( "vortigaunt_beam", ply.pet:GetPos(), Angle( 0, 0, 0 ) )
+			local effect = ParticleEffect( "vortigaunt_beam", ply.pet:GetPos(), Angle( 0, 0, 0 ), ply.pet)
 			ply.pet:EmitSound("beams/beamstart5.wav", 100, 75)
-			RemovePet(ply)
-			
-			--table.Empty(ply.hl2cr.Pets.CurrentPet)
-			
+		
+			table.Empty(ply.hl2cr.Pets.CurrentPet)
+		
 			timer.Simple(0.1, function()
-			
+				for i, newPet in ipairs(GAMEMODE.PlayerPets) do
+					if newPet.class == classEvolvingFrom then
+						table.remove(ply.hl2cr.Pets, i)
+					end
+					
+					if newPet.class == EVOLVE_TREE[classEvolvingFrom] then
+						table.insert(ply.hl2cr.Pets, newPet)
+						table.Merge(ply.hl2cr.Pets.CurrentPet, newPet)
+					end
+				end
+				
+				local lastPos = ply.pet:GetPos()
+				
+				RemovePet(ply)
+				SpawnPet(ply)
+				ply.pet:SetPos(lastPos)
+				ply:SetNWString("pet_name", ply.hl2cr.Pets.CurrentPet.name)
 			end)
 		end)
-		
-		
-		--vortigaunt_hand_glow
-		--vortigaunt_beam
-		print(EVOLVE_TREE[classEvolvingFrom])
+
 	end)
 end

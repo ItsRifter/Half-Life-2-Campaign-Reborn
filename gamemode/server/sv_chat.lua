@@ -14,7 +14,7 @@ hook.Add( "PlayerSay", "HL2CR_BringNPC", function( ply, text )
 		ents.FindByClass("npc_alyx")[1]:SetPos(hit)
 	end
 	
-	if ply:IsAdmin() and ( text == "!bringalyx" ) then
+	if ply:IsAdmin() and ( text == "!bringbarney" ) then
 		local hit = ply:GetEyeTrace().HitPos
 		local offset = Vector( 10, 0, 30 )
 		ents.FindByClass("npc_barney")[1]:SetPos(hit)
