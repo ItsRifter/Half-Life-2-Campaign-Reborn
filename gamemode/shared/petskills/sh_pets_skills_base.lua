@@ -20,7 +20,7 @@ end
 
 if SERVER then
 	local SKILLS_TBL = {
-		["npc_hl2cr_pet_headcrab"] = {
+		["npc_vj_hl2cr_headcrab"] = {
 		
 			["Health Boost"] = function(ply)
 				ply.hl2cr.Pets.CurrentPet["stats"]["health"] = ply.hl2cr.Pets.CurrentPet["stats"]["health"] + 25
@@ -44,11 +44,89 @@ if SERVER then
 			end,
 			
 			["Genetic Evolution"] = function(ply)
-				--TODO: evolve in a better pet
 			end,
 		},
 		
-		["npc_hl2cr_pet_fastheadcrab"] = {
+		["npc_vj_hl2cr_torsozombie"] = {
+			["Strength Buff I"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["damage"] = ply.hl2cr.Pets.CurrentPet["stats"]["damage"] + 5
+			end,
+			
+			["Strength Buff II"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["damage"] = ply.hl2cr.Pets.CurrentPet["stats"]["damage"] + 5
+			end,
+			
+			["Agility Increase"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["speed"] = ply.hl2cr.Pets.CurrentPet["stats"]["speed"] + 15
+				ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] = ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] - 1
+			end,
+			
+			["Health Boost"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["health"] = ply.hl2cr.Pets.CurrentPet["stats"]["health"] + 25
+			end,
+			
+			["Strength Buff III"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["damage"] = ply.hl2cr.Pets.CurrentPet["stats"]["damage"] + 5
+			end,
+			
+			["Health Boost II"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["health"] = ply.hl2cr.Pets.CurrentPet["stats"]["health"] + 25
+			end,
+			
+			["Health Boost III"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["health"] = ply.hl2cr.Pets.CurrentPet["stats"]["health"] + 25
+			end,
+			
+			["Genetic Evolution"] = function(ply)
+			end,
+		},
+		
+		["npc_vj_hl2cr_zombie"] = {
+			["Strength Buff I"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["damage"] = ply.hl2cr.Pets.CurrentPet["stats"]["damage"] + 5
+			end,
+			
+			["Agility Increase"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["speed"] = ply.hl2cr.Pets.CurrentPet["stats"]["speed"] + 15
+				ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] = ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] - 1
+			end,
+			
+			["Strength Buff II"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["damage"] = ply.hl2cr.Pets.CurrentPet["stats"]["damage"] + 5
+			end,
+			
+			["Strength Buff III"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["damage"] = ply.hl2cr.Pets.CurrentPet["stats"]["damage"] + 5
+			end,
+			
+			["Health Boost"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["health"] = ply.hl2cr.Pets.CurrentPet["stats"]["health"] + 25
+			end,
+			
+			["Health Boost II"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["health"] = ply.hl2cr.Pets.CurrentPet["stats"]["health"] + 25
+			end,
+			
+			["Health Boost III"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["health"] = ply.hl2cr.Pets.CurrentPet["stats"]["health"] + 25
+			end,
+			
+			["Agility Increase II"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["speed"] = ply.hl2cr.Pets.CurrentPet["stats"]["speed"] + 15
+				ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] = ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] - 1
+			end,
+			
+			["Agility Increase III"] = function(ply)
+				ply.hl2cr.Pets.CurrentPet["stats"]["speed"] = ply.hl2cr.Pets.CurrentPet["stats"]["speed"] + 15
+				ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] = ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] - 1
+			end,
+			
+			["Genetic Evolution"] = function(ply)
+				GrantAchievement(ply, "Misc", "Pet_Zombie_Max")
+			end,
+		},
+		
+		["npc_vj_hl2cr_fastheadcrab"] = {
 			["Agility Increase"] = function(ply)
 				ply.hl2cr.Pets.CurrentPet["stats"]["speed"] = ply.hl2cr.Pets.CurrentPet["stats"]["speed"] + 7
 				ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] = ply.hl2cr.Pets.CurrentPet["stats"]["attDelay"] - 1
@@ -72,7 +150,6 @@ if SERVER then
 			end,
 			
 			["Genetic Evolution"] = function(ply)
-				--TODO: evolve in a better pet
 			end,
 		},
 	}	
@@ -80,7 +157,7 @@ if SERVER then
 	local function UpdatePetSkills(ply)
 		for _, skill in ipairs(ply.hl2cr.Pets.CurrentPet["curSkills"]) do
 			if SKILLS_TBL[ply.hl2cr.Pets.CurrentPet.class][skill] then
-				SKILLS_TBL[ply.hl2cr.Pets.CurrentPet.class][skill](pet)
+				SKILLS_TBL[ply.hl2cr.Pets.CurrentPet.class][skill](ply)
 			end
 		end
 	end

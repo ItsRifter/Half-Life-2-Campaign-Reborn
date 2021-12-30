@@ -151,7 +151,7 @@ local function SetCheckpoints()
 		}
 			
 		CHECKPOINT_POS = {
-			Vector(4326, 3589, 420),		Vector(4586, 3580, 684)
+			Vector(4326, 3589, 420),		Vector(4586, 3580, 712)
 		}
 	elseif game.GetMap() == "ep1_c17_01" then
 		TRIGGER_CHANGELEVEL = {

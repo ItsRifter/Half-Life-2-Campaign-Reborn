@@ -4,6 +4,7 @@ local PET_CLASS = {
 	--Standard Zombie
 	["npc_vj_hl2cr_headcrab"] = true,
 	["npc_vj_hl2cr_torsozombie"] = true,
+	["npc_vj_hl2cr_zombie"] = true,
 	
 	--Fast Zombie
 	["npc_vj_hl2cr_fastheadcrab"] = true
@@ -57,6 +58,13 @@ local torsoStats = {
 	["attDelay"] = 5,
 }
 
+local zombStats = {
+	["health"] = 1000,
+	["speed"] = 40,
+	["damage"] = 25,
+	["attDelay"] = 4,
+}
+
 local fastheadcrabStats = {
 	["health"] = 250,
 	["speed"] = 35,
@@ -64,10 +72,13 @@ local fastheadcrabStats = {
 	["attDelay"] = 3,
 }
 
-local headcrab = CreatePet("Headcrab", 6, 1500, "npc_vj_hl2cr_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000, headcrabStats, true)
-local fastheadcrab = CreatePet("Fast Headcrab", 6, 1250, "npc_vj_hl2cr_fastheadcrab", "An alternate version of the\noriginal headcrab\nfaster but weaker", "models/headcrab.mdl", 11500, fastheadcrabStats, true)
+--Normal Zombie Tree
+CreatePet("Headcrab", 6, 1500, "npc_vj_hl2cr_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000, headcrabStats, true)
+CreatePet("Torso Zombie", 8, 3000, "npc_vj_hl2cr_torsozombie", "A mutated version of\nthe standard headcrab", "models/zombie/classic_torso.mdl", 20000, torsoStats)
+CreatePet("Zombie", 10, 5000, "npc_vj_hl2cr_zombie", "A fully grown zombie", "models/zombie/classic.mdl", 30000, zombStats)
 
-local torsoZombie = CreatePet("Torso Zombie", 8, 3000, "npc_vj_hl2cr_torsozombie", "A mutated version of\nthe standard headcrab", "models/zombie/classic_torso.mdl", 20000, torsoStats)
+--Fast Zombie Tree
+CreatePet("Fast Headcrab", 6, 1250, "npc_vj_hl2cr_fastheadcrab", "An alternate version of the\noriginal headcrab\nfaster but weaker", "models/headcrab.mdl", 11500, fastheadcrabStats, true)
 
 if SERVER then
 	net.Receive("HL2CR_EquipPet", function(len, ply)
@@ -148,13 +159,16 @@ if SERVER then
 	end)
 	
 	local EVOLVE_TREE = {
-		["npc_vj_hl2cr_headcrab"] = "npc_vj_hl2cr_torsozombie"
+		["npc_vj_hl2cr_headcrab"] = "npc_vj_hl2cr_torsozombie",
+		["npc_vj_hl2cr_torsozombie"] = "npc_vj_hl2cr_zombie",
 	}
 	
 	net.Receive("HL2CR_MutatePet", function(len, ply)
 		if not ply then return end
 		
 		local classEvolvingFrom = net.ReadString()
+		
+		if not EVOLVE_TREE[classEvolvingFrom] then return end
 		
 		if not ply.pet then
 			MISSING_PET = {

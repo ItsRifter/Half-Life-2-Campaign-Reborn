@@ -81,9 +81,10 @@ include("shared/sh_translate.lua")
 
 ----Pets
 include("shared/petskills/sh_pets_headcrab_skills.lua")
-include("shared/petskills/sh_pets_fastheadcrab_skills.lua")
-
 include("shared/petskills/sh_pets_torsozombie_skills.lua")
+include("shared/petskills/sh_pets_zombie_skills.lua")
+
+include("shared/petskills/sh_pets_fastheadcrab_skills.lua")
 
 --Networks
 util.AddNetworkString("HL2CR_HelpMenu")

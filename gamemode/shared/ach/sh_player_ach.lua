@@ -372,6 +372,17 @@ GM.Achievements = {
 			IsRare = false
 		},
 		
+		Pet_Zombie_Max = {
+			Name = "Pet_Zombie_Max",
+			Mat = "vgui/achievements/hl2_beat_cemetery.png", 
+			Desc = "Pet_Zombie_Max_Desc",
+			Rewards = {
+				XP = 5000,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
 		Craft_1 = {
 			Name = "Craft_1!",
 			Mat = "vgui/achievements/hl2_get_gravitygun.png", 

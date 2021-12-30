@@ -1,3 +1,5 @@
+
+
 MAPS_LOBBY = {
 	--Future maps will go here
 	["hl2cr_lobby_v2"] = true,
@@ -236,6 +238,14 @@ function InitMap()
 	else
 		StartCoop()
 	end
+	
+	StartCountdownToLobby()
+end
+
+local function StartCountdownToLobby()
+	timer.Create("HL2CR_LobbyTimer", 3600, 1, function()
+		RunConsoleCommand("ChangeLevel", "hl2cr_lobby_v2")
+	end)
 end
 
 function FailedMap()
