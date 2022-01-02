@@ -7,7 +7,7 @@ local CONVERT_NAME_TO_IMAGE = {
 	["Unstable_Electric_Shotgun"] = "materials/hl2cr/weapon_unstableshotgun.jpg",
 	["BMG_Heavy_Sniper"] = "materials/hl2cr/weapon_bmgsniper.jpg",
 	["Test"] = "materials/hl2cr/weapon_nailer.jpg",
-	["Suit_PWR_Boost"] = "materials/hl2cr/weapon_bmgsniper.jpg",
+	["Suit_PWR_Boost"] = "materials/hl2cr/item_powerboost.jpg",
 	["Exosuit_Boots"] = "materials/hl2cr/boot_exo.jpg",
 	["Longfall_Boots"] = "materials/hl2cr/boot_longfall.jpg",
 	["Metal_Boots"] = "materials/hl2cr/boot_metal.jpg",
@@ -146,39 +146,39 @@ local CONVERT_NAME_TRANSLATION = {
 
 local CONVERT_DESC_TRANSLATION = {
 	["Flare_Gun"] = function()
-		return translate.Get("Flare_Gun_Desc")
+		return translate.Get("Flare_Gun_desc")
 	end,
 	
 	["Automatic_Pistol"] = function()
-		return translate.Get("Automatic_Pistol_Desc")
+		return translate.Get("Automatic_Pistol_desc")
 	end,
 	
 	["Shredding_Assault_Rifle"] = function()
-		return translate.Get("Shredding_Assault_Rifle_Desc")
+		return translate.Get("Shredding_Assault_Rifle_desc")
 	end,
 	
 	["Multi_Grenade_Launcher"] = function()
-		return translate.Get("Multi_Grenade_Launcher_Desc")
+		return translate.Get("Multi_Grenade_Launcher_desc")
 	end,
 	
 	["Unstable_Electric_Shotgun"] = function()
-		return translate.Get("Unstable_Electric_Shotgun_Desc")
+		return translate.Get("Unstable_Electric_Shotgun_desc")
 	end,
 	
 	["The_Nailer_Gun"] = function()
-		return translate.Get("The_Nailer_Gun_Desc")
+		return translate.Get("The_Nailer_Gun_desc")
 	end,
 	
 	["BMG_Heavy_Sniper"] = function()
-		return translate.Get("BMG_Heavy_Sniper_Desc")
+		return translate.Get("BMG_Heavy_Sniper_desc")
 	end,
 	
 	["Test"] = function()
-		return translate.Get("Flare_Gun_Desc")
+		return translate.Get("Flare_Gun_desc")
 	end,
 
 	["Suit_PWR_Boost"] = function()
-		return translate.Get("SuitPower_Desc")
+		return translate.Get("SuitPower_desc")
 	end,
 
 	["Exosuit_Boots"] = function()
@@ -377,8 +377,8 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			weaponSlotImage:SetImage("materials/hl2cr/empty_weapon.jpg")
 		end
 
-		local totalArmorLabel = vgui.Create("DLabel", invPnl)
-		totalArmorLabel:SetPos(invPnl:GetWide() - 160, 25)
+		local totalArmorLabel = vgui.Create("DLabel", invPnlPlayer)
+		totalArmorLabel:SetPos(invPnlPlayer:GetWide() / 6, 75)
 		totalArmorLabel:SetText(translate.Get("ArmorPoints") .. (LocalPlayer():GetNWInt("stat_armorpoints", 0)))
 		totalArmorLabel:SetFont("HL2CR_ArmorPoints")
 		totalArmorLabel:SizeToContents()

@@ -52,3 +52,8 @@ else
 		end
 	end)
 end
+
+if not CLIENT then -- disables VJ sandbox hooks
+	hook.Remove("PlayerInitialSpawn", "VJBaseSpawn")
+	hook.Remove("PlayerInitialSpawn", "drvrejplayerInitialSpawn")
+end

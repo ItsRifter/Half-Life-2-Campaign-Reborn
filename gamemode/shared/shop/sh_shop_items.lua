@@ -23,7 +23,7 @@ local nailer = CreateShopItem("The_Nailer_Gun", "Nailed it!", 32575, "materials/
 local unstable_shotgun = CreateShopItem("Unstable_Electric_Shotgun", "Highly unstable\nImmediately throw after use", 50000, "materials/hl2cr/weapon_unstableshotgun.jpg", "Weapon")
 local heavy_sniper = CreateShopItem("BMG_Heavy_Sniper", "A rather heavy sniper\nwith devastating results", 75000, "materials/hl2cr/weapon_bmgsniper.jpg", "Weapon")
 
-local suit_buff = CreateShopItem("Suit_PWR_Boost", "Test Item\nYou shouldn't be buying this", 1, "materials/hl2cr/weapon_bmgsniper.jpg", "Item")
+local suit_buff = CreateShopItem("Suit_PWR_Boost", "Decreases suit power\ncharge speed on 50%", 35000, "materials/hl2cr/item_powerboost.jpg", "Item")
 
 local long_boots = CreateShopItem("Longfall_Boots", "Stolen from Black Mesa's peers\nRESIST: 0.75", 7500, "materials/hl2cr/boot_longfall.jpg", "Boots")
 local metal_boots = CreateShopItem("Metal_Boots", "Metal and bulky\nRESIST: 0.35", 3000, "materials/hl2cr/boot_metal.jpg", "Boots")
