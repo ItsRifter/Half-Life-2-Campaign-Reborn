@@ -677,6 +677,12 @@ local function SetUpMisc()
 	MapLua:SetName("triggerhook")
 	MapLua:Spawn()
 	
+	local npc_vortigaunt = {
+		["npc_vortigaunt"] = true
+	}
+	
+	table.Merge(FRIENDLY_NPCS, npc_vortigaunt)
+	
 	timer.Simple(1.5, function()
 		for _, ent in ipairs(ents.GetAll()) do
 			if (string.find(ent:GetName(), "global_newgame_spawner")) then
@@ -747,6 +753,10 @@ local function SetUpMisc()
 	
 	if game.GetMap() == "ep1_c17_02" then
 		ents.FindByName("timer_give_guard_health")[1]:Remove()
+	end	
+	
+	if game.GetMap() == "ep1_c17_02a" then
+		ents.FindByName("gunship_showdown")[1]:Fire("AddOutput", "OnDeath triggerhook:RunPassedCode:AchAll('Attica')")
 	end
 	
 	if game.GetMap() == "ep1_c17_05" then
@@ -803,7 +813,7 @@ hook.Add("Tick", "HL2CR_CitizenFollow05", function()
 		for _, cit in ipairs(ents.FindByClass("npc_citizen")) do
 			if not cit or not string.find(cit:GetName(), "citizen_refugees_") then continue end
 			if cit.ReachedEnd == true then continue end
-			if (cit:GetPos():Distance(player.GetAll()[1]:GetPos()) > 50 and cit:GetPos():Distance(player.GetAll()[1]:GetPos()) <= 500) and not cit:IsCurrentSchedule(SCHED_FORCED_GO_RUN) then
+			if cit:IsValid() and (cit:GetPos():Distance(player.GetAll()[1]:GetPos()) > 50 and cit:GetPos():Distance(player.GetAll()[1]:GetPos()) <= 500) and not cit:IsCurrentSchedule(SCHED_FORCED_GO_RUN) then
 				cit:SetLastPosition( player.GetAll()[1]:GetPos() )
 				cit:SetSchedule(SCHED_FORCED_GO_RUN)
 			end

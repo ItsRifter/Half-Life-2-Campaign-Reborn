@@ -150,7 +150,8 @@ local CLIENT_FRIENDLY_NPCS = {
 	["npc_furniture"] = true,
 	["npc_crow"] = true,
 	["npc_pigeon"] = true,
-	["npc_seagull"] = true
+	["npc_seagull"] = true,
+	["npc_puppet"] = true
 }
 
 local CONVERT_TO_NAME_NH2 = {
@@ -378,7 +379,7 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 				if not ent:GetNWBool("HL2CR_Special") then
 					if string.find(game.GetMap(), "nh2") or game.GetMap() == "nh1remake1_fixed" then
 						draw.SimpleText(CONVERT_TO_NAME_NH2[ent:GetClass()], font or "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-					else 
+					else
 						draw.SimpleText(CONVERT_TO_NAME_STANDARD[ent:GetClass()], font or "HL2CR_NPCStats", ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				else

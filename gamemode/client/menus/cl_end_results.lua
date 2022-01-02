@@ -87,12 +87,6 @@ function ResultScreen(tblResults)
 	xpLabel:AlphaTo(255, 2, 0, nil)
 	xpLabel:MoveTo(ScrW() / 2.3703703, 200, 1, 0, 0.5, nil)
 	
-	local totalAchNames = ""
-	
-	for _, name in ipairs(tblResults["achs"]) do
-		totalAchNames = totalAchNames .. name .. "\n"
-	end
-	
 	local totalBonuses = "\n"
 	
 	for i, bonus in pairs(tblResults["bonus"]) do
@@ -114,18 +108,6 @@ function ResultScreen(tblResults)
 	
 	resinLabel:AlphaTo(255, 2, 0, nil)
 	resinLabel:MoveTo(ScrW() / 2.299399, 250, 1, 0, 0.5, nil)
-	
-	if totalAchNames != "\n" then
-		local achsLabel = vgui.Create("DLabel", endFrame)
-		achsLabel:SetPos(ScrW() / 2.61224, 25)
-		achsLabel:SetAlpha(0)
-		achsLabel:SetText(translate.Get("StatAchievement") .. totalAchNames)
-		achsLabel:SetFont("HL2CR_EndMapStats")
-		achsLabel:SizeToContents()
-		
-		achsLabel:AlphaTo(255, 2, 0, nil)
-		achsLabel:MoveTo(ScrW() / 2.61224, 375, 1, 0, 0.5, nil)
-	end
 	
 	if totalBonuses != "" then
 		local bonusesLabel = vgui.Create("DLabel", endFrame)

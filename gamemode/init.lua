@@ -25,6 +25,7 @@ include("server/maps/sv_lobby.lua")
 include("server/maps/sv_map_manager.lua")
 include("server/maps/sv_custom_coop.lua")
 include("server/maps/sv_ep1.lua")
+include("server/maps/sv_ep2.lua")
 
 ----Quests
 include("server/sv_quests.lua")
@@ -319,6 +320,11 @@ ENABLED_AIRBOAT_GUN = {
 ENABLED_JEEP = {
 	["Colour"] = Color(50, 215, 50),
 	["Message"] = "ENABLED_JEEP"
+}
+
+ENABLED_JALOPY = {
+	["Colour"] = Color(50, 215, 50),
+	["Message"] = "ENABLED_JALOPY"
 }
 
 ERROR_JEEP_OWNER = {

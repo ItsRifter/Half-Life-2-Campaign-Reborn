@@ -325,6 +325,63 @@ GM.Achievements = {
 			},
 			IsRare = false
 		},
+		
+		Attica = {
+			Name = "Attica",
+			Mat = "vgui/achievements/ep1_beat_hospitalatticgunship.png", 
+			Desc = "Attica_Desc",
+			Rewards = {
+				XP = 3000,
+				Item = nil
+			},
+			IsRare = false
+		},
+	},
+	
+	EP2 = {
+		Acid_Reflex = {
+			Name = "Acid_Reflex",
+			Mat = "vgui/achievements/ep2_kill_poisonantlion.png", 
+			Desc = "Acid_Reflex_Desc",
+			Rewards = {
+				XP = 1000,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		IntoBreach = {
+			Name = "IntoBreach",
+			Mat = "vgui/achievements/ep2_beat_antlioninvasion.png", 
+			Desc = "IntoBreach_Desc",
+			Rewards = {
+				XP = 1000,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		Twofer = {
+			Name = "Twofer",
+			Mat = "vgui/achievements/ep2_beat_antlionguards.png", 
+			Desc = "Twofer_Desc",
+			Rewards = {
+				XP = 2000,
+				Item = nil
+			},
+			IsRare = false
+		},
+		
+		HunterAmbush = {
+			Name = "HunterAmbush",
+			Mat = "vgui/achievements/ep2_beat_hunterambush.png", 
+			Desc = "HunterAmbush_Desc",
+			Rewards = {
+				XP = 2500,
+				Item = nil
+			},
+			IsRare = false
+		},
 	},
 	
 	Misc = {

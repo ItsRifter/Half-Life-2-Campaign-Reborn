@@ -7,7 +7,7 @@ if SERVER then
 end
 
 SWEP.PrintName = "Armorkit"
-SWEP.Author = "SuperSponer"
+SWEP.Author = ""
 SWEP.Purpose = "Repair targets armor"
 
 SWEP.Spawnable = true
@@ -125,7 +125,7 @@ function SWEP:PrimaryAttack()
 				for i, v in ipairs(ents.FindInSphere(tr.Entity:GetPos(), 250) ) do
 					if not v:IsPlayer() or v == tr.Entity then continue end
 					v:SetArmor(math.min(v:GetMaxArmor(), v:Armor() + self.Owner:GetNWInt("skill_grouprepair") ) )
-					AddXP(self.Owner, self.Owner:GetNWInt("skill_grouprepair") * 2 * GetConVar("hl2cr_difficulty"):GetInt())
+					AddXP(self.Owner, self.Owner:GetNWInt("skill_grouprepair") * (10 * GetConVar("hl2cr_difficulty"):GetInt()))
 					SendNotificaton(self.Owner:Nick() .. translate.Get("ArmorCharged") .. need + self.Owner:GetNWInt("skill_repairing"), Color(45, 255, 0), v)
 				end
 			end

@@ -176,6 +176,12 @@ function ToggleBoard(toggle)
 			playerPing:SetText(translate.Get("Ping") .. pl:Ping())
 			playerPing:SetTextColor( Color( 0, 0, 0) )
 			playerPing:SizeToContents()
+			
+			local playerclass = vgui.Create("DLabel", panel)
+			playerclass:SetPos(80, 60)
+			playerclass:SetTextColor( Color( 0, 0, 0) )
+			playerclass:SetText(translate.Get("PlayerClass") .. pl:GetNWString("stat_curclass"))
+			playerclass:SizeToContents()
 		end
 	elseif not toggle and scoreboard:IsValid() then
 		scoreboard:Remove()

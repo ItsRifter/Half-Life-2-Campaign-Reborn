@@ -43,7 +43,7 @@ LANGUAGE.EarnedAchievement 				= " получил достижение: "
 LANGUAGE.TimeLeft 						= "До смены: "
 --Финальные результаты
 LANGUAGE.StatXP							= "Получено Опыта: "
-LANGUAGE.StatAchievement				= "Достижения: "
+--LANGUAGE.StatAchievement				= "Достижения: "
 LANGUAGE.StatBonus						= "Бонусы: "
 LANGUAGE.StatKills						= "Всего Убито: "
 LANGUAGE.StatResin						= "Получено Резины: "

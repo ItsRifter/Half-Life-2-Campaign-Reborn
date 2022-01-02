@@ -383,6 +383,8 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 	end
 	
 	if text == "!petsummon" or text == "!summonpet" then
+		if !ply:Alive() or ply:Team() == 2 then return end
+		
 		if table.IsEmpty(ply.hl2cr.Pets) then
 			BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
 			return ""
@@ -620,6 +622,8 @@ concommand.Add("hl2cr_petremove", function(ply, cmd, args)
 end)
 
 concommand.Add("hl2cr_petsummon", function(ply, cmd, args)
+	if !ply:Alive() or ply:Team() == 2 then return end
+	
 	if table.IsEmpty(ply.hl2cr.Pets) then
 		BroadcastMessage(ERROR_PET_UNAVAILABLE, ply)
 		return 

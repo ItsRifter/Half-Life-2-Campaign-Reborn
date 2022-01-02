@@ -672,7 +672,14 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		local skillsPnlBG = vgui.Create("DPanel", skillsPnl)
 		skillsPnlBG:SetSize(skillsPnl:GetWide(), skillsPnl:GetTall())
 		skillsPnlBG.Paint = function() return end
-
+		
+		local skillPointsLbl = vgui.Create("DLabel", skillsPnl)
+		skillPointsLbl:SetText(translate.Get("SkillPointQ") .. LocalPlayer():GetNWInt("stat_skillpoints"))
+		skillPointsLbl:SetFont("HL2CR_Skill_Level")
+		skillPointsLbl:SetPos(0, skillsPnl:GetTall() / 1.22)
+		skillPointsLbl:SizeToContents()
+		
+		
 		local skillsSelectionPnl = vgui.Create("HL2CR_Tab", skillsPnlBG)
 		skillsSelectionPnl:SetSize(skillsPnl:GetWide(), skillsPnl:GetTall())
 		skillsSelectionPnl:SetPos(0, -35)
@@ -867,6 +874,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 				end
 				
 				surface.PlaySound("buttons/button5.wav")
+				skillPointsLbl:SetText(translate.Get("SkillPointQ") .. skillPoints)
 			end
 		end
 			

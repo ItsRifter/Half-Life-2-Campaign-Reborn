@@ -53,7 +53,7 @@ LANGUAGE.UsefulInfo						= "In events of map breaking, use !vrm / !restartmap Ve
 --Ending Results
 LANGUAGE.TimeLeft 						= "Time left: "
 LANGUAGE.StatKills						= "Total Kills: "
-LANGUAGE.StatAchievement				= "Achievements Earned: "
+--LANGUAGE.StatAchievement				= "Achievements Earned: "
 LANGUAGE.StatBonus						= "Bonuses Earned: "
 LANGUAGE.StatXP							= "XP Gained: "
 LANGUAGE.StatResin						= "Resin Earned: "
@@ -96,6 +96,7 @@ LANGUAGE.CHECKPOINT_HIT					= " reached a checkpoint"
 LANGUAGE.ENABLED_AIRBOAT				= "Airboat is now spawnable Use F3 and F4"
 LANGUAGE.ENABLED_AIRBOAT_GUN			= "Airboat with Gun is now spawnable Use F3 and F4"
 LANGUAGE.ENABLED_JEEP					= "Jeep is now spawnable Use F3 and F4"
+LANGUAGE.ENABLED_JALOPY					= "Jalopy is now spawnable Use F3 and F4"
 LANGUAGE.PLAYER_FINISHED				= " has finished the map in "
 LANGUAGE.PLAYER_FINISHED2				= " (" .. team.NumPlayers(TEAM_COMPLETED_MAP) .. "/" .. #player.GetAll() .. ")"
 LANGUAGE.ERROR_JEEP_OWNER				= "This jeep doesn't belong to you"
@@ -121,6 +122,7 @@ LANGUAGE.Field_Medic_Desc				= "A field medic here to help the injured during co
 LANGUAGE.Class_Locked					= "LOCKED: Reach Level 5"
 LANGUAGE.ASSIGNED_MESSAGE1				= "You'll be assigned as '"
 LANGUAGE.ASSIGNED_MESSAGE2				= "' by next respawn"
+LANGUAGE.PlayerClass					= "Class: "
 --Statistics
 LANGUAGE.Kills							= "Kills: "
 LANGUAGE.Deaths							= " | Deaths: "
@@ -137,6 +139,7 @@ LANGUAGE.Quests_Bar					= "Quests"
 LANGUAGE.Achievements_Bar				= "Achievements"
 LANGUAGE.Close							= "Close"
 LANGUAGE.ArmorPoints					= "Armor Points: "
+LANGUAGE.SkillPointQ					= "Skillpoints: "
 
 LANGUAGE.AssignQuest					= "Assign Quest"
 
@@ -146,6 +149,7 @@ LANGUAGE.PET_MAX_LEVEL					= "Congratulations, your pet is now at max level, you
 --Other Menu Translations
 LANGUAGE.Ach_HL2_Bar					= "Half-Life 2"
 LANGUAGE.Ach_EP1_Bar					= "Episode 1"
+LANGUAGE.Ach_EP2_Bar					= "Episode 2"
 LANGUAGE.Ach_Misc_Bar					= "Misc"
 LANGUAGE.Ach_Custom_Bar					= "Custom Maps"
 --Weapon Names
@@ -248,6 +252,12 @@ LANGUAGE.Lambda_Locator					= "Lambda Locator"
 LANGUAGE.Citadel_Lift					= "Watch your head!"
 LANGUAGE.Containment					= "Containment"
 LANGUAGE.Pacifist_Stalkers				= "Pacifist"
+LANGUAGE.Attica							= "Attica!"
+
+LANGUAGE.Acid_Reflex					= "Acid Reflex"
+LANGUAGE.IntoBreach						= "Into the Breach"
+LANGUAGE.Twofer							= "Twofer"
+LANGUAGE.HunterAmbush					= "Meet the Hunters"
 
 LANGUAGE.New_Arrival					= "New Arrival"
 LANGUAGE.Leiftiger						= "The return of the Leiftiger"
@@ -288,6 +298,12 @@ LANGUAGE.Lambda_Locator_Desc			= "Find all Lambda Caches"
 LANGUAGE.Citadel_Lift_Desc				= "Make it to the bottom of the Citadel's main elevator shaft in one piece"
 LANGUAGE.Containment_Desc				= "Contain the Citadel core"
 LANGUAGE.Pacifist_Stalkers_Desc			= "Contain the Citadel core without killing any stalkers"
+LANGUAGE.Attica_Desc					= "Destroy the gunship in the hospital attic"
+
+LANGUAGE.Acid_Reflex_Desc				= "Kill an acid antlion worker"
+LANGUAGE.IntoBreach_Desc				= "Help Griggs and Sheckley\nhold off the antlion invasion\ninside the mine shaft"
+LANGUAGE.Twofer_Desc					= "Defeat both antlion guards\noutside the White Forest"
+LANGUAGE.HunterAmbush_Desc				= "Survive the Hunter\nambush with Alyx"
 
 LANGUAGE.New_Arrival_Desc				= "Play the gamemode for the first time"
 LANGUAGE.Leiftiger_Desc					= "Met the original creator of HL2-C"

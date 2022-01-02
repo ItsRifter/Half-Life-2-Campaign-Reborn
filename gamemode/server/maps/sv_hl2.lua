@@ -4033,6 +4033,7 @@ local function SetUpMisc()
 	local MapLua = ents.Create("lua_run")
 	MapLua:SetName("triggerhook")
 	MapLua:Spawn()
+	
 	local npc_vortigaunt = {
 		["npc_vortigaunt"] = true
 	}

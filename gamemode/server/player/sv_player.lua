@@ -51,6 +51,7 @@ function GM:ShowHelp(ply)
 	HL2CR_Voting:PlayerVote(ply, true)
 end
 
+
 function GM:ShowTeam(ply)
 	HL2CR_Voting:PlayerVote(ply, false)
 end
@@ -838,6 +839,14 @@ local function createIndicator(rewardAmount, position, player, isPet)
 	
 end
 
+local NO_INF_ANTLION_MAPS = {
+	["ep2_outland_01"] = true,
+	["ep2_outland_01a"] = true,
+	["ep2_outland_02"] = true,
+	["ep2_outland_03"] = true,
+	["ep2_outland_04"] = true,
+}
+
 RANDOM_XP_BASED_NPC = {
 	["npc_headcrab"] = {xpMin = 2, xpMax = 12},
 	["npc_headcrab_fast"] = {xpMin = 3, xpMax = 15},
@@ -856,8 +865,10 @@ RANDOM_XP_BASED_NPC = {
 	["npc_antlionguardian"] = {xpMin = 125, xpMax = 275},
 	["npc_barnacle"] = {xpMin = 1, xpMax = 25},
 	["npc_turret_ground"] = {xpMin = 5, xpMax = 25},
-	
 	["npc_vortigaunt"] = {xpMin = 25, xpMax = 50},
+	["npc_antlion"] = {xpMin = 30, xpMax = 55},
+	["npc_antlion_worker"] = {xpMin = 35, xpMax = 60},
+	
 }
 
 hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
@@ -869,6 +880,11 @@ hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 	end
 	
 	if player and not inflictor:IsPet() then
+		if npc:GetClass() == "npc_antlion_worker" then
+			GrantAchievement(player, "EP2", "Acid_Reflex")
+		end
+		
+		if (npc:GetClass() == "npc_antlion" or npc:GetClass() == "npc_antlion_worker") and not NO_INF_ANTLION_MAPS[game.GetMap()] then return end
 	
 		if not RANDOM_XP_BASED_NPC[npc:GetClass()] or not npc.level then return end
 		
@@ -941,7 +957,13 @@ hook.Add("PlayerEnteredVehicle", "HL2CR_EnableVehicleOnEnter", function(ply, veh
 		canSpawnJeepGlobal = true
 		
 		BroadcastMessage(ENABLED_JEEP)
-	end	
+	end
+	
+	if game.GetMap() == "ep2_outland_06" and not canSpawnJalopyGlobal then
+		canSpawnJalopyGlobal = true
+		
+		BroadcastMessage(ENABLED_JALOPY)
+	end
 end)
 
 local PROJ_IGNORE = {

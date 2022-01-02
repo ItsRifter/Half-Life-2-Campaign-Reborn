@@ -190,11 +190,13 @@ if SERVER then
 			table.Empty(ply.hl2cr.Pets.CurrentPet)
 		
 			timer.Simple(0.1, function()
-				for i, newPet in ipairs(GAMEMODE.PlayerPets) do
-					if newPet.class == classEvolvingFrom then
+				for i, oldPet in ipairs(ply.hl2cr.Pets) do
+					if oldPet.class == classEvolvingFrom then
 						table.remove(ply.hl2cr.Pets, i)
 					end
-					
+				end
+				
+				for i, newPet in ipairs(GAMEMODE.PlayerPets) do	
 					if newPet.class == EVOLVE_TREE[classEvolvingFrom] then
 						table.insert(ply.hl2cr.Pets, newPet)
 						table.Merge(ply.hl2cr.Pets.CurrentPet, newPet)

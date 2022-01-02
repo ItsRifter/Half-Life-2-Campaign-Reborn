@@ -50,8 +50,11 @@ list.Set( "Vehicles", "Jalopy", jalopy )
 canSpawnAirboatGlobal = false
 canSpawnGlobalGun = false
 canSpawnJeepGlobal = false
+canSpawnJalopyGlobal = false
+
 disableJeepGlobal = false
 disableAirboatGlobal = false
+disableJalopyGlobal = false
 
 local nextSpawn = 0
 local antiExploit = 0
@@ -122,6 +125,23 @@ function GM:ShowSpare1(ply)
 		jeep:SetCustomCollisionCheck( true )
 		
 		ply.vehicle = jeep
+	elseif (JALOPY_MAPS[game.GetMap()] or canSpawnJalopyGlobal) and not disableJalopyGlobal then
+		local jalopy = ents.Create(Jalopy.Class)
+		jalopy:SetModel(Jalopy.Model)
+		jalopy:SetPos(ply:GetPos() + Vector(0, 0, 65)	 )
+		jalopy:SetAngles(ply:EyeAngles() - Angle(0, 90, 0))
+		
+		for i, key in pairs(Jalopy.KeyValues) do
+			jalopy:SetKeyValue(i, key)
+		end
+		
+		jalopy:Activate()
+		jalopy:Fire( "addoutput", "targetname jalopy" );
+		jalopy:Spawn()
+				
+		jalopy:SetCustomCollisionCheck( true )
+		
+		ply.vehicle = jalopy
 	else
 		BroadcastMessage(ERROR_VEHICLE_MAP, ply)
 		return

@@ -31,8 +31,6 @@ function GrantAchievement(ply, baseList, achName)
 		AddXP(ply, ach.Rewards.XP)
 	end
 	
-	table.insert(ply.rewards["achs"], ach.Name)
-	
 	ply:SetNWInt("stat_totalachs", #ply.hl2cr.Achievements)
 	ply:SetNWString("stat_achievements", table.concat(ply.hl2cr.Achievements, " "))
 end

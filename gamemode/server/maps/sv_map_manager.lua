@@ -96,6 +96,27 @@ MAPS_EP1 = {
 	"ep1_c17_06"
 }
 
+MAPS_EP2 = {
+	"ep2_outland_01",
+	"ep2_outland_01a",
+	"ep2_outland_02",
+	"ep2_outland_03",
+	"ep2_outland_04",
+	"ep2_outland_05",
+	"ep2_outland_06",
+	"ep2_outland_06a",
+	"ep2_outland_07",
+	"ep2_outland_08",
+	"ep2_outland_09",
+	"ep2_outland_10",
+	"ep2_outland_10a",
+	"ep2_outland_11",
+	"ep2_outland_11a",
+	"ep2_outland_11b",
+	"ep2_outland_12",
+	"ep2_outland_12a",
+}
+
 MAPS_COOP_SYNB2 = {
 	"level01_synb2_entryway_of_doom",
 	"level02_synb2_tricks_and_traps",
@@ -183,6 +204,15 @@ function StartMapCountdown()
 				RunConsoleCommand("changelevel", MAPS_EP1[k+1])
 			end
 		end
+		
+		for k = 1, #MAPS_EP2 do
+			if game.GetMap() == MAPS_EP2[k] then
+				if not MAPS_EP2[k+1] then
+					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+				end
+				RunConsoleCommand("changelevel", MAPS_EP2[k+1])
+			end
+		end
 
 		for k = 1, #MAPS_COOP_SYNB2 do
 			if game.GetMap() == MAPS_COOP_SYNB2[k] then
@@ -231,10 +261,13 @@ end
 function InitMap()
 	if MAPS_LOBBY[game.GetMap()] then
 		StartLobby()
+		return
 	elseif string.find(game.GetMap(), "d1_") or string.find(game.GetMap(), "d2_") or string.find(game.GetMap(), "d3_") then
 		StartHL2()
 	elseif string.find(game.GetMap(), "ep1_") then
 		StartEP1()
+	elseif string.find(game.GetMap(), "ep2_") then
+		StartEP2()
 	else
 		StartCoop()
 	end
@@ -242,7 +275,7 @@ function InitMap()
 	StartCountdownToLobby()
 end
 
-local function StartCountdownToLobby()
+function StartCountdownToLobby()
 	timer.Create("HL2CR_LobbyTimer", 3600, 1, function()
 		RunConsoleCommand("ChangeLevel", "hl2cr_lobby_v2")
 	end)

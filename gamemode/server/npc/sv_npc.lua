@@ -35,8 +35,8 @@ HOSTILE_NPCS = {
 	["npc_antlionguardian"] = true,
 	["npc_barnacle"] = true,
 	["npc_turret_ground"] = true,
-	["sent_controllable_manhack"] = true,
-	["sent_controllable_drone"] = true
+	["npc_antlion"] = true,
+	["npc_antlion_worker"] = true
 }
 
 function meta:IsFriendly()
