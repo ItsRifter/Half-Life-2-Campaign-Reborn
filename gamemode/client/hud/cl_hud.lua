@@ -638,6 +638,19 @@ net.Receive("HL2CR_OpenCustomMap", function()
 		net.SendToServer()
 		customFrame:Close()
 	end
+	
+	local miMapBtn = vgui.Create("DButton", mapScroll)
+	miMapBtn:SetSize(1024, 256)
+	miMapBtn:SetPos(customFrame:GetWide() / 3.74, 50 * 19)
+	miMapBtn:SetText("")
+	miMapBtn:SetImage("materials/hl2cr/mapicons/mission.jpg")
+	miMapBtn.Paint = function() end
+	miMapBtn.DoClick = function()
+		net.Start("HL2CR_VoteCustomMap")
+			net.WriteString("BeginMissionImprobable")
+		net.SendToServer()
+		customFrame:Close()
+	end
 end)
 
 net.Receive("HL2CR_StatusEffect", function()

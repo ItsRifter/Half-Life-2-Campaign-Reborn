@@ -189,6 +189,166 @@ local function SetCheckpoints()
 			Vector(1235, -1639, -95)
 		}
 	
+	elseif game.GetMap() == "mimp1" then
+		HL2CR_Voting = HL2CR_Voting or {}
+		disableJalopyGlobal = true
+
+		ents.FindByName("suicidetrigger")[1]:Remove()
+
+		TRIGGER_CHANGELEVEL_COOP = {
+			Vector(-3647, -637, -1277),	Vector(-3650, -122, -1084)
+		}
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(-3858, 2292, -1165),		Vector(-3808, 2500, -1390),
+			Vector(-2731, 2518, -936),		Vector(-2811, 2590, -853),
+			Vector(-751, 4245, -765),		Vector(-682, 4413, -661),
+			Vector(-1620, 568, -1626),		Vector(-1386, 883, -1506),
+			Vector(3663, -1017, -1779),		Vector(3447, -1000, -1670),
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(-3822, 2387, -1299),
+			Vector(-2801, 2552, -920),
+			Vector(-700, 4334, -724),
+			Vector(-1498, 755, -1568),
+			Vector(3558, -976, -1736)
+		}
+
+		if GetConVar("hl2cr_survival"):GetInt() == 0 then
+		    CHECKPOINT_FUNC_3 = function()
+			    GetConVar("hl2cr_survival"):SetInt(1)
+			    HL2CR_Voting.nextVoteTime = CurTime() + (60 * 60)
+			    for i = 1, 4 do
+			        timer.Simple(.5 + i, function()
+				        PrintMessage(HUD_PRINTCENTER, "Survival Mode are Enabled.") 
+			        end)
+			    end
+				for i = 1, 4 do
+			        timer.Simple(4.5 + i, function()
+				        PrintMessage(HUD_PRINTCENTER, "Votes are disabled until the next CP.") 
+			        end)
+			    end
+		    end
+		    CHECKPOINT_FUNC_4 = function()
+				GetConVar("hl2cr_survival"):SetInt(0)
+		    	HL2CR_Voting.nextVoteTime = CurTime() / 36000
+			    for i = 1, 4 do
+				    timer.Simple(.5 + i, function()
+					    PrintMessage(HUD_PRINTCENTER, "Survival Mode are Disabled.")
+				    end)
+			    end
+	        end
+	    end
+		
+		CHECKPOINT_FUNC_5 = function()
+			disableJalopyGlobal = false
+			canSpawnJalopyGlobal = true			
+			BroadcastMessage(ENABLED_JALOPY)
+		end
+
+	elseif game.GetMap() == "mimp_intermission" then
+
+		TRIGGER_CHANGELEVEL_COOP = {
+			Vector(-3669, -185, -156),		Vector(-3646, 317, -20)
+		}
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(1875, -1898, -258),		Vector(1883, -2028, -170),
+			Vector(1744, -1086, -302),		Vector(1731, -980, -176),
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(1875, -1970, -267),
+			Vector(1729, -1031, -300)
+		}
+
+	elseif game.GetMap() == "mimp2" then
+
+		disableJalopyGlobal = false
+		canSpawnJalopyGlobal = true
+
+		ents.FindByName("suicidetrigger")[1]:Remove()
+
+		TRIGGER_CHANGELEVEL_COOP = {
+			Vector(4349, -3003, -1153),			Vector(-4227, -2996, -1051)
+		}
+	
+		TRIGGER_CHECKPOINT = {
+			--Vector(-9484, -9495, -924), 		Vector(-9639, -9265, -816),
+			Vector(-11068, -3997, -1315),		Vector(-10431, -3776, -1110),
+			--Vector(11641, -9543, -1645), 		Vector(11795, -9404, -1533),
+			Vector(-10738, 2283, -1231), 		Vector(-10610, 2273, -1129),
+			Vector(13437, -6933, -1642), 		Vector(13153, -6597, -1505),
+			Vector(9989, -4962, -1902), 		Vector(9859, -5630, -1555),
+			Vector(4347, -4796, -1151), 		Vector(4227, -4698, -1051),
+		}
+	
+		CHECKPOINT_POS = {
+			--Vector(-9532, -9440, -884),
+			Vector(-10724, -3889, -1178),
+			--Vector(11731, -9471, -1604),
+			Vector(-11026, 2861, -1227),
+			Vector(13318, -6833, -1634),
+			Vector(9951, -5134, -1824),
+			Vector(4289, -4743, -1132)
+		}
+
+		CHECKPOINT_FUNC_1 = function()
+			disableJalopyGlobal = true
+			canSpawnJalopyGlobal = false
+		end
+
+	elseif game.GetMap() == "mimp3" then
+		HL2CR_Voting = HL2CR_Voting or {}
+		local npc_stalker = {
+			["npc_stalker"] = true
+		}
+		
+		table.Merge(FRIENDLY_NPCS, npc_stalker)
+	
+		TRIGGER_CHECKPOINT = {
+			Vector(4363, -810, -3324), 		Vector(4443, -934, -3197),
+			Vector(3010, -802, -4349),		Vector(3034, -1046, -4213),
+			Vector(2495, -1202, -4510), 	Vector(2435, -1346, -4383),
+			Vector(576, -1612, -4759), 		Vector(507, -1477, -4550),
+			Vector(4325, 380, 115), 		Vector(4302, 321, 240),
+		}
+	
+		CHECKPOINT_POS = {
+			Vector(4389, -869, -3314),
+			Vector(3043, -924, -4348),
+			Vector(2480, -1256, -4498),
+			Vector(438, -1535, -4840),
+			Vector(4235, 350, 157)
+		}
+
+		if GetConVar("hl2cr_survival"):GetInt() == 0 then
+		    CHECKPOINT_FUNC_4 = function()
+			    GetConVar("hl2cr_survival"):SetInt(1)
+			    HL2CR_Voting.nextVoteTime = CurTime() + (60 * 60)
+			    for i = 1, 4 do
+			        timer.Simple(.5 + i, function()
+				        PrintMessage(HUD_PRINTCENTER, "Survival Mode are Enabled.") 
+			        end)
+			    end
+				for i = 1, 4 do
+			        timer.Simple(4.5 + i, function()
+				        PrintMessage(HUD_PRINTCENTER, "Votes are disabled until the next CP.") 
+			        end)
+			    end
+		    end
+		    CHECKPOINT_FUNC_5 = function()
+				GetConVar("hl2cr_survival"):SetInt(0)
+		    	HL2CR_Voting.nextVoteTime = CurTime() / 36000
+			    for i = 1, 4 do
+				    timer.Simple(.5 + i, function()
+					    PrintMessage(HUD_PRINTCENTER, "Survival Mode are Disabled.")
+				    end)
+			    end
+	        end
+	    end
+
 	elseif game.GetMap() == "nh1remake1_fixed" then
 	
 		TRIGGER_CHECKPOINT = {
@@ -429,6 +589,22 @@ local COOP_WEAPONS = {
 		[1] = "weapon_crowbar",
 		[2] = "weapon_physcannon",
 	},
+
+	["mimp1"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+	},
+
+	["mimp_intermission"] = {
+		[1] = "weapon_crowbar",
+		[2] = "weapon_pistol",
+		[3] = "weapon_357",
+		[4] = "weapon_smg1",
+		[5] = "weapon_ar2",
+		[6] = "weapon_shotgun",
+		[7] = "weapon_crossbow",
+		[8] = "weapon_rpg",
+	},
 	
 	["nh2c2_v2"] = {
 		[1] = "weapon_nh_hatchet",
@@ -526,6 +702,10 @@ local MAP_LOGIC = {
 	
 	["level_4b"] = function(MapLua)
 		ents.FindByName("strider_hit_count")[1]:Fire("AddOutput", "OnHitMax triggerhook:RunPassedCode:hook.Run('FinishRnD')")
+	end,
+
+	["mimp3"] = function(MapLua)
+		ents.FindByName("end_of_an_era_sadface")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:hook.Run('FinishMI')")
 	end,
 	
 	["nh1remake1_fixed"] = function(MapLua)	
@@ -815,6 +995,19 @@ hook.Add("FinishRnD", "HL2CR_FinishRndSeries", function()
 	end
 	
 	BroadcastMessage(MAPS_CUSTOM_FINISHED_RND)
+	
+	net.Start("HL2CR_EndCampaign")
+	net.Broadcast()
+	StartFinalMapCountdown()
+end)
+
+hook.Add("FinishMI", "HL2CR_FinishMissionImprobableSeries", function()
+	for k, v in ipairs(player.GetAll()) do
+		v:SetTeam(TEAM_COMPLETED_MAP)
+		GrantAchievement(v, "Custom", "MI_Wheelchair")
+	end
+	
+	BroadcastMessage(MAPS_CUSTOM_FINISHED_MI)
 	
 	net.Start("HL2CR_EndCampaign")
 	net.Broadcast()

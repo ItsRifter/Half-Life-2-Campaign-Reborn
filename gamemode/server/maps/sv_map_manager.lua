@@ -151,6 +151,13 @@ MAPS_COOP_RND = {
 	"level_4b"
 }
 
+MAPS_COOP_IMPROBABLE = {
+	"mimp1",
+	"mimp_intermission",
+	"mimp2",
+	"mimp3"
+}
+
 function StartMapCountdown()
 	
 	timer.Create("HL2CR_Countdown", 20, 1, function()
@@ -229,6 +236,15 @@ function StartMapCountdown()
 					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
 				end
 				RunConsoleCommand("changelevel", MAPS_COOP_RND[k+1])
+			end
+		end
+
+		for k = 1, #MAPS_COOP_IMPROBABLE do
+			if game.GetMap() == MAPS_COOP_IMPROBABLE[k] then
+				if not MAPS_COOP_IMPROBABLE[k+1] then
+					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+				end
+				RunConsoleCommand("changelevel", MAPS_COOP_IMPROBABLE[k+1])
 			end
 		end
 		

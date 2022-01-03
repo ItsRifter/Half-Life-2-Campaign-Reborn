@@ -496,6 +496,17 @@ GM.Achievements = {
 			},
 			IsRare = false
 		},
+		
+		MI_Wheelchair = {
+			Name = "MI_Wheelchair",
+			Mat = "vgui/achievements/hl2_beat_game.png", 
+			Desc = "MI_Wheelchair_Desc",
+			Rewards = {
+				XP = 2500,
+				Item = nil
+			},
+			IsRare = false
+		},
 	},
 	
 	Killer = {

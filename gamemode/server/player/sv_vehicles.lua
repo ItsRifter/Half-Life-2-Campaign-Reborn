@@ -107,6 +107,23 @@ function GM:ShowSpare1(ply)
 		gunboat:SetCustomCollisionCheck( true )
 
 		ply.vehicle = gunboat
+
+	elseif (JALOPY_MAPS[game.GetMap()] or canSpawnJalopyGlobal) or (game.GetMap() == "mimp1" and not disableJalopyGlobal) then
+		local jalopy = ents.Create(Jalopy.Class)
+		jalopy:SetModel(Jalopy.Model)
+		jalopy:SetPos(ply:GetPos() + Vector(0, 0, 45) )
+		
+		for i, key in pairs(Jalopy.KeyValues) do
+			jalopy:SetKeyValue(i, key)
+		end
+		jalopy:Activate()
+		jalopy:Fire( "addoutput", "targetname jalopy" );
+		jalopy:Spawn()
+				
+		jalopy:SetAngles(ply:EyeAngles() - Angle(0, 90, 0))
+		jalopy:SetCustomCollisionCheck( true )
+		
+		ply.vehicle = jalopy
 		
 	elseif (JEEP_MAPS[game.GetMap()] or canSpawnJeepGlobal) and not disableJeepGlobal then
 		local jeep = ents.Create(Jeep.Class)
@@ -125,23 +142,6 @@ function GM:ShowSpare1(ply)
 		jeep:SetCustomCollisionCheck( true )
 		
 		ply.vehicle = jeep
-	elseif (JALOPY_MAPS[game.GetMap()] or canSpawnJalopyGlobal) and not disableJalopyGlobal then
-		local jalopy = ents.Create(Jalopy.Class)
-		jalopy:SetModel(Jalopy.Model)
-		jalopy:SetPos(ply:GetPos() + Vector(0, 0, 65)	 )
-		jalopy:SetAngles(ply:EyeAngles() - Angle(0, 90, 0))
-		
-		for i, key in pairs(Jalopy.KeyValues) do
-			jalopy:SetKeyValue(i, key)
-		end
-		
-		jalopy:Activate()
-		jalopy:Fire( "addoutput", "targetname jalopy" );
-		jalopy:Spawn()
-				
-		jalopy:SetCustomCollisionCheck( true )
-		
-		ply.vehicle = jalopy
 	else
 		BroadcastMessage(ERROR_VEHICLE_MAP, ply)
 		return
