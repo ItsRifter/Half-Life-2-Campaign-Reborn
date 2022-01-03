@@ -981,6 +981,12 @@ hook.Add("FixSpeed", "HL2CR_NH2_FixSpeed", function()
 	end
 end)
 
+hook.Add("EntityTakeDamage", "MI_Water_Kills", function(ent, dmginfo)
+	if ent:IsPlayer() and ent:WaterLevel() >= 1 and (game.GetMap("mimp1") or game.GetMap("mimp2")) then
+	ent:Kill()
+	end
+end)
+
 hook.Add("FailCoopMap", "HL2CR_RestartCoop", function()
 	BroadcastSound("music/hl2_song23_suitsong3.mp3")
 	timer.Simple(10, function()

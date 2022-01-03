@@ -51,6 +51,10 @@ JEEP_MAPS = {
 	["d2_coast_10"] = true
 }
 
+JALOPY_MAPS = {
+	["mimp_intermission"] = true,
+}
+
 NO_REWARDS_MAPS = {
 	["d1_trainstation_01"] = true,
 	["d1_trainstation_02"] = true,
@@ -4033,7 +4037,6 @@ local function SetUpMisc()
 	local MapLua = ents.Create("lua_run")
 	MapLua:SetName("triggerhook")
 	MapLua:Spawn()
-	
 	local npc_vortigaunt = {
 		["npc_vortigaunt"] = true
 	}
