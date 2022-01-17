@@ -11,7 +11,7 @@ function ToggleBoard(toggle)
 		
 		local titleLabel = vgui.Create("DLabel", scoreboard)
 		titleLabel:SetText(GAMEMODE.ServerName)
-		titleLabel:SetPos(0, 45)
+		titleLabel:SetPos(0, 55)
 		titleLabel:SetFont("HL2CR_Title")
 		titleLabel:SizeToContents()
 		titleLabel:SetTextColor( Color(0, 0, 0) )
@@ -29,10 +29,17 @@ function ToggleBoard(toggle)
 		
 		local versionLabel = vgui.Create("DLabel", mainPanel)
 		versionLabel:SetText(translate.Get("SCVersion") .. GAMEMODE.Version)
-		versionLabel:SetPos(0, 460)
+		versionLabel:SetPos(5, 460)
 		versionLabel:SetFont("HL2CR_Title")
 		versionLabel:SizeToContents()
 		versionLabel:SetTextColor( Color(0, 0, 0) )
+
+		local diff = vgui.Create("DLabel", mainPanel)
+		diff:SetText(translate.Get("DifficultyLevel") .. GetConVar("hl2cr_difficulty"):GetInt())
+		diff:SetPos(735, 460)
+		diff:SetFont("HL2CR_Title")
+		diff:SizeToContents()
+		diff:SetTextColor( Color(0, 0, 0) )
 		
 		local playerList = vgui.Create( "DIconLayout", mainPanel )
 		playerList:SetPos(20, 10)
@@ -92,35 +99,35 @@ function ToggleBoard(toggle)
 			
 			if pl:IsSuperAdmin() then
 				local adminBadge = vgui.Create( "DImageButton", panel )
-				adminBadge:SetSize(24, 24)
-				adminBadge:SetPos(panel:GetWide() - 30, 0)
+				adminBadge:SetSize(18, 18)
+				adminBadge:SetPos(panel:GetWide() - 20, 0)
 				adminBadge:SetImage( "icon16/award_star_gold_3.png" )
 				adminBadge:SetToolTip(translate.Get("SuperAdmin"))
 				
 			elseif pl:IsAdmin() then
 				local adminBadge = vgui.Create( "DImageButton", panel )
-				adminBadge:SetSize(24, 24)
+				adminBadge:SetSize(18, 18)
 				adminBadge:SetPos(panel:GetWide() - 30, 0)
 				adminBadge:SetImage( "icon16/award_star_gold_2.png" )
 				adminBadge:SetToolTip(translate.Get("Admin"))
 			end
 			if pl:GetUserGroup() == "donator" then
 				local donatorBadge = vgui.Create( "DImageButton", panel )
-				donatorBadge:SetSize(24, 24)
+				donatorBadge:SetSize(18, 18)
 				donatorBadge:SetPos(panel:GetWide() - 30, 0)
 				donatorBadge:SetImage( "icon16/medal_bronze_3.png" )
 				donatorBadge:SetToolTip(translate.Get("Donator"))
 				
 			elseif pl:GetUserGroup() == "vip" then
 				local vipBadge = vgui.Create( "DImageButton", panel )
-				vipBadge:SetSize(24, 24)
+				vipBadge:SetSize(18, 18)
 				vipBadge:SetPos(panel:GetWide() - 30, 0)
 				vipBadge:SetImage( "icon16/medal_silver_3.png" )
 				vipBadge:SetToolTip(translate.Get("VIP"))
 			
 			elseif pl:GetUserGroup() == "vip+" then
 				local vipExtraBadge = vgui.Create( "DImageButton", panel )
-				vipExtraBadge:SetSize(24, 24)
+				vipExtraBadge:SetSize(18, 18)
 				vipExtraBadge:SetPos(panel:GetWide() - 30, 0)
 				vipExtraBadge:SetImage( "icon16/medal_gold_3.png" )
 				vipExtraBadge:SetToolTip(translate.Get("VIPExtra"))
@@ -128,7 +135,7 @@ function ToggleBoard(toggle)
 			
 			if ALPHA_TESTERS[pl:SteamID()] then
 				local testerBadge = vgui.Create( "DImageButton", panel )
-				testerBadge:SetSize(24, 24)
+				testerBadge:SetSize(18, 18)
 				testerBadge:SetPos(panel:GetWide() - 60, 0)
 				testerBadge:SetImage( "icon16/bug.png" )
 				testerBadge:SetToolTip(translate.Get("AlphaTester"))
@@ -172,16 +179,22 @@ function ToggleBoard(toggle)
 			end
 			
 			local playerPing = vgui.Create("DLabel", panel)
-			playerPing:SetPos(80, 45)
+			playerPing:SetPos(80, 57)
 			playerPing:SetText(translate.Get("Ping") .. pl:Ping())
 			playerPing:SetTextColor( Color( 0, 0, 0) )
 			playerPing:SizeToContents()
-			
+
 			local playerclass = vgui.Create("DLabel", panel)
-			playerclass:SetPos(80, 60)
+			playerclass:SetPos(80, 45)
 			playerclass:SetTextColor( Color( 0, 0, 0) )
 			playerclass:SetText(translate.Get("PlayerClass") .. pl:GetNWString("stat_curclass"))
 			playerclass:SizeToContents()
+
+			local playercountry = vgui.Create("DLabel", panel)
+			playercountry:SetPos(210, 63)
+			playercountry:SetTextColor( Color( 0, 0, 0) )
+			playercountry:SetText(system.GetCountry())
+			playercountry:SizeToContents()
 		end
 	elseif not toggle and scoreboard:IsValid() then
 		scoreboard:Remove()
