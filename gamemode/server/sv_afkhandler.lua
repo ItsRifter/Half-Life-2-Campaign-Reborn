@@ -1,6 +1,6 @@
 --Afk Kicker by Salamafet, fitted for hl2cr
-AFK_WARN_TIME = 8
-AFK_TIME = 15
+AFK_WARN_TIME = 300
+AFK_TIME = 600
 
 WARNING_AFK = {
 	["Colour"] = Color(215, 50, 50),
