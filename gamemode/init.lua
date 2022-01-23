@@ -2,7 +2,6 @@
 --Server Files
 ----Basic
 include("shared.lua")
-include("server/sv_base_convars.lua")
 
 --Chat System
 include("server/sv_chat.lua")
@@ -79,6 +78,7 @@ include("shared/quests/sh_quest_system.lua")
 
 ----Misc
 include("shared/sh_translate.lua")
+include("shared/sh_base_convars.lua")
 
 ----Pets
 include("shared/petskills/sh_pets_headcrab_skills.lua")

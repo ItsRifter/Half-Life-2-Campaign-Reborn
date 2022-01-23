@@ -1,5 +1,22 @@
+
 function ToggleBoard(toggle)
 	if toggle then
+		local convertNumToLanguage = {
+			[1] = translate.Get("DiffVEasy"),
+			[2] = translate.Get("DiffEasy"),
+			[3] = translate.Get("DiffMedium"),
+			[4] = translate.Get("DiffHard"),
+			[5] = translate.Get("DiffVHard")
+		}
+		
+		local convertNumToSize = {
+			[1] = 600,
+			[2] = 675,
+			[3] = 625,
+			[4] = 675,
+			[5] = 600,
+		}
+		
 		scoreboard = vgui.Create("HL2CR_Tab")
 		scoreboard:SetSize(1000, 650)
 		scoreboard:SetPos(ScrW() / 2 - 500, ScrH() / 15)
@@ -35,8 +52,8 @@ function ToggleBoard(toggle)
 		versionLabel:SetTextColor( Color(0, 0, 0) )
 
 		local diff = vgui.Create("DLabel", mainPanel)
-		diff:SetText(translate.Get("DifficultyLevel") .. GetConVar("hl2cr_difficulty"):GetInt())
-		diff:SetPos(735, 460)
+		diff:SetText(translate.Get("DifficultyLevel") .. convertNumToLanguage[GetConVar("hl2cr_difficulty"):GetInt()])
+		diff:SetPos(convertNumToSize[GetConVar("hl2cr_difficulty"):GetInt()], 460)
 		diff:SetFont("HL2CR_Title")
 		diff:SizeToContents()
 		diff:SetTextColor( Color(0, 0, 0) )
@@ -183,6 +200,11 @@ function ToggleBoard(toggle)
 			playerPing:SetText(translate.Get("Ping") .. pl:Ping())
 			playerPing:SetTextColor( Color( 0, 0, 0) )
 			playerPing:SizeToContents()
+
+			playerPing.Think = function(self)
+				self:SetText(translate.Get("Ping") .. pl:Ping())	
+				self:SizeToContents()
+			end
 
 			local playerclass = vgui.Create("DLabel", panel)
 			playerclass:SetPos(80, 45)

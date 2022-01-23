@@ -1,3 +1,5 @@
+AddCSLuaFile()
+
 --Ammo Limits Convars
 CreateConVar("hl2cr_max_pistol", 			150, 	{FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, true)
 CreateConVar("hl2cr_max_357", 				12, 	{FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, true)
@@ -19,7 +21,6 @@ CreateConVar("hl2cr_survival", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Enable/Dis
 CreateConVar("hl2cr_cooldown_class", 60, {FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How long is the cooldown for class switching", 1, 180)
 
 --Random NPC Spawning ConVars
-
 CreateConVar("hl2cr_rndnpc_max", 3, {FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How many can randomly spawn", 1, 20)
 CreateConVar("hl2cr_rndnpc_mindist", 1000, {FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How close can they spawn", 1, 2500)
 CreateConVar("hl2cr_rndnpc_maxdist", 7500, {FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How far can they spawn", 1, 10000)

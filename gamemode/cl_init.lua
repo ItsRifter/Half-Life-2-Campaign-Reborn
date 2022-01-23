@@ -31,6 +31,7 @@ include("shared/shop/sh_shop_items.lua")
 include("shared/shop/sh_craftable_items.lua")
 include("shared/sh_translate.lua")
 include("shared/quests/sh_quest_system.lua")
+include("shared/sh_base_convars.lua")
 
 ALPHA_TESTERS = {
 	["STEAM_0:0:64628700"] = true,

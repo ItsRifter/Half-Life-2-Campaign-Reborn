@@ -304,6 +304,26 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			surface.DrawRect(0, 0, w, h)
 		end
 		
+		qMenuTabs.Think = function()
+			if not LocalPlayer():Alive() then
+				qMenuTabs:Remove()
+				return
+			end
+		end
+
+		local closeBtn = vgui.Create("DButton", qMenuTabs)
+		closeBtn:SetSize(64, 32)
+		closeBtn:SetPos(qMenuTabs:GetWide() - closeBtn:GetWide(), 48)
+		closeBtn:SetText("X")
+		closeBtn:SetFont("HL2CR_CloseBtn")
+		closeBtn.Paint = function() return end
+
+		closeBtn.DoClick = function()
+			if qMenuTabs:IsValid() then
+				qMenuTabs:Remove()
+			end
+		end
+
 		local invPnlPlayer = vgui.Create("DPanel", invPnl)
 		invPnlPlayer:SetPos(invPnl:GetWide() / 1.6, -invPnl:GetTall() / 32 - 32)
 		invPnlPlayer:SetSize(invPnl:GetWide() / 4.2, invPnl:GetTall() )

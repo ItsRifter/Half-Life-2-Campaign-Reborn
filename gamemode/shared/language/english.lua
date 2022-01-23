@@ -5,6 +5,11 @@ LANGUAGE.SCLevel						= "Level: "
 LANGUAGE.Ping							= "Ping: "
 LANGUAGE.PlayerClass					= "Class: "
 LANGUAGE.DifficultyLevel				= "Difficulty Level: "
+LANGUAGE.DiffVEasy                      = "Very Easy"
+LANGUAGE.DiffEasy                       = "Easy"
+LANGUAGE.DiffMedium                     = "Medium"
+LANGUAGE.DiffHard                       = "Hard"
+LANGUAGE.DiffVHard                      = "Very Hard"
 LANGUAGE.SCExprience					= "\nXP: "
 
 LANGUAGE.AlphaTester					= "This player is an alpha tester"
@@ -181,7 +186,10 @@ LANGUAGE.Exosuit_Shoulders_Desc 		= "Part of an Exosuit\nRESIST: 0.65"
 LANGUAGE.Exosuit_Vest_Desc 				= "Part of an Exosuit\nRESIST: 1.15"
 LANGUAGE.Exosuit_Boots_Desc 			= "Part of an Exosuit\nRESIST: 0.45"
 
-
+--AFK
+LANGUAGE.WARNING_AFK                    = "WARNING: You are now AFK"
+LANGUAGE.WARNING_AFK2                   = "You will be disconnected in 5 minutes if you remain inactive"
+LANGUAGE.MovingAfterAFK                 = "You are no longer AFK"
 
 --Weapon Descriptions
 LANGUAGE.Flare_Gun_desc					= "Used for emergencies... so it was"

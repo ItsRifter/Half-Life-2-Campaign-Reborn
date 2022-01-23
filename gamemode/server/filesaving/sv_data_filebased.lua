@@ -76,7 +76,8 @@ local function InitData(ply)
 	
 	--Miscellanous
 	ply.hl2cr.Misc = ply.hl2cr.Misc or {}
-	
+	ply.hl2cr.Misc.AFK = ply.hl2cr.Misc.AFK or false
+
 	ply:SetNWInt("stat_level", ply.hl2cr.Level)
 	ply:SetNWInt("stat_exp", ply.hl2cr.Exp)
 	ply:SetNWInt("stat_reqexp", ply.hl2cr.ReqExp)

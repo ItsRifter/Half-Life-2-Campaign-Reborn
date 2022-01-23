@@ -12,4 +12,4 @@ TEAM_LOYAL = 4
 team.SetUp(TEAM_LOYAL, "Combine", Color(0, 225, 255, 255))
 
 TEAM_AFK = 5
-team.SetUp(TEAM_LOYAL, "AFK", Color(165, 165, 165, 255))
+team.SetUp(TEAM_AFK, "AFK", Color(165, 165, 165, 255))

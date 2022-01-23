@@ -172,6 +172,14 @@ hook.Add("PlayerInitialSpawn", "HL2CR_InitialPlayerSpawn", function(ply, transit
 			net.WriteTable(ply.hl2cr.Quests)
 		net.Send(ply)
 	end
+
+	if ply.hl2cr.Misc.AFK and ply:Team() ~= TEAM_AFK then
+		timer.Simple(1, function()	
+			ply:SetTeam(TEAM_AFK)
+			BroadcastMessage(ENABLE_AFK, ply)
+			EnableSpectateAFK(ply)
+		end)
+	end
 	
 	ply.rewards = {
 		["kills"] = 0,

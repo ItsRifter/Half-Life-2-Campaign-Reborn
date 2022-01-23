@@ -78,6 +78,34 @@ votingTypes["KickPlayer"] = {
 	end
 }
 
+local bringToPlayer = nil
+
+votingTypes["BringAlyxVote"] = {
+	Description = "Teleport Alyx to ",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			ents.FindByClass("npc_alyx")[1]:SetPos(bringToPlayer:GetPos())
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+
+votingTypes["BringBarneyVote"] = {
+	Description = "Teleport Barney to ",
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		if positive > negative then
+			ents.FindByClass("npc_barney")[1]:SetPos(bringToPlayer:GetPos())
+		else
+			BroadcastMessage(VOTE_FAILED)
+		end
+	end
+}
+
 local UPDATE_DIFF_MESSAGE = {
 	[1] = "Very Easy",
 	[2] = "Easy",
@@ -384,6 +412,51 @@ if SERVER then
 		end
 	end
 	
+	function HL2CR_Voting:StartVoteBring(ply, voteTypeKey)
+		-- If there is already a state, there is a vote in progress.
+		if self.State then
+			ply:ChatPrint("A vote is currently in progress!")
+			return
+		end
+
+		-- Get the vote type object.
+		local voteType = votingTypes[voteTypeKey]
+		
+		-- Check if type exists.
+		if not voteType then
+			ply:ChatPrint(string.format("Unknown vote type %q!", voteTypeKey))
+			return
+		end
+
+		-- (Re)set internal and global vote state.
+		self.State = {
+			Creator = ply,
+			VoteTypeKey = voteTypeKey,
+			Voters = {}, -- Table of players containing their votes and maybe some other data.
+			CustomDesc = voteType["Description"] .. ply:Nick()
+		}
+
+		ply.WaitBring = 180 + CurTime()
+		bringToPlayer = ply
+
+		-- Broadcast new vote to all players.
+		self:SendToAll()
+
+		-- Issue a vote for the creator.
+		self:PlayerVote(ply, true)
+		
+		self.CurVote = voteType
+		
+		if not timer.Exists("HL2CR_ServerVoteTimer") then
+			timer.Create("HL2CR_ServerVoteTimer", 30, 1, function() 
+				net.Start("HL2CR_EndVote")
+				net.Broadcast()
+				self:EndVote()
+				self.nextVoteTime = 180 + CurTime()				
+			end)
+		end
+	end
+
 	function HL2CR_Voting:ServerStartVote(voteTypeKey)
 		-- If there is already a state, there is a vote in progress.
 		if self.State then

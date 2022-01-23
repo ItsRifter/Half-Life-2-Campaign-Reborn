@@ -34,6 +34,23 @@ surface.CreateFont( "HL2CR_Notification", {
 	outline = true,
 } )
 
+surface.CreateFont( "HL2CR_CloseBtn", {
+	font = "Roboto",
+	extended = false,
+	size = 46,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = false,
+	underline = false,
+	italic = false,
+	strikeout = false,
+	symbol = false,
+	rotary = false,
+	shadow = false,
+	additive = false,
+	outline = false,
+} )
 
 surface.CreateFont( "HL2CR_ButtonText", {
 	font = "Tahoma",

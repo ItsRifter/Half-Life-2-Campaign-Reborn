@@ -85,6 +85,7 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		ply:SetTeam(TEAM_AFK)
 		BroadcastMessage(ENABLE_AFK, ply)
 		EnableSpectateAFK(ply)
+		ply.hl2cr.Misc.AFK = true
 		return ""
 	--Otherwise disable AFK mode on the player
 	elseif text == "!afk" and ply:Team() == TEAM_AFK then
@@ -92,6 +93,7 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		BroadcastMessage(DISABLE_AFK, ply)
 		DisableSpectate(ply)
 		ply:Spawn()
+		ply.hl2cr.Misc.AFK = false
 		return ""
 	--If they already completed the map, return an message
 	elseif text == "!afk" and ply:Team() == TEAM_COMPLETED_MAP then
@@ -382,6 +384,26 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		return ""
 	end
 	
+	if text == "!vba" or text == "!votebringalyx" then
+		if not ents.FindByClass("npc_alyx")[1] then return "" end
+		if ply.WaitBring and ply.WaitBring > CurTime() then return "" end
+		--if ply.hl2cr.Level < 5 then return "" end
+
+		HL2CR_Voting:StartVoteBring(ply, "BringAlyxVote")
+
+		return ""
+	end
+
+	if text == "!vbb" or text == "!votebringbarney" then
+		if not ents.FindByClass("npc_barney")[1] then return "" end
+		if ply.WaitBring and ply.WaitBring > CurTime() then return "" end
+		--if ply.hl2cr.Level < 5 then return "" end
+
+		HL2CR_Voting:StartVoteBring(ply, "BringBarneyVote")
+
+		return ""
+	end
+
 	if text == "!petsummon" or text == "!summonpet" then
 		if !ply:Alive() or ply:Team() == 2 then return end
 		
