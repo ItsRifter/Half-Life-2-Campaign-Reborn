@@ -32,7 +32,7 @@ NO_SPAWNING_WEAPONS = {
 
 --Takes the name in CurWeaponSlot into a entity weapon
 local CONVERT_NAME_TO_ENT = {
-	["Flare_gun"] = "the_fire_hazard",
+	["Flare_Gun"] = "the_fire_hazard",
 	["Automatic_Pistol"] = "the_swiss_hellbringer",
 	["Shredding_Assault_Rifle"] = "the_aerosol_ar",
 	["Multi_Grenade_Launcher"] = "bakkers_blaster",

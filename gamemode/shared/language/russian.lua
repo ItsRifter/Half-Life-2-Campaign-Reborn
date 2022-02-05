@@ -162,6 +162,7 @@ LANGUAGE.SKILLS_SUPPLIER				= "Снабженец"
 LANGUAGE.SKILLS_ROCKETEER				= "Ракетчик"
 LANGUAGE.SKILLS_ROBOT					= "Робот"
 LANGUAGE.SpendToUnlock					= "Потратьте очков чтобы разблокировать"
+LANGUAGE.SkillPoints					= "Очков навыков: "
 --Классы
 LANGUAGE.PickClass						= "Выбрать класс"
 LANGUAGE.Field_Medic_Desc				= "Доктор спешит\nзалечивать колек на войне..."

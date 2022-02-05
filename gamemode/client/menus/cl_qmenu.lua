@@ -312,8 +312,8 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		end
 
 		local closeBtn = vgui.Create("DButton", qMenuTabs)
-		closeBtn:SetSize(64, 32)
-		closeBtn:SetPos(qMenuTabs:GetWide() - closeBtn:GetWide(), 48)
+		closeBtn:SetSize(64, 64)
+		closeBtn:SetPos(qMenuTabs:GetWide() - closeBtn:GetWide(), 46)
 		closeBtn:SetText("X")
 		closeBtn:SetFont("HL2CR_CloseBtn")
 		closeBtn.Paint = function() return end
@@ -694,7 +694,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		skillsPnlBG.Paint = function() return end
 		
 		local skillPointsLbl = vgui.Create("DLabel", skillsPnl)
-		skillPointsLbl:SetText(translate.Get("SkillPointQ") .. LocalPlayer():GetNWInt("stat_skillpoints"))
+		skillPointsLbl:SetText(translate.Get("SkillPoints") .. LocalPlayer():GetNWInt("stat_skillpoints"))
 		skillPointsLbl:SetFont("HL2CR_Skill_Level")
 		skillPointsLbl:SetPos(0, skillsPnl:GetTall() / 1.22)
 		skillPointsLbl:SizeToContents()
@@ -1168,7 +1168,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		end
 		
 		local statsPnl = vgui.Create("DPanel", qMenuTabs)
-		statsPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall())
+		statsPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall()/3.3)
 		statsPnl:SetPos(0, 100)
 		
 		local statsPnlBG = vgui.Create("DPanel", statsPnl)

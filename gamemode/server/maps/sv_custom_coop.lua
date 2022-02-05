@@ -982,7 +982,7 @@ hook.Add("FixSpeed", "HL2CR_NH2_FixSpeed", function()
 end)
 
 hook.Add("EntityTakeDamage", "MI_Water_Kills", function(ent, dmginfo)
-	if ent:IsPlayer() and ent:WaterLevel() >= 1 and (game.GetMap("mimp1") or game.GetMap("mimp2")) then
+	if ent:IsPlayer() and ent:WaterLevel() >= 1 and ((string.find(string.lower(game.GetMap()),"mimp1")) or (string.find(string.lower(game.GetMap()),"mimp2"))) then
 	ent:Kill()
 	end
 end)

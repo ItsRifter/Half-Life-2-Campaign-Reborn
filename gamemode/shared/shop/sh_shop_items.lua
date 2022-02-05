@@ -35,9 +35,9 @@ local exo_pads = CreateShopItem("Exosuit_Shoulders", "Part of an Exosuit\nRESIST
 local exo_vest = CreateShopItem("Exosuit_Vest", "Part of an Exosuit\nRESIST: 1.15", 27500, "materials/hl2cr/chest_exo.jpg", "Chest")
 local exo_boots = CreateShopItem("Exosuit_Boots", "Part of an Exosuit\nRESIST: 0.45", 20000, "materials/hl2cr/boot_exo.jpg", "Boots")
 
-local test_mat1 = CreateShopItem("Test_Mat_1", "Test Item\nYou shouldn't be buying this", 1, "materials/hl2cr/mat_iron.jpg", "Material")
-local test_mat2 = CreateShopItem("Test_Mat_2", "Test Item\nYou shouldn't be buying this", 1, "materials/hl2cr/mat_scrap.jpg", "Material")
-local test_mat3 = CreateShopItem("Test_Mat_3", "Test Item\nYou shouldn't be buying this", 1, "materials/hl2cr/mat_morphine.jpg", "Material")
+local test_mat1 = CreateShopItem("Test_Mat_1", "Test Item\nYou shouldn't be buying this", 999999, "materials/hl2cr/mat_iron.jpg", "Material")
+local test_mat2 = CreateShopItem("Test_Mat_2", "Test Item\nYou shouldn't be buying this", 999999, "materials/hl2cr/mat_scrap.jpg", "Material")
+local test_mat3 = CreateShopItem("Test_Mat_3", "Test Item\nYou shouldn't be buying this", 999999, "materials/hl2cr/mat_morphine.jpg", "Material")
 
 if SERVER then
 	

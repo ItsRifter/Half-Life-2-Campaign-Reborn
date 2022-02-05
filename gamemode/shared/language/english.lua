@@ -121,6 +121,7 @@ LANGUAGE.SKILLS_ROCKETEER				= "Rocketeer"
 LANGUAGE.SKILLS_ROBOT					= "Robot"
 LANGUAGE.SKILLS_MECHANIC				= "Mechanic"
 LANGUAGE.SpendToUnlock					= "Spend a skill-point to unlock"
+LANGUAGE.SkillPoints					= "Skill Points: "
 --Classes
 LANGUAGE.PickClass						= "Pick class"
 LANGUAGE.Field_Medic_Desc				= "A field medic here to help the injured during combat"
