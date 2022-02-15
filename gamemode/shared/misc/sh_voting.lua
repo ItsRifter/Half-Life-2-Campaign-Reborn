@@ -30,7 +30,7 @@ votingTypes["Template"] = {
 }
 
 votingTypes["Lobby"] = {
-	Description = "Return to the lobby?",
+	Description = translate.Get("ReturnLobby"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -48,7 +48,7 @@ votingTypes["Lobby"] = {
 }
 
 votingTypes["Restart"] = {
-	Description = "Restart the map?",
+	Description = translate.Get("RestartMap"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -65,7 +65,7 @@ votingTypes["Restart"] = {
 }
 
 votingTypes["KickPlayer"] = {
-	Description = "Kick ",
+	Description = translate.Get("KickUser"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -81,7 +81,7 @@ votingTypes["KickPlayer"] = {
 local bringToPlayer = nil
 
 votingTypes["BringAlyxVote"] = {
-	Description = "Teleport Alyx to ",
+	Description = translate.Get("TeleportAlyx"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -94,7 +94,7 @@ votingTypes["BringAlyxVote"] = {
 }
 
 votingTypes["BringBarneyVote"] = {
-	Description = "Teleport Barney to ",
+	Description = translate.Get("TeleportBarney"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -115,7 +115,7 @@ local UPDATE_DIFF_MESSAGE = {
 }
 
 votingTypes["VoteVEasy"] = {
-	Description = "Set Difficulty to 'Very Easy'?",
+	Description = translate.Get("Change_to_VEasy"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -136,7 +136,7 @@ votingTypes["VoteVEasy"] = {
 	end
 }
 votingTypes["VoteEasy"] = {
-	Description = "Set Difficulty to 'Easy'?",
+	Description = translate.Get("Change_to_Easy"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -156,7 +156,7 @@ votingTypes["VoteEasy"] = {
 	end
 }
 votingTypes["VoteMedium"] = {
-	Description = "Set Difficulty to 'Medium'?",
+	Description = translate.Get("Change_to_Medium"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -176,7 +176,7 @@ votingTypes["VoteMedium"] = {
 	end
 }
 votingTypes["VoteHard"] = {
-	Description = "Set Difficulty to 'Hard'?",
+	Description = translate.Get("Change_to_Hard"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -196,7 +196,7 @@ votingTypes["VoteHard"] = {
 	end
 }
 votingTypes["VoteVHard"] = {
-	Description = "Set Difficulty to 'Very Hard'?",
+	Description = translate.Get("Change_to_VHard"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -217,7 +217,7 @@ votingTypes["VoteVHard"] = {
 }
 
 votingTypes["EnableSurvival"] = {
-	Description = "Enable Survival mode?",
+	Description = translate.Get("Enable_Survival"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -235,7 +235,7 @@ votingTypes["EnableSurvival"] = {
 }
 
 votingTypes["DisableSurvival"] = {
-	Description = "Disable Survival mode?",
+	Description = translate.Get("Disable_Survival"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -261,7 +261,7 @@ votingTypes["Custom"] = {
 }
 
 votingTypes["BeginHL2"] = {
-	Description = "Start Half-Life 2?",
+	Description = translate.Get("StartHL2"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -278,7 +278,7 @@ votingTypes["BeginHL2"] = {
 }
 
 votingTypes["BeginEP1"] = {
-	Description = "Start Episode 1?",
+	Description = translate.Get("StartEP1"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -295,7 +295,7 @@ votingTypes["BeginEP1"] = {
 }
 
 votingTypes["BeginRND"] = {
-	Description = "Start Research and Development?",
+	Description = translate.Get("StartRND"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -316,7 +316,7 @@ votingTypes["BeginRND"] = {
 }
 
 votingTypes["BeginPursoups"] = {
-	Description = "Start Pursoups Campaign?",
+	Description = translate.Get("StartPursoups"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))
@@ -337,7 +337,7 @@ votingTypes["BeginPursoups"] = {
 }
 
 votingTypes["BeginNightmareHouse"] = {
-	Description = "Start Nightmare House?",
+	Description = translate.Get("StartNH"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))

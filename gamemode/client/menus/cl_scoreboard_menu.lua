@@ -51,9 +51,20 @@ function ToggleBoard(toggle)
 		versionLabel:SizeToContents()
 		versionLabel:SetTextColor( Color(0, 0, 0) )
 
+		local surv = vgui.Create("DLabel", mainPanel)
+		if GetConVar("hl2cr_survival"):GetInt() == 1 then
+			surv:SetText(translate.Get("SurvIsOn"))
+		else
+			surv:SetText(translate.Get("SurvIsOff"))
+		end
+		surv:SetPos(805, 460)
+		surv:SetFont("HL2CR_Title")
+		surv:SizeToContents()
+		surv:SetTextColor( Color(0, 0, 0) )
+
 		local diff = vgui.Create("DLabel", mainPanel)
 		diff:SetText(translate.Get("DifficultyLevel") .. convertNumToLanguage[GetConVar("hl2cr_difficulty"):GetInt()])
-		diff:SetPos(convertNumToSize[GetConVar("hl2cr_difficulty"):GetInt()], 460)
+		diff:SetPos(convertNumToSize[GetConVar("hl2cr_difficulty"):GetInt()], 420)
 		diff:SetFont("HL2CR_Title")
 		diff:SizeToContents()
 		diff:SetTextColor( Color(0, 0, 0) )

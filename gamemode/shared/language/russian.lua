@@ -15,6 +15,10 @@ LANGUAGE.Mod							= "Модератор"
 LANGUAGE.Donator						= "Донатер"
 LANGUAGE.VIP							= "ВИП"
 LANGUAGE.VIPExtra						= "ВИП+"
+
+LANGUAGE.SurvIsOn                       = "Выживание Включено"
+LANGUAGE.SurvIsOff                      = "Выживание Выключено"
+
 --HUD
 LANGUAGE.HUDPlayerGotLevel				= "Вы получили новый уровень: '"
 LANGUAGE.HUDPlayerLeftTheGame			= " вышел с сервера. Причина: "
@@ -192,6 +196,26 @@ LANGUAGE.Quests_Done					= "Закончено квестов: "
 --Голосования
 LANGUAGE.ERROR_VOTE_COOLDOWN1			= "Подождите "
 LANGUAGE.ERROR_VOTE_COOLDOWN2			= " перед тем, как начинать голосование."
+LANGUAGE.Return_Lobby					= "Вернуться в Лобби?"
+LANGUAGE.RestartMap						= "Перезапускаем Карту?"
+LANGUAGE.KickUser						= "Выгоняем "
+
+LANGUAGE.TeleportAlyx                   = "Телепортируем Аликс к "
+LANGUAGE.TeleportBarney                 = "Телепортируем Барни к "
+LANGUAGE.Change_to_VEasy                = "Сменить сложность на 'Очень Лёгкую'"
+LANGUAGE.Change_to_Easy                 = "Сменить сложность на 'Лёгкую'"
+LANGUAGE.Change_to_Medium               = "Сменить сложность на 'Среднюю'"
+LANGUAGE.Change_to_Hard                 = "Сменить сложность на 'Сложную'"
+LANGUAGE.Change_to_VHard                = "Сменить сложность на 'Очень Сложную'"
+LANGUAGE.Enable_Survival                = "Включить режим выживания?"
+LANGUAGE.Disable_Survival               = "Выключить режим выживания?"
+
+LANGUAGE.StartHL2                       = "Запускаем 'Half-Life 2'?"
+LANGUAGE.StartEP1                       = "Запускаем 'HL2 - Эпизод 1'?"
+LANGUAGE.StartRND                       = "Запускаем 'Research and Development'?"
+LANGUAGE.StartPursoups                  = "Запускаем Кампанию от 'Pursoup'?"
+LANGUAGE.StartNH                        = "Запускаем 'Дом Кошмаров'?"
+LANGUAGE.StartMIMP                      = "Запускаем 'Mission Improbable'?"
 
 --Сообщения в чат по сложности 
 LANGUAGE.CHECK_DIFF_SETTING				= "Голосование прошло успешно, меняем сложность на "
