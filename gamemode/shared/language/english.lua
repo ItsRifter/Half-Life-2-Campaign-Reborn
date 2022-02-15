@@ -118,6 +118,7 @@ LANGUAGE.ChatAnnounce_Difficulty        = "Difficulty too easy or hard? type !di
 LANGUAGE.ChatAnnounce_Survival          = "Looking for an easier or one shot chance? type !surv"
 LANGUAGE.ChatAnnounce_NotGordon         = "Remember you are not gordon freeman, you won't survive everything"
 LANGUAGE.ChatAnnounce_Help              = "Need help or want to ask a question? ask a member of staff"
+LANGUAGE.ChatAnnounce_ReturnLobby       = "Want to return to the lobby? type !lobby"
 
 --Skills
 LANGUAGE.LEVEL_LOCKED					= "LOCKED REACH LEVEL "

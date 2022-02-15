@@ -16,8 +16,8 @@ LANGUAGE.Donator						= "Донатер"
 LANGUAGE.VIP							= "ВИП"
 LANGUAGE.VIPExtra						= "ВИП+"
 
-LANGUAGE.SurvIsOn                       = "Выживание Включено"
-LANGUAGE.SurvIsOff                      = "Выживание Выключено"
+LANGUAGE.SurvIsOn                       = "Выживание"
+LANGUAGE.SurvIsOff                      = "Не Выживаем"
 
 --HUD
 LANGUAGE.HUDPlayerGotLevel				= "Вы получили новый уровень: '"
@@ -112,6 +112,14 @@ LANGUAGE.ERROR_NO_JEEP					= "Вы не находитесь в транспор
 LANGUAGE.ERROR_JEEP_SEAT_EXIST			= "У вас уже установлено пассажирское кресло."
 LANGUAGE.ACH_FAILED_SAND				= " наступил на песок и провалил достижение"
 LANGUAGE.ACH_FAILED_PACIFIST			= " убил сталкера и провалил достижение"
+
+--Заметки от хоста
+
+LANGUAGE.ChatAnnounce_CustomMaps        = "Напиши !custom находясь в лобби, дабы сыграть в одну из кастомных кампаний."
+LANGUAGE.ChatAnnounce_Difficulty        = "Играется слишком легко или слишком сложно? Напиши !diff [1-5] (1 - самая низкая, 5 - самая высокая)"
+LANGUAGE.ChatAnnounce_Survival          = "Хотите сделать игру ещё сложнее или проще? Напишите !surv"
+LANGUAGE.ChatAnnounce_NotGordon         = "Запомните, ВЫ не Гордон Фриман, ВЫ не выживете столько же попаданий, как он."
+LANGUAGE.ChatAnnounce_Help              = "Нужна помощь или есть вопрос? Задайте его администрации в чате или Дискорд канале."
 
 --Оружие
 LANGUAGE.Flare_Gun						= "Ракетница"

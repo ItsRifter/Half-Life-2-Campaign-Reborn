@@ -1027,7 +1027,8 @@ local randomAutoMessage = {
 	[2]	= translate.Get("ChatAnnounce_Difficulty"),
 	[3] = translate.Get("ChatAnnounce_Survival"),
 	[4]	= translate.Get("ChatAnnounce_NotGordon"),
-	[5] = translate.Get("ChatAnnounce_Help")
+	[5] = translate.Get("ChatAnnounce_Help"),
+	[6] = translate.Get("ChatAnnounce_ReturnLobby")
 }
 
 function ChatAutoMessage()
