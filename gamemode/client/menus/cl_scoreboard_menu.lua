@@ -54,9 +54,7 @@ function ToggleBoard(toggle)
 		local surv = vgui.Create("DLabel", mainPanel)
 		if GetConVar("hl2cr_survival"):GetInt() == 1 then
 			surv:SetText(translate.Get("SurvIsOn"))
-		else
-			surv:SetText(translate.Get("SurvIsOff"))
-		end
+		else surv:SetText(" ") end
 		
 		surv:SetPos(805, 460)
 		surv:SetFont("HL2CR_Title")
@@ -65,7 +63,7 @@ function ToggleBoard(toggle)
 
 		local diff = vgui.Create("DLabel", mainPanel)
 		diff:SetText(translate.Get("DifficultyLevel") .. convertNumToLanguage[GetConVar("hl2cr_difficulty"):GetInt()])
-		diff:SetPos(convertNumToSize[GetConVar("hl2cr_difficulty"):GetInt()], 420)
+		diff:SetPos(convertNumToSize[GetConVar("hl2cr_difficulty"):GetInt()], 460)
 		diff:SetFont("HL2CR_Title")
 		diff:SizeToContents()
 		diff:SetTextColor( Color(0, 0, 0) )
@@ -223,12 +221,6 @@ function ToggleBoard(toggle)
 			playerclass:SetTextColor( Color( 0, 0, 0) )
 			playerclass:SetText(translate.Get("PlayerClass") .. pl:GetNWString("stat_curclass"))
 			playerclass:SizeToContents()
-
-			local playercountry = vgui.Create("DLabel", panel)
-			playercountry:SetPos(210, 63)
-			playercountry:SetTextColor( Color( 0, 0, 0) )
-			playercountry:SetText(system.GetCountry())
-			playercountry:SizeToContents()
 		end
 	elseif not toggle and scoreboard:IsValid() then
 		scoreboard:Remove()
