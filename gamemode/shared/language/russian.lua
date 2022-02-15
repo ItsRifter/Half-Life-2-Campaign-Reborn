@@ -196,7 +196,7 @@ LANGUAGE.Quests_Done					= "Закончено квестов: "
 --Голосования
 LANGUAGE.ERROR_VOTE_COOLDOWN1			= "Подождите "
 LANGUAGE.ERROR_VOTE_COOLDOWN2			= " перед тем, как начинать голосование."
-LANGUAGE.Return_Lobby					= "Вернуться в Лобби?"
+LANGUAGE.ReturnLobby					= "Вернуться в Лобби?"
 LANGUAGE.RestartMap						= "Перезапускаем Карту?"
 LANGUAGE.KickUser						= "Выгоняем "
 

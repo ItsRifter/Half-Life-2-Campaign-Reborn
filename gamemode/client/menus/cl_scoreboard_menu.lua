@@ -57,6 +57,7 @@ function ToggleBoard(toggle)
 		else
 			surv:SetText(translate.Get("SurvIsOff"))
 		end
+		
 		surv:SetPos(805, 460)
 		surv:SetFont("HL2CR_Title")
 		surv:SizeToContents()

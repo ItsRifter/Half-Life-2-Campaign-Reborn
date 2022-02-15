@@ -1019,7 +1019,32 @@ function Administrator.Chat.Chat.Think( )
 	end
 end
 
+local lastMessage = 60
+local nextMessageTime = 120
+
+local randomAutoMessage = {
+	[1] = translate.Get("ChatAnnounce_CustomMaps"),
+	[2]	= translate.Get("ChatAnnounce_Difficulty"),
+	[3] = translate.Get("ChatAnnounce_Survival"),
+	[4]	= translate.Get("ChatAnnounce_NotGordon"),
+	[5] = translate.Get("ChatAnnounce_Help")
+}
+
+function ChatAutoMessage()
+	if lastMessage > CurTime() then return end
+
+	local tab = {}
+	table.insert( tab, Color( 235, 100, 0) )
+	table.insert( tab, randomAutoMessage[math.random(1, 5)] )
+	chat.AddText( unpack( tab ) )
+	
+	lastMessage = nextMessageTime + CurTime()
+end
+
 hook.Add( "Think", "Administrator.Chat.Chat.Think", Administrator.Chat.Chat.Think )
+
+hook.Add("Think", "Chat.AutoAnnounceThink", ChatAutoMessage)
+
 
 function Administrator.Chat.Chat.HUDShouldDraw( name )
 	if name == "CHudChat" and not Administrator.Chat.Chat.OpenOnce then return false end

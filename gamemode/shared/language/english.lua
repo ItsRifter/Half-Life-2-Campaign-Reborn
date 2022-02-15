@@ -112,6 +112,13 @@ LANGUAGE.ERROR_NO_JEEP					= "You aren't in a vehicle"
 LANGUAGE.ERROR_JEEP_SEAT_EXIST			= "You already have a passenger seat"
 LANGUAGE.ACH_FAILED_SAND				= " stepped on the sand achievement failed"
 LANGUAGE.ACH_FAILED_PACIFIST			= " killed a stalker achievement failed"
+
+LANGUAGE.ChatAnnounce_CustomMaps        = "Type !custom while in lobby to play a custom campaign"
+LANGUAGE.ChatAnnounce_Difficulty        = "Difficulty too easy or hard? type !diff [1-5] (1 being lowest, 5 being highest)"
+LANGUAGE.ChatAnnounce_Survival          = "Looking for an easier or one shot chance? type !surv"
+LANGUAGE.ChatAnnounce_NotGordon         = "Remember you are not gordon freeman, you won't survive everything"
+LANGUAGE.ChatAnnounce_Help              = "Need help or want to ask a question? ask a member of staff"
+
 --Skills
 LANGUAGE.LEVEL_LOCKED					= "LOCKED REACH LEVEL "
 LANGUAGE.SKILL_REQUIRES					= " REQUIRES: "
