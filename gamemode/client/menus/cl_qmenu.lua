@@ -894,7 +894,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 				end
 				
 				surface.PlaySound("buttons/button5.wav")
-				skillPointsLbl:SetText(translate.Get("SkillPointQ") .. skillPoints)
+				skillPointsLbl:SetText(translate.Get("SkillPoints") .. skillPoints)
 			end
 		end
 			
