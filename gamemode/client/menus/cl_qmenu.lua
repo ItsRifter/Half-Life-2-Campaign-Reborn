@@ -547,7 +547,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 				
 				pl.Inv[i].Icon = vgui.Create("DImageButton", pl.Inv[i])
 				pl.Inv[i].Icon:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
-				pl.Inv[i].Icon:SetToolTip(CONVERT_DESC_TRANSLATION[slots[i]]())
+				pl.Inv[i].Icon:SetToolTip(CONVERT_NAME_TRANSLATION[slots[i]]() .."\n\n" .. CONVERT_DESC_TRANSLATION[slots[i]]())
 				pl.Inv[i].Icon:SetSize(pl.Inv[i]:GetWide(), pl.Inv[i]:GetTall())
 				
 				pl.Inv[i].ComboBox = vgui.Create("DComboBox", pl.Inv[i])
