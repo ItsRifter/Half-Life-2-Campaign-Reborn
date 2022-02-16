@@ -32,13 +32,30 @@ hl2c_chat_size
 -- {"petsummon","now"},
 --[ "!pet" ] = { "!pet", "!petsummon", "!petremove", "!petname", "!petfollow", "!petstopfollow" }
 Administrator.ClientCommands = {
-	["!help"] = { "!help" },
-	["!content"] = { "!content" },
-	["!lobby"] = { "!lobby = Vote to return to lobby" },
-	["!surv"] = { "!surv = Vote to enable/disable survival mode" },
-	["!vrm"] = { "!vrm = Vote to restart map" },
+	["!help"] = { "Opens Help Menu" },
+	["!content"] = { "Opens Steam Workshop" },
+	["!lobby"] = { "Vote to return to lobby" },
+	["!surv"] = { "Vote to enable/disable survival mode" },
+	["!survival"] = { "Vote to enable/disable survival mode" },
+	["!vrm"] = { "Vote to restart map" },
 	["!diff"] = { "1 = Very Easy", "2 = Easy", "3 = Medium", "4 = Hard", "5 = Very Hard" },
-	["!pet"] = { "!pet = Pet menu", "!petsummon = Spawn pet", "!petremove = Remove pet", "!petname = Name your pet", "!petfollow = Starts/Stops following you" }
+	["!pet"] = { "Pet menu" },
+	["!petsummon"] = { "Spawn pet" },
+	["!petremove"] = { "Remove pet" },
+	["!petname"] = { "Name your pet" },
+	["!petfollow"] = { "Starts/Stops following you" },
+	["!ach"] = { "Opens Achievements" },
+	["!achievement"] = { "Opens Achievements" },
+	["!config"] = { "Opens Settings Menu" },
+	["!settings"] = { "Opens Settings Menu" },
+	["!seat"] = { "How to use: get in your Buggy", "", "Adds second seat in Buggy" },
+	["!afk"] = { "Sets you in Spectator mode" },
+	["!custom"] = { "Opens custom campaign menu" },
+	["!kickuser"] = { "Name", "", "Vote to kick somebody" },
+	["!vbb"] = { "Vote to teleport Barney nearby" },
+	["!vba"] = { "Vote to teleport Alyx nearby" },
+	["!votebringbarney"] = { "Vote to teleport Barney nearby" },
+	["!votebringalyx"] = { "Vote to teleport Alyx nearby" }
 }
 
 -- "!petsummon" = {""},
@@ -1023,13 +1040,22 @@ local lastMessage = 60
 local nextMessageTime = 120
 
 local randomAutoMessage = {
+	[1] = "Type !custom while in lobby to play a custom campaign",
+	[2]	= "Difficulty too easy or hard? type !diff [1-5] (1 being lowest, 5 being highest)",
+	[3] = "Looking for an easier or one shot chance? type !surv",
+	[4]	= "Remember you are not gordon freeman, you won't survive everything",
+	[5] = "Need help or want to ask a question? ask a member of staff",
+	[6] = "Want to return to the lobby? type !lobby"
+}
+
+--[[
 	[1] = translate.Get("ChatAnnounce_CustomMaps"),
 	[2]	= translate.Get("ChatAnnounce_Difficulty"),
 	[3] = translate.Get("ChatAnnounce_Survival"),
 	[4]	= translate.Get("ChatAnnounce_NotGordon"),
 	[5] = translate.Get("ChatAnnounce_Help"),
 	[6] = translate.Get("ChatAnnounce_ReturnLobby")
-}
+]]
 
 function ChatAutoMessage()
 	if lastMessage > CurTime() then return end
@@ -1076,6 +1102,11 @@ function GM:OnPlayerChat( ply, strText, bTeamOnly, bPlayerIsDead )
 	if ( IsValid( ply ) ) and ( ply:Team( ) == 1 ) then
 		table.insert( tab, Color( 30, 255, 40 ) )
 		table.insert( tab, "[ALIVE] " )
+	end
+
+	if ( IsValid( ply ) ) and ( ply:Team( ) == 5 ) then
+		table.insert( tab, Color( 165, 165, 165 ) )
+		table.insert( tab, "[AFK] " )
 	end
 
 	if ( IsValid( ply ) ) and ( ply:Team( ) == 2 ) then
