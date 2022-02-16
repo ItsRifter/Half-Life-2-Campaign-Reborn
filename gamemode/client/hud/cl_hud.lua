@@ -196,6 +196,15 @@ local CONVERT_TO_NAME_STANDARD = {
 	["npc_antlionguard"] = "Antlion Guard",
 	["npc_antlionguardian"] = "Antlion Guardian",
 	["npc_stalker"] = "Stalker",
+	--[[["npc_combine_assassin"] = "Assassin",
+	["npc_combine_medic"] = "Field Medic",
+	["npc_combine_commander"] = "Commander",
+	["npc_combine_engineer"] = "Field Engineer",
+	["npc_combine_veteran"] = "Veteran",
+	["npc_combine_support"] = "Field Supporter",
+	["npc_combine_burner"] = "Flamethrower",
+	["npc_combine_grenadier"] = "Grenadier",
+	["npc_combine_synth"] = "Synth",--]] -- not working, they are always "Soldier"
 }
 
 local FIX_FONT_SPACING = {
@@ -386,13 +395,13 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 					draw.SimpleText(ent:GetNWString("HL2CR_NPC_Name"), font, ScrPos.x, ScrPos.y, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 				
-				draw.SimpleText("LEVEL " .. ent:GetNWInt("HL2CR_NPC_Level"), font, ScrPos.x, ScrPos.y + 30, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(translate.Get("NPCLevel") .. ent:GetNWInt("HL2CR_NPC_Level"), font, ScrPos.x, ScrPos.y + 30, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				
 				if LocalPlayer():GetNWBool("CanScanEnemies") then
 					if ent:Health() > 0 then
-						draw.SimpleText("HEALTH: " .. ent:Health(), font, ScrPos.x, ScrPos.y + 60, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText(translate.Get("NPCHealth") .. ent:Health(), font, ScrPos.x, ScrPos.y + 60, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					elseif ent:Health() <= 0 then
-						draw.SimpleText("HEALTH: DEAD", font, ScrPos.x, ScrPos.y + 60, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText(translate.Get("NPCDead"), font, ScrPos.x, ScrPos.y + 60, levelColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				end
 			end
@@ -407,7 +416,7 @@ hook.Add("HUDPaint", "HL2CR_DrawStats", function()
 				
 			local ScrPos = pos:ToScreen()
 			if entPet:GetOwner() and dist <= 250 then
-				draw.SimpleText("Level: " .. entPet:GetOwner():GetNWInt("pet_level", -1), "HL2CR_NPCStats", ScrPos.x, ScrPos.y - 35, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(translate.Get("NPCLevel") .. entPet:GetOwner():GetNWInt("pet_level", -1), "HL2CR_NPCStats", ScrPos.x, ScrPos.y - 35, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				draw.SimpleText(entPet:GetOwner():Nick() .. translate.Get("HUDPlayerPets"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				draw.SimpleText(entPet:GetOwner():GetNWString("pet_name"), "HL2CR_NPCStats", ScrPos.x, ScrPos.y + 35, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
@@ -449,9 +458,9 @@ net.Receive( "HL2CR_SpawnIndicators", function()
 	local wasPet = net.ReadBool()
 	
 	if wasPet then
-		spawnIndicator("Pet XP: " .. reward, HL2CR.Theme.petKill, pos, Vector(math.Rand(-0.5, 0.5), math.Rand(-0.5, 0.5), math.Rand(0.75, 1) * 1.5), 2)
+		spawnIndicator(translate.Get("PetEXPForKill") .. reward, HL2CR.Theme.petKill, pos, Vector(math.Rand(-0.5, 0.5), math.Rand(-0.5, 0.5), math.Rand(0.75, 1) * 1.5), 2)
 	else
-		spawnIndicator("XP: " .. reward, HL2CR.Theme.playerKill, pos, Vector(math.Rand(-0.5, 0.5), math.Rand(-0.5, 0.5), math.Rand(0.75, 1) * 1.5), 2)
+		spawnIndicator(translate.Get("EXPForKill") .. reward, HL2CR.Theme.playerKill, pos, Vector(math.Rand(-0.5, 0.5), math.Rand(-0.5, 0.5), math.Rand(0.75, 1) * 1.5), 2)
 	end
 	
 end)
