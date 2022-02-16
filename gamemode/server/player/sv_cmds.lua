@@ -293,6 +293,37 @@ hook.Add("PlayerSay", "HL2CR_UserCmds", function(ply, text, team)
 		return ""
 	end
 	
+	if text == "!specnpc" or text == "!specialnpcs" then
+	
+		if MAPS_LOBBY[game.GetMap()] then
+			BroadcastMessage(ERROR_VOTE_LOBBY, ply)
+			return ""
+		end
+	
+		if (HL2CR_Voting.nextVoteTime - 120) > CurTime() then
+			local ERROR_VOTE_COOLDOWN = {
+				["Colour"] = Color(215, 50, 50),
+				["Message"] = "ERROR_VOTE_COOLDOWN1",
+				["Other"] = {
+					["Player"] = "",
+					["Time"] = string.FormattedTime((HL2CR_Voting.nextVoteTime - 120) - CurTime(), "%02i:%02i"),
+					["CurCompleted"] = "ERROR_VOTE_COOLDOWN2"
+				}
+						
+			}
+			BroadcastMessage(ERROR_VOTE_COOLDOWN, ply)
+			return ""
+		end
+
+		if GetConVar("hl2cr_specials"):GetInt() == 0 then
+			HL2CR_Voting:StartVote(ply, "EnableSpecials")
+		else
+			HL2CR_Voting:StartVote(ply, "DisableSpecials")
+		end
+		
+		return ""
+	end
+
 	if text == "!config" or text == "!settings" then
 		net.Start("HL2CR_SettingsMenu")
 		net.Send(ply)

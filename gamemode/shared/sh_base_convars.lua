@@ -16,6 +16,7 @@ CreateConVar("hl2cr_max_frags", 			5, 		{FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_A
 --Difficulty ConVars
 CreateConVar("hl2cr_difficulty", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Change Difficulty", 1, 5)
 CreateConVar("hl2cr_survival", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Enable/Disable survival", 0, 1)
+CreateConVar("hl2cr_specials", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Enable/Disable special NPC spawns", 0, 1)
 
 --Misc
 CreateConVar("hl2cr_cooldown_class", 60, {FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How long is the cooldown for class switching", 1, 180)

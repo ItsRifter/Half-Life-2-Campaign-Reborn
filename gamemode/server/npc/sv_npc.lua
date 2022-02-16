@@ -151,6 +151,46 @@ end)
 
 hook.Add("OnEntityCreated", "HL2CR_NPCCreated", function(ent)
 	SetNPCTraits(ent)
+	if GetConVar("hl2cr_specials"):GetInt() == 1 then
+		if ent:IsNPC() then
+			if ent:GetName() == "*" or ent.Changed == true then return end
+			if ent:GetClass() == "npc_combine_s" or ent:GetClass() == "npc_metropolice" or ent:GetClass() == "npc_combine_prisonguard" then
+				local specialChance = math.random(1, 100)
+				if specialChance <= 33 and GetConVar("hl2cr_difficulty"):GetInt() >=3 then
+					local newNPC = nil
+					local NPCKind = math.random(1, 6)
+							
+					if NPCKind == 1 then
+						newNPC = ents.Create("npc_combine_assassin")
+					elseif NPCKind == 2 then
+						newNPC = ents.Create("npc_combine_support")
+					elseif NPCKind == 3 then
+						newNPC = ents.Create("npc_combine_medic")
+					elseif NPCKind == 4 then
+						newNPC = ents.Create("npc_combine_veteran")
+					elseif NPCKind == 5 then
+						newNPC = ents.Create("npc_combine_grenadier")
+					elseif NPCKind == 6 then
+						newNPC = ents.Create("npc_combine_hg")
+					end
+						
+						
+					timer.Simple(1, function()
+						if ent:IsValid() then
+							ent:Remove()
+							newNPC:SetPos(ent:GetPos() + Vector(0, 0, 30))
+							newNPC:Spawn()
+							ent.Changed = true
+						end
+					end)
+						
+			
+				elseif specialChance >= 33 and GetConVar("hl2cr_difficulty"):GetInt() >=3 then 
+					ent.Changed = true
+				end
+			end
+		end
+	end
 end)
 
 hook.Add( "ScaleNPCDamage", "HL2CR_NPCDMGScale", function( npc, hitgroup, dmgInfo )

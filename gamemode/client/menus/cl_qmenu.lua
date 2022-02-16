@@ -284,7 +284,7 @@ net.Receive("HL2CR_QMenuUpdate", function()
 end)
 
 function StartQMenu(shouldOpen, skillsTbl, questTbl)
-	if not LocalPlayer():Alive() or (LocalPlayer():Team() == 2 or LocalPlayer():Team() == 5) then return end
+	if not LocalPlayer():Alive() or (LocalPlayer():Team() == 5 or LocalPlayer():Team() == 3) then return end
 	
 	if shouldOpen then 
 		qMenuTabs = vgui.Create("HL2CR_Tab")

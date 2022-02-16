@@ -13,6 +13,7 @@ LANGUAGE.DiffVHard                      = "Very Hard"
 LANGUAGE.SCExprience					= "\nXP: "
 LANGUAGE.SurvIsOn                       = "Survival: On"
 LANGUAGE.SurvIsOff                      = "Survival: Off"
+LANGUAGE.SpecIsOn                       = "Specials: On"
 
 LANGUAGE.AlphaTester					= "This player is an alpha tester"
 LANGUAGE.SuperAdmin						= "This player is a super admin"
