@@ -574,6 +574,12 @@ local function SetCheckpoints()
 		
 		CHECKPOINT_FUNC_1 = function()
 			disableJeepGlobal = true
+			    for _, v in ipairs(player.GetAll()) do
+					if v.vehicle and v.vehicle:IsValid() then
+					v.vehicle:Remove()
+					v.vehicle = nil
+				end
+			end 
 		end
 		
 	elseif game.GetMap() == "d2_coast_11" then
