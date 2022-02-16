@@ -291,7 +291,7 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 				local icon = Material(pl:GetNWString("class_icon"))
 				surface.SetMaterial( icon )
 				surface.SetDrawColor( 255, 255, 255 )
-				surface.DrawTexturedRect(ScrPos.x - 20, ScrPos.y + 75, 48, 48)
+				surface.DrawTexturedRect(ScrPos.x - 20, ScrPos.y + 105, 48, 48)
 			end
 			
 			local font = "HL2CR_HoverPlayer"
@@ -329,11 +329,11 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 				
 			elseif LocalPlayer():GetNWString("stat_curclass") == "Repairman" then
 				if pl:GetNWString("stat_curclass") == "Robot" then
-					draw.SimpleText("State: " .. pl:Health(), font, ScrPos.x - 50 + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-					draw.SimpleText(translate.Get("HUDPlayerArmor") .. pl:Armor(), font, ScrPos.x + 75 + hpSpacing, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(translate.Get("HUDPlayerRobotCondition") .. pl:Health(), font, ScrPos.x - 50 + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(translate.Get("HUDPlayerArmor") .. pl:Armor(), font, ScrPos.x, ScrPos.y + 90, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				else
 					draw.SimpleText(hpStatus, font, ScrPos.x - 50 + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-					draw.SimpleText(translate.Get("HUDPlayerArmor") .. pl:Armor(), font, ScrPos.x + 70 + hpSpacing, ScrPos.y + 60, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+					draw.SimpleText(translate.Get("HUDPlayerArmor") .. pl:Armor(), font, ScrPos.x, ScrPos.y + 90, Color(145, 255, 250), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 				end
 			else
 				draw.SimpleText(hpStatus, font, ScrPos.x - 50 + hpSpacing, ScrPos.y + 60, hpColour, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
