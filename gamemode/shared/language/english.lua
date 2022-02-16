@@ -48,6 +48,7 @@ LANGUAGE.HUDPlayerHealth				= "HP: "
 LANGUAGE.HUDPlayerHealthUnknown			= "???"
 LANGUAGE.HUDPlayerArmor					= " / Armor: "
 LANGUAGE.HUDPlayerPets 					= "'s Pet"
+LANGUAGE.HUDPlayerRobotCondition		= "State: "
 --Help menu
 LANGUAGE.Welcome						= "Welcome to 'Half-Life 2- Campaign Reborn'"
 LANGUAGE.WelcomeBoard					= "Welcome"
