@@ -498,6 +498,15 @@ local function SetCheckpoints()
 		CHECKPOINT_POS = {
 			Vector(8777, 4344, 267)
 		}
+		CHECKPOINT_FUNC_1 = function()
+			disableJeepGlobal = true
+			    for _, v in ipairs(player.GetAll()) do
+					if v.vehicle and v.vehicle:IsValid() then
+					v.vehicle:Remove()
+					v.vehicle = nil
+				end
+			end 
+		end
 	elseif game.GetMap() == "d2_coast_04" then
 		TRIGGER_CHANGELEVEL = {
 			Vector(-3806, 10753, 1922),		Vector(-4263, 10241, 1793)
@@ -4510,6 +4519,8 @@ hook.Add("OpenGateCoast", "HL2CR_OpenGate", function()
 	for k, v in ipairs(ents.FindByName("village_gate")) do
 		v:Fire("Open")
 	end
+
+		disableJeepGlobal = false
 	
 	for k, v in ipairs(player.GetAll()) do
 		GrantAchievement(v, "HL2", "Cubbage")
