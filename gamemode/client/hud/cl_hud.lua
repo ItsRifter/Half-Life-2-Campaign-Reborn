@@ -322,7 +322,6 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 			draw.SimpleText(translate.Get("SCLevel") .. pl:GetNWInt("stat_level", -1), font, ScrPos.x, ScrPos.y + 30, Color(240, 168, 0), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			
 			--Status
-			
 			if LocalPlayer():GetNWString("stat_curclass") == "Field Medic" then
 				
 				if pl:GetNWString("stat_curclass") == "Robot" then
@@ -335,6 +334,7 @@ hook.Add( "HUDDrawTargetID", "HL2CR_PlayerInfo", function()
 
 			elseif LocalPlayer():GetNWString("class_icon") == "Supporter" then
 				--Niik fix this please
+			elseif LocalPlayer():GetNWString("class_icon") == "Supplier" then
 				
 			elseif LocalPlayer():GetNWString("stat_curclass") == "Repairman" then
 				if pl:GetNWString("stat_curclass") == "Robot" then

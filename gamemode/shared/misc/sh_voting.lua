@@ -94,7 +94,7 @@ votingTypes["BringAlyxVote"] = {
 }
 
 votingTypes["BringBarneyVote"] = {
-	Description = "Teleport Barney To",
+	Description = "Teleport Barney To ",
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		print(string.format("There were %d positive and %d negative votes!", positive, negative))

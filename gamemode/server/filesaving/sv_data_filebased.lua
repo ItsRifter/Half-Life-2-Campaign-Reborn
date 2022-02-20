@@ -57,6 +57,10 @@ local function InitData(ply)
 		["Chest"] = "",
 		["Boots"] = "",
 	}
+
+	ply.hl2cr.Inventory.CurItemsSlot = ply.hl2cr.Inventory.CurItemsSlot or {
+		["ItemsSlot"] = "",
+	}
 	
 	ply.hl2cr.Inventory.TotalSlots = ply.hl2cr.Inventory.TotalSlots or 15
 	ply.hl2cr.Inventory.CurWeaponSlot = ply.hl2cr.Inventory.CurWeaponSlot or ""
@@ -97,9 +101,10 @@ local function InitData(ply)
 	
 	ply:SetNWString("inv_slots", table.concat(ply.hl2cr.Inventory.Slots, " "))
 	ply:SetNWString("inv_armorslot_helmet", ply.hl2cr.Inventory.ArmorSlots["Helmet"])
-	ply:SetNWString("inv_armorslot_shoulders", ply.hl2cr.Inventory.ArmorSlots["Shoulder"])
+	ply:SetNWString("inv_armorslot_shoulders", ply.hl2cr.Inventory.ArmorSlots["Shoulders"])
 	ply:SetNWString("inv_armorslot_chest", ply.hl2cr.Inventory.ArmorSlots["Chest"])
 	ply:SetNWString("inv_armorslot_boots", ply.hl2cr.Inventory.ArmorSlots["Boots"])
+	ply:SetNWString("inv_itemslot", ply.hl2cr.Inventory.CurItemSlot)
 	ply:SetNWString("inv_weaponslot", ply.hl2cr.Inventory.CurWeaponSlot)
 	ply:SetNWInt("inv_totalslots", ply.hl2cr.Inventory.TotalSlots)
 	

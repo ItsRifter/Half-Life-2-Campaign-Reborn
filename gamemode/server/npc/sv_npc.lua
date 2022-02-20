@@ -152,13 +152,31 @@ end)
 hook.Add("OnEntityCreated", "HL2CR_NPCCreated", function(ent)
 	SetNPCTraits(ent)
 	if GetConVar("hl2cr_specials"):GetInt() == 1 then
+		if (( string.find( string.lower( game.GetMap() ), "d1_trainstation_01" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d1_trainstation_02" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d1_trainstation_03" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d1_trainstation_04" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d1_trainstation_05" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d1_town_05" ) ) or 
+		( string.find( string.lower( game.GetMap() ), "d1_eli_01" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d1_eli_02" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d2_coast_10" ) ) or 
+		( string.find( string.lower( game.GetMap() ), "d2_prison_03" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d2_prison_07" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d3_c17_06b" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d3_c17_07" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d3_c17_10b" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d3_c17_11" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d3_c17_13" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d3_citadel_01" ) ) or
+		( string.find( string.lower( game.GetMap() ), "d3_breen_01" ) ) ) then return end -- scripts ruiners
 		if ent:IsNPC() then
 			if ent:GetName() == "*" or ent.Changed == true then return end
-			if ent:GetClass() == "npc_combine_s" or ent:GetClass() == "npc_metropolice" or ent:GetClass() == "npc_combine_prisonguard" then
-				local specialChance = math.random(1, 100)
-				if specialChance <= 33 and GetConVar("hl2cr_difficulty"):GetInt() >=3 then
+			if ent:GetClass() == "npc_combine_s" or ent:GetClass() == "npc_metropolice" then
+				local specialChance = math.random(1,100)
+				if specialChance <= 25 and GetConVar("hl2cr_difficulty"):GetInt() > 2 then
 					local newNPC = nil
-					local NPCKind = math.random(1, 6)
+					local NPCKind = math.random(1, 5)
 							
 					if NPCKind == 1 then
 						newNPC = ents.Create("npc_combine_assassin")
@@ -166,12 +184,12 @@ hook.Add("OnEntityCreated", "HL2CR_NPCCreated", function(ent)
 						newNPC = ents.Create("npc_combine_support")
 					elseif NPCKind == 3 then
 						newNPC = ents.Create("npc_combine_medic")
+					--elseif NPCKind == 4 then
+						--newNPC = ents.Create("npc_combine_veteran")
 					elseif NPCKind == 4 then
-						newNPC = ents.Create("npc_combine_veteran")
-					elseif NPCKind == 5 then
-						newNPC = ents.Create("npc_combine_grenadier")
-					elseif NPCKind == 6 then
 						newNPC = ents.Create("npc_combine_hg")
+					elseif NPCKind == 5 then
+						newNPC = ents.Create("npc_combine_burner")
 					end
 						
 						
@@ -181,12 +199,14 @@ hook.Add("OnEntityCreated", "HL2CR_NPCCreated", function(ent)
 							newNPC:SetPos(ent:GetPos() + Vector(0, 0, 30))
 							newNPC:Spawn()
 							ent.Changed = true
+							SetNPCTraits(ent)
 						end
 					end)
 						
 			
-				elseif specialChance >= 33 and GetConVar("hl2cr_difficulty"):GetInt() >=3 then 
+				elseif specialChance <= 25 then 
 					ent.Changed = true
+					SetNPCTraits(ent)
 				end
 			end
 		end

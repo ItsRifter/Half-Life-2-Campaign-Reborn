@@ -846,11 +846,13 @@ local function SetCheckpoints()
 			Vector(528, 4974, 256),		Vector(484, 4802, 409)
 		}
 		TRIGGER_CHECKPOINT = {
-			Vector(-2978, 6740, 129),		Vector(-3069, 6806, 247)
+			Vector(-2978, 6740, 129),		Vector(-3069, 6806, 247),
+			Vector(-1635, 8116.4, 134),		Vector(-1228, 8170, 260)
 		}
 		
 		CHECKPOINT_POS = {
-			Vector(-3023, 6760, 146)
+			Vector(-3023, 6760, 146),
+			Vector(-1397, 8149, 192)
 		}
 		
 		CHECKPOINT_FUNC_1 = function()
@@ -1697,7 +1699,7 @@ local HL2_WEAPONS = {
 		[9] = "weapon_crossbow"
 	},
 	
-	["d3_citadel_03"] = {
+		["d3_citadel_03"] = {
 		[1] = "weapon_crowbar",
 		[2] = "weapon_pistol",
 		[3] = "weapon_smg1",

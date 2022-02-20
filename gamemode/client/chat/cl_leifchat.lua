@@ -55,6 +55,8 @@ Administrator.ClientCommands = {
 	["!vbb"] = { "Vote to teleport Barney nearby" },
 	["!vba"] = { "Vote to teleport Alyx nearby" },
 	["!votebringbarney"] = { "Vote to teleport Barney nearby" },
+	["!specnpc"] = { "Enable/Disable Special NPCs" },
+	["!specialnpcs"] = { "Enable/Disable Special NPCs" },
 	["!votebringalyx"] = { "Vote to teleport Alyx nearby" }
 }
 

@@ -71,7 +71,7 @@ local ITEM_TYPE = {
 	["Light_Vest"] = "chest",
 	["HECU_Helm"] = "helmet",
 	["Robo_Helm"] = "helmet",
-	["Exosuit_Shoulders"] = "shoulder",
+	["Exosuit_Shoulders"] = "shoulders",
 	["Test_Mat_1"] = "mat",
 	["Test_Mat_2"] = "mat",
 	["Test_Mat_3"] = "mat",
@@ -141,6 +141,15 @@ local CONVERT_NAME_TRANSLATION = {
 	end,
 	["Exosuit_Shoulders"] = function()
 		return translate.Get("Exosuit_Shoulders")
+	end,
+	["Test_Mat_1"] = function()
+		return translate.Get("Test_Mat_1")
+	end,
+	["Test_Mat_2"] = function()
+		return translate.Get("Test_Mat_2")
+	end,
+	["Test_Mat_3"] = function()
+		return translate.Get("Test_Mat_3")
 	end,
 }
 
@@ -221,11 +230,11 @@ local CONVERT_DESC_TRANSLATION = {
 	end,
 	
 	["Test_Mat_2"] = function()
-		return translate.Get("SuitPower_Desc")
+		return translate.Get("Test_Mat_2_Desc")
 	end,
 	
 	["Test_Mat_3"] = function()
-		return translate.Get("SuitPower_Desc")
+		return translate.Get("Test_Mat_3_Desc")
 	end,
 	
 	["Test_Result"] = function()
@@ -284,7 +293,7 @@ net.Receive("HL2CR_QMenuUpdate", function()
 end)
 
 function StartQMenu(shouldOpen, skillsTbl, questTbl)
-	if not LocalPlayer():Alive() or (LocalPlayer():Team() == 5 or LocalPlayer():Team() == 3) then return end
+	if LocalPlayer():Team() == 3 then return end
 	
 	if shouldOpen then 
 		qMenuTabs = vgui.Create("HL2CR_Tab")
@@ -323,9 +332,9 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 				qMenuTabs:Remove()
 			end
 		end
-
+		-- playermodel panel
 		local invPnlPlayer = vgui.Create("DPanel", invPnl)
-		invPnlPlayer:SetPos(invPnl:GetWide() / 1.6, -invPnl:GetTall() / 32 - 32)
+		invPnlPlayer:SetPos(invPnl:GetWide() / 1.6, -invPnl:GetTall() / 32 - 64)
 		invPnlPlayer:SetSize(invPnl:GetWide() / 4.2, invPnl:GetTall() )
 		invPnlPlayer.Paint = function(self, w, h)
 			surface.SetDrawColor(HL2CR.Theme.qMenu2)
@@ -334,7 +343,13 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		
 		local invPnlPlayerModel = vgui.Create( "DModelPanel", invPnlPlayer )
 		invPnlPlayerModel:SetSize(invPnlPlayer:GetWide() * 3.3, invPnlPlayer:GetTall())
-		invPnlPlayerModel:SetPos(-invPnlPlayerModel:GetWide()/2.9, invPnlPlayerModel:GetTall() / 500)
+		if ScrH() <= 800 and ScrW() <= 1366 then
+		invPnlPlayerModel:SetPos(-invPnlPlayerModel:GetWide()/2.9, invPnlPlayerModel:GetTall() / 5)
+		elseif ScrH() == 1024 and ScrW() == 1280 then
+		invPnlPlayerModel:SetPos(-invPnlPlayerModel:GetWide()/2.9, invPnlPlayerModel:GetTall() / 25)
+		else 
+		invPnlPlayerModel:SetPos(-invPnlPlayerModel:GetWide()/2.9, invPnlPlayerModel:GetTall() / 11.5)
+		end
 		invPnlPlayerModel:SetDirectionalLight(BOX_RIGHT, Color(255, 160, 80, 255))
 		invPnlPlayerModel:SetDirectionalLight(BOX_LEFT, Color(80, 160, 255, 255))
 		invPnlPlayerModel:SetAmbientLight(Vector(-64, -64, -64))
@@ -357,7 +372,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 
 			ent:SetAngles(self.Angles)
 		end
-		
+		--slots
 		local slots = string.Explode(" ", LocalPlayer():GetNWString("inv_slots"))
 		
 		local invPnlSlotsPnl = vgui.Create("DPanel", invPnl)
@@ -369,7 +384,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		invLayout:Dock(FILL)
 		invLayout:SetSpaceX(10)
 		invLayout:SetSpaceY(5)
-		
+		--crafting panel
 		local craftPnlSlotsPnl = vgui.Create("DPanel", invPnl)
 		craftPnlSlotsPnl:SetSize(invPnl:GetWide() / 2.2, invPnl:GetTall())
 		craftPnlSlotsPnl:SetPos(15, 256)
@@ -379,16 +394,18 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		craftLayout:Dock(FILL)
 		craftLayout:SetSpaceX(10)
 		craftLayout:SetSpaceY(5)
-
+		-- items panel
 		local weaponSlotPnl = vgui.Create("DPanel", invPnl)
-		weaponSlotPnl:SetPos(invPnl:GetWide() / 1.95, 50)
+		if ScrH() <= 800 and ScrW() <= 1366 then
+			weaponSlotPnl:SetPos(invPnl:GetWide() / 1.95, 10)
+		else weaponSlotPnl:SetPos(invPnl:GetWide() / 1.95, 50) end
 		weaponSlotPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
 		
 		weaponSlotPnl.Paint = function(pnl, w, h)
 			surface.SetDrawColor(HL2CR.Theme.qMenu2)
 			surface.DrawRect(0, 0, w, h)
 		end
-		
+
 		local weaponSlotImage = vgui.Create("DImage", weaponSlotPnl)
 		weaponSlotImage:SetSize(weaponSlotPnl:GetWide(), weaponSlotPnl:GetTall())
 		if CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")] then
@@ -398,13 +415,15 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		end
 
 		local totalArmorLabel = vgui.Create("DLabel", invPnlPlayer)
-		totalArmorLabel:SetPos(invPnlPlayer:GetWide() / 6, 75)
+		totalArmorLabel:SetPos(invPnlPlayer:GetWide() / 5, 85)
 		totalArmorLabel:SetText(translate.Get("ArmorPoints") .. (LocalPlayer():GetNWInt("stat_armorpoints", 0)))
 		totalArmorLabel:SetFont("HL2CR_ArmorPoints")
 		totalArmorLabel:SizeToContents()
 
         local ArmorHeadSlotPnl = vgui.Create("DPanel", invPnl)
-		ArmorHeadSlotPnl:SetPos(invPnl:GetWide() / 1.12, 150)
+		if ScrH() <= 800 and ScrW() <= 1366 then
+			ArmorHeadSlotPnl:SetPos(invPnl:GetWide() / 1.12, 80)
+		else ArmorHeadSlotPnl:SetPos(invPnl:GetWide() / 1.12, 150) end
 		ArmorHeadSlotPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
 		
 		ArmorHeadSlotPnl.Paint = function(pnl, w, h)
@@ -421,7 +440,9 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		end
 
 		local ArmorShouldersSlotPnl = vgui.Create("DPanel", invPnl)
-		ArmorShouldersSlotPnl:SetPos(invPnl:GetWide() / 1.12, 250)
+		if ScrH() <= 800 and ScrW() <= 1366 then
+			ArmorShouldersSlotPnl:SetPos(invPnl:GetWide() / 1.12, 150)
+		else ArmorShouldersSlotPnl:SetPos(invPnl:GetWide() / 1.12, 250) end
 		ArmorShouldersSlotPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
 		
 		ArmorShouldersSlotPnl.Paint = function(pnl, w, h)
@@ -438,7 +459,9 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		end
 		
 		local ArmorChestSlotPnl = vgui.Create("DPanel", invPnl)
-		ArmorChestSlotPnl:SetPos(invPnl:GetWide() / 1.12, 350)
+		if ScrH() <= 800 and ScrW() <= 1366 then
+			ArmorChestSlotPnl:SetPos(invPnl:GetWide() / 1.12, 220)
+		else ArmorChestSlotPnl:SetPos(invPnl:GetWide() / 1.12, 350) end
 		ArmorChestSlotPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
 		
 		ArmorChestSlotPnl.Paint = function(pnl, w, h)
@@ -456,6 +479,9 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		
 		local ArmorBootsSlotPnl = vgui.Create("DPanel", invPnl)
 		ArmorBootsSlotPnl:SetPos(invPnl:GetWide() / 1.12, 450)
+		if ScrH() <= 800 and ScrW() <= 1366 then
+			ArmorBootsSlotPnl:SetPos(invPnl:GetWide() / 1.12, 290)
+		else ArmorBootsSlotPnl:SetPos(invPnl:GetWide() / 1.12, 450) end
 		ArmorBootsSlotPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
 		
 		ArmorBootsSlotPnl.Paint = function(pnl, w, h)
@@ -473,6 +499,9 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 
 		local itemSlotPanel = vgui.Create("DPanel", invPnl)
 		itemSlotPanel:SetPos(invPnl:GetWide() / 1.12, 50)
+		if ScrH() <= 800 and ScrW() <= 1366 then
+			itemSlotPanel:SetPos(invPnl:GetWide() / 1.12, 10)
+		else itemSlotPanel:SetPos(invPnl:GetWide() / 1.12, 50) end
 		itemSlotPanel:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
 		
 		itemSlotPanel.Paint = function(pnl, w, h)
@@ -487,7 +516,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		else
 			itemSlotImage:SetImage("materials/hl2cr/empty_item.jpg")
 		end
-		
+		--crafting result panel
 		local CraftingResultPnl = vgui.Create("DPanel", invPnl)
 		CraftingResultPnl:SetPos(155, invPnl:GetWide() / (ScrW() / 600))
 		CraftingResultPnl:SetSize(invPnl:GetWide() / (ScrW() / 102), invPnl:GetWide() / (ScrW() / 102) )
@@ -505,7 +534,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			if pnl:GetImage() == "materials/hl2cr/mystery.jpg" then 
 				surface.PlaySound("buttons/button16.wav")
 			else
-				if #slots >= LocalPlayer().GetNWInt("inv_totalslots") then surface.PlaySound("buttons/button16.wav") return end
+				if #slots >= 15 then surface.PlaySound("buttons/button16.wav") return end
 				
 				surface.PlaySound("hl1/ambience/steamburst1.wav")
 				net.Start("HL2CR_CraftItem")
@@ -520,7 +549,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 					
 			end
 		end
-
+		--crafting shit
 		local totalSlots = LocalPlayer():GetNWInt("inv_totalslots")
 		
 		local pl = LocalPlayer()
@@ -542,7 +571,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		for i = 1, totalSlots do
 			pl.Inv[i] = invLayout:Add("HL2CR_InvSlot")
 			pl.Inv[i]:SetSize(62, 62)
-
+			
 			if slots[i] and CONVERT_NAME_TO_IMAGE[slots[i]] then
 				
 				pl.Inv[i].Icon = vgui.Create("DImageButton", pl.Inv[i])
@@ -568,7 +597,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 				pl.Inv[i].Icon.DoClick = function(pnl)
 					pl.Inv[i].ComboBox:SetVisible(true)
 				end
-
+				--equippables
 				pl.Inv[i].ComboBox.OnSelect = function( self, index, value )
 					if value == "Equip" then
 					
@@ -587,7 +616,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 						elseif ITEM_TYPE[slots[i]] == "helmet" then
 							ArmorHeadSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
 							
-						elseif ITEM_TYPE[slots[i]] == "shoulder" then
+						elseif ITEM_TYPE[slots[i]] == "shoulders" then
 							ArmorShouldersSlotImage:SetImage(CONVERT_NAME_TO_IMAGE[slots[i]])
 							
 						elseif ITEM_TYPE[slots[i]] == "chest" then
@@ -610,7 +639,6 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 						surface.PlaySound("hl2cr/standardbeep.wav")
 						self:SetVisible(false)
 						self:SetValue("")
-						
 						pl.Inv[i].Icon:Remove()
 						
 						if LocalPlayer():GetNWString("inv_armorslot_helmet") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_helmet")] then
@@ -621,14 +649,16 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 							ArmorChestSlotImage:SetImage("materials/hl2cr/empty_chest.jpg")
 						elseif LocalPlayer():GetNWString("inv_armorslot_boots") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_boots")] then
 							ArmorBootsSlotImage:SetImage("materials/hl2cr/empty_boots.jpg")
-						elseif LocalPlayer():GetNWString("inv_weaponslot") and slots[i] == LocalPlayer():GetNWString("inv_weaponslot") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")] then 
-							weaponSlotImage:SetImage("materials/hl2cr/empty_weapon.jpg")
+						elseif LocalPlayer():GetNWString("inv_itemslot") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_itemslot")] then
+							ArmorBootsSlotImage:SetImage("materials/hl2cr/empty_item.jpg")
+						elseif LocalPlayer():GetNWString("inv_weaponslot") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")] then 
+							weaponSlotImage:SetImage("materials/hl2cr/empty_weapon")
 						end
+						
 						
 						net.Start("HL2CR_SellSlot")
 							net.WriteString(slots[i])
 						net.SendToServer()
-
 					elseif value == "Use" then
 						if totalItemsInCraft > 6 then return end
 						
@@ -660,7 +690,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 				end
 			end
 		end
-		
+		--playermodel scroll menu
 		local modelHorizontalScroll = vgui.Create("DHorizontalScroller", invPnl)
 		modelHorizontalScroll:SetSize(qMenuTabs:GetWide() / 2.22, 64)
 		modelHorizontalScroll:SetPos(0, invPnl:GetTall() - 168)
@@ -697,7 +727,9 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		local skillPointsLbl = vgui.Create("DLabel", skillsPnl)
 		skillPointsLbl:SetText(translate.Get("SkillPoints") .. LocalPlayer():GetNWInt("stat_skillpoints"))
 		skillPointsLbl:SetFont("HL2CR_Skill_Level")
-		skillPointsLbl:SetPos(0, skillsPnl:GetTall() / 1.22)
+		if ScrH() <= 800 and ScrW() <= 1366 then
+			skillPointsLbl:SetPos(580, skillsPnl:GetTall() / 1.37)
+		else skillPointsLbl:SetPos(0, skillsPnl:GetTall() / 1.22) end
 		skillPointsLbl:SizeToContents()
 		
 		
@@ -802,11 +834,14 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 				statusPnl = vgui.Create("DPanel", robotSkillsLayout)
 				
 			end
-			statusPnl:SetSize(250, 125)
+			if ScrH() <= 800 and ScrW() <= 1366 then
+				statusPnl:SetSize(250, 100)
+			else statusPnl:SetSize(250, 150) end
 			
 			local skillPnlShowcase = vgui.Create("DLabel", statusPnl)
 			skillPnlShowcase:SetText(skill.Name)
 			skillPnlShowcase:SetFont("HL2CR_Class_TitleFont")
+			
 			skillPnlShowcase:SetPos(0, 5)
 			skillPnlShowcase:SizeToContents()
 			skillPnlShowcase:SetTextColor(Color(0, 0, 0, 255))
@@ -820,7 +855,9 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 						
 			local skillPnlLevel = vgui.Create("DLabel", statusPnl)
 			skillPnlLevel:SetFont("HL2CR_Skill_Level")
-			skillPnlLevel:SetPos(0, statusPnl:GetTall() - 50)
+			if ScrH() <= 800 and ScrW() <= 1366 then
+				skillPnlLevel:SetPos(0, 60)
+			else skillPnlLevel:SetPos(0, 100) end
 			skillPnlLevel:SetTextColor(Color(0, 0, 0, 255))
 			skillPnlLevel:SetText("0/" .. skill.Max)
 			
@@ -838,8 +875,11 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			end
 			
 			skillBtn = vgui.Create("DImageButton", statusPnl)
-			skillBtn:SetSize(76, 76)
-			skillBtn:SetPos(175, statusPnl:GetTall() - 75)
+			if ScrH() <= 800 and ScrW() <= 1366 then
+				skillBtn:SetSize(58, 58)
+				skillBtn:SetPos(192, 42)
+			else skillBtn:SetSize(76, 76)
+				skillBtn:SetPos(175, 75) end
 		
 			if LocalPlayer():GetNWInt("stat_level") < skill.LevelReq then
 				skillPnlLevel:SetText("")
@@ -939,6 +979,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		for k, wep in pairs(GAMEMODE.ShopItems) do
 			if wep.Type ~= "Weapon" then continue end
 			
+			
 			if string.find(LocalPlayer():GetNWString("inv_slots"), wep.Name) then continue end
 			
 			local wepBtn = weaponsLayout:Add("DImageButton")
@@ -1007,7 +1048,11 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		
 		local shoparmorPnl = vgui.Create("DPanel", shopPnlBG)
 		shoparmorPnl:SetSize(192, 192)
-		shoparmorPnl:SetPos(12.5, 320)
+		if ScrH() <= 800 and ScrW() <= 1366 then
+			shoparmorPnl:SetPos(12.5, 210)
+			shoparmorPnl:SetSize(352, 128)
+		else shoparmorPnl:SetPos(12.5, 256)
+			shoparmorPnl:SetSize(192, 192) end
 		shoparmorPnl.Paint = function() return end
 				
 		local shoparmorScroll = vgui.Create("DScrollPanel", shoparmorPnl)
@@ -1019,6 +1064,8 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		for k, item in pairs(GAMEMODE.ShopItems) do
 			
 			if item.Type ~= "Chest" && item.Type ~= "Boots" && item.Type ~= "Helmet" && item.Type ~= "Shoulders" then continue end
+
+			if string.find(LocalPlayer():GetNWString("inv_slots"), item.Name) then continue end
 			
 			local armorBtn = armorLayout:Add("DImageButton")
 			armorBtn:SetSize(64, 64)
@@ -1061,8 +1108,8 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			local matBtn = matsLayout:Add("DImageButton")
 			matBtn:SetSize(64, 64)
 			matBtn:SetImage(mat.Icon)
-			--matBtn:SetToolTip(CONVERT_NAME_TRANSLATION[mat.Name]().. "\n\n" .. CONVERT_DESC_TRANSLATION[mat.Name]() .. translate.Get("WeaponCost") .. mat.Cost .. translate.Get("Resin"))
-			matBtn:SetToolTip("Test".. "\n\n" .. "Blah" .. translate.Get("WeaponCost") .. mat.Cost .. translate.Get("Resin"))
+			matBtn:SetToolTip(CONVERT_NAME_TRANSLATION[mat.Name]().. "\n\n" .. CONVERT_DESC_TRANSLATION[mat.Name]() .. translate.Get("WeaponCost") .. mat.Cost .. translate.Get("Resin"))
+			--matBtn:SetToolTip("Test".. "\n\n" .. "Blah" .. translate.Get("WeaponCost") .. mat.Cost .. translate.Get("Resin"))
 			
 			matBtn.DoClick = function(pnl)			
 
@@ -1169,7 +1216,9 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		end
 		
 		local statsPnl = vgui.Create("DPanel", qMenuTabs)
-		statsPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall()/3.3)
+		if ScrH() <= 800 and ScrW() <= 1366 then
+			statsPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall()/3)
+		else statsPnl:SetSize(qMenuTabs:GetWide(), qMenuTabs:GetTall()/3.3) end
 		statsPnl:SetPos(0, 100)
 		
 		local statsPnlBG = vgui.Create("DPanel", statsPnl)

@@ -158,6 +158,10 @@ LANGUAGE.Robo_Helm 						= "Шлем Робота"
 LANGUAGE.Exosuit_Shoulders 				= "Наплечники от Экзокостюма"
 LANGUAGE.Exosuit_Vest 					= "Нагрудник от Экзокостюма"
 LANGUAGE.Exosuit_Boots 					= "Ботинки от Экзокостюма"
+
+LANGUAGE.Test_Mat_1 					= "Металл"
+LANGUAGE.Test_Mat_2 					= "Скрап"
+LANGUAGE.Test_Mat_3 					= "Морфин"
 --Описания шмоток
 LANGUAGE.SuitPower_desc					= "Увеличивает\nмощность костюма вдвое"
 LANGUAGE.Longfall_Boots_Desc 			= "Когда-то эти\nботинки украли у\nAperture Science.\n\nЗАЩИТА: 0.75"
@@ -169,6 +173,10 @@ LANGUAGE.Robo_Helm_Desc					= "Разобранная голова\nробота
 LANGUAGE.Exosuit_Shoulders_Desc 		= "Одна из частей Экзокостюма\n\nЗАЩИТА: 0.65"
 LANGUAGE.Exosuit_Vest_Desc 				= "Одна из частей Экзокостюма\n\nЗАЩИТА: 1.15"
 LANGUAGE.Exosuit_Boots_Desc 			= "Одна из частей Экзокостюма\n\nЗАЩИТА: 0.45"
+
+LANGUAGE.Test_Mat_1_Desc 				= "Обычное железо"
+LANGUAGE.Test_Mat_2_Desc 				= "Какой-то хлам"
+LANGUAGE.Test_Mat_3_Desc 				= "Бутылка с лекарствами"
 --Скиллы
 LANGUAGE.LEVEL_LOCKED					= "ЗАКРЫТО\nДОСТИГНИТЕ УРОВНЯ "
 LANGUAGE.SKILL_REQUIRES					= "\nТРЕБУЕТСЯ: "
