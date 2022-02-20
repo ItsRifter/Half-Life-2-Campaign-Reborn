@@ -14,16 +14,14 @@ function CreateCraftableItem(name, desc, icon, recipe)
 	return craftitem
 end
 
-
-
-local testitem_recipe = {
-	[1] = "Test_Mat_1",
-	[2] = "Test_Mat_2"
+local stimshot_recipe = {
+	[1] = "Morphine",
+	[2] = "Scrap_Metal"
 }
 
-local testmat = CreateCraftableItem("Test_Result", "A test result, means this worked", "materials/hl2cr/item_stimshot.jpg", testitem_recipe)
+local stim = CreateCraftableItem("Stim_Shot", "A syringe filled with morphine\nto keep a fighter going", "materials/hl2cr/item_stimshot.jpg", stimshot_recipe)
 
-table.insert(GM.CraftableItems, testmat)
+table.insert(GM.CraftableItems, stim)
 
 if SERVER then
 	net.Receive("HL2CR_CraftItem", function(len, ply)

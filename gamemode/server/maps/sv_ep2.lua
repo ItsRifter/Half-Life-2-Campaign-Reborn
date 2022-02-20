@@ -1,5 +1,6 @@
 JALOPY_MAPS = {
 	["ep2_outland_06a"] = true,
+	["ep2_outland_07"] = true,
 }
 
 local function SetCheckpoints()
@@ -150,7 +151,61 @@ local function SetCheckpoints()
 				GrantAchievement(v, "EP2", "HunterAmbush")
 			end
 		end
+	elseif game.GetMap() == "ep2_outland_07" then
+		TRIGGER_CHANGELEVEL = {
+			Vector(-3970, 13658, 48),		Vector(-3392, 14061, 286)
+		}
+
+		TRIGGER_CHECKPOINT = {
+			Vector(-9873, -9872, 144), 		Vector(-9946, -9817, 36)
+		}
+			
+		CHECKPOINT_POS = {
+			Vector(-9618, -9636, 76)
+		}
+
+		CHECKPOINT_FUNC_1 = function()
+			ents.FindByName("relay_remove_outer_door")[1]:Fire("trigger")
+			ents.FindByName("gate_open_relay")[1]:Fire("trigger")
+		end
+	elseif game.GetMap() == "ep2_outland_08" then
+		TRIGGER_CHANGELEVEL = {
+			Vector(-3161, 2022, 74),		Vector(-3061, 1871, 203)
+		}
+
+		TRIGGER_CHECKPOINT = {
+			Vector(-827, 1396, 180), 		Vector(-327, 1202, 30),
+		}
+			
+		CHECKPOINT_POS = {
+			Vector(-969, 1584, 70),		Vector(-4538, -7831, -1519)
+		}
+
+		CHANGELEVEL_FUNC = function()
+			for _, v in ipairs(player.GetAll()) do
+				v:SetPos(Vector(-3108, 1948, 90))
+			end
+		end
+
+		CHECKPOINT_FUNC_1 = function()
+			canSpawnJalopyGlobal = false
+		end
+
+	elseif game.GetMap() == "ep2_outland_09" then
+		TRIGGER_CHANGELEVEL = {
+			Vector(3076, 10168, 192),		Vector(3600, 9826, 485)
+		}
+
+		TRIGGER_CHECKPOINT = {
+			Vector(545, -9116, 195), 		Vector(328, -9262, 73),
+		}
+			
+		CHECKPOINT_POS = {
+			Vector(458, -9181, 98),		Vector(-4538, -7831, -1519)
+		}
+
 	end
+
 	if TRIGGER_CHECKPOINT then
 	
 		if TRIGGER_CHECKPOINT[1] and TRIGGER_CHECKPOINT[2] then
@@ -335,6 +390,12 @@ local function SetUpMisc()
 	MapLua:SetName("triggerhook")
 	MapLua:Spawn()
 	
+	for k, spawn in ipairs(ents.FindByClass("info_player_start")) do 
+		if k ~= 1 then
+			spawn:Remove()
+		end
+	end
+
 	local npc_vortigaunt = {
 		["npc_vortigaunt"] = true
 	}
@@ -365,6 +426,16 @@ local function SetUpMisc()
 		ents.FindByName("ss_alyx_wait_02")[1]:Fire("AddOutput", "OnEndSequence triggerhook:RunPassedCode:FixAlyxStandup()")
 	end
 	
+	if game.GetMap() == "ep2_outland_08" then
+		canSpawnJalopyGlobal = true
+	end
+
+	if game.GetMap() == "ep2_outland_09" then
+		canSpawnJalopyGlobal = false
+		ents.FindByName("relay.power.off")[1]:Fire("AddOutput", "OnTrigger triggerhook:RunPassedCode:GunnerDestroyed()")
+		ents.FindByName("lcs.radar")[1]:Fire("AddOutput", "OnTrigger4 triggerhook:RunPassedCode:AllowJelopy()" )
+	end
+
 	if EP2_WEAPONS[game.GetMap()] then
 		for i, wep in pairs(EP2_WEAPONS[game.GetMap()]) do 
 			table.insert(SPAWNING_WEAPONS, wep)
@@ -393,6 +464,23 @@ function FixAlyxStandup()
 	timer.Simple(1, function()
 		ents.FindByClass("npc_alyx")[1]:SetPos(Vector(363, 5798, 7))
 	end)
+end
+
+function GunnerDestroyed()
+	ents.FindByClass("info_player_start")[1]:SetPos(Vector(-768, -7157, 85))
+
+	for _, v in ipairs(player.GetAll()) do
+		if v:Team() == TEAM_DEAD then
+			v:Spawn()
+		end
+		v:SetPos(Vector(-768, -7157, 85))
+	end
+end
+
+
+function AllowJelopy()
+	canSpawnJalopyGlobal = true
+	BroadcastMessage(ENABLED_JALOPY)
 end
 
 function StartEP2()

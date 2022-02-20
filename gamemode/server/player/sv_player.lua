@@ -1024,20 +1024,20 @@ end)
 
 hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup, dmgInfo )
 	local damage = dmgInfo:GetDamage()
-	local hitMulti = GetConVar("hl2cr_difficulty"):GetInt() - 1
-	
-	if hitMulti <= 0 then return end
+	local hitMulti = GetConVar("hl2cr_difficulty"):GetInt()
 	
 	if hitgroup == HITGROUP_HEAD then
-		hitMulti = hitMulti * 2
+		hitMulti = hitMulti * 3
 	elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
-		hitMulti = hitMulti * 1.5
+		hitMulti = hitMulti * 1.75
 	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-		hitMulti = hitMulti * 1.25
+		hitMulti = hitMulti * 1.5
 	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-		hitMulti = hitMulti * 1.25
+		hitMulti = hitMulti * 1.5
 	end
+	
 	damage = damage * hitMulti
+
 	if ply.totalArmorRes ~= 0 then
 		damage = damage - ply.totalArmorRes
 	end

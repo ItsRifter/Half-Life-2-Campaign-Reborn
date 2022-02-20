@@ -505,7 +505,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			if pnl:GetImage() == "materials/hl2cr/mystery.jpg" then 
 				surface.PlaySound("buttons/button16.wav")
 			else
-				if #slots >= 15 then surface.PlaySound("buttons/button16.wav") return end
+				if #slots >= LocalPlayer().GetNWInt("inv_totalslots") then surface.PlaySound("buttons/button16.wav") return end
 				
 				surface.PlaySound("hl1/ambience/steamburst1.wav")
 				net.Start("HL2CR_CraftItem")
@@ -542,7 +542,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		for i = 1, totalSlots do
 			pl.Inv[i] = invLayout:Add("HL2CR_InvSlot")
 			pl.Inv[i]:SetSize(62, 62)
-			
+
 			if slots[i] and CONVERT_NAME_TO_IMAGE[slots[i]] then
 				
 				pl.Inv[i].Icon = vgui.Create("DImageButton", pl.Inv[i])
@@ -568,7 +568,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 				pl.Inv[i].Icon.DoClick = function(pnl)
 					pl.Inv[i].ComboBox:SetVisible(true)
 				end
-				
+
 				pl.Inv[i].ComboBox.OnSelect = function( self, index, value )
 					if value == "Equip" then
 					
@@ -610,6 +610,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 						surface.PlaySound("hl2cr/standardbeep.wav")
 						self:SetVisible(false)
 						self:SetValue("")
+						
 						pl.Inv[i].Icon:Remove()
 						
 						if LocalPlayer():GetNWString("inv_armorslot_helmet") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_helmet")] then
@@ -620,14 +621,14 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 							ArmorChestSlotImage:SetImage("materials/hl2cr/empty_chest.jpg")
 						elseif LocalPlayer():GetNWString("inv_armorslot_boots") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_boots")] then
 							ArmorBootsSlotImage:SetImage("materials/hl2cr/empty_boots.jpg")
-						elseif LocalPlayer():GetNWString("inv_weaponslot") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")] then 
-							weaponSlotImage:SetImage("materials/hl2cr/empty_weapon")
+						elseif LocalPlayer():GetNWString("inv_weaponslot") and slots[i] == LocalPlayer():GetNWString("inv_weaponslot") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")] then 
+							weaponSlotImage:SetImage("materials/hl2cr/empty_weapon.jpg")
 						end
-						
 						
 						net.Start("HL2CR_SellSlot")
 							net.WriteString(slots[i])
 						net.SendToServer()
+
 					elseif value == "Use" then
 						if totalItemsInCraft > 6 then return end
 						
@@ -801,7 +802,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 				statusPnl = vgui.Create("DPanel", robotSkillsLayout)
 				
 			end
-			statusPnl:SetSize(250, 150)
+			statusPnl:SetSize(250, 125)
 			
 			local skillPnlShowcase = vgui.Create("DLabel", statusPnl)
 			skillPnlShowcase:SetText(skill.Name)
@@ -819,7 +820,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 						
 			local skillPnlLevel = vgui.Create("DLabel", statusPnl)
 			skillPnlLevel:SetFont("HL2CR_Skill_Level")
-			skillPnlLevel:SetPos(0, 100)
+			skillPnlLevel:SetPos(0, statusPnl:GetTall() - 50)
 			skillPnlLevel:SetTextColor(Color(0, 0, 0, 255))
 			skillPnlLevel:SetText("0/" .. skill.Max)
 			
@@ -838,7 +839,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			
 			skillBtn = vgui.Create("DImageButton", statusPnl)
 			skillBtn:SetSize(76, 76)
-			skillBtn:SetPos(175, 75)
+			skillBtn:SetPos(175, statusPnl:GetTall() - 75)
 		
 			if LocalPlayer():GetNWInt("stat_level") < skill.LevelReq then
 				skillPnlLevel:SetText("")
