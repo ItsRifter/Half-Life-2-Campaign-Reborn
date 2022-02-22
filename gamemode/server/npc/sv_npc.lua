@@ -122,7 +122,6 @@ hook.Add("EntityTakeDamage", "HL2CR_PlayerToNPCDmgMisc", function(ent, dmgInfo)
 		--Robot Melee DMGRobotMeleeDamage
 		if att.hl2cr.CurClass.Name == "Robot" and PLAYER_MELEE_WEPS[att:GetActiveWeapon():GetClass()] then
 			local totalDMG = dmg + att.hl2cr.RobotMeleeDamage
-			print(totalDMG)
 			dmgInfo:SetDamage(totalDMG)
 		end
 
