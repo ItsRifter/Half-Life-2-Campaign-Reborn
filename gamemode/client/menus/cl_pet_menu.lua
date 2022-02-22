@@ -128,7 +128,6 @@ function OpenPetsMenu(curPlayerPets)
 	adoptionLayout:SetSpaceX(25)
 	
 	local resin = LocalPlayer():GetNWInt("currency_resin")
-	print( LocalPlayer():GetNWInt("pet_skillpoints"))
 	local skillPoints = LocalPlayer():GetNWInt("pet_skillpoints") or 0
 	local hasPet = false
 	
