@@ -11,6 +11,8 @@ function SpawnPet(ply)
 	pet:Spawn()
 	pet:SetOwner(ply)
 
+	ply:SetNWEntity("hl2cr_pet", pet)
+
 	pet:SetUpStats(ply.hl2cr.Pets.CurrentPet["stats"])
 	
 	ply:SetNWInt("pet_level", ply.hl2cr.Pets.CurrentPet["level"])
@@ -19,18 +21,19 @@ function SpawnPet(ply)
 	
 	ply:SetNWInt("pet_skillpoints", ply.hl2cr.Pets.CurrentPet["skillpoints"])
 	
-	ply:SetNWInt("pet_health", ply.hl2cr.Pets.CurrentPet["stats"]["health"])
-	ply:SetNWInt("pet_maxhealth", ply.hl2cr.Pets.CurrentPet["stats"]["health"])
-	
 	ply.pet = pet
 	ply.petcool = 5 + CurTime()
 	
-	net.Start("HL2CR_SpawnPet")
-		net.WriteBool(true)
-	net.Send(ply)
+	timer.Simple(0.1, function()
+		net.Start("HL2CR_SpawnPet")
+			net.WriteBool(true)
+		net.Send(ply)
+	end)
 end
 
 function RemovePet(ply)
+	ply:SetNWEntity("hl2cr_pet", nil)
+	
 	net.Start("HL2CR_SpawnPet")
 		net.WriteBool(false)
 	net.Send(ply)

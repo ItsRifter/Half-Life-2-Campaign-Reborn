@@ -2,15 +2,16 @@ AddCSLuaFile()
 
 GM.ShopItems = {}
 
-function CreateShopItem(name, desc, cost, icon, typeItem, stackAmount)
-	
+function CreateShopItem(name, desc, cost, icon, typeItem, stackAmount, canBuy)
+
 	local item = {
 		["Name"] = name,
 		["Desc"] = desc,
 		["Cost"] = cost,
 		["Icon"] = icon,
 		["Type"] = typeItem,
-		["stacks"] = stackAmount or 1
+		["stacks"] = stackAmount or 1,
+		["buyable"] = canBuy or false
 	}
 	
 	table.insert(GM.ShopItems, item)
@@ -36,9 +37,9 @@ local exo_pads = CreateShopItem("Exosuit_Shoulders", "Part of an Exosuit\nRESIST
 local exo_vest = CreateShopItem("Exosuit_Vest", "Part of an Exosuit\nRESIST: 1.15", 27500, "materials/hl2cr/chest_exo.jpg", "Chest")
 local exo_boots = CreateShopItem("Exosuit_Boots", "Part of an Exosuit\nRESIST: 0.45", 20000, "materials/hl2cr/boot_exo.jpg", "Boots")
 
-local iron = CreateShopItem("Iron", "Test Item\nYou shouldn't be buying this", 999999, "materials/hl2cr/mat_iron.jpg", "Material", 30)
-local scrap_metal = CreateShopItem("Scrap_Metal", "Test Item\nYou shouldn't be buying this", 999999, "materials/hl2cr/mat_scrap.jpg", "Material", 12)
-local morphine = CreateShopItem("Morphine", "Test Item\nYou shouldn't be buying this", 999999, "materials/hl2cr/mat_morphine.jpg", "Material", 3)
+local iron = CreateShopItem("Iron", "Test Item\nYou shouldn't be buying this", 999999, "materials/hl2cr/mat_iron.jpg", "Material", 30, false)
+local scrap_metal = CreateShopItem("Scrap_Metal", "Test Item\nYou shouldn't be buying this", 999999, "materials/hl2cr/mat_scrap.jpg", "Material", 12, false)
+local morphine = CreateShopItem("Morphine", "Test Item\nYou shouldn't be buying this", 999999, "materials/hl2cr/mat_morphine.jpg", "Material", 3, true)
 
 if SERVER then
 	
@@ -54,35 +55,37 @@ if SERVER then
 		if not ply then return end
 		
 		local slotToSell = net.ReadString()
-		
+
 		for i, v in ipairs(GAMEMODE.ShopItems) do
 			if v.Name == slotToSell then
-			
 				table.RemoveByValue(ply.hl2cr.Inventory.Slots, v.Name)
 				ply:SetNWString("inv_slots", table.concat(ply.hl2cr.Inventory.Slots, " "))
-				
-				if v.Cost then return end
 					
 				ply.hl2cr.Resin = ply.hl2cr.Resin + math.ceil(v.Cost / 3)
 				ply:SetNWInt("currency_resin", ply.hl2cr.Resin)
 				
 				if ply:GetNWString("inv_armorslot_helmet") == slotToSell then
+					ply.hl2cr.Inventory.ArmorSlots["Helmet"] = ""
 					ply:SetNWString("inv_armorslot_helmet", "")
 				end
 				
 				if ply:GetNWString("inv_armorslot_shoulders") == slotToSell then
+					ply.hl2cr.Inventory.ArmorSlots["Shoulders"] = ""
 					ply:SetNWString("inv_armorslot_shoulders", "")
 				end
 				
 				if ply:GetNWString("inv_armorslot_chest") == slotToSell then
+					ply.hl2cr.Inventory.ArmorSlots["Chest"] = ""
 					ply:SetNWString("inv_armorslot_chest", "")
 				end
 				
 				if ply:GetNWString("inv_armorslot_boots") == slotToSell then
+					ply.hl2cr.Inventory.ArmorSlots["Boots"] = ""
 					ply:SetNWString("inv_armorslot_boots", "")
 				end
 				
 				if ply:GetNWString("inv_weaponslot") == slotToSell then
+					ply.hl2cr.Inventory.CurWeaponSlot = ""
 					ply:SetNWString("inv_weaponslot", "")
 				end
 				

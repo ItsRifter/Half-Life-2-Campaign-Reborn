@@ -24,7 +24,7 @@ function AddXP(ply, XP)
 		ply.hl2cr.Exp = ply.hl2cr.Exp - ply.hl2cr.ReqExp
 		ply.hl2cr.Level = ply.hl2cr.Level + 1
 		ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints + 1
-		ply.hl2cr.ReqExp = ply.hl2cr.ReqExp + (500 * ply.hl2cr.Level)
+		ply.hl2cr.ReqExp = ply.hl2cr.ReqExp + (750 * ply.hl2cr.Level)
 		
 		notifyLevelUp = true
 	end

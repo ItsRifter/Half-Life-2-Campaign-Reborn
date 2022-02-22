@@ -55,34 +55,14 @@ ENT.SoundTbl_DamageByPlayer = {}
 ENT.SoundTbl_Death = {}
 ENT.SoundTbl_SoundTrack = {}
 
-function ENT:SetUpStats(stats)
-	
-	self.StartHealth = stats["health"]
-	self.TurningSpeed = stats["speed"]
-	self.AA_MoveAccelerate = stats["speed"]
-	self.NextMeleeAttackTime = stats["attDelay"]
-	self.LeapAttackDamage = stats["damage"]
-	self.MeleeAttackDamage = stats["damage"]
-end
-
 function ENT:OnInjured( dmginfo )
 	local att = dmginfo:GetAttacker()
 	
-	self:GetOwner().petcool = CurTime() + 6
-	
 	self:SetHealth(self:Health() - dmginfo:GetDamage())
-	self:GetOwner():SetNWInt("pet_health", self:Health())
 end
 
 function ENT:OnKilled( dmginfo )
 	local att = dmginfo:GetAttacker()
-	
-	net.Start("HL2CR_SpawnPet")
-		net.WriteBool(false)
-	net.Send(self:GetOwner())
-	
-	self:GetOwner().spawnCooldown = 5 + CurTime() * GetConVar("hl2cr_difficulty"):GetInt()
-	
-	self:GetOwner().pet = nil
+
 	SafeRemoveEntity(self)
 end

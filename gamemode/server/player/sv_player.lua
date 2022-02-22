@@ -146,6 +146,7 @@ hook.Add("PostPlayerDeath", "HL2CR_HandlePlayerDeath", function(victim)
 	else
 		victim.waitForRespawn = CurTime() + GetConVar("hl2cr_difficulty"):GetInt() * 10
 	end
+	victim:SetNWInt("hl2cr_respawntime", victim.waitForRespawn)
 	
 	victim.waitDeath = CurTime() + 5
 end)
@@ -255,11 +256,18 @@ function SetUpPlayerStats(ply)
 	local repairRecharge = 0
 	local regenArmor = 0
 	local repairGroup = 0
+
 	local resupplyGroup = 0
 	local ammoStock = 1
 	local biggerStock = 1
+
 	local jetFuel = 0
-	
+
+	local igniteChance = 0
+	local shockChance = 0
+
+	local meleeDMGBuff = 0
+
 	if ply.hl2cr.CurClass.Name == "Field Medic" then
 		newMaxHP = newMaxHP + 25
 		ArmorCount = ArmorCount - 50
@@ -290,48 +298,51 @@ function SetUpPlayerStats(ply)
 			end
 		end
 		
-		if skill.Name == "Healing" and ply.hl2cr.Skills[k].Invested then
-			for i = 1, ply.hl2cr.Skills[k].Invested do 
-				healing = healing + 5
+		if ply.hl2cr.CurClass.Name == "Field Medic" then 
+			if skill.Name == "Healing" and ply.hl2cr.Skills[k].Invested then
+				for i = 1, ply.hl2cr.Skills[k].Invested do 
+					healing = healing + 5
+				end
+			end
+			
+			if skill.Name == "Health Recharging" and ply.hl2cr.Skills[k].Invested then
+				for i = 1, ply.hl2cr.Skills[k].Invested do 
+					HPrecharge = HPrecharge + 5
+				end
+			end
+
+			if skill.Name == "Regeneration" and ply.hl2cr.CurClass.Name == "Field Medic" and ply.hl2cr.Skills[k].Invested then
+				for i = 1, ply.hl2cr.Skills[k].Invested do 
+					regenHP = regenHP + 5
+				end
 			end
 		end
+		if ply.hl2cr.CurClass.Name == "Repairman" then
+			if skill.Name == "Group Repair" and ply.hl2cr.Skills[k].Invested then
+				for i = 1, ply.hl2cr.Skills[k].Invested do 
+					repairGroup = repairGroup + 2
+				end
+			end
+			
+			if skill.Name == "Recharge" and ply.hl2cr.Skills[k].Invested then
+				for i = 1, ply.hl2cr.Skills[k].Invested do 
+					repairRecharge = repairRecharge + 5
+				end
+			end
 		
-		if skill.Name == "Health Recharging" and ply.hl2cr.Skills[k].Invested then
-			for i = 1, ply.hl2cr.Skills[k].Invested do 
-				HPrecharge = HPrecharge + 5
+			if skill.Name == "Effective Charge" and ply.hl2cr.Skills[k].Invested then
+				for i = 1, ply.hl2cr.Skills[k].Invested do 
+					repairing = repairing + 5
+				end
+			end
+
+			if skill.Name == "Group Resupply" and ply.hl2cr.Skills[k].Invested then
+				for i = 1, ply.hl2cr.Skills[k].Invested do 
+					resupplyGroup = resupplyGroup + 1
+				end
 			end
 		end
-		
-		if skill.Name == "Recharge" and ply.hl2cr.Skills[k].Invested then
-			for i = 1, ply.hl2cr.Skills[k].Invested do 
-				repairRecharge = repairRecharge + 5
-			end
-		end
-		
-		if skill.Name == "Effective Charge" and ply.hl2cr.Skills[k].Invested then
-			for i = 1, ply.hl2cr.Skills[k].Invested do 
-				repairing = repairing + 5
-			end
-		end
-		
-		if skill.Name == "Regeneration" and ply.hl2cr.CurClass.Name == "Field Medic" and ply.hl2cr.Skills[k].Invested then
-			for i = 1, ply.hl2cr.Skills[k].Invested do 
-				regenHP = regenHP + 5
-			end
-		end
-		
-		if skill.Name == "Group Repair" and ply.hl2cr.Skills[k].Invested then
-			for i = 1, ply.hl2cr.Skills[k].Invested do 
-				repairGroup = repairGroup + 2
-			end
-		end
-		
-		if skill.Name == "Group Resupply" and ply.hl2cr.Skills[k].Invested then
-			for i = 1, ply.hl2cr.Skills[k].Invested do 
-				resupplyGroup = resupplyGroup + 1
-			end
-		end
-		
+
 		if skill.Name == "Ammo Stock" and ply.hl2cr.Skills[k].Invested then
 			for i = 1, ply.hl2cr.Skills[k].Invested do 
 				ammoStock = ammoStock + 0.15
@@ -344,20 +355,44 @@ function SetUpPlayerStats(ply)
 			end
 		end
 		
-		if skill.Name == "Armor Regen" and ply.hl2cr.CurClass.Name == "Repairman" and ply.hl2cr.Skills[k].Invested then
-			for i = 1, ply.hl2cr.Skills[k].Invested do 
-				regenArmor = regenArmor + 5
+		if ply.hl2cr.CurClass.Name == "Repairman" and ply.hl2cr.Skills[k].Invested then
+			if skill.Name == "Armor Regen" then
+				for i = 1, ply.hl2cr.Skills[k].Invested do 
+					regenArmor = regenArmor + 5
+				end
 			end
 		end
 		
-		if skill.Name == "Enhanced Exo-skeleton" and ply.hl2cr.CurClass.Name == "Robot" and ply.hl2cr.Skills[k].Invested then
-			for i = 1, ply.hl2cr.Skills[k].Invested do 
-				ply.totalArmorRes = ply.totalArmorRes + 2
+		if ply.hl2cr.CurClass.Name == "Robot" then
+			if skill.Name == "Enhanced Exo-skeleton" then 
+				for i = 1, ply.hl2cr.Skills[k].Invested do 
+					ply.totalArmorRes = ply.totalArmorRes + 2
+				end
+			end
+			
+			if skill.Name == "Strength Enhance" then 
+				for i = 1, ply.hl2cr.Skills[k].Invested do 
+					meleeDMGBuff = meleeDMGBuff + 3
+				end
+			end
+
+			if skill.Name == "Entity Scanner" then
+				ply:SetNWBool("CanScanEnemies", true)
 			end
 		end
-		
-		if skill.Name == "Entity Scanner" and ply.hl2cr.CurClass.Name == "Robot" then
-			ply:SetNWBool("CanScanEnemies", true)
+
+		if ply.hl2cr.CurClass.Name == "Gunman" then
+			if skill.Name == "Ignition Bullets" then
+				for i = 1, ply.hl2cr.Skills[k].Invested do 
+					igniteChance = igniteChance + 1
+				end
+			end
+
+			if skill.Name == "Shock Bullets" then
+				for i = 1, ply.hl2cr.Skills[k].Invested do 
+					shockChance = shockChance + 1
+				end
+			end
 		end
 	end
 
@@ -374,10 +409,19 @@ function SetUpPlayerStats(ply)
 		return
 	end
 	
+	--Grenadier
 	ply.hl2cr.AmmoGrenade = 0
+
 	ply.hl2cr.StunDamage = 0
-	ply.hl2cr.MaxAmmoStock = ammoStock
+
+	ply.hl2cr.RobotMeleeDamage = meleeDMGBuff
 	
+	ply.hl2cr.MaxAmmoStock = ammoStock
+
+	--Gunman
+	ply.chance_ignitebullets = igniteChance
+	ply.chance_shockbullets = shockChance
+
 	if ply.hl2cr.CurClass.Name == "Grenadier" then
 		ply.hl2cr.AmmoGrenade = ply.hl2cr.AmmoGrenade + 5
 	elseif ply.hl2cr.CurClass.Name == "Combine Dropout" then
@@ -455,6 +499,11 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 	ply:SetNWString("class_icon", ply.hl2cr.CurClass.Icon)
 	ply:SetNWBool("CanRevive", false)
 	
+	if ply.NewCurClass then
+		ply.hl2cr.CurClass = ply.NewCurClass
+		ply:SetNWString("stat_curclass", ply.hl2cr.CurClass.Name)
+	end
+
 	SetUpPlayerStats(ply)
 	SetUpPlayerArmorStats(ply)
 
@@ -476,7 +525,6 @@ hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
 		ply:SetRunSpeed(125)
 	end
 	
-
 	for k, wep in pairs(SPAWNING_WEAPONS) do
 		ply:Give(wep)
 	end
@@ -697,7 +745,27 @@ hook.Add("Tick", "HL2CR_AmmoLimiter", function()
 end)
 
 hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
-	
+
+	--Give the gunman less health from med pickups
+	if ply.hl2cr.CurClass.Name == "Gunman" then
+		if ply:Health() >= ply:GetMaxHealth() then return end
+		ply:EmitSound("items/smallmedkit1.wav")
+		item:Remove()
+
+		if item:GetClass() == "item_healthkit" then
+			ply:SetHealth(ply:Health() + 5)
+		elseif item:GetClass() == "item_healthvial" then
+			ply:SetHealth(ply:Health() + 3)
+		end
+		if ply:Health() > ply:GetMaxHealth() then
+			ply:SetHealth(ply:GetMaxHealth())
+		end
+
+		return false
+	end
+
+	--Prevent robots from picking up health
+	--However batteries will first heal the player then charge suit energy
 	if (item:GetClass() == "item_healthkit" or item:GetClass() == "item_healthvial") and ply.hl2cr.CurClass.Name == "Robot" then
 		return false
 	elseif item:GetClass() == "item_battery" and ply.hl2cr.CurClass.Name == "Robot" and ply:Health() < ply:GetMaxHealth() and not item.robotPicked then
@@ -886,9 +954,10 @@ RANDOM_XP_BASED_NPC = {
 hook.Add("OnNPCKilled", "HL2CR_NPCKilled", function(npc, attacker, inflictor)
 	
 	local player = nil
-
 	if attacker:IsPlayer() then
 		player = attacker
+	elseif npc.Attacker then
+		player = npc.Attacker
 	end
 	
 	if player and not inflictor:IsPet() then
@@ -1027,7 +1096,7 @@ hook.Add("EntityTakeDamage", "HL2CR_SlashDMGBuff", function( target, dmgInfo )
 		end--]]
 		
 		if dmgType == DMG_SHOCK and att:GetClass() == "npc_vortigaunt" then
-			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * math.random(0.15, 1))
+			dmgInfo:ScaleDamage(GetConVar("hl2cr_difficulty"):GetInt() * math.random(0.15, 0.55))
 		end
 	end
 end)
@@ -1039,15 +1108,17 @@ hook.Add("ScalePlayerDamage", "HL2CR_PlayerDamageScale", function( ply, hitgroup
 	if hitMulti <= 0 then return end
 	
 	if hitgroup == HITGROUP_HEAD then
-		hitMulti = hitMulti * 2
+		hitMulti = hitMulti * 2.5
 	elseif hitgroup == HITGROUP_CHEST or hitgroup == HITGROUP_STOMACH then
-		hitMulti = hitMulti * 1.5
+		hitMulti = hitMulti * 1.75
 	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
-		hitMulti = hitMulti * 1.25
+		hitMulti = hitMulti * 1.50
 	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
-		hitMulti = hitMulti * 1.25
+		hitMulti = hitMulti * 1.50
 	end
+
 	damage = damage * hitMulti
+
 	if ply.totalArmorRes ~= 0 then
 		if GetConVar("hl2cr_difficulty"):GetInt() > 3 then -- twice effective armor on hard+
 			damage = damage - (ply.totalArmorRes * 2)

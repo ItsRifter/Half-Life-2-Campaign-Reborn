@@ -17,37 +17,37 @@ local CONVERT_NAME_TO_IMAGE = {
 	["HECU_Helm"] = "materials/hl2cr/helmet_hecu.jpg",
 	["Robo_Helm"] = "materials/hl2cr/helmet_robot.jpg",
 	["Exosuit_Shoulders"] = "materials/hl2cr/shoulder_exo.jpg",
-	["Test_Mat_1"] = "materials/hl2cr/mat_iron.jpg",
-	["Test_Mat_2"] = "materials/hl2cr/mat_scrap.jpg",
-	["Test_Mat_3"] = "materials/hl2cr/mat_morphine.jpg",
-	["Test_Result"] = "materials/hl2cr/item_stimshot.jpg"
+	["Iron"] = "materials/hl2cr/mat_iron.jpg",
+	["Scrap_Metal"] = "materials/hl2cr/mat_scrap.jpg",
+	["Morphine"] = "materials/hl2cr/mat_morphine.jpg",
+	["Stimshot"] = "materials/hl2cr/item_stimshot.jpg"
 }
 
 local CONVERT_IMAGE_TO_CRAFT = {
-	["materials/hl2cr/mat_iron.jpg"] = "Test_Mat_1",
-	["materials/hl2cr/mat_scrap.jpg"] = "Test_Mat_2",
-	["materials/hl2cr/mat_morphine.jpg"] = "Test_Mat_3",
+	["materials/hl2cr/mat_iron.jpg"] = "Iron",
+	["materials/hl2cr/mat_scrap.jpg"] = "Scrap_Metal",
+	["materials/hl2cr/mat_morphine.jpg"] = "Morphine",
 }
 
 local CONVERT_CRAFTED_TO_IMAGE = {
-	["Test_Result"] = "materials/hl2cr/item_stimshot.jpg",
+	["Stimshot"] = "materials/hl2cr/item_stimshot.jpg",
 }
 
 local MENU_CRAFTABLES_RECIPE = {
 	[1] = {
-		[1] = "Test_Mat_1",
-		[2] = "Test_Mat_1",
+		[1] = "Scrap_Metal",
+		[2] = "Morphine",
 	}
 }
 
 local MENU_CRAFTABLES_RESULT = {
-	[1] = "Test_Result",
+	[1] = "Stimshot",
 }
 
 local MENU_CRAFTABLE_TAKEITEMS = {
 	["materials/hl2cr/item_stimshot.jpg"] = {
-		[1] = "Test_Mat_1",
-		[2] = "Test_Mat_1",
+		[1] = "Scrap_Metal",
+		[2] = "Morphine",
 	}
 }
 
@@ -72,10 +72,10 @@ local ITEM_TYPE = {
 	["HECU_Helm"] = "helmet",
 	["Robo_Helm"] = "helmet",
 	["Exosuit_Shoulders"] = "shoulders",
-	["Test_Mat_1"] = "mat",
-	["Test_Mat_2"] = "mat",
-	["Test_Mat_3"] = "mat",
-	["Test_Result"] = "usable"
+	["Iron"] = "mat",
+	["Scrap_Metal"] = "mat",
+	["Morphine"] = "mat",
+	["Stimshot"] = "usable"
 }
 
 local CONVERT_NAME_TRANSLATION = {
@@ -142,14 +142,14 @@ local CONVERT_NAME_TRANSLATION = {
 	["Exosuit_Shoulders"] = function()
 		return translate.Get("Exosuit_Shoulders")
 	end,
-	["Test_Mat_1"] = function()
-		return translate.Get("Test_Mat_1")
+	["Iron"] = function()
+		return translate.Get("Iron")
 	end,
-	["Test_Mat_2"] = function()
-		return translate.Get("Test_Mat_2")
+	["Scrap_Metal"] = function()
+		return translate.Get("Scrap_Metal")
 	end,
-	["Test_Mat_3"] = function()
-		return translate.Get("Test_Mat_3")
+	["Morphine"] = function()
+		return translate.Get("Morphine")
 	end,
 }
 
@@ -225,20 +225,20 @@ local CONVERT_DESC_TRANSLATION = {
 		return translate.Get("Exosuit_Shoulders_Desc")
 	end,
 	
-	["Test_Mat_1"] = function()
-		return translate.Get("Test_Mat_1_Desc")
+	["Iron"] = function()
+		return translate.Get("Iron_Desc")
 	end,
 	
-	["Test_Mat_2"] = function()
-		return translate.Get("Test_Mat_2_Desc")
+	["Scrap_Metal"] = function()
+		return translate.Get("Scrap_Metal_Desc")
 	end,
 	
-	["Test_Mat_3"] = function()
-		return translate.Get("Test_Mat_3_Desc")
+	["Morphine"] = function()
+		return translate.Get("Morphine_Desc")
 	end,
 	
-	["Test_Result"] = function()
-		return translate.Get("SuitPower_Desc")
+	["Stimshot"] = function()
+		return translate.Get("Stimshot_Desc")
 	end,
 }
 
@@ -284,6 +284,20 @@ local PLAYERMODELS = {
 	["Robot"] = {
 		[1] = "models/player/mc/robo/Robo.mdl"
 	},
+
+	["VIP"] = {
+		[1] = "models/player/SGG/hev_helmet.mdl"
+	},
+	
+	["OTF"] = {
+		[1] = "models/Inaki/Characters/gordon_freeman.mdl"
+	},
+}
+
+local VIP_GROUPS = {
+	["donator"] = true,
+	["vip"] = true,
+	["vip+"] = true
 }
 
 net.Receive("HL2CR_QMenuUpdate", function()
@@ -342,24 +356,28 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		end
 		
 		local invPnlPlayerModel = vgui.Create( "DModelPanel", invPnlPlayer )
-		invPnlPlayerModel:SetSize(invPnlPlayer:GetWide() * 3.3, invPnlPlayer:GetTall())
+			invPnlPlayerModel:SetSize(invPnlPlayer:GetWide() * 3.3, invPnlPlayer:GetTall())
 		if ScrH() <= 800 and ScrW() <= 1366 then
-		invPnlPlayerModel:SetPos(-invPnlPlayerModel:GetWide()/2.9, invPnlPlayerModel:GetTall() / 5)
+			invPnlPlayerModel:SetPos(-invPnlPlayerModel:GetWide()/2.9, invPnlPlayerModel:GetTall() / 5)
 		elseif ScrH() == 1024 and ScrW() == 1280 then
-		invPnlPlayerModel:SetPos(-invPnlPlayerModel:GetWide()/2.9, invPnlPlayerModel:GetTall() / 25)
+			invPnlPlayerModel:SetPos(-invPnlPlayerModel:GetWide()/2.9, invPnlPlayerModel:GetTall() / 25)
 		else 
-		invPnlPlayerModel:SetPos(-invPnlPlayerModel:GetWide()/2.9, invPnlPlayerModel:GetTall() / 11.5)
+			invPnlPlayerModel:SetPos(-invPnlPlayerModel:GetWide()/2.9, invPnlPlayerModel:GetTall() / 11.5)
 		end
+
 		invPnlPlayerModel:SetDirectionalLight(BOX_RIGHT, Color(255, 160, 80, 255))
 		invPnlPlayerModel:SetDirectionalLight(BOX_LEFT, Color(80, 160, 255, 255))
 		invPnlPlayerModel:SetAmbientLight(Vector(-64, -64, -64))
 		invPnlPlayerModel:SetModel( LocalPlayer():GetModel() )
 		invPnlPlayerModel.Angles = Angle(0, 0, 0)
+
 		function invPnlPlayerModel:DragMousePress()
 			self.PressX, self.PressY = gui.MousePos()
 			self.Pressed = true
 		end
+
 		function invPnlPlayerModel:DragMouseRelease() self.Pressed = false end
+
 		function invPnlPlayerModel:LayoutEntity(ent)
 			if (self.bAnimated) then self:RunAnimation() end
 
@@ -640,25 +658,11 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 						self:SetVisible(false)
 						self:SetValue("")
 						pl.Inv[i].Icon:Remove()
-						
-						if LocalPlayer():GetNWString("inv_armorslot_helmet") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_helmet")] then
-							ArmorHeadSlotImage:SetImage("materials/hl2cr/empty_helmet.jpg")
-						elseif LocalPlayer():GetNWString("inv_armorslot_shoulders") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_shoulders")] then
-							ArmorShouldersSlotImage:SetImage("materials/hl2cr/empty_shoulders.jpg")
-						elseif LocalPlayer():GetNWString("inv_armorslot_chest") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_chest")] then
-							ArmorChestSlotImage:SetImage("materials/hl2cr/empty_chest.jpg")
-						elseif LocalPlayer():GetNWString("inv_armorslot_boots") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_armorslot_boots")] then
-							ArmorBootsSlotImage:SetImage("materials/hl2cr/empty_boots.jpg")
-						elseif LocalPlayer():GetNWString("inv_itemslot") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_itemslot")] then
-							ArmorBootsSlotImage:SetImage("materials/hl2cr/empty_item.jpg")
-						elseif LocalPlayer():GetNWString("inv_weaponslot") and CONVERT_NAME_TO_IMAGE[LocalPlayer():GetNWString("inv_weaponslot")] then 
-							weaponSlotImage:SetImage("materials/hl2cr/empty_weapon")
-						end
-						
-						
+	
 						net.Start("HL2CR_SellSlot")
 							net.WriteString(slots[i])
 						net.SendToServer()
+
 					elseif value == "Use" then
 						if totalItemsInCraft > 6 then return end
 						
@@ -698,7 +702,22 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		local curClass = LocalPlayer():GetNWString("stat_curclass")
 		for name, v in pairs(PLAYERMODELS) do
 			for i, p in ipairs(v) do
-				if name == curClass or name == "Standard" then
+				
+				if not LocalPlayer():IsAdmin() and name == curClass or name == "Standard" or (name == "VIP" and VIP_GROUPS[LocalPlayer():GetUserGroup()]) then
+					local playermodelBtn = modelHorizontalScroll:Add("SpawnIcon")
+					playermodelBtn:SetModel(v[i])
+					playermodelBtn:SetSize(64, 64)
+					
+					modelHorizontalScroll:AddPanel(playermodelBtn)
+					
+					playermodelBtn.DoClick = function(pnl)
+						net.Start("HL2CR_UpdateModel")
+							net.WriteString(v[i])
+						net.SendToServer()
+
+						invPnlPlayerModel:SetModel( v[i] )
+					end
+				elseif LocalPlayer():IsAdmin() then
 					local playermodelBtn = modelHorizontalScroll:Add("SpawnIcon")
 					playermodelBtn:SetModel(v[i])
 					playermodelBtn:SetSize(64, 64)
@@ -809,6 +828,17 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		mechSkillsLayout:Dock(FILL)
 		mechSkillsLayout:SetSpaceX(20)
 
+		local gunmanSkillsPnl = vgui.Create("DPanel", skillsSelectionPnl)
+		gunmanSkillsPnl:SetSize(skillsSelectionPnl:GetWide(), skillsSelectionPnl:GetTall())
+
+		local gunmanHorizontalScroll = vgui.Create("DHorizontalScroller", gunmanSkillsPnl)
+		gunmanHorizontalScroll:Dock(FILL)
+		gunmanHorizontalScroll:SetOverlap( 0 )
+		
+		local gunmanSkillsLayout = vgui.Create("DIconLayout", gunmanHorizontalScroll)
+		gunmanSkillsLayout:Dock(FILL)
+		gunmanSkillsLayout:SetSpaceX(20)
+
 		local skillPoints = LocalPlayer():GetNWInt("stat_skillpoints")
 		
 		for i, skill in pairs(GAMEMODE.PlayerSkills) do
@@ -832,13 +862,20 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 				
 			elseif skill.Class == "Robot" then
 				statusPnl = vgui.Create("DPanel", robotSkillsLayout)
-				
-			end
-			if ScrH() <= 800 and ScrW() <= 1366 then
-				statusPnl:SetSize(250, 100)
-			else statusPnl:SetSize(250, 150) end
 			
-			local skillPnlShowcase = vgui.Create("DLabel", statusPnl)
+			elseif skill.Class == "Gunman" then
+				statusPnl = vgui.Create("DPanel", gunmanSkillsLayout)
+			end
+
+			if ScrH() <= 800 and ScrW() <= 1366 then
+				statusPnl:SetSize(250, 75)
+			else statusPnl:SetSize(250, 125) end
+			
+			local skillBtn = vgui.Create("DImageButton", statusPnl)
+			skillBtn:SetColor(Color(255, 255, 255, 200))
+			skillBtn:SetSize(statusPnl:GetWide(), statusPnl:GetTall())
+
+			local skillPnlShowcase = vgui.Create("DLabel", skillBtn)
 			skillPnlShowcase:SetText(skill.Name)
 			skillPnlShowcase:SetFont("HL2CR_Class_TitleFont")
 			
@@ -846,21 +883,20 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 			skillPnlShowcase:SizeToContents()
 			skillPnlShowcase:SetTextColor(Color(0, 0, 0, 255))
 			
-			local skillPnlDesc = vgui.Create("DLabel", statusPnl)
+			local skillPnlDesc = vgui.Create("DLabel", skillBtn)
 			skillPnlDesc:SetText(skill.Desc)
 			skillPnlDesc:SetPos(0, 30)
 			skillPnlDesc:SetFont("HL2CR_Class_DescFont")
 			skillPnlDesc:SizeToContents()
 			skillPnlDesc:SetTextColor(Color(0, 0, 0, 255))
 						
-			local skillPnlLevel = vgui.Create("DLabel", statusPnl)
+			local skillPnlLevel = vgui.Create("DLabel", skillBtn)
 			skillPnlLevel:SetFont("HL2CR_Skill_Level")
 			if ScrH() <= 800 and ScrW() <= 1366 then
-				skillPnlLevel:SetPos(0, 60)
-			else skillPnlLevel:SetPos(0, 100) end
+				skillPnlLevel:SetPos(0, statusPnl:GetTall() - 10)
+			else skillPnlLevel:SetPos(0, statusPnl:GetTall() - 50) end
 			skillPnlLevel:SetTextColor(Color(0, 0, 0, 255))
 			skillPnlLevel:SetText("0/" .. skill.Max)
-			
 			
 			if skillsTbl[i] and skillsTbl[i].Invested < skill.Max then
 				skillPnlLevel:SetText( (skillsTbl[i].Invested ) .. "/" .. skill.Max)
@@ -874,12 +910,11 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 				surface.DrawRect(0, 0, w, h)
 			end
 			
-			skillBtn = vgui.Create("DImageButton", statusPnl)
-			if ScrH() <= 800 and ScrW() <= 1366 then
-				skillBtn:SetSize(58, 58)
-				skillBtn:SetPos(192, 42)
-			else skillBtn:SetSize(76, 76)
-				skillBtn:SetPos(175, 75) end
+			--if ScrH() <= 800 and ScrW() <= 1366 then
+				--skillBtn:SetSize(58, 58)
+			--	skillBtn:SetPos(192, statusPnl:GetTall() - 42)
+			--else skillBtn:SetSize(76, 76)
+			--	skillBtn:SetPos(175, statusPnl:GetTall() - 75) end
 		
 			if LocalPlayer():GetNWInt("stat_level") < skill.LevelReq then
 				skillPnlLevel:SetText("")
@@ -945,6 +980,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_SUPPLIER"), supplierSkillsPnl)
 		skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_ROBOT"), robotSkillsPnl)
 	    skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_MECHANIC"), mechSkillsPnl)
+		skillsSelectionPnl.navbar:AddTab(translate.Get("SKILLS_GUNMAN"), gunmanSkillsPnl)
 		skillsSelectionPnl.navbar:SetActive(1)
 		
 		local shopPnl = vgui.Create("DPanel", qMenuTabs)
@@ -1104,6 +1140,7 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		for k, mat in pairs(GAMEMODE.ShopItems) do
 			
 			if mat.Type ~= "Material" then continue end
+			if not mat.buyable then continue end
 			
 			local matBtn = matsLayout:Add("DImageButton")
 			matBtn:SetSize(64, 64)

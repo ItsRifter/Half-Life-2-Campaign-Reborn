@@ -95,17 +95,65 @@ end
 	["npc_combine_synth"] = "Synth",
 --]]
 
+local PLAYER_MELEE_WEPS = {
+	["weapon_crowbar"] = true,
+	["weapon_stunstick"] = true,
+	["the_lobotomizer"] = true,
+}
+
 hook.Add("EntityTakeDamage", "HL2CR_PlayerToNPCDmgMisc", function(ent, dmgInfo)
 	local dmg = dmgInfo:GetDamage()
 	local att = dmgInfo:GetAttacker()
 	
-	if att:IsPlayer() and ent:IsValid() then 
-		if att:GetActiveWeapon():GetClass() == "weapon_stunstick" and not (ent:IsFriendly() or ent:GetClass() == "npc_citizen") then
-			if att.hl2cr.StunDamage and not ent:IsPlayer() then
+	if not ent:IsValid() then return end
+
+	if att:IsPlayer() then
+		--Stop here if its a friendly NPC or player 
+		if ent:IsFriendly() or ent:GetClass() == "npc_citizen" or ent:IsPlayer() then return end
+
+		--Stunstick DMG
+		if att.hl2cr.CurClass.Name == "Combine Dropout" and att:GetActiveWeapon():GetClass() == "weapon_stunstick" then
+			if att.hl2cr.StunDamage then
 				local totalStun = dmg + att.hl2cr.StunDamage
 				dmgInfo:SetDamage(totalStun)
 			end
-		end	
+		end
+
+		--Robot Melee DMGRobotMeleeDamage
+		if att.hl2cr.CurClass.Name == "Robot" and PLAYER_MELEE_WEPS[att:GetActiveWeapon():GetClass()] then
+			local totalDMG = dmg + att.hl2cr.RobotMeleeDamage
+			print(totalDMG)
+			dmgInfo:SetDamage(totalDMG)
+		end
+
+		--Gunman DMG (if they have skills applied)
+		if att.hl2cr.CurClass.Name == "Gunman" then
+			--Melee isn't a firearm so stop here if they used melee weapons
+			if PLAYER_MELEE_WEPS[att:GetActiveWeapon():GetClass()] then return end
+
+			--Class Passive
+			dmgInfo:SetDamage(math.Round(dmg * 1.45))
+
+			--Ignition
+			if math.random(1, 100) <= att.chance_ignitebullets then
+				ent:Ignite(10, 0)
+				ent.Attacker = att
+			end
+
+			--Shock
+			if math.random(1, 100) <= att.chance_shockbullets then
+				ent:EmitSound("npc/roller/mine/rmine_explode_shock1.wav")
+				
+				timer.Create("HL2CR_NPC_Shocked", 0.1, 50, function()
+					if not ent:IsValid() then return end
+					ent:SetMoveVelocity(Vector(0, 0, 0))
+					ent:SetIdealActivity(ACT_IDLE)
+					ent:SetMovementActivity(ACT_IDLE)
+					ent:SetNPCState(NPC_STATE_IDLE)
+				end)
+			end
+		end
+			
 	end
 end)
 

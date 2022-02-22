@@ -41,6 +41,11 @@ CreateSkill("Group Resupply", "Resupply multiple people\nat the same time", "Sup
 --Robot
 CreateSkill("Enhanced Exosuit", "Stronger and more powerful", "Robot", 21, "materials/hl2cr/chest_exo.jpg", 3)
 CreateSkill("Entity Scanner", "Scan Hostiles status", "Robot", 24, "materials/hl2cr/skill_targetstats.jpg", 1)
+CreateSkill("Strength Enhance", "Hit harder with melee weapons", "Robot", 26, "materials/hl2cr/skill_robot_strength.jpg", 3)
+
+--Gunman
+CreateSkill("Ignition Bullets", "Fire bullets that cause\nfire damage to enemies", "Gunman", 35, "materials/hl2cr/skill_ignition.jpg", 5)
+CreateSkill("Shock Bullets", "Electrifying bullets that cause\nshock damage to enemies", "Gunman", 37, "materials/hl2cr/skill_shock.jpg", 4)
 
 if SERVER then
 	net.Receive("HL2CR_SkillObtain", function(len, ply)

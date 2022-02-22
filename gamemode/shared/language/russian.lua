@@ -159,9 +159,9 @@ LANGUAGE.Exosuit_Shoulders 				= "Наплечники от Экзокостюм
 LANGUAGE.Exosuit_Vest 					= "Нагрудник от Экзокостюма"
 LANGUAGE.Exosuit_Boots 					= "Ботинки от Экзокостюма"
 
-LANGUAGE.Test_Mat_1 					= "Металл"
-LANGUAGE.Test_Mat_2 					= "Скрап"
-LANGUAGE.Test_Mat_3 					= "Морфин"
+LANGUAGE.Iron        					= "Металл"
+LANGUAGE.Scrap_Metal 					= "Скрап"
+LANGUAGE.Morphine 				    	= "Морфин"
 --Описания шмоток
 LANGUAGE.SuitPower_desc					= "Увеличивает\nмощность костюма вдвое"
 LANGUAGE.Longfall_Boots_Desc 			= "Когда-то эти\nботинки украли у\nAperture Science.\n\nЗАЩИТА: 0.75"
@@ -174,9 +174,9 @@ LANGUAGE.Exosuit_Shoulders_Desc 		= "Одна из частей Экзокост
 LANGUAGE.Exosuit_Vest_Desc 				= "Одна из частей Экзокостюма\n\nЗАЩИТА: 1.15"
 LANGUAGE.Exosuit_Boots_Desc 			= "Одна из частей Экзокостюма\n\nЗАЩИТА: 0.45"
 
-LANGUAGE.Test_Mat_1_Desc 				= "Обычное железо"
-LANGUAGE.Test_Mat_2_Desc 				= "Какой-то хлам"
-LANGUAGE.Test_Mat_3_Desc 				= "Бутылка с лекарствами"
+LANGUAGE.Iron_Desc 				        = "Обычное железо"
+LANGUAGE.Scrap_Metal_Desc 				= "Какой-то хлам"
+LANGUAGE.Morphine_Desc 				    = "Бутылка с лекарствами"
 --Скиллы
 LANGUAGE.LEVEL_LOCKED					= "ЗАКРЫТО\nДОСТИГНИТЕ УРОВНЯ "
 LANGUAGE.SKILL_REQUIRES					= "\nТРЕБУЕТСЯ: "
@@ -187,6 +187,7 @@ LANGUAGE.SKILLS_MECHANIC				= "Механик"
 LANGUAGE.SKILLS_SUPPLIER				= "Снабженец"
 LANGUAGE.SKILLS_ROCKETEER				= "Ракетчик"
 LANGUAGE.SKILLS_ROBOT					= "Робот"
+LANGUAGE.SKILLS_GUNMAN                  = "NIIK HELP!"
 LANGUAGE.SpendToUnlock					= "Потратьте очков чтобы разблокировать"
 LANGUAGE.SkillPoints					= "Очков навыков: "
 --Классы

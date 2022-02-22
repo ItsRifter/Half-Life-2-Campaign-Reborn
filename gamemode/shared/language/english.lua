@@ -137,6 +137,7 @@ LANGUAGE.SKILLS_SUPPLIER				= "Supplier"
 LANGUAGE.SKILLS_ROCKETEER				= "Rocketeer"
 LANGUAGE.SKILLS_ROBOT					= "Robot"
 LANGUAGE.SKILLS_MECHANIC				= "Mechanic"
+LANGUAGE.SKILLS_GUNMAN                  = "Gunman"
 LANGUAGE.SpendToUnlock					= "Spend a skill-point to unlock"
 LANGUAGE.SkillPoints					= "Skill Points: "
 --Classes
@@ -194,9 +195,9 @@ LANGUAGE.Exosuit_Shoulders 				= "Exosuit Shoulders"
 LANGUAGE.Exosuit_Vest 					= "Exosuit Vest"
 LANGUAGE.Exosuit_Boots 					= "Exosuit Boots"
 
-LANGUAGE.Test_Mat_1 					= "Iron"
-LANGUAGE.Test_Mat_2 					= "Scrap"
-LANGUAGE.Test_Mat_3 					= "Morphine"
+LANGUAGE.Iron 					        = "Iron"
+LANGUAGE.Scrap_Metal					= "Scrap"
+LANGUAGE.Morphine 				    	= "Morphine"
 --Item Desc
 LANGUAGE.SuitPower_desc					= "Decreases suit power\ncharge speed on 50%"
 LANGUAGE.Longfall_Boots_Desc 			= "Stolen from Black Mesa's peers\nRESIST: 0.75"
@@ -209,9 +210,9 @@ LANGUAGE.Exosuit_Shoulders_Desc 		= "Part of an Exosuit\nRESIST: 0.65"
 LANGUAGE.Exosuit_Vest_Desc 				= "Part of an Exosuit\nRESIST: 1.15"
 LANGUAGE.Exosuit_Boots_Desc 			= "Part of an Exosuit\nRESIST: 0.45"
 
-LANGUAGE.Test_Mat_1_Desc 				= "Basic metal"
-LANGUAGE.Test_Mat_2_Desc 				= "Garbage... Or not?"
-LANGUAGE.Test_Mat_3_Desc 				= "Bottle with medicine"
+LANGUAGE.Iron_Desc 				        = "Basic metal"
+LANGUAGE.Scrap_Metal_Desc 				= "Garbage... Or not?"
+LANGUAGE.Morphine_Desc 				    = "Bottle with medicine"
 
 --AFK
 LANGUAGE.WARNING_AFK                    = "WARNING: You are now AFK"

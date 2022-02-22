@@ -87,7 +87,6 @@ function ENT:OnInjured( dmginfo )
 	self:GetOwner().petcool = CurTime() + 6
 	
 	self:SetHealth(self:Health() - dmginfo:GetDamage())
-	self:GetOwner():SetNWInt("pet_health", self:Health())
 end
 
 function ENT:OnKilled( dmginfo )

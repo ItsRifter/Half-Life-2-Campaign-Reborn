@@ -1,7 +1,6 @@
 local specUsername = nil
 local isSpectating = false
 local wasKilled = false
-local timeForRespawn = 0
 
 function StartClientSpectate(shouldSpectate, isSurvivalOn)
 	if shouldSpectate then
@@ -31,7 +30,7 @@ function StartClientSpectate(shouldSpectate, isSurvivalOn)
 		specTime:SetText("")
 		
 		if wasKilled and not isSurvivalOn then
-			specTime:SetText(translate.Get("Respawn") .. math.Round(timeForRespawn - CurTime()))
+			specTime:SetText(translate.Get("Respawn") .. math.Round(LocalPlayer():GetNWInt("hl2cr_respawntime") - CurTime()))
 			specTime:SetFont("HL2CR_SpectatePlayer")
 			specTime:SizeToContents()
 			specTime:SetPos(specPanel:GetWide() - 400, 12.5)
@@ -53,10 +52,10 @@ hook.Add("Think", "HL2CR_SpectateThink", function()
 	end
 	specUser:SizeToContents()
 
-	specTime:SetText(translate.Get("Respawn") .. math.Round(timeForRespawn - CurTime()))
+	specTime:SetText(translate.Get("Respawn") .. math.Round(LocalPlayer():GetNWInt("hl2cr_respawntime") - CurTime()))
 	specTime:SizeToContents()
 	
-	if (timeForRespawn - 0.1) < CurTime() then
+	if (LocalPlayer():GetNWInt("hl2cr_respawntime") - 0.1) < CurTime() then
 		specFrame:Close()
 		isSpectating = false
 		specUsername = nil
@@ -70,27 +69,12 @@ net.Receive("HL2CR_UpdatePlayerName", function()
 	specUsername = net.ReadString()
 end)
 
-local VIP_GROUPS = {
-	["donator"] = true,
-	["vip"] = true,
-	["vip+"] = true
-}
-
 net.Receive("HL2CR_ShouldClientSpectate", function()
 	isSpectating = net.ReadBool()
 	wasKilled = net.ReadBool()
 	local difficulty = net.ReadInt(8)
 	local isSurvival = net.ReadBool()
-	
-	if wasKilled and not isSurvival then
-	
-		if VIP_GROUPS[LocalPlayer():GetUserGroup()] then
-			timeForRespawn = CurTime() + 5 * difficulty
-		else
-			timeForRespawn = CurTime() + 10 * difficulty
-		end	
-	end
-	
+		
 	StartClientSpectate(isSpectating, isSurvival)
 	
 end)

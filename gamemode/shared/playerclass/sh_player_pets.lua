@@ -48,28 +48,28 @@ local headcrabStats = {
 	["health"] = 350,
 	["speed"] = 25,
 	["damage"] = 10,
-	["attDelay"] = 6,
+	["attDelay"] = 5,
 }
 
 local torsoStats = {
 	["health"] = 500,
 	["speed"] = 30,
 	["damage"] = 15,
-	["attDelay"] = 5,
+	["attDelay"] = 4,
 }
 
 local zombStats = {
 	["health"] = 1000,
 	["speed"] = 40,
 	["damage"] = 25,
-	["attDelay"] = 4,
+	["attDelay"] = 3,
 }
 
 local fastheadcrabStats = {
 	["health"] = 250,
 	["speed"] = 35,
 	["damage"] = 6,
-	["attDelay"] = 3,
+	["attDelay"] = 2,
 }
 
 --Normal Zombie Tree

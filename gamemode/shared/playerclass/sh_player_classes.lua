@@ -46,21 +46,23 @@ local dropoutWeps = {
 	"weapon_stunstick"
 }
 
-local fieldMedic = CreateClass("Field Medic", "A field medic here to help\nthe injured during combat", "EQUIPMENT:\nMedkit", "STRENGTHS:\n25 Health Increase\nWEAKNESSES:\n50 Armor Capacity Reduction", 5, "materials/hl2cr/class_medic.jpg", medicWeps)
+local fieldMedic = CreateClass("Field Medic", "A field medic here to help\nthe injured during combat", "\nEQUIPMENT:\nMedkit", "STRENGTHS:\n25 Health Increase\nWEAKNESSES:\n50 Armor Capacity Reduction", 5, "materials/hl2cr/class_medic.jpg", medicWeps)
 
-local repairMan = CreateClass("Repairman", "A repair-man who can restore\nlost armor points", "EQUIPMENT:\nArmorKit", "STRENGTHS:\n25 Armor Capacity Increase\nWEAKNESSES:\n20 Health Decrease", 5, "materials/hl2cr/class_repairman.jpg", repairWeps)
+local repairMan = CreateClass("Repairman", "A repair-man who can restore\nlost armor points", "\nEQUIPMENT:\nArmorKit", "STRENGTHS:\n25 Armor Capacity Increase\nWEAKNESSES:\n20 Health Decrease", 5, "materials/hl2cr/class_repairman.jpg", repairWeps)
 
-local supplier = CreateClass("Supplier", "An ammo supplier that gives\nammo for the\ncurrent active weapon", "EQUIPMENT:\nAmmo Box", "WEAKNESSES:\nLess resilient to damage", 5, "materials/hl2cr/class_supporter.jpg",supplierWeps)
+local supplier = CreateClass("Supplier", "An ammo supplier that gives\nammo for the\ncurrent active weapon", "\nEQUIPMENT:\nAmmo Box", "WEAKNESSES:\nLess resilient to damage", 5, "materials/hl2cr/class_supporter.jpg",supplierWeps)
 
-local mechanic = CreateClass("Mechanic", "A mechanic filled with\ndesigns ideas\nincluding his weapon of choice", "EQUIPMENT:\nElectric Chain-Blade", "WEAKNESSES:", 10,"materials/hl2cr/class_mechanic.jpg", mechanicWeps)
+local mechanic = CreateClass("Mechanic", "A mechanic filled with\ndesigns ideas\nincluding his weapon of choice", "\nEQUIPMENT:\nElectric Chain-Blade", "WEAKNESSES:", 10,"materials/hl2cr/class_mechanic.jpg", mechanicWeps)
 
-local grenadier = CreateClass("Grenadier", "Become more effective with\ngrenades", "EQUIPMENT:\nPack of grenades\nGrenade Belt", "WEAKNESSES:", 10, "materials/hl2cr/class_grenadier.jpg", grenadierWeps)
+local grenadier = CreateClass("Grenadier", "Become more effective with\ngrenades", "\nEQUIPMENT:\nPack of grenades\nGrenade Belt", "WEAKNESSES:", 10, "materials/hl2cr/class_grenadier.jpg", grenadierWeps)
 
-local dropout = CreateClass("Combine Dropout", "After rethinking their\ncareer choices\nit was time to dropout\nand help the resistance", "EQUIPMENT:\nMan-Hack\nStunstick", "WEAKNESSES:", 10, "materials/hl2cr/class_dropout.jpg", dropoutWeps)
+local dropout = CreateClass("Combine Dropout", "After rethinking their\ncareer choices\nit was time to dropout\nand help the resistance", "\nEQUIPMENT:\nMan-Hack\nStunstick", "WEAKNESSES:", 10, "materials/hl2cr/class_dropout.jpg", dropoutWeps)
 
-local rocketeer = CreateClass("Rocketeer", "A jetpack rebel that\ncan reach the unreachable", "EQUIPMENT:\nJetpack", "WEAKNESSES:\n35 Health Decrease\nLess resilient to damage", 20, "materials/hl2cr/class_rocketeer.jpg", nil)
+local rocketeer = CreateClass("Rocketeer", "A jetpack rebel that\ncan reach the unreachable", "\nEQUIPMENT:\nJetpack", "WEAKNESSES:\n35 Health Decrease\nLess resilient to damage", 20, "materials/hl2cr/class_rocketeer.jpg", nil)
 
-local robot = CreateClass("Robot", "Created by the resistance\ncares nothing else\nbut the humans", "EQUIPMENT:\nNONE", "STRENGTHS:\nMore resililent to damage\nWEAKNESSES:\nMedkits are ineffective\nCannot be revived", 20, "materials/hl2cr/class_robot.jpg", nil)
+local robot = CreateClass("Robot", "Created by the resistance\ncares nothing else\nbut the humans", "\nEQUIPMENT:\nNONE", "STRENGTHS:\nMore resililent to damage\nWEAKNESSES:\nMedkits are ineffective\nCannot be revived", 20, "materials/hl2cr/class_robot.jpg", nil)
+	
+local gunman = CreateClass("Gunman", "A man who is fond\nof weaponry\nweirdly has unique\nbullet types", "\nEQUIPMENT:\nNONE", "STRENGTHS:\nWeapons deal more damage\n(EXCEPT MELEE) \nWEAKNESSES:Medkits are\nless effective", 35, "materials/hl2cr/class_gunman.jpg", nil)
 
 if SERVER then
 	net.Receive("HL2CR_SelectClass", function(len, ply)
@@ -85,16 +87,14 @@ if SERVER then
 		
 		ply.classCooldown = CurTime() + GetConVar("hl2cr_cooldown_class"):GetInt()
 		
-		ply.hl2cr.CurClass = GAMEMODE.PlayStyleClass[classToAdd]
-		
-		ply:SetNWString("stat_curclass", ply.hl2cr.CurClass.Name)
-		
+		ply.NewCurClass = GAMEMODE.PlayStyleClass[classToAdd]
+	
 		local ASSIGNED_MESSAGE = {
 			["Colour"] = Color(50, 215, 50),
 			["Message"] = "ASSIGNED_MESSAGE1",
 			["Other"] = {
 				["Player"] = "",
-				["Time"] = ply.hl2cr.CurClass.Name,
+				["Time"] = GAMEMODE.PlayStyleClass[classToAdd].Name,
 				["CurCompleted"] = "ASSIGNED_MESSAGE2",
 			}
 		}
