@@ -38,7 +38,7 @@ function CreatePet(name, maxLevel, reqExp, className, desc, model, cost, stats, 
 		["cost"] = cost,
 		["stats"] = stats,
 		["curSkills"] = {},
-		["isBuyable"] = buyable or false
+		["isBuyable"] = buyable or false,
 	}
 	
 	table.insert(GM.PlayerPets, pet)
@@ -89,10 +89,9 @@ if SERVER then
 		local updatePet = net.ReadString()
 		
 		for i, v in ipairs(ply.hl2cr.Pets) do
-			
 			if ply.hl2cr.Pets.CurrentPet.name == v.name then
-				v.xp = ply.hl2cr.Pets.CurrentPet.xp
-				v.skillpoints = ply.hl2cr.Pets.CurrentPet.skillpoints
+				v["xp"] = ply.hl2cr.Pets.CurrentPet["xp"]
+				v["skillpoints"] = ply.hl2cr.Pets.CurrentPet["skillpoints"]
 			end
 		end
 		

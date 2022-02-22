@@ -1,6 +1,7 @@
 function ShowPetStatMenu(shouldOpen)
 	
 	if shouldOpen then
+		if not LocalPlayer():GetNWEntity("hl2cr_pet") then return end
 		petFrame = vgui.Create("DFrame")
 		petFrame:SetSize(165, 125)
 		petFrame:SetPos(15, ScrH() / 2.25)
@@ -49,7 +50,8 @@ function ShowPetStatMenu(shouldOpen)
 		end
 		
 		petFrame.Think = function(pnl)
-			if LocalPlayer():GetNWEntity("hl2cr_pet") and LocalPlayer():GetNWEntity("hl2cr_pet"):Health() <= 0 then pnl:Close() end
+			if not LocalPlayer():GetNWEntity("hl2cr_pet") then pnl:Close() end
+			if LocalPlayer():GetNWEntity("hl2cr_pet"):Health() <= 0 then pnl:Close() end
 			petStatusLabel:SetText(LocalPlayer():GetNWString("pet_name") )
 			petStatusLabel:SizeToContents()
 			
