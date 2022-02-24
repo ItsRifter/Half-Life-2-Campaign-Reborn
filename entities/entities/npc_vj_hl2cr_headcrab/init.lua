@@ -124,7 +124,7 @@ function ENT:OnKilled( dmginfo )
 		net.WriteBool(false)
 	net.Send(self:GetOwner())
 	
-	self:GetOwner().spawnCooldown = 5 + CurTime() * GetConVar("hl2cr_difficulty"):GetInt()
+	self:GetOwner().petcool = (5 * GetConVar("hl2cr_difficulty"):GetInt()) + CurTime()
 	
 	self:GetOwner().pet = nil
 	SafeRemoveEntity(self)

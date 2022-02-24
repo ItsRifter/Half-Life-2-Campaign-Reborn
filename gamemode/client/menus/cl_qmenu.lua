@@ -840,7 +840,32 @@ function StartQMenu(shouldOpen, skillsTbl, questTbl)
 		gunmanSkillsLayout:SetSpaceX(20)
 
 		local skillPoints = LocalPlayer():GetNWInt("stat_skillpoints")
+		print(skillPoints)
 		
+		local confirmBool = false
+
+		local resetSkillBtn = vgui.Create("DButton", skillsSelectionPnl)
+		resetSkillBtn:SetSize(128, 48)
+		resetSkillBtn:SetPos(skillsSelectionPnl:GetWide() - 128, skillsSelectionPnl:GetTall() - 48)
+		resetSkillBtn:SetText(translate.Get("ResetSkills"))
+
+		resetSkillBtn.DoClick = function(pnl)
+			if confirmBool == false then
+				pnl:SetText(translate.Get("ConfirmSell"))
+				confirmBool = true
+				return
+			end
+			if LocalPlayer():GetNWInt("currency_resin", 0) < LocalPlayer():GetNWInt("stat_level") * 2500 then
+				pnl:SetText(translate.Get("Insufficent"))
+				return
+			end
+
+			net.Start("HL2CR_ResetSkills")
+			net.SendToServer()
+			qMenuTabs:Remove()
+		end
+
+
 		for i, skill in pairs(GAMEMODE.PlayerSkills) do
 			
 			local statusPnl

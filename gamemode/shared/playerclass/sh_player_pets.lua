@@ -7,7 +7,8 @@ local PET_CLASS = {
 	["npc_vj_hl2cr_zombie"] = true,
 	
 	--Fast Zombie
-	["npc_vj_hl2cr_fastheadcrab"] = true
+	["npc_vj_hl2cr_fastheadcrab"] = true,
+	["npc_vj_hl2cr_fast_torsozombie"] = true
 }
 
 local meta = FindMetaTable( "Entity" )
@@ -72,6 +73,13 @@ local fastheadcrabStats = {
 	["attDelay"] = 2,
 }
 
+local fastTorsoStats = {
+	["health"] = 500,
+	["speed"] = 50,
+	["damage"] = 7,
+	["attDelay"] = 1.45,
+}
+
 --Normal Zombie Tree
 CreatePet("Headcrab", 6, 1500, "npc_vj_hl2cr_headcrab", "The standard pet\ncompletely harmless...\nto you", "models/headcrabclassic.mdl", 10000, headcrabStats, true)
 CreatePet("Torso Zombie", 8, 3000, "npc_vj_hl2cr_torsozombie", "A mutated version of\nthe standard headcrab", "models/zombie/classic_torso.mdl", 20000, torsoStats)
@@ -79,6 +87,7 @@ CreatePet("Zombie", 10, 5000, "npc_vj_hl2cr_zombie", "A fully grown zombie", "mo
 
 --Fast Zombie Tree
 CreatePet("Fast Headcrab", 6, 1250, "npc_vj_hl2cr_fastheadcrab", "An alternate version of the\noriginal headcrab\nfaster but weaker", "models/headcrab.mdl", 11500, fastheadcrabStats, true)
+CreatePet("Fast Torso Zombie", 8, 2750, "npc_vj_hl2cr_fast_torsozombie", "A mutated version of\nthe fast headcrab", "models/zombie/fast_torso.mdl", 23000, fastTorsoStats)
 
 if SERVER then
 	net.Receive("HL2CR_EquipPet", function(len, ply)
@@ -158,8 +167,12 @@ if SERVER then
 	end)
 	
 	local EVOLVE_TREE = {
+		--Zombie Tree
 		["npc_vj_hl2cr_headcrab"] = "npc_vj_hl2cr_torsozombie",
 		["npc_vj_hl2cr_torsozombie"] = "npc_vj_hl2cr_zombie",
+
+		--Fast Zombie Tree
+		["npc_vj_hl2cr_fastheadcrab"] = "npc_vj_hl2cr_fast_torsozombie"
 	}
 	
 	net.Receive("HL2CR_MutatePet", function(len, ply)
@@ -186,7 +199,7 @@ if SERVER then
 			local effect = ParticleEffect( "vortigaunt_beam", ply.pet:GetPos(), Angle( 0, 0, 0 ), ply.pet)
 			ply.pet:EmitSound("beams/beamstart5.wav", 100, 75)
 		
-			table.Empty(ply.hl2cr.Pets.CurrentPet)
+			
 		
 			timer.Simple(0.1, function()
 				for i, oldPet in ipairs(ply.hl2cr.Pets) do
@@ -194,6 +207,8 @@ if SERVER then
 						table.remove(ply.hl2cr.Pets, i)
 					end
 				end
+
+				table.Empty(ply.hl2cr.Pets.CurrentPet)
 				
 				for i, newPet in ipairs(GAMEMODE.PlayerPets) do	
 					if newPet.class == EVOLVE_TREE[classEvolvingFrom] then

@@ -162,7 +162,8 @@ LANGUAGE.Quests_Bar						= "Quests"
 LANGUAGE.Achievements_Bar				= "Achievements"
 LANGUAGE.Close							= "Close"
 LANGUAGE.ArmorPoints					= "Armor Points: "
-
+LANGUAGE.ResetSkills                    = "Reset Skills\nCosts 2500 * Level"
+LANGUAGE.Insufficent                    = "Insufficent Funds"
 LANGUAGE.AssignQuest					= "Assign Quest"
 
 --Pets Menu

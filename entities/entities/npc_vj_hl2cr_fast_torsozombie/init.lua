@@ -1,7 +1,7 @@
 AddCSLuaFile("shared.lua")
 include('shared.lua')
 
-ENT.Model = "models/headcrab.mdl" -- The game will pick a random model from the table when the SNPC is spawned | Add as many as you want
+ENT.Model = "models/zombie/fast_torso.mdl" -- The game will pick a random model from the table when the SNPC is spawned | Add as many as you want
 
 ENT.MovementType = VJ_MOVETYPE_GROUND
 ENT.PlayerFriendly = true
@@ -25,7 +25,7 @@ ENT.VJ_NPC_Class = {"HL2CR_PETS", "CLASS_PLAYER_ALLY"}
 ENT.HasMeleeAttack = true
 ENT.AnimTbl_MeleeAttack = {ACT_MELEE_ATTACK1}
 
-ENT.HasLeapAttack = true -- Should the SNPC have a leap attack?
+ENT.HasLeapAttack = false -- Should the SNPC have a leap attack?
 ENT.LeapAttackDamageType = DMG_SLASH -- Type of Damage
 	-- ====== Animation Variables ====== --
 ENT.AnimTbl_LeapAttack = {ACT_MELEE_ATTACK1} -- Melee Attack Animations
@@ -62,7 +62,7 @@ ENT.NextWanderTime = 3
 ENT.FollowPlayer = false
 
 ENT.SoundTbl_FootStep = {}
-ENT.SoundTbl_Breath = {}
+ENT.SoundTbl_Breath = {"npc/fast_zombie/breathe_loop1.wav"}
 ENT.SoundTbl_Idle = {}
 ENT.SoundTbl_IdleDialogue = {}
 ENT.SoundTbl_IdleDialogueAnswer = {}
@@ -77,7 +77,7 @@ ENT.SoundTbl_MedicReceiveHeal = {}
 ENT.SoundTbl_OnPlayerSight = {}
 ENT.SoundTbl_Investigate = {}
 ENT.SoundTbl_LostEnemy = {}
-ENT.SoundTbl_Alert = {"npc/headcrab/alert1.wav"}
+ENT.SoundTbl_Alert = {"npc/fast_zombie/fz_alert_close1.wav"}
 ENT.SoundTbl_CallForHelp = {}
 ENT.SoundTbl_BecomeEnemyToPlayer = {}
 ENT.SoundTbl_BeforeMeleeAttack = {}
@@ -86,7 +86,7 @@ ENT.SoundTbl_MeleeAttackExtra = {}
 ENT.SoundTbl_MeleeAttackMiss = {}
 ENT.SoundTbl_MeleeAttackSlowPlayer = {"vj_player/heartbeat.wav"}
 ENT.SoundTbl_BeforeRangeAttack = {}
-ENT.SoundTbl_RangeAttack = {"npc/headcrab/attack1.wav", "npc/headcrab/attack2.wav", "npc/headcrab/attack3.wav"}
+ENT.SoundTbl_RangeAttack = {"npc/fast_zombie/claw_strike1.wav", "npc/fast_zombie/claw_strike2.wav", "npc/fast_zombie/claw_strike3.wav"}
 ENT.SoundTbl_BeforeLeapAttack = {}
 ENT.SoundTbl_LeapAttackJump = {}
 ENT.SoundTbl_LeapAttackDamage = {}

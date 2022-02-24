@@ -79,4 +79,16 @@ if SERVER then
 		ply:SetNWInt("stat_skillpoints", ply.hl2cr.SkillPoints)
 		SetUpPlayerStats(ply)
 	end)
+
+	net.Receive("HL2CR_ResetSkills", function(len, ply)
+		if not ply then return end
+
+		table.Empty(ply.hl2cr.Skills)
+		
+		ply.hl2cr.Resin = ply.hl2cr.Resin - (ply.hl2cr.Level * 2500)
+
+		ply:SetNWInt("currency_resin", ply.hl2cr.Resin)
+		ply:SetNWInt("stat_skillpoints", ply.hl2cr.Level)
+		SetUpPlayerStats(ply)
+	end)
 end
