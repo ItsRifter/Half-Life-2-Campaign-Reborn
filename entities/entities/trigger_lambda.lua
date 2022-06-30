@@ -31,7 +31,3 @@ function ENT:StartTouch(ent)
 		self.Triggered = false
 	end)
 end
-
-function ENT:IsTriggered()
-	return self.Triggered
-end

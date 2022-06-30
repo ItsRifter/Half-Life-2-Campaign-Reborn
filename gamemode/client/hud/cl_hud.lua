@@ -18,8 +18,25 @@ local function PlayLocalSound(soundPath)
 	surface.PlaySound(soundPath)
 end
 
+local function PlayUniqueLocalSound(soundName, setPitch)
+	sound.Add( {
+		name = "hl2cr_custom_sound",
+		channel = CHAN_STATIC,
+		volume = 1.0,
+		level = 80,
+		pitch = setPitch,
+		sound = soundName
+	} )
+
+	LocalPlayer():EmitSound("hl2cr_custom_sound")
+end
+
 net.Receive("HL2CR_MsgSound", function()
 	PlayLocalSound(net.ReadString())
+end)
+
+net.Receive("HL2CR_MsgPitchSound", function()
+	PlayUniqueLocalSound(net.ReadString(), net.ReadInt(32))
 end)
 
 net.Receive("HL2CR_ChatMessage", function()

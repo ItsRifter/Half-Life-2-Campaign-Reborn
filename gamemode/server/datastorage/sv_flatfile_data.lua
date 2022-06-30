@@ -17,7 +17,8 @@ local function InitData(ply)
 	--Money/Experience
 	ply.hl2cr.Resin = ply.hl2cr.Resin or 0
 	ply.hl2cr.Exp = ply.hl2cr.Exp or 0
-	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 5000
+	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 3000
+	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints or 0
 
 end
 

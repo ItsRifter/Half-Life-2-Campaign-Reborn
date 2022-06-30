@@ -1,27 +1,3 @@
-
-MAPS_NO_SUIT = {
-    ["d1_trainstation_01"] = true,
-	["d1_trainstation_02"] = true,
-	["d1_trainstation_03"] = true,
-	["d1_trainstation_04"] = true
-}
-
-MAPS_NO_PETS = {
-    ["d1_trainstation_01"] = true,
-	["d1_trainstation_02"] = true,
-	["d1_trainstation_03"] = true,
-	["d1_trainstation_04"] = true,
-	["d1_trainstation_05"] = true,
-	["d3_breen_01"] = true
-}
-
-MAPS_SUPERGRAVGUN = {
-	["d3_citadel_03"] = true,
-	["d3_citadel_04"] = true,
-	["d3_citadel_05"] = true,
-	["d3_breen_01"] = true
-}
-
 MAPS_LOBBY = {
 	--Future maps will go here
 	["hl2cr_lobby_v2"] = true,
@@ -151,17 +127,6 @@ MAPS_COOP_SYNB2 = {
 
 }
 
-MAPS_NH2 = {
-	"nh1remake1_fixed",
-	"nh2c1_v2",
-	"nh2c2_v2",
-	"nh2c3_v2",
-	"nh2c4_v2",
-	"nh2c5_v2",
-	"nh2c6_v2",
-	"nh2c7_v2"
-}
-
 MAPS_COOP_RND = {
 	"level_1a",
 	"level_1b",
@@ -178,9 +143,24 @@ MAPS_COOP_IMPROBABLE = {
 	"mimp3"
 }
 
+
 function StartMapCountdown()
 	
+	BroadcastMessageToAll(HL2CR_StandardColour, translate.Get("Map_Finished"))
+	BroadcastSoundToAll("hl1/fvox/bell.wav")
+
+	timer.Simple(13, function()
+		local repsMade = 1
+
+		timer.Create("HL2CR_Countdown_Beep", 1, 5, function()
+
+			BroadcastPitchedSoundToAll("hl1/fvox/beep.wav", 90 + (repsMade * 5))
+			repsMade = repsMade + 1
+		end)
+	end)
+
 	timer.Create("HL2CR_Countdown", 20, 1, function()
+				
 		if game.GetMap() == "d2_lostcoast" then
 			RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
 			return
@@ -267,15 +247,6 @@ function StartMapCountdown()
 				RunConsoleCommand("changelevel", MAPS_COOP_IMPROBABLE[k+1])
 			end
 		end
-		
-		for k = 1, #MAPS_NH2 do
-			if game.GetMap() == MAPS_NH2[k] then
-				if not MAPS_NH2[k+1] then
-					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
-				end
-				RunConsoleCommand("changelevel", MAPS_NH2[k+1])
-			end
-		end
 	end)
 end
 
@@ -303,7 +274,7 @@ end
 --Initialize the map depending on which one is being played
 function InitMap()
 	if MAPS_LOBBY[game.GetMap()] then
-		StartLobby()
+		SetUpLobbyMap()
 		return
 	elseif string.find(game.GetMap(), "d1_") or string.find(game.GetMap(), "d2_") or string.find(game.GetMap(), "d3_") then
 		StartHL2()

@@ -22,8 +22,6 @@ function ENT:Initialize()
 	local minPos = Vector(-1 - ( w / 2 ), -1 - ( l / 2 ), -1 - ( h / 2 ))
 	local maxPos = Vector(w / 2, l / 2, h / 2)
 	
-	self.Triggered = false
-
 	self:DrawShadow(false)
 	self:SetCollisionBounds(minPos, maxPos)
 	self:SetSolid(SOLID_BBOX)
@@ -36,6 +34,7 @@ end
 
 --When the player touches the entity
 function ENT:StartTouch(ent)
+	print(ent)
 	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_ALIVE and not self.Triggered then
 		self.Triggered = true
 		
@@ -47,24 +46,25 @@ function ENT:StartTouch(ent)
 
 		for _, p in pairs(player.GetAll()) do
 						
-			if p:Team() == TEAM_COMPLETED_MAP then break end
+			if p:Team() == TEAM_COMPLETED_MAP then continue end
 			
-			if ent ~= p then 
-				if p:Team() == TEAM_DEAD then
-					p:Spawn()
-				end
-				
-				if p:InVehicle() then
-					p:ExitVehicle()
-					if p.vehicle and p.vehicle:IsValid() then
-						p.vehicle:Remove()
-						p.vehicle.owner = nil
-					end
-					p.vehicle = nil
-					p.HasSeat = false
-				end
-				p.vehicleSpawnable = true
+			if ent:InVehicle() then continue end
+			
+			if p:Team() == TEAM_DEAD then
+				p:Spawn()
 			end
+			
+			if p:InVehicle() then
+				p:ExitVehicle()
+				if p.vehicle and p.vehicle:IsValid() then
+					p.vehicle:Remove()
+					p.vehicle.owner = nil
+				end
+				p.vehicle = nil
+				p.HasSeat = false
+			end
+
+			p.vehicleSpawnable = true
 			
 			if ents.FindByClass("info_player_start")[1] then	
 				for l, spawn in pairs(ents.FindByClass("info_player_start")) do

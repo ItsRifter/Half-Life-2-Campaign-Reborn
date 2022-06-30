@@ -7,14 +7,11 @@ SPAWNING_ITEMS = SPAWNING_ITEMS or {}
 --Restrict these weapons from being picked up/used
 RESTRICTED_WEAPONS = {
 	["weapon_physgun"] = true,
+	["weapon_stunstick"] = true
 }
 
-function GM:ShowHelp(ply)
-	//Used for debugging for now
-end
-
 function GM:PlayerShouldTakeDamage( ply, attacker )
-	if attacker:IsPlayer() then
+	if attacker:IsPlayer() and ply ~= attacker then
 		return false
 	end
 
@@ -22,7 +19,6 @@ function GM:PlayerShouldTakeDamage( ply, attacker )
 end
 
 function hl2cr_player:SetUpPlayer()
-	self:SetupHands(self)
 	self:SetTeam(TEAM_ALIVE)
 
 	self:SetCustomCollisionCheck(true)
@@ -48,7 +44,7 @@ function hl2cr_player:SetUpRespawn()
 end
 
 function hl2cr_player:SetStats()
-
+	
 end
 
 function hl2cr_player:GiveWeaponsSpawn()
@@ -59,6 +55,15 @@ end
 
 --Force the spawnpoint to be suitable making players not spawn into eachother
 function GM:IsSpawnpointSuitable(ply, spawnpoint, makeSuitable)
+	return true
+end
+
+function GM:CanPlayerSuicide(ply)
+	if NO_SUICIDE_MAPS[game.GetMap()] then
+		ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Suicide_BadMap"))
+		return false
+	end
+
 	return true
 end
 
@@ -87,6 +92,13 @@ end
 function BroadcastMessageToAll(...)
 	net.Start("HL2CR_ChatMessage")
 		net.WriteTable({...})
+	net.Broadcast()
+end
+
+function BroadcastPitchedSoundToAll(soundPath, pitch)
+	net.Start("HL2CR_MsgPitchSound")
+		net.WriteString(soundPath)
+		net.WriteInt(pitch, 32)
 	net.Broadcast()
 end
 
