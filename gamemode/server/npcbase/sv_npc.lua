@@ -61,25 +61,55 @@ function hl2cr_npc:IsHostile()
 	end
 end
 
-function GM:ScaleNPCDamage(npc, hitgroup, dmgInfo )
-    dmgInfo:ScaleDamage(1)
-end
+hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo )
 
-function GM:EntityTakeDamage( npc, dmgInfo )
- 
-    if npc:IsPlayer() then
+    if target:IsPlayer() then
+    
+        local npcAttacker = dmgInfo:GetAttacker()
+    
+        if dmgInfo:GetDamageType() == 17 or dmgInfo:GetDamageType() == 1 then 
+			dmgInfo:SetDamage(0) 
+			return
+		end
+
+        if npcAttacker:GetClass() == "npc_rollermine" and game.GetMap() == "d1_eli_02" then
+            dmgInfo:SetDamage(0)
+        end
+
+        if not npcAttacker:IsNPC() then
+            return false
+        end
+
+        if npcAttacker:GetCustomDamage() then
+            dmgInfo:SetDamage(npcAttacker:GetCustomDamage()) 
+        else 
+            dmgInfo:SetDamage(dmgInfo:GetDamage() * GetConVar("hl2cr_difficulty"):GetInt())
+        end
+
         return false
+
+    elseif target:IsNPC() then
+        local playerAtt = dmgInfo:GetAttacker()
+
+        if target:IsPet() then
+            return true
+        end
+
+        if target:GetClass() == "npc_vortigaunt" and not MAPS_VORT_HOSTILE[game.GetMap()] then
+            return true
+        end
+
+        if (FRIENDLY_NPCS[target:GetClass()] or (FRIENDLY_HARMABLE_NPCS[target:GetClass()]) and playerAtt:IsPlayer()) then
+            return true
+        end
+    else
+        if target:GetClass() == "item_ammo_crate" then
+            local playerAtt = dmgInfo:GetAttacker()
+
+            //Loop this twice in case the player switches between weapons
+            timer.Create("hl2cr_itemcrate_wait_" .. playerAtt:EntIndex(), 0.85, 2, function()
+                playerAtt:CheckAllAmmo()
+            end)
+        end
     end
-
-    local attacker = dmgInfo:GetAttacker()
-
-    if npc:GetClass() == "npc_vortigaunt" and not MAPS_VORT_HOSTILE[game.GetMap()] then
-        return true
-    end
-
-    if (FRIENDLY_NPCS[npc:GetClass()] or (FRIENDLY_HARMABLE_NPCS[npc:GetClass()]) and attacker:IsPlayer()) then
-        return true
-    end
-
-
-end
+end)

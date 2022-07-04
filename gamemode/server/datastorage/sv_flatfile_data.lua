@@ -14,12 +14,36 @@ local function InitData(ply)
 	--Level
 	ply.hl2cr.Level = ply.hl2cr.Level or 0
 	
+	ply.hl2cr.Statistics = ply.hl2cr.Statistics or {
+		["HealthBonus"] = 0,
+		["SuitBonus"] = 0,
+		["AmmoBoost"] = {
+			["Pistol"] = 0,
+			["357"] = 0,
+			["SMG"] = 0,
+			["AR2"] = 0,
+			["Buckshot"] = 0,
+			["Crossbow"] = 0,
+			["RPG"] = 0,
+			["Frags"] = 0
+		},
+	}
+
+	ply.hl2cr.Skills = ply.hl2cr.Skills or {}
+	ply.hl2cr.Class = ply.hl2cr.Class or {
+		["Name"] = translate.Get("Player_Class_Default"),
+		["Buffs"] = {},
+		["Debuffs"] = {}
+	}
+
 	--Money/Experience
 	ply.hl2cr.Resin = ply.hl2cr.Resin or 0
 	ply.hl2cr.Exp = ply.hl2cr.Exp or 0
 	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 3000
 	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints or 0
 
+	--Achievements
+	ply.hl2cr.Achievements = ply.hl2cr.Achievements or {}
 end
 
 local function CreateData(ply)
@@ -30,6 +54,10 @@ local function CreateData(ply)
 	
 	-- Store all persistent data as JSON
 	file.Write("hl2cr_data/" .. PlayerID .. ".txt", util.TableToJSON(ply.hl2cr, true))
+
+	timer.Simple(2, function()
+		ply:GrantAchievement("Rise and Shine")
+	end)
 end
 
 

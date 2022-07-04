@@ -16,6 +16,15 @@ CreateConVar("hl2cr_difficulty", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Change D
 CreateConVar("hl2cr_survival", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Enable/Disable survival", 0, 1)
 CreateConVar("hl2cr_specials", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Enable/Disable special NPC spawns", 0, 1)
 
+//Suit Convars
+//Flashlight
+CreateConVar("hl2cr_suit_default_rate", 0.05, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 100)
+CreateConVar("hl2cr_suit_default_delay", 0.01, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 100)
+CreateConVar("hl2cr_suit_default_flashlight_rate", 0.05, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 100)
+CreateConVar("hl2cr_suit_default_flashlight_delay", 0.01, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 10)
+CreateConVar("hl2cr_suit_default_recharge_rate", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 10)
+CreateConVar("hl2cr_suit_default_recharge_delay", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 10)
+
 --Misc
 CreateConVar("hl2cr_cooldown_class", 60, {FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How long is the cooldown for class switching", 1, 180)
 

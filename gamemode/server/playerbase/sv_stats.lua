@@ -27,6 +27,10 @@ function hl2cr_player:AddXP(XP)
 
 	self.hl2cr.Exp = self.hl2cr.Exp + (XP * GetConVar("hl2cr_difficulty"):GetInt())
 	
+	self:UpdateXPClient(XP)
+
+	self.MapStats.TotalXP = self.MapStats.TotalXP + XP
+
 	local notifyLevelUp = false
 
 	while self.hl2cr.Exp >= self.hl2cr.ReqExp do
@@ -34,19 +38,31 @@ function hl2cr_player:AddXP(XP)
 		self.hl2cr.Exp = self.hl2cr.Exp - self.hl2cr.ReqExp
 		self.hl2cr.Level = self.hl2cr.Level + 1
 		self.hl2cr.SkillPoints = self.hl2cr.SkillPoints + 1
-		self.hl2cr.ReqExp = self.hl2cr.ReqExp + (750 * self.hl2cr.Level)
+		self.hl2cr.ReqExp = self.hl2cr.ReqExp + (750 * self.hl2cr.Level) / 2
+		
 		
 		notifyLevelUp = true
 	end
 
-	if notifyLevelUp then			
-        self:BroadcastMessage(HL2CR_LevelupColour, translate.Get("Player_Levelup"), self.hl2cr.Level)
+	if notifyLevelUp then	
+		self:SetNWInt("hl2cr_stat_level", self.hl2cr.Level)
+		self:SetNWInt("hl2cr_stat_expreq", self.hl2cr.ReqExp)	
+		self:SetNWInt("hl2cr_stat_skillpoints", self.hl2cr.SkillPoints)
+		
+        self:BroadcastMessage(HL2CR_LevelupColour, translate.Get("Player_Levelup"), HL2CR_LevelColour, tostring(self.hl2cr.Level))
 		self:BroadcastSound("hl2cr/levelup.wav")
 	end
+
+	self:SetNWInt("hl2cr_stat_exp", self.hl2cr.Exp)
 end
 
 hook.Add( "OnNPCKilled", "HL2CR_GiveXP", function( npc, attacker, inflictor )
 	if attacker:IsPlayer() then
-		attacker:AddXP(math.random(XP_BASE_RANDOM[npc:GetClass()].xpMin, XP_BASE_RANDOM[npc:GetClass()].xpMax))
+		if not XP_BASE_RANDOM[npc:GetClass()] then return end
+
+		attacker.MapStats.Kills = attacker.MapStats.Kills + 1
+		local gainXP = math.random(XP_BASE_RANDOM[npc:GetClass()].xpMin, XP_BASE_RANDOM[npc:GetClass()].xpMax)
+		
+		attacker:AddXP(gainXP)
 	end
 end)

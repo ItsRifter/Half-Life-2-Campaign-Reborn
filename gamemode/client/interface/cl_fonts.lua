@@ -18,6 +18,36 @@ surface.CreateFont( "template", {
 } )
 --]]
 
+surface.CreateFont( "hl2cr_scoreboard_title", {
+	font = "Roboto",
+	extended = false,
+	size = 48,
+	weight = 750,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+} )
+
+surface.CreateFont( "hl2cr_scoreboard_version", {
+	font = "Roboto",
+	extended = false,
+	size = 32,
+	weight = 750,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+} )
+
+surface.CreateFont( "hl2cr_scoreboard_player", {
+	font = "Arial",
+	extended = false,
+	size = 24,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+} )
+
 surface.CreateFont( "hl2cr_voting_title", {
 	font = "Roboto",
 	extended = false,
@@ -28,10 +58,69 @@ surface.CreateFont( "hl2cr_voting_title", {
 	antialias = true,
 } )
 
+surface.CreateFont( "hl2cr_ach_title", {
+	font = "Roboto",
+	extended = false,
+	size = 24,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+} )
+
+surface.CreateFont( "hl2cr_ach_desc", {
+	font = "Roboto",
+	extended = false,
+	size = 18,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+} )
+
 surface.CreateFont( "hl2cr_voting", {
 	font = "Roboto",
 	extended = false,
 	size = 24,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+} )
+
+surface.CreateFont( "hl2cr_hud_xp", {
+	font = "Roboto",
+	extended = false,
+	size = 32,
+	weight = 350,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+} )
+
+surface.CreateFont( "hl2cr_qmenu_skill", {
+	font = "Roboto",
+	extended = false,
+	size = 20,
+	weight = 400,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+} )
+
+surface.CreateFont( "hl2cr_endresults_title", {
+	font = "Nunito",
+	extended = false,
+	size = 48,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+} )
+
+
+surface.CreateFont( "hl2cr_endresults_result", {
+	font = "Nunito",
+	extended = false,
+	size = 32,
 	weight = 500,
 	blursize = 0,
 	scanlines = 0,

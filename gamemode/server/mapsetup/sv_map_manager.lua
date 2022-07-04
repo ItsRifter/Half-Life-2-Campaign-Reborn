@@ -256,12 +256,27 @@ function StartFinalMapCountdown()
 	end)
 end
 
+//In case the map is reset or cleaned up and hl2cr ents are leftever
+//then they should be removed
+local function ClearHL2CREntities()
+	for _, cp in ipairs(ents.FindByClass("trigger_checkpoint")) do
+		cp:Remove()
+	end
+	
+	for _, push in ipairs(ents.FindByClass("trigger_pushback")) do
+		push:Remove()
+	end
+	
+end
+
 --On a cleanup or post map start, Initialize the map to support HL2-CR
 function GM:PostCleanupMap()
+	ClearHL2CREntities()
 	InitMap()
 end
 
 function GM:InitPostEntity()
+	ClearHL2CREntities()
 	InitMap()
 end
 

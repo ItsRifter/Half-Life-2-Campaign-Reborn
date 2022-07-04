@@ -135,8 +135,8 @@ function GM:ShowSpare1(ply)
 		return
 	end
 	
-	ply.nextSpawn = CurTime() + 5
 	ply.antiExploit = CurTime() + 3
+	ply.nextSpawn = CurTime() + 10
 	
 	if (AIRBOAT_MAPS[game.GetMap()] or canSpawnAirboatGlobal) or (game.GetMap() == "d1_canals_11" and not disableAirboatGlobal) then
 		ply:SpawnAirboat()
@@ -158,8 +158,8 @@ end
 function GM:ShowSpare2(ply)
 	if ply.antiExploit and ply.antiExploit > CurTime() then return end
 	
-	if not ply.vehicle then
-		ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Vehicle_TooFast"), (CurTime() - ply.antiExploit))
+	if ply.nextSpawn > CurTime() then
+		ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Vehicle_TooFast"), tostring(math.Round(ply.nextSpawn - CurTime())))
 		return
 	end
 	
@@ -171,6 +171,12 @@ function GM:ShowSpare2(ply)
 
 	ply.vehicle = nil
 
+end
+
+function GM:PlayerLeaveVehicle( ply, veh )
+	if ply:GetAllowWeaponsInVehicle() then
+		ply:SetAllowWeaponsInVehicle(false)
+	end
 end
 
 function GM:CanExitVehicle(veh, ply)
@@ -185,18 +191,21 @@ hook.Add("PlayerEnteredVehicle", "HL2CR_ToggleVehicleSpawning", function(ply, ve
 	if game.GetMap() == "d1_canals_05" and not canSpawnAirboatGlobal then
 		canSpawnAirboatGlobal = true	
 		
-		BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Map_Enabled_Vehicles_Airboat"), HL2CR_StandardColour, translate.Get("Map_Enabled_Vehicles_Tip"))
+		BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Map_Enabled_Vehicles_Airboat"))
+		BroadcastMessageToAll(HL2CR_StandardColour, translate.Get("Map_Enabled_Vehicles_Tip"))
 	end
 	
 	if game.GetMap() == "d2_coast_01" and not canSpawnJeepGlobal then
 		canSpawnJeepGlobal = true
 		
-		BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Map_Enabled_Vehicles_Jeep"), HL2CR_StandardColour, translate.Get("Map_Enabled_Vehicles_Tip"))
+		BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Map_Enabled_Vehicles_Jeep"))
+		BroadcastMessageToAll(HL2CR_StandardColour, translate.Get("Map_Enabled_Vehicles_Tip"))
 	end
 	
 	if game.GetMap() == "ep2_outland_06" and not canSpawnJalopyGlobal then
 		canSpawnJalopyGlobal = true
 		
-		BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Map_Enabled_Vehicles_Jalopy"), HL2CR_StandardColour, translate.Get("Map_Enabled_Vehicles_Tip"))
+		BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Map_Enabled_Vehicles_Jalopy"))
+		BroadcastMessageToAll(HL2CR_StandardColour, translate.Get("Map_Enabled_Vehicles_Tip"))
 	end
 end)

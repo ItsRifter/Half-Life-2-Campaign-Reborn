@@ -1,28 +1,34 @@
 local hl2cr_npc = FindMetaTable( "Entity" )
 
-function hl2cr_npc:SetStatsTraits()
-	if GetConVar("hl2cr_difficulty"):GetInt() == 1 then
-		self.level = math.random(1, 5)
-	elseif GetConVar("hl2cr_difficulty"):GetInt() == 2 then
-		self.level = math.random(6, 13)
-	elseif GetConVar("hl2cr_difficulty"):GetInt() == 3 then
-		self.level = math.random(14, 25)
-	elseif GetConVar("hl2cr_difficulty"):GetInt() == 4 then
-		self.level = math.random(26, 50)
-	elseif GetConVar("hl2cr_difficulty"):GetInt() == 5 then
-		self.level = math.random(51, 75)
-	end
-	
-	self:SetNWInt("HL2CR_NPC_Level", self.level)
+local npc_base_damge = {
+	["npc_headcrab"] = {
+		["minDMG"] = 1,
+		["maxDMG"] = 5
+	},
+
+	["npc_zombie"] = {
+		["minDMG"] = 5,
+		["maxDMG"] = 10
+	}
+}
+
+function hl2cr_npc:SetStatsTraits()	
 
 	timer.Simple(0.15, function()
 		if not self:IsValid() then return end
 
-		local newHealth = self:Health() + (self.level * 2)
+		local newHealth = self:Health() * ( math.abs(1 + ((GetConVar("hl2cr_difficulty"):GetInt() - 1) * 0.25) ) )
 		self:SetMaxHealth(newHealth)
 		self:SetHealth(newHealth)
 
+		if npc_base_damge[self:GetClass()] then
+			self.Damage = math.random(npc_base_damge[self:GetClass()].minDMG, npc_base_damge[self:GetClass()].maxDMG) * GetConVar("hl2cr_difficulty"):GetInt()
+		end
 	end)
+end
+
+function hl2cr_npc:GetCustomDamage()
+	return self.Damage
 end
 
 //Makes the npc not collide with players

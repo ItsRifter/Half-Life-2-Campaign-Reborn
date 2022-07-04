@@ -1,14 +1,23 @@
 
 local hl2cr_player = FindMetaTable( "Player" )
 
-function hl2cr_player:rantAchievement(baseList, achName)
-	--Grab the list from the achievements unless its an invalid list
-	local list = GAMEMODE.Achievements[baseList]
-	if not list then return print("ERROR: bad list") end
+function hl2cr_player:GrantAchievement(achName)
 	
+	local ach = nil
+
+	for i, a in ipairs(GAMEMODE.Achievements) do
+		if a.Name == achName then
+			ach = a
+			break 
+		end
+	end
+
 	--Grab the achievement from the list unless its an invalid name
-	local ach = list[achName]
-	if not ach then return print("ERROR: bad achievement name") end
+
+	if not ach then 
+		MsgC(HL2CR_RedColour, string.format("\nCouldn't find the achievement %s", achName) )
+		return 
+	end
 	
 	--If player already has the achievement, stop here
 	if table.HasValue(self.hl2cr.Achievements, ach.Name) then return end
@@ -22,14 +31,14 @@ function hl2cr_player:rantAchievement(baseList, achName)
 	net.Send(self)
 
 	--Notify everyone of the achiever
-	net.Start("HL2CR_AchievementNotifyAll")
-		net.WriteString(self:Nick())
-		net.WriteString(ach.Name)
-		net.WriteBool(ach.IsRare)
-	net.Broadcast()
+	if ach.IsRare then
+		BroadcastMessageToAll(HL2CR_PlayerColour, self:Nick(), HL2CR_StandardColour, translate.Get("Server_Announce_Achievement_Rare"), HL2CR_PlayerColour, ach.Name)
+	else
+		BroadcastMessageToAll(HL2CR_PlayerColour, self:Nick(), HL2CR_StandardColour, translate.Get("Server_Announce_Achievement_Normal"), HL2CR_PlayerColour, ach.Name)
+	end
 
 	if ach.Rewards.XP > 0 then
-		AddXP(self, ach.Rewards.XP)
+		self:AddXP(ach.Rewards.XP)
 	end
 end
 

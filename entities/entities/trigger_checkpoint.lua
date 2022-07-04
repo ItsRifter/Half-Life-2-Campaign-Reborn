@@ -13,17 +13,8 @@ function ENT:Initialize()
 		return
 	end
 
-	--Set width, length and height of the checkpoint
-	
-	local w = self.Max.x - self.Min.x
-	local l = self.Max.y - self.Min.y
-	local h = self.Max.z - self.Min.z
-
-	local minPos = Vector(-1 - ( w / 2 ), -1 - ( l / 2 ), -1 - ( h / 2 ))
-	local maxPos = Vector(w / 2, l / 2, h / 2)
-	
 	self:DrawShadow(false)
-	self:SetCollisionBounds(minPos, maxPos)
+	self:SetCollisionBoundsWS(self.Min, self.Max)
 	self:SetSolid(SOLID_BBOX)
 	self:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	self:SetMoveType(0)
@@ -33,8 +24,8 @@ function ENT:Initialize()
 end
 
 --When the player touches the entity
-function ENT:StartTouch(ent)
-	print(ent)
+function ENT:Touch(ent)
+
 	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_ALIVE and not self.Triggered then
 		self.Triggered = true
 		
@@ -45,10 +36,10 @@ function ENT:StartTouch(ent)
 		BroadcastMessageToAll(HL2CR_PlayerColour, ent:Nick(), HL2CR_StandardColour, translate.Get("Player_Checkpoint"))
 
 		for _, p in pairs(player.GetAll()) do
-						
-			if p:Team() == TEAM_COMPLETED_MAP then continue end
 			
-			if ent:InVehicle() then continue end
+			if p == ent then continue end
+
+			if p:Team() == TEAM_COMPLETED_MAP then continue end
 			
 			if p:Team() == TEAM_DEAD then
 				p:Spawn()
@@ -63,8 +54,6 @@ function ENT:StartTouch(ent)
 				p.vehicle = nil
 				p.HasSeat = false
 			end
-
-			p.vehicleSpawnable = true
 			
 			if ents.FindByClass("info_player_start")[1] then	
 				for l, spawn in pairs(ents.FindByClass("info_player_start")) do
