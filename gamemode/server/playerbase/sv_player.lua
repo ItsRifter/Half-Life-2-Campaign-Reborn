@@ -4,6 +4,18 @@ local hl2cr_player = FindMetaTable( "Player" )
 SPAWNING_WEAPONS = SPAWNING_WEAPONS or {}
 SPAWNING_ITEMS = SPAWNING_ITEMS or {}
 
+local NO_SUICIDE_MAPS = {
+	["hl2cr_lobby_v2"] = true,
+	["d1_trainstation_01"] = true,
+	["d1_trainstation_02"] = true,
+	["d1_trainstation_03"] = true,
+	["d1_trainstation_04"] = true,
+	["d1_trainstation_05"] = true,
+	["d1_eli_01"] = true,
+	["d1_eli_02"] = true,
+	["d3_breen_01"] = true
+}
+
 --Restrict these weapons from being picked up/used
 RESTRICTED_WEAPONS = {
 	["weapon_physgun"] = true,
@@ -15,6 +27,10 @@ RESTRICTED_WEAPONS = {
 	["weapon_hl2cr_crowsaw"] = true,
 	["weapon_hl2cr_autopistol"] = true,
 	["weapon_hl2cr_rampagesmg"] = true,
+	["weapon_hl2cr_crossbow"] = true,
+	--Class based weapons
+	["weapon_hl2cr_medkit"] = true,
+	["weapon_hl2cr_ammobox"] = true,
 }
 
 DISALLOW_PICKUP = {
@@ -66,6 +82,9 @@ local id_convert_to_convar = {
 	[1] = "hl2cr_base_ar2",
 	[7] = "hl2cr_base_buckshot",
 	[8] = "hl2cr_base_rpg_round",
+	[6] = "hl2cr_base_rpg_round",
+	[2] = "hl2cr_base_rpg_round",
+	[9] = "hl2cr_base_frags",
 	[10] = "hl2cr_base_frags"
 }
 
@@ -112,9 +131,11 @@ function GM:PlayerShouldTakeDamage( ply, attacker )
 end
 
 function hl2cr_player:DisplayResults()
+	if NO_RESULT_MAPS[game.GetMap()] then return end
+	
 	net.Start("HL2CR_Endresults")
-		net.WriteTable(ply.MapStats)
-	net.Send(ply)
+		net.WriteTable(self.MapStats)
+	net.Send(self)
 end
 
 function hl2cr_player:UpdateModelNetwork(type, gender)
@@ -137,15 +158,36 @@ function hl2cr_player:UpdateModelNetwork(type, gender)
 end
 
 function hl2cr_player:ChangeModel()
-	if self.hl2cr.ModelType.Type == "citizen" then
-		if self.hl2cr.ModelType.Gender == "male" then
-			self:SetModel(CitizenModels["Male"][math.random(1, #CitizenModels["Male"])])
-		elseif self.hl2cr.ModelType.Gender == "female" then
-			self:SetModel(CitizenModels["Female"][math.random(1, #CitizenModels["Female"])])
-		end
-	end
+
+	self:SetModel(ServerModels[self.hl2cr.ModelType.Type][self.hl2cr.ModelType.Gender]
+	[math.random(1, #ServerModels[self.hl2cr.ModelType.Type][self.hl2cr.ModelType.Gender])])
 end
 
+function hl2cr_player:UpdateClass(className)
+	
+	if self.hl2cr.Class.Name == className then
+		self:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Class_AlreadyAssigned"))
+		return
+	end
+	
+	local assignClass = nil
+
+	for _, class in ipairs(HL2CR_Classes) do
+		if class.Name == className then
+			assignClass = class
+			break
+		end
+	end
+
+	if self.hl2cr.Level < assignClass.LevelReq then
+		self:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Class_LowLevel"))
+		return
+	end
+
+	assignClass.Func(self)
+
+	self:BroadcastMessage(HL2CR_GreenColour, translate.Get("Class_Assigned"))
+end
 
 function hl2cr_player:SetUpPlayer()	
 	self:SetTeam(TEAM_ALIVE)
@@ -154,6 +196,11 @@ function hl2cr_player:SetUpPlayer()
 	self:SetNoCollideWithTeammates(true)
 
 	self:ChangeModel()
+	
+	timer.Simple(1, function()
+		self:SetupHands()
+		self:ApplyCosmeticSpawn()
+	end)
 
 	self:SetNWInt("hl2cr_stat_level", self.hl2cr.Level)
 	self:SetNWInt("hl2cr_stat_exp", self.hl2cr.Exp)
@@ -162,10 +209,33 @@ function hl2cr_player:SetUpPlayer()
 	self:SetNWString("hl2cr_stat_skills", table.concat(self.hl2cr.Skills, " "))
 	self:SetNWString("hl2cr_class", self.hl2cr.Class.Name)
 
+	local cosmetics = {}
+
+	for _, c in ipairs(self.hl2cr.Inventory.Cosmetics) do
+		table.insert(cosmetics, c.Name)
+	end
+
+	self:SetNWString("hl2cr_items_cosmetics", table.concat(cosmetics, "  "))
+
 	if self.hl2cr.Statistics.HealthBonus > 0 then
 		self:SetMaxHealth(self:Health() + self.hl2cr.Statistics.HealthBonus)
 		self:SetHealth(self:GetMaxHealth())
 	end
+
+	if self.hl2cr.Statistics.SuitBonus > 0 then
+		self:SetMaxArmor(100 + self.hl2cr.Statistics.SuitBonus)
+	end
+
+	if not table.IsEmpty(self.hl2cr.Class.Buffs) then
+		self.hl2cr.Class.Buffs.BuffFunc(self)
+	end
+
+	if not table.IsEmpty(self.hl2cr.Class.Debuffs) then
+		self.hl2cr.Class.Debuffs.DebuffFunc(self)
+	end
+
+	HL2CR_AUX:SetupAuxPower(self)
+	hook.Run("HL2CR_AuxPowerInitialize", self)
 end
 
 function hl2cr_player:AdjustSpeed()
@@ -185,6 +255,47 @@ function hl2cr_player:AdjustSpeed()
 	end
 end
 
+function hl2cr_player:ApplyCosmeticSpawn()
+	if self.hl2cr.CurCosmetic == "" then return end
+	
+	net.Start("HL2CR_Cosmetic_Use")
+		net.WriteTable(HL2CR_Shared_Cosmetics[self.hl2cr.CurCosmetic])
+		net.WriteEntity(self)
+	net.Broadcast()
+end
+
+function hl2cr_player:ApplyCosmeticServer(cosmeticToApply)
+	if cosmeticToApply == "" or cosmeticToApply == nil then
+		self.hl2cr.CurCosmetic = ""
+		local emptyTbl = {}
+
+		net.Start("HL2CR_Cosmetic_Use")
+			net.WriteTable(emptyTbl)
+			net.WriteEntity(self)
+		net.Broadcast()
+		return
+	end
+	
+	local apply = nil 
+	local tempName = nil
+	for _, c in ipairs(HL2CR_Cosmetics) do
+		if c.Name == cosmeticToApply then
+			apply = c.Class
+			tempName = c.Name
+			break
+		end
+	end
+
+	self.hl2cr.CurCosmetic = apply
+
+	self:BroadcastMessage(HL2CR_GreenColour, tempName .. translate.Get("Player_CosmeticApply"))
+
+	net.Start("HL2CR_Cosmetic_Use")
+		net.WriteTable(HL2CR_Shared_Cosmetics[apply])
+		net.WriteEntity(self)
+	net.Broadcast()
+end
+
 function hl2cr_player:SetUpInitialSpawn()
     if self:IsBot() then return end
 
@@ -192,31 +303,79 @@ function hl2cr_player:SetUpInitialSpawn()
 	self:GiveWeaponsSpawn()
 	self:AdjustSpeed()
 
-	HL2CR_AUX:SetupAuxPower(self)
-	hook.Run("HL2CR_AuxPowerInitialize", self)
-
 	self.MapStats = {
 		["Kills"] = 0,
 		["Deaths"] = 0,
 		["TotalXP"] = 0,
 		["Misc"] = {}
 	}
+
+	if VortexBall and VortexBall:IsValid() then
+		self:BroadcastMessage(HL2CR_PlayerColour, translate.Get("Server_Announce_Vortex_Spawn"))
+	end
+end
+
+function hl2cr_player:SetUpRespawnRevive()
+	if self:IsBot() then return end
+	
+	self:SetTeam(TEAM_ALIVE)
+
+	if self.Ragdoll then
+		self.Ragdoll:Remove()
+		self.Ragdoll = nil 
+	end
+	
+	self:UnSpectate()
+	//self:SetObserverMode(OBS_MODE_NONE)
+	
+	self:GiveEquipment()
+	self:GiveWeaponsSpawn()
+	self:AdjustSpeed()
 end
 
 function hl2cr_player:SetUpRespawn()
     if self:IsBot() then return end
 	
+	if self.Ragdoll then
+		self.Ragdoll:Remove()
+		self.Ragdoll = nil 
+	end
+
+	self:UnSpectate()
+	//self:SpectateEntity(nil)
+	//self:SetObserverMode(OBS_MODE_NONE)
+
 	self:SetUpPlayer()
 	self:GiveWeaponsSpawn()
+	self:GiveEquipment()
 	self:AdjustSpeed()
+end
 
-	HL2CR_AUX:SetupAuxPower(self)
-	hook.Run("HL2CR_AuxPowerInitialize", self)
+function hl2cr_player:GiveEquipment()
+	if MAPS_NO_SUIT[game.GetMap()] or (game.GetMap() == "d1_trainstation_05" and GetGlobalBool("HL2CR_GLOBAL_SUIT") == false) then return end
+	
+	for _, items in ipairs(SPAWNING_ITEMS) do
+		for _, item in ipairs(items) do
+			if item.Type == "Armor" then
+				self:SetArmor(item.Amount)
+			else
+				self:SetAmmo(item.Amount, item.Type)
+			end
+		end
+	end
+
+	self:CheckAllAmmo()
 end
 
 function hl2cr_player:GiveWeaponsSpawn()
 	for _, weapon in ipairs(SPAWNING_WEAPONS) do
 		self:Give(weapon)
+	end
+
+	if self.hl2cr.Class.Weapons then
+		for _, classWep in ipairs(self.hl2cr.Class.Weapons) do
+			self:Give(classWep)
+		end
 	end
 end
 
@@ -234,6 +393,24 @@ function GM:CanPlayerSuicide(ply)
 	end
 
 	return true
+end
+
+function GM:PostEntityTakeDamage( ent, dmg, took )
+	if ent:IsPlayer() then
+		if ent.hl2cr.Buffs.SelfHealing and ent:Health() < ent:GetMaxHealth() then
+			if ent:Health() >= ent:GetMaxHealth() then
+				return 
+			end
+
+			timer.Create("HL2CR_Selfhealing_" .. ent:EntIndex(), 10, 999, function()
+				ent:SetHealth(ent:Health() + 5)
+				if ent:Health() >= ent:GetMaxHealth() then
+					ent:SetHealth(ent:GetMaxHealth())
+					timer.Remove("HL2CR_Selfhealing_" .. ent:EntIndex())
+				end
+			end)
+		end
+	end
 end
 
 --Stores the weapons for player joining or respawning
@@ -353,9 +530,61 @@ function hl2cr_player:UpdateSkills(skill)
 	self:SetNWString("hl2cr_stat_skills", table.concat(self.hl2cr.Skills, " "))
 end
 
+function hl2cr_player:CreateRagdollBody(dmgInfo)
+	local ragdoll = ents.Create("prop_ragdoll")
+	ragdoll:SetModel(self:GetModel())
+	ragdoll:SetPos(self:GetPos())
+	ragdoll:SetAngles(self:GetAngles())
+	ragdoll:SetOwner(self)
+	ragdoll:Spawn()
+	ragdoll:Activate()
+	ragdoll:GetPhysicsObject():SetVelocity(self:GetVelocity())
+	
+	local num = ragdoll:GetPhysicsObjectCount() - 1
+	local v = self:GetVelocity()
+
+	if dmgInfo:IsDamageType(DMG_BULLET) or dmgInfo:IsDamageType(DMG_SLASH) then
+	   v = v / 5
+	end
+ 
+	for i=0, num do
+	   local bone = ragdoll:GetPhysicsObjectNum(i)
+	   if IsValid(bone) then
+			local bp, ba = self:GetBonePosition(ragdoll:TranslatePhysBoneToBone(i))
+			if bp and ba then
+				bone:SetPos(bp)
+				bone:SetAngles(ba)
+			end
+
+			bone:SetVelocity(v)
+		end
+	end
+
+	self.Ragdoll = ragdoll
+end
+
+function GM:DoPlayerDeath(ply, att, dmgInfo)
+	ply:CreateRagdollBody(dmgInfo)
+	ply:Spectate( OBS_MODE_CHASE )
+	ply:SpectateEntity(ply.Ragdoll)
+	CheckPlayerCompleted()
+end
+
 function GM:PlayerDeath( victim, inflictor, attacker )
 	victim:SetTeam(TEAM_DEAD)
 	victim.MapStats.Deaths = victim.MapStats.Deaths + 1
+
+	victim.TimeDied = (10 * GetConVar("hl2cr_difficulty"):GetInt()) + CurTime()
+end
+
+function GM:PlayerDeathThink( ply )
+
+	if ply.TimeDied < CurTime() and ply:Team() == TEAM_DEAD then
+		ply:Spawn()
+	end
+
+	return false
+
 end
 
 --Bullet Ignoring player code collision so players can't block bullets
@@ -423,17 +652,21 @@ function GM:GravGunPunt( ply, ent )
     return true
 end
 
+--Player spawning
 hook.Add("PlayerInitialSpawn", "HL2CR_InitialPlayerSpawn", function(ply, transition)
     ply:SetUpInitialSpawn()
 end)
 
---Player spawning
-hook.Add("PlayerSpawn", "HL2CR_PlayerSpawn", function(ply)
+function GM:PlayerSpawn(ply)
     ply:SetUpRespawn()
-end)
+end
 
 --If on the trainstation maps, do not allow players to use their flashlight else allow them
 hook.Add("PlayerSwitchFlashlight", "HL2CR_CanUseFlashlight", function(ply, enabled)
+	if ply:Team() ~= TEAM_ALIVE then 
+		return false
+	end
+	
 	if MAPS_NO_SUIT[game.GetMap()] then
 		ply:SetCanZoom(false)
 		return false
@@ -459,7 +692,7 @@ hook.Add( "PlayerUse", "HL2CR_PlayerUse", function( ply, ent )
 
 	if ent:GetClass() == "prop_vehicle_jeep" then
 	
-		if ent:GetOwner() ~= ply then
+		if ent:GetOwner():IsValid() and ent:GetOwner() ~= ply then
 			return false
 		end
 
@@ -477,9 +710,10 @@ end )
 
 function hl2cr_player:AdmireSuitHands()
 	self:Give("Admire_Hands")
-
+	self:SetActiveWeapon(self:GetWeapon("Admire_Hands"))
 	timer.Create(self:Nick() .. "_admiring", 4, 1, function()
 		self:StripWeapons()
+		self:GiveEquipment()
 	end)
 end
 
@@ -503,6 +737,11 @@ hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
 			ply:CheckAmmo(lastItem)
 		end)
 	end
+	if item:GetClass() == "item_healthkit" or item:GetClass() == "item_healthvial" then
+		if ply.hl2cr.Buffs.MedicalKnowledge then
+			ply:SetHealth(math.Clamp(ply:Health() + ply.hl2cr.Buffs.MedicalKnowledge, 1, ply:GetMaxHealth()))
+		end
+	end
 
 	return true
 end)
@@ -519,8 +758,14 @@ net.Receive("HL2CR_Model_Update", function(len, ply)
 	ply:UpdateModelNetwork(net.ReadString(), net.ReadString())
 end)
 
-concommand.Add("hl2cr_test", function(ply)
-	net.Start("HL2CR_Endresults")
-		net.WriteTable(ply.MapStats)
-	net.Send(ply)
+net.Receive("HL2CR_Class_Update", function(len, ply)
+	if not ply then return end
+
+	ply:UpdateClass(net.ReadString())
+end)
+
+net.Receive("HL2CR_Cosmetic", function(len, ply)
+	if not ply then return end
+
+	ply:ApplyCosmeticServer(net.ReadString())
 end)

@@ -1,143 +1,132 @@
+
 AddCSLuaFile()
 
 SWEP.WElements = {
-	["left_fuelcell+"] = { type = "Model", model = "models/Items/Flare.mdl", bone = "ValveBiped.Anim_Attachment_RH", rel = "", pos = Vector(1.101, -5.901, 4.697), angle = Angle(50, -90, 90), size = Vector(0.684, 0.684, 0.684), color = Color(255, 255, 255, 255), surpresslightning = false, material = "phoenix_storms/metalset_1-2", skin = 0, bodygroup = {} },
-	["airvent"] = { type = "Model", model = "models/props_building_details/Storefront_Template001a_Bars.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(-1.165, 1.37, -4.249), angle = Angle(-10.959, 0, -3.372), size = Vector(0.014, 0.014, 0.014), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-	["left_fuelcell++"] = { type = "Model", model = "models/Items/Flare.mdl", bone = "ValveBiped.Anim_Attachment_RH", rel = "", pos = Vector(-1.691, -5.901, 4.697), angle = Angle(50, -90, 90), size = Vector(0.684, 0.684, 0.684), color = Color(255, 255, 255, 255), surpresslightning = false, material = "phoenix_storms/metalset_1-2", skin = 0, bodygroup = {} },
-	["pipe+"] = { type = "Model", model = "models/props_mining/industrial_pipe01_c_01.mdl", bone = "ValveBiped.Anim_Attachment_RH", rel = "", pos = Vector(-1.754, -5.594, 3.355), angle = Angle(-85, -90, 90), size = Vector(0.05, 0.05, 0.054), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-	["pipe"] = { type = "Model", model = "models/props_mining/industrial_pipe01_c_01.mdl", bone = "ValveBiped.Anim_Attachment_RH", rel = "", pos = Vector(0.996, -5.594, 3.355), angle = Angle(-85, 90, 90), size = Vector(0.05, 0.05, 0.054), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+	["crate"] = { type = "Model", model = "models/items/item_item_crate.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(7.677, 7.119, 2.631), angle = Angle(0, 0, 180), size = Vector(0.314, 0.314, 0.314), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 }
 
 SWEP.VElements = {
-	["left_fuelcell++"] = { type = "Model", model = "models/Items/Flare.mdl", bone = "ValveBiped.base", rel = "", pos = Vector(-1.178, -0.611, -1.869), angle = Angle(-47, 25, -92), size = Vector(0.684, 0.684, 0.684), color = Color(255, 255, 255, 255), surpresslightning = false, material = "phoenix_storms/metalset_1-2", skin = 0, bodygroup = {} },
-	["airvent"] = { type = "Model", model = "models/props_building_details/Storefront_Template001a_Bars.mdl", bone = "ValveBiped.base", rel = "", pos = Vector(0.152, -0.21, -8.502), angle = Angle(90, 90, 0), size = Vector(0.014, 0.014, 0.014), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-	["left_fuelcell+"] = { type = "Model", model = "models/Items/Flare.mdl", bone = "ValveBiped.base", rel = "", pos = Vector(2.161, -0.611, -1.869), angle = Angle(-47, 25, -92), size = Vector(0.684, 0.684, 0.684), color = Color(255, 255, 255, 255), surpresslightning = false, material = "phoenix_storms/metalset_1-2", skin = 0, bodygroup = {} },
-	["pipe"] = { type = "Model", model = "models/props_mining/industrial_pipe01_c_01.mdl", bone = "ValveBiped.base", rel = "", pos = Vector(1.93, -0.459, -3.385), angle = Angle(-90, 90, 89.583), size = Vector(0.05, 0.05, 0.054), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+	["crate"] = { type = "Model", model = "models/items/item_item_crate.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(8.5, 5.599, 3.299), angle = Angle(6.5, 22, 180), size = Vector(0.314, 0.314, 0.314), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 }
 
-SWEP.Author = nil
-SWEP.Base = "weapon_base"
-SWEP.PrintName = translate.Get("HUD_Weapon_RampageSMG")
-SWEP.Instructions = nil
 
+SWEP.PrintName = translate.Get("HUD_Weapon_AmmoBox")
+
+SWEP.Slot = 5
+SWEP.SlotPos = 3
+
+SWEP.Spawnable = true
+
+SWEP.ViewModel = Model( "models/weapons/c_slam.mdl" )
+SWEP.WorldModel = Model( "models/weapons/w_slam.mdl" )
+SWEP.ViewModelFOV = 54
 SWEP.UseHands = true
-SWEP.ViewModel = "models/weapons/c_smg1.mdl"
-SWEP.WorldModel = "models/weapons/w_smg1.mdl"
-SWEP.ViewModelBoneMods = {}
 
-SWEP.BounceWeaponIcon = false
+SWEP.ShowViewModel = false
+SWEP.ShowWorldModel = false
 
-SWEP.Slot = 2
-SWEP.SlotPos = 2
-SWEP.DrawAmmo = true
-SWEP.DrawCrosshair = true
-
-SWEP.ViewModelFOV = 70
-SWEP.ViewModelFlip = false
-SWEP.Spawnable = false
-SWEP.AdminSpawnable = false
-
-SWEP.HoldType = "smg"
-SWEP.Primary.Rate = 0.65
-SWEP.Primary.NumShots = 1
-SWEP.Primary.Spread = 0.05
-SWEP.Primary.Ammo = "smg1"
-SWEP.Primary.Damage = 10
-SWEP.Primary.ClipSize = 60
-SWEP.Primary.DefaultClip = 60
-SWEP.Primary.Automatic = true
-
-SWEP.Primary.RateAccumulate = -0.05
-SWEP.Primary.CurRate = SWEP.Primary.Rate
-SWEP.Primary.MaxRate = 0.05
-SWEP.Primary.MinRate = 0.65
+SWEP.Primary.ClipSize = 100
+SWEP.Primary.DefaultClip = 100
+SWEP.Primary.Automatic = false
+SWEP.Primary.Ammo = "none"
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.Primary.ShootSound = Sound("Weapon_SMG1.Single")
-SWEP.Primary.ReloadSound = Sound("Weapon_SMG1.Reload")
+SWEP.HealAmount = 20 -- Maximum heal amount per use
+SWEP.MaxAmmo = 100 -- Maxumum ammo
 
-SWEP.LastFire = 0
+local HealSound = Sound( "HealthKit.Touch" )
+local DenySound = Sound( "WallHealth.Deny" )
 
 function SWEP:Initialize()
-	
+
+	self:SetHoldType( "slam" )
+
+	if ( CLIENT ) then return end
+
+	timer.Create( "medkit_ammo" .. self:EntIndex(), 1, 0, function()
+		if ( self:Clip1() < self.MaxAmmo ) then self:SetClip1( math.min( self:Clip1() + 2, self.MaxAmmo ) ) end
+	end )
+
 end
 
 function SWEP:PrimaryAttack()
-	
-	if not self:CanPrimaryAttack() then return end
 
-    local pl = self:GetOwner()
+	if ( CLIENT ) then return end
 
-    pl:LagCompensation(true)
+	if ( self.Owner:IsPlayer() ) then
+		self.Owner:LagCompensation( true )
+	end
 
-    local bullet = {}
-	bullet.Attacker = pl
-    bullet.num = self.Primary.NumShots
-    bullet.Src = pl:GetShootPos()
-    bullet.Dir = pl:GetAimVector()
-    bullet.Spread = Vector(self.Primary.Spread, self.Primary.Spread, 0)
-    bullet.Tracer = 0
-    bullet.Damage = self.Primary.Damage
-    bullet.AmmoType = self.Primary.Ammo
-    
-    self:FireBullets(bullet)
+	local tr = util.TraceLine( {
+		start = self.Owner:GetShootPos(),
+		endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 64,
+		filter = self.Owner
+	} )
 
-    self:EmitSound(self.Primary.ShootSound)
+	if ( self.Owner:IsPlayer() ) then
+		self.Owner:LagCompensation( false )
+	end
 
-    self.BaseClass.ShootEffects(self)
-    self:TakePrimaryAmmo(1)
-    self:SetNextPrimaryFire(self.Primary.CurRate + CurTime())
+	local ent = tr.Entity
 
-	self.Primary.CurRate = math.Clamp(self.Primary.CurRate + self.Primary.RateAccumulate, self.Primary.MaxRate, self.Primary.MinRate)
-    pl:LagCompensation(false)
+	local need = self.HealAmount
+	if ( IsValid( ent ) ) then need = math.min( ent:GetMaxHealth() - ent:Health(), self.HealAmount ) end
 
-	self.LastFire = 1 + CurTime()
-end
+	if ( IsValid( ent ) && self:Clip1() >= need && ( ent:IsPlayer() or ent:IsNPC() ) && ent:Health() < ent:GetMaxHealth() ) then
 
-function SWEP:Reload()
-    
-    if self:Clip1() == self.Primary.ClipSize then return end
-	if self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0 then return end
+		self:TakePrimaryAmmo( need )
 
-    if CLIENT then
+		ent:SetHealth( math.min( ent:GetMaxHealth(), ent:Health() + need ) )
+		ent:EmitSound( HealSound )
 
-        self:EmitSound(self.Primary.ReloadSound)
-		if self.Primary.CurRate == self.Primary.MaxRate then
-			self:EmitSound("hl1/ambience/steamburst1.wav", 80, 65)
-		end
-    end
-    
-	self.Primary.CurRate = self.Primary.Rate
+		self:SendWeaponAnim( ACT_VM_PRIMARYATTACK )
 
-    self.Weapon:DefaultReload( ACT_VM_RELOAD );
+		self:SetNextPrimaryFire( CurTime() + self:SequenceDuration() + 0.5 )
+		self.Owner:SetAnimation( PLAYER_ATTACK1 )
+
+		self.Owner:AddXP(need)
+
+		-- Even though the viewmodel has looping IDLE anim at all times, we need this to make fire animation work in multiplayer
+		timer.Create( "weapon_idle" .. self:EntIndex(), self:SequenceDuration(), 1, function() if ( IsValid( self ) ) then self:SendWeaponAnim( ACT_VM_IDLE ) end end )
+	else
+		self.Owner:EmitSound( DenySound )
+		self:SetNextPrimaryFire( CurTime() + 1 )
+	end
+
 end
 
 function SWEP:SecondaryAttack()
-	return
 end
 
-function SWEP:Think()
-	
-	if CLIENT then return end
+function SWEP:OnRemove()
 
-	if self.Primary.CurRate == self.Primary.MinRate then return end
-
-	if self.LastFire > CurTime() then return end
-
-	self.Primary.CurRate = math.Clamp(self.Primary.CurRate - self.Primary.RateAccumulate, self.Primary.MaxRate, self.Primary.MinRate)
-	
-	self.LastFire = 0.5 + CurTime()
+	timer.Stop( "box_ammo" .. self:EntIndex() )
+	timer.Stop( "weapon_idle" .. self:EntIndex() )
 
 end
 
-function SWEP:Deploy()
-	self:SetHoldType(self.HoldType)
-	self.Primary.CurRate = math.Clamp(self.Primary.CurRate + self.Primary.RateAccumulate, self.Primary.MaxRate, self.Primary.MinRate)
+function SWEP:Holster()
+
+	timer.Stop( "weapon_idle" .. self:EntIndex() )
+
+	return true
+
 end
+
+function SWEP:CustomAmmoDisplay()
+
+	self.AmmoDisplay = self.AmmoDisplay or {}
+	self.AmmoDisplay.Draw = true
+	self.AmmoDisplay.PrimaryClip = self:Clip1()
+
+	return self.AmmoDisplay
+
+end
+
 
 /********************************************************
 	SWEP Construction Kit base code
@@ -187,7 +176,7 @@ function SWEP:Initialize()
 					vm:SetColor(Color(255,255,255,1))
 					// ^ stopped working in GMod 13 because you have to do Entity:SetRenderMode(1) for translucency to kick in
 					// however for some reason the view model resets to render mode 0 every frame so we just apply a debug material to prevent it from drawing
-					vm:SetMaterial("vgui/hsv")		
+					vm:SetMaterial("vgui/hsv")			
 				end
 			end
 		end
@@ -632,3 +621,4 @@ if CLIENT then
 	end
 	
 end
+

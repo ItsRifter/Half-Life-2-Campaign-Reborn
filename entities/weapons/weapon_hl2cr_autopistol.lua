@@ -11,7 +11,7 @@ SWEP.VElements = {
 
 SWEP.Author = nil
 SWEP.Base = "weapon_base"
-SWEP.PrintName = "Automatic pistol"
+SWEP.PrintName = translate.Get("HUD_Weapon_AutoPistol")
 SWEP.Instructions = nil
 
 SWEP.UseHands = true
@@ -66,6 +66,7 @@ function SWEP:PrimaryAttack()
     pl:LagCompensation(true)
 
     local bullet = {}
+	bullet.Attacker = pl
     bullet.num = self.Primary.NumShots
     bullet.Src = pl:GetShootPos()
     bullet.Dir = pl:GetAimVector()
@@ -81,6 +82,8 @@ function SWEP:PrimaryAttack()
     self.BaseClass.ShootEffects(self)
     self:TakePrimaryAmmo(1)
     self:SetNextPrimaryFire(self.Primary.Rate + CurTime())
+
+	self.Owner:ViewPunch(Angle(math.random(-1, -2), math.random(-1, 1), -0.5))
 
     pl:LagCompensation(false)
 end
@@ -153,7 +156,7 @@ function SWEP:Initialize()
 					vm:SetColor(Color(255,255,255,1))
 					// ^ stopped working in GMod 13 because you have to do Entity:SetRenderMode(1) for translucency to kick in
 					// however for some reason the view model resets to render mode 0 every frame so we just apply a debug material to prevent it from drawing
-					vm:SetMaterial("Debug/hsv")			
+					vm:SetMaterial("vgui/hsv")		
 				end
 			end
 		end

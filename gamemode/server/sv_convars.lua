@@ -26,7 +26,7 @@ CreateConVar("hl2cr_suit_default_recharge_rate", 1, {FCVAR_REPLICATED, FCVAR_ARC
 CreateConVar("hl2cr_suit_default_recharge_delay", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 10)
 
 --Misc
-CreateConVar("hl2cr_cooldown_class", 60, {FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How long is the cooldown for class switching", 1, 180)
+CreateConVar("hl2cr_vortex_chance", 65, {FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, "The chance of a vortex spawning in a specific map", 1, 100)
 
 --Random NPC Spawning ConVars
 CreateConVar("hl2cr_rndnpc_max", 3, {FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How many can randomly spawn", 1, 20)

@@ -55,12 +55,12 @@ function ENT:Touch(ent)
 				p.HasSeat = false
 			end
 			
-			if ents.FindByClass("info_player_start")[1] then	
+			if ents.FindByClass("info_player_start")[1]:IsValid() then	
 				for l, spawn in pairs(ents.FindByClass("info_player_start")) do
 					spawn:SetPos(self.TPPoint)
 					p:SetPos(self.TPPoint)
 				end
-			elseif ents.FindByClass("info_player_deathmatch")[1] then
+			elseif ents.FindByClass("info_player_deathmatch")[1]:IsValid() then
 				for l, spawn in pairs(ents.FindByClass("info_player_deathmatch")) do
 					spawn:SetPos(self.TPPoint)
 					p:SetPos(self.TPPoint)

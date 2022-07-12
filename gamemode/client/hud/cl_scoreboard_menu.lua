@@ -68,14 +68,14 @@ function ToggleBoard(toggle)
 		playerList:SetSpaceY( 5 )
 		playerList:SetSpaceX( 15 )
 		
+		
 		for _, pl in ipairs(player.GetAll()) do
 		
 			local panel = playerList:Add("DPanel")
-			panel:SetSize(180, 75)
+			panel:SetSize(225, 100)
 			
 			panel.Think = function(self)
 				local statusColours = GetPlayerTeamColours(pl)
-
 				panel:SetBackgroundColor(statusColours)
 			end
 
@@ -100,43 +100,49 @@ function ToggleBoard(toggle)
 			username:SizeToContents()
 			
 			local playerStats = vgui.Create("DLabel", panel)
-			playerStats:SetPos(80, 20)
-			playerStats:SetText(translate.Get("Scoreboard_Player_Level") .. pl:GetNWInt("hl2cr_stat_level", -1) .. "\n" .. translate.Get("Scoreboard_Player_Exp") .. pl:GetNWInt("hl2cr_stat_exp", -1) .. "/" .. pl:GetNWInt("hl2cr_stat_expreq", 0))
+			playerStats:SetPos(80, 30)
 			playerStats:SetTextColor( Color( 0, 0, 0) )
-			playerStats:SizeToContents()
+			playerStats:SetFont("hl2cr_scoreboard_stats")
 			
+			playerStats.Think = function()
+				playerStats:SetText(translate.Get("Scoreboard_Player_Level") .. pl:GetNWInt("hl2cr_stat_level", -1) .. "\n" .. translate.Get("Scoreboard_Player_Exp") .. pl:GetNWInt("hl2cr_stat_exp", -1) .. "/" .. pl:GetNWInt("hl2cr_stat_expreq", 0))
+				playerStats:SizeToContents()
+			end
+
+			local badgeXPos, badgeYPos = 30, 0
+			local badgeSize = 24 
+
 			if pl:IsSuperAdmin() then
 				local adminBadge = vgui.Create( "DImageButton", panel )
-				adminBadge:SetSize(18, 18)
-				adminBadge:SetPos(panel:GetWide() - 20, 0)
+				adminBadge:SetSize(badgeSize, badgeSize)
+				adminBadge:SetPos(panel:GetWide() - badgeXPos, badgeYPos)
 				adminBadge:SetImage( "icon16/award_star_gold_3.png" )
 				adminBadge:SetToolTip(translate.Get("Scoreboard_Player_Status_SuperAdmin"))
 				
 			elseif pl:IsAdmin() then
 				local adminBadge = vgui.Create( "DImageButton", panel )
-				adminBadge:SetSize(18, 18)
-				adminBadge:SetPos(panel:GetWide() - 30, 0)
+				adminBadge:SetSize(badgeSize, badgeSize)
+				adminBadge:SetPos(panel:GetWide() - badgeXPos, badgeYPos)
 				adminBadge:SetImage( "icon16/award_star_gold_2.png" )
 				adminBadge:SetToolTip(translate.Get("Scoreboard_Player_Status_Admin"))
-			end
-			if pl:GetUserGroup() == "donator" then
+			elseif pl:GetUserGroup() == "donator" then
 				local donatorBadge = vgui.Create( "DImageButton", panel )
-				donatorBadge:SetSize(18, 18)
-				donatorBadge:SetPos(panel:GetWide() - 30, 0)
+				donatorBadge:SetSize(badgeSize, badgeSize)
+				donatorBadge:SetPos(panel:GetWide() -badgeXPos30, badgeYPos)
 				donatorBadge:SetImage( "icon16/medal_bronze_3.png" )
 				donatorBadge:SetToolTip(translate.Get("Scoreboard_Player_Status_Donator"))
 				
 			elseif pl:GetUserGroup() == "vip" then
 				local vipBadge = vgui.Create( "DImageButton", panel )
-				vipBadge:SetSize(18, 18)
-				vipBadge:SetPos(panel:GetWide() - 30, 0)
+				vipBadge:SetSize(badgeSize, badgeSize)
+				vipBadge:SetPos(panel:GetWide() - badgeXPos, badgeYPos)
 				vipBadge:SetImage( "icon16/medal_silver_3.png" )
 				vipBadge:SetToolTip(translate.Get("Scoreboard_Player_Status_VIP"))
 			
 			elseif pl:GetUserGroup() == "vip+" then
 				local vipExtraBadge = vgui.Create( "DImageButton", panel )
-				vipExtraBadge:SetSize(18, 18)
-				vipExtraBadge:SetPos(panel:GetWide() - 30, 0)
+				vipExtraBadge:SetSize(badgeSize, badgeSize)
+				vipExtraBadge:SetPos(panel:GetWide() - badgeXPos, badgeYPos)
 				vipExtraBadge:SetImage( "icon16/medal_gold_3.png" )
 				vipExtraBadge:SetToolTip(translate.Get("Scoreboard_Player_Status_VIPExtra"))
 			end
@@ -144,7 +150,7 @@ function ToggleBoard(toggle)
 			if LocalPlayer() != pl then
 				local muteBtn = vgui.Create("DImageButton", panel)
 				muteBtn:SetSize(32, 32)
-				muteBtn:SetPos(panel:GetWide() - 30, 45	)
+				muteBtn:SetPos(panel:GetWide() - 30, 25	)
 				
 				if pl:IsMuted() then
 					muteBtn:SetImage( "icon32/muted.png" )
@@ -179,20 +185,26 @@ function ToggleBoard(toggle)
 			end
 			
 			local playerPing = vgui.Create("DLabel", panel)
-			playerPing:SetPos(80, 57)
+			playerPing:SetPos(0, 75)
 			playerPing:SetText(translate.Get("Scoreboard_Player_Ping") .. pl:Ping())
 			playerPing:SetTextColor( Color( 0, 0, 0) )
+			playerPing:SetFont("hl2cr_scoreboard_stats")
 			playerPing:SizeToContents()
 
 			playerPing.Think = function(self)
+				if not pl:IsValid() then
+					panel:Remove()
+					return
+				end
 				self:SetText(translate.Get("Scoreboard_Player_Ping") .. pl:Ping())	
 				self:SizeToContents()
 			end
 
 			local playerclass = vgui.Create("DLabel", panel)
-			playerclass:SetPos(80, 45)
+			playerclass:SetPos(80, 75)
 			playerclass:SetTextColor( Color( 0, 0, 0) )
 			playerclass:SetText(translate.Get("Scoreboard_Player_CurClass") .. pl:GetNWString("hl2cr_class", "???"))
+			playerclass:SetFont("hl2cr_scoreboard_stats")
 			playerclass:SizeToContents()
 		end
 	elseif not toggle and scoreboard:IsValid() then

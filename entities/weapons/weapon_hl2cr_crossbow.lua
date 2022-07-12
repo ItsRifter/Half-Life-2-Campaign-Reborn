@@ -1,34 +1,32 @@
 AddCSLuaFile()
 
 SWEP.WElements = {
-	["left_fuelcell+"] = { type = "Model", model = "models/Items/Flare.mdl", bone = "ValveBiped.Anim_Attachment_RH", rel = "", pos = Vector(1.101, -5.901, 4.697), angle = Angle(50, -90, 90), size = Vector(0.684, 0.684, 0.684), color = Color(255, 255, 255, 255), surpresslightning = false, material = "phoenix_storms/metalset_1-2", skin = 0, bodygroup = {} },
-	["airvent"] = { type = "Model", model = "models/props_building_details/Storefront_Template001a_Bars.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(-1.165, 1.37, -4.249), angle = Angle(-10.959, 0, -3.372), size = Vector(0.014, 0.014, 0.014), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-	["left_fuelcell++"] = { type = "Model", model = "models/Items/Flare.mdl", bone = "ValveBiped.Anim_Attachment_RH", rel = "", pos = Vector(-1.691, -5.901, 4.697), angle = Angle(50, -90, 90), size = Vector(0.684, 0.684, 0.684), color = Color(255, 255, 255, 255), surpresslightning = false, material = "phoenix_storms/metalset_1-2", skin = 0, bodygroup = {} },
-	["pipe+"] = { type = "Model", model = "models/props_mining/industrial_pipe01_c_01.mdl", bone = "ValveBiped.Anim_Attachment_RH", rel = "", pos = Vector(-1.754, -5.594, 3.355), angle = Angle(-85, -90, 90), size = Vector(0.05, 0.05, 0.054), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-	["pipe"] = { type = "Model", model = "models/props_mining/industrial_pipe01_c_01.mdl", bone = "ValveBiped.Anim_Attachment_RH", rel = "", pos = Vector(0.996, -5.594, 3.355), angle = Angle(-85, 90, 90), size = Vector(0.05, 0.05, 0.054), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+	["box_bolts"] = { type = "Model", model = "models/Items/BoxSRounds.mdl", bone = "ValveBiped.Anim_Attachment_RH", rel = "", pos = Vector(-2.106, 3.255, 12.541), angle = Angle(10.567, 0, -92.625), size = Vector(0.5, 0.8, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, material = "phoenix_storms/metalset_1-2", skin = 0, bodygroup = {} }
 }
 
 SWEP.VElements = {
-	["left_fuelcell++"] = { type = "Model", model = "models/Items/Flare.mdl", bone = "ValveBiped.base", rel = "", pos = Vector(-1.178, -0.611, -1.869), angle = Angle(-47, 25, -92), size = Vector(0.684, 0.684, 0.684), color = Color(255, 255, 255, 255), surpresslightning = false, material = "phoenix_storms/metalset_1-2", skin = 0, bodygroup = {} },
-	["airvent"] = { type = "Model", model = "models/props_building_details/Storefront_Template001a_Bars.mdl", bone = "ValveBiped.base", rel = "", pos = Vector(0.152, -0.21, -8.502), angle = Angle(90, 90, 0), size = Vector(0.014, 0.014, 0.014), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-	["left_fuelcell+"] = { type = "Model", model = "models/Items/Flare.mdl", bone = "ValveBiped.base", rel = "", pos = Vector(2.161, -0.611, -1.869), angle = Angle(-47, 25, -92), size = Vector(0.684, 0.684, 0.684), color = Color(255, 255, 255, 255), surpresslightning = false, material = "phoenix_storms/metalset_1-2", skin = 0, bodygroup = {} },
-	["pipe"] = { type = "Model", model = "models/props_mining/industrial_pipe01_c_01.mdl", bone = "ValveBiped.base", rel = "", pos = Vector(1.93, -0.459, -3.385), angle = Angle(-90, 90, 89.583), size = Vector(0.05, 0.05, 0.054), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+	["box_bolts"] = { type = "Model", model = "models/Items/BoxSRounds.mdl", bone = "ValveBiped.Crossbow_base", rel = "", pos = Vector(0, 6.677, 10.288), angle = Angle(0, 0, -90), size = Vector(0.5, 0.8, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, material = "phoenix_storms/metalset_1-2", skin = 0, bodygroup = {} }
 }
 
 SWEP.Author = nil
 SWEP.Base = "weapon_base"
-SWEP.PrintName = translate.Get("HUD_Weapon_RampageSMG")
+SWEP.PrintName = translate.Get("HUD_Weapon_Crossbow")
 SWEP.Instructions = nil
 
+SWEP.HoldType = "crossbow"
+SWEP.ViewModelFOV = 60
+SWEP.ViewModelFlip = false
 SWEP.UseHands = true
-SWEP.ViewModel = "models/weapons/c_smg1.mdl"
-SWEP.WorldModel = "models/weapons/w_smg1.mdl"
+SWEP.ViewModel = "models/weapons/c_crossbow.mdl"
+SWEP.WorldModel = "models/weapons/w_crossbow.mdl"
+SWEP.ShowViewModel = true
+SWEP.ShowWorldModel = true
 SWEP.ViewModelBoneMods = {}
 
 SWEP.BounceWeaponIcon = false
 
-SWEP.Slot = 2
-SWEP.SlotPos = 2
+SWEP.Slot = 3
+SWEP.SlotPos = 3
 SWEP.DrawAmmo = true
 SWEP.DrawCrosshair = true
 
@@ -37,38 +35,33 @@ SWEP.ViewModelFlip = false
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = false
 
-SWEP.HoldType = "smg"
-SWEP.Primary.Rate = 0.65
+SWEP.HoldType = "crossbow"
+SWEP.Primary.Rate = 0.75
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Spread = 0.05
-SWEP.Primary.Ammo = "smg1"
-SWEP.Primary.Damage = 10
-SWEP.Primary.ClipSize = 60
-SWEP.Primary.DefaultClip = 60
+SWEP.Primary.Ammo = "XBowBolt"
+SWEP.Primary.Damage = 75
+SWEP.Primary.ClipSize = 3
+SWEP.Primary.DefaultClip = 3
 SWEP.Primary.Automatic = true
-
-SWEP.Primary.RateAccumulate = -0.05
-SWEP.Primary.CurRate = SWEP.Primary.Rate
-SWEP.Primary.MaxRate = 0.05
-SWEP.Primary.MinRate = 0.65
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.Primary.ShootSound = Sound("Weapon_SMG1.Single")
-SWEP.Primary.ReloadSound = Sound("Weapon_SMG1.Reload")
+SWEP.Primary.ShootSound = Sound("Weapon_Crossbow.Single")
+SWEP.Primary.ReloadSound = Sound("Weapon_Crossbow.Reload")
 
-SWEP.LastFire = 0
+SWEP.IsReloading = false
 
 function SWEP:Initialize()
-	
 end
 
 function SWEP:PrimaryAttack()
 	
 	if not self:CanPrimaryAttack() then return end
+	if self.IsReloading then return end
 
     local pl = self:GetOwner()
 
@@ -90,53 +83,44 @@ function SWEP:PrimaryAttack()
 
     self.BaseClass.ShootEffects(self)
     self:TakePrimaryAmmo(1)
-    self:SetNextPrimaryFire(self.Primary.CurRate + CurTime())
+    self:SetNextPrimaryFire(self.Primary.Rate + CurTime())
 
-	self.Primary.CurRate = math.Clamp(self.Primary.CurRate + self.Primary.RateAccumulate, self.Primary.MaxRate, self.Primary.MinRate)
+	timer.Simple(self.Primary.Rate / 2.5, function()
+		self:SendWeaponAnim(ACT_VM_IDLE)
+	end)
+
     pl:LagCompensation(false)
-
-	self.LastFire = 1 + CurTime()
 end
 
 function SWEP:Reload()
     
-    if self:Clip1() == self.Primary.ClipSize then return end
+    if self:Clip1() >= self.Primary.ClipSize then return end
 	if self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0 then return end
+	if self.IsReloading then return end
+
+	self.IsReloading = true
 
     if CLIENT then
-
         self:EmitSound(self.Primary.ReloadSound)
-		if self.Primary.CurRate == self.Primary.MaxRate then
-			self:EmitSound("hl1/ambience/steamburst1.wav", 80, 65)
-		end
     end
-    
-	self.Primary.CurRate = self.Primary.Rate
 
-    self.Weapon:DefaultReload( ACT_VM_RELOAD );
+	self:SendWeaponAnim( ACT_VM_RELOAD )
+
+	timer.Simple(1.95, function()
+		
+		if not self.Owner:IsValid() then return end
+		self.IsReloading = false
+		self:SetClip1(self:Clip1() + 1)
+		self.Owner:RemoveAmmo(1, self.Primary.Ammo)
+	end)
 end
 
 function SWEP:SecondaryAttack()
 	return
 end
 
-function SWEP:Think()
-	
-	if CLIENT then return end
-
-	if self.Primary.CurRate == self.Primary.MinRate then return end
-
-	if self.LastFire > CurTime() then return end
-
-	self.Primary.CurRate = math.Clamp(self.Primary.CurRate - self.Primary.RateAccumulate, self.Primary.MaxRate, self.Primary.MinRate)
-	
-	self.LastFire = 0.5 + CurTime()
-
-end
-
 function SWEP:Deploy()
 	self:SetHoldType(self.HoldType)
-	self.Primary.CurRate = math.Clamp(self.Primary.CurRate + self.Primary.RateAccumulate, self.Primary.MaxRate, self.Primary.MinRate)
 end
 
 /********************************************************

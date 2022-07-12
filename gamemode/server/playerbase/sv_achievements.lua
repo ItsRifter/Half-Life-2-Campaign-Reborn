@@ -8,7 +8,7 @@ function hl2cr_player:GrantAchievement(achName)
 	for i, a in ipairs(GAMEMODE.Achievements) do
 		if a.Name == achName then
 			ach = a
-			break 
+			break
 		end
 	end
 
@@ -21,13 +21,24 @@ function hl2cr_player:GrantAchievement(achName)
 	
 	--If player already has the achievement, stop here
 	if table.HasValue(self.hl2cr.Achievements, ach.Name) then return end
-	
+
 	--Insert the achievement to the player's data
 	table.insert(self.hl2cr.Achievements, ach.Name)
 	
+	local displayAch = {
+		["Name"] = ach.Name,
+		["Desc"] = ach.Desc,
+		["Mat"] = ach.Mat,
+		["IsRare"] = ach.IsRare,
+
+		["Rewards"] = {
+			["XP"] = ach.Rewards.XP
+		}
+	}
+
 	--Show the popup achievement similar to steam's achievements
 	net.Start("HL2CR_AchievementEarned")
-		net.WriteTable(ach)
+		net.WriteTable(displayAch)
 	net.Send(self)
 
 	--Notify everyone of the achiever
@@ -40,13 +51,12 @@ function hl2cr_player:GrantAchievement(achName)
 	if ach.Rewards.XP > 0 then
 		self:AddXP(ach.Rewards.XP)
 	end
+
+	if ach.Rewards.Items then
+		ach.Rewards.Items(self)
+	end
 end
 
-hook.Add("ShutDown", "HL2CR_CheckAchStatus", function()
-	if savedBaby == false and file.Exists("hl2cr_data/babycheck.txt", "DATA") then
-		file.Delete("hl2cr_data/babycheck.txt")
-	end
-	if savedRoller == false and file.Exists("hl2cr_data/ballcheck.txt", "DATA") then
-		file.Delete("hl2cr_data/ballcheck.txt")
-	end
-end)
+function hl2cr_player:HasAchievement(achName)
+	return string.find(table.concat(self.hl2cr.Achievements, " "), achName)
+end

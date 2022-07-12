@@ -5,7 +5,7 @@ votingTypes["Lobby"] = {
 	Description = translate.Get("Vote_Type_Lobby"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Success_Lobby"))
 			timer.Simple(5, function()
@@ -21,7 +21,7 @@ votingTypes["Restart"] = {
 	Description = translate.Get("Vote_Type_RestartMap"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Success_Map_Restart"))
 			
@@ -39,7 +39,7 @@ votingTypes["DiffNormal"] = {
 	Description = translate.Get("Vote_Type_Diff_Normal"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			GetConVar("hl2cr_difficulty"):SetInt(1)
 			
@@ -58,7 +58,7 @@ votingTypes["DiffHard"] = {
 	Description = translate.Get("Vote_Type_Diff_Hard"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			GetConVar("hl2cr_difficulty"):SetInt(2)
 			
@@ -77,7 +77,7 @@ votingTypes["DiffVHard"] = {
 	Description = translate.Get("Vote_Type_Diff_VHard"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			GetConVar("hl2cr_difficulty"):SetInt(3)
 			
@@ -96,7 +96,7 @@ votingTypes["DiffInsane"] = {
 	Description = translate.Get("Vote_Type_Diff_Insane"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			GetConVar("hl2cr_difficulty"):SetInt(4)
 			
@@ -115,7 +115,7 @@ votingTypes["DiffGF"] = {
 	Description = translate.Get("Vote_Type_Diff_GF"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			GetConVar("hl2cr_difficulty"):SetInt(5)
 
@@ -134,7 +134,7 @@ votingTypes["EnableSurvival"] = {
 	Description = translate.Get("Vote_Tyle_Survival_Enable"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			GetConVar("hl2cr_survival"):SetInt(1)
 			
@@ -149,7 +149,7 @@ votingTypes["DisableSurvival"] = {
 	Description = translate.Get("Vote_Tyle_Survival_Disable"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			GetConVar("hl2cr_survival"):SetInt(0)
 			
@@ -163,7 +163,7 @@ votingTypes["BeginHL2"] = {
 	Description = translate.Get("Vote_Type_MapSeries_HL2"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Sucess_Map_HL2"))
 			BroadcastSoundToAll("hl2cr/begin_game.wav")
@@ -180,7 +180,7 @@ votingTypes["BeginEP1"] = {
 	Description = translate.Get("Vote_Type_MapSeries_HL2_EP1"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Sucess_Map_EP1"))
 			BroadcastSoundToAll("hl2cr/begin_game.wav")
@@ -197,7 +197,7 @@ votingTypes["BeginRND"] = {
 	Description = translate.Get("Vote_Type_MapSeries_HL2"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Sucess_Map_Custom"))
 			BroadcastSound("hl2cr/begin_game.wav")
@@ -214,7 +214,7 @@ votingTypes["BeginPursoups"] = {
 	Description = translate.Get("Vote_Type_MapSeries_Custom_Pursoup"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
-		print(string.format("There were %d positive and %d negative votes!", positive, negative))
+		
 		if positive > negative then
 			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Sucess_Map_Custom"))
 			BroadcastSound("hl2cr/begin_game.wav")

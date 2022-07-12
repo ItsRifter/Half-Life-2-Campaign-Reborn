@@ -45,6 +45,11 @@ HOSTILE_NPCS = {
     ["npc_antlion_worker"] = true
 }
 
+local poison_npcs = {
+    ["npc_headcrab_poison"] = true,
+    ["npc_headcrab_black"] = true
+}
+
 function hl2cr_npc:IsFriendly()
 	if self:IsValid() and self:IsNPC() and (FRIENDLY_NPCS[self:GetClass()] or FRIENDLY_HARMABLE_NPCS[self:GetClass()]) then
 		return true
@@ -66,7 +71,17 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
     if target:IsPlayer() then
     
         local npcAttacker = dmgInfo:GetAttacker()
-    
+
+        if target.hl2cr.CurCosmetic ~= "" then
+            for _, c in ipairs(HL2CR_Cosmetics) do
+                if c.Class == target.hl2cr.CurCosmetic then
+                    if not c.TakeDamageFunc then break end
+                    c.TakeDamageFunc(target, npcAttacker, dmgInfo:GetDamageType())
+                    break
+                end
+            end
+        end
+
         if dmgInfo:GetDamageType() == 17 or dmgInfo:GetDamageType() == 1 then 
 			dmgInfo:SetDamage(0) 
 			return
@@ -82,7 +97,9 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
 
         if npcAttacker:GetCustomDamage() then
             dmgInfo:SetDamage(npcAttacker:GetCustomDamage()) 
-        else 
+        else
+            if poison_npcs[npcAttacker:GetClass()] then return false end
+
             dmgInfo:SetDamage(dmgInfo:GetDamage() * GetConVar("hl2cr_difficulty"):GetInt())
         end
 
@@ -105,6 +122,8 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
     else
         if target:GetClass() == "item_ammo_crate" then
             local playerAtt = dmgInfo:GetAttacker()
+            
+            if not playerAtt:IsPlayer() then return end
 
             //Loop this twice in case the player switches between weapons
             timer.Create("hl2cr_itemcrate_wait_" .. playerAtt:EntIndex(), 0.85, 2, function()

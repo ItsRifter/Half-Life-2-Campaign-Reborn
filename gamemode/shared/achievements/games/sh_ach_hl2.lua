@@ -5,7 +5,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_Malcontent_Desc"),
         Rewards = {
             XP = 500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -16,7 +16,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_Submissive_Desc"),
         Rewards = {
             XP = 500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -27,7 +27,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_Defiant_Desc"),
         Rewards = {
             XP = 500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -38,7 +38,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_BarneyWish_Desc"),
         Rewards = {
             XP = 500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -49,7 +49,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_TrustyHardware_Desc"),
         Rewards = {
             XP = 500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -60,7 +60,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_KeepOffSand_Desc"),
         Rewards = {
             XP = 5000,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -71,7 +71,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_WardenFreeman_Desc"),
         Rewards = {
             XP = 1500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -82,7 +82,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_FollowFreeman_Desc"),
         Rewards = {
             XP = 1500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -93,7 +93,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_CubbageTrends_Desc"),
         Rewards = {
             XP = 2500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -104,19 +104,29 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_Radiation_Desc"),
         Rewards = {
             XP = 1500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
     
-    Red_Letter_Baby = {
-        Name = translate.Get("Achievement_HL2_RedBaby_Name"), 
-        Mat = "vgui/achievements/hl2_beat_game.png", 
-        Desc = translate.Get("Achievement_HL2_RedBaby_Desc"),
+    What_Baby = {
+        Name = translate.Get("Achievement_HL2_WhatBaby_Name"), 
+        Mat = "vgui/achievements/hl2_break_miniteleporter.png", 
+        Desc = translate.Get("Achievement_HL2_WhatBaby_Desc"),
         Rewards = {
             XP = 2250,
-            Item = nil
-            --Replace with baby hat
+            Items = function(ply)
+                local hat = nil 
+
+                for _, h in ipairs(HL2CR_Cosmetics) do
+                    if h.Class == "hat_dollhead" then
+                        hat = h
+                        break
+                    end
+                end
+
+                table.insert(ply.hl2cr.Inventory.Cosmetics, hat)
+            end
         },
         IsRare = false
     },
@@ -127,7 +137,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_ZeroEnergy_Desc"),
         Rewards = {
             XP = 1000,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -138,7 +148,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_TwoPoints_Desc"),
         Rewards = {
             XP = 2500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -149,7 +159,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_HallowGround_Desc"),
         Rewards = {
             XP = 1250,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -161,7 +171,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_BarnacleBowling_Desc"),
         Rewards = {
             XP = 3500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -172,7 +182,18 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_RavenBall_Desc"),
         Rewards = {
             XP = 12500,
-            Item = nil
+            Items = function(ply)
+                local hat = nil 
+
+                for _, h in ipairs(HL2CR_Cosmetics) do
+                    if h.Class == "hat_ballhead" then
+                        hat = h
+                        break
+                    end
+                end
+
+                table.insert(ply.hl2cr.Inventory.Cosmetics, hat)
+            end
         },
         IsRare = false
     },
@@ -183,7 +204,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_Flushed_Desc"),
         Rewards = {
             XP = 2500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -194,18 +215,18 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_HackAttack_Desc"),
         Rewards = {
             XP = 3500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
     
     What_Cat = {
         Name = translate.Get("Achievement_HL2_WhatCat_Name"), 
-        Mat = "vgui/achievements/hl2_beat_game.png", 
+        Mat = "vgui/achievements/hl2_break_miniteleporter.png", 
         Desc = translate.Get("Achievement_HL2_WhatCat_Desc"),
         Rewards = {
             XP = 2500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -216,7 +237,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_BlastPast_Desc"),
         Rewards = {
             XP = 1750,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -227,7 +248,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_BeatGame_Desc"),
         Rewards = {
             XP = 5000,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -238,7 +259,7 @@ ACHIEVEMENT = {
         Desc = translate.Get("Achievement_HL2_GiantKiller_Desc"),
         Rewards = {
             XP = 2500,
-            Item = nil
+            Items = nil
         },
         IsRare = false
     },
@@ -249,7 +270,7 @@ ACHIEVEMENT = {
         Desc =  translate.Get("Achievement_HL2_LambdaLocator_Desc"),
         Rewards = {
             XP = 17500,
-            Item = nil
+            Items = nil
         },
         IsRare = false,
         Value = 0,

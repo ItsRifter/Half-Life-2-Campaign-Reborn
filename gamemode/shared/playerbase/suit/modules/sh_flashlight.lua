@@ -205,11 +205,8 @@ if CLIENT then
     Calls the "EP2FlashlightHUDPaint" hook to see if it's overriden (in case you want to make your own)
     ]]
     hook.Add("HUDPaint", "auxpow_flashlight_hud", function()
-        local shouldDraw = hook.Run("EP2FlashlightHUDPaint", power) ~= true
-        if shouldDraw and GetConVar("cl_drawhud"):GetInt() > 0 then
-            local x, y = 431, 20
-            HL2CR_AUX:DrawFlashlightHUD(math.Round(x * HL2CR_AUX:GetScale()), ScrH() - math.Round(y * HL2CR_AUX:GetScale()))
-        end
+        local x, y = 431, 20
+        HL2CR_AUX:DrawFlashlightHUD(math.Round(x * HL2CR_AUX:GetScale()), ScrH() - math.Round(y * HL2CR_AUX:GetScale()))
     end)
 
 -- Receive EP2 flashlight power amount

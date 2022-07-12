@@ -52,7 +52,6 @@ function SWEP:Deploy()
 	self:SetHoldType("normal")
 	local vm = self.Owner:GetViewModel()
 	vm:SendViewModelMatchingSequence( vm:LookupSequence( "seq_admire" ) )
-	print(vm:LookupSequence( "seq_admire" ) )
 end
 
 function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )

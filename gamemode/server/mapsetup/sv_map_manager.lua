@@ -1,3 +1,5 @@
+MapLua = MapLua or nil
+
 MAPS_LOBBY = {
 	--Future maps will go here
 	["hl2cr_lobby_v2"] = true,
@@ -166,30 +168,31 @@ function StartMapCountdown()
 			return
 		end
 		
-		if game.GetMap() == "d1_town_02" and not file.Exists("hl2cr_data/ravenholmcheck.txt", "DATA") then
+		if game.GetMap() == "d1_town_02" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
 			RunConsoleCommand("changelevel", "d1_town_03")
 			return
-		elseif file.Exists("hl2cr_data/ravenholmcheck.txt", "DATA") then
+		elseif game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
 			RunConsoleCommand("changelevel", "d1_town_02a")
 			return
 		end
 		
 		if game.GetMap() == "d1_town_03" then
-			file.Write("hl2cr_data/ravenholmcheck.txt", "raven check")
+			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
 			RunConsoleCommand("changelevel", "d1_town_02")
 			return
 		end
 		
-		if game.GetMap() == "d2_coast_07" and not file.Exists("hl2cr_data/bridgecheck.txt", "DATA") then
-			file.Write("hl2cr_data/bridgecheck.txt", "coast bridge check")
+		if game.GetMap() == "d2_coast_07" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
+			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
 			RunConsoleCommand("changelevel", "d2_coast_08")
 			return
-		elseif game.GetMap() == "d2_coast_08" and file.Exists("hl2cr_data/bridgecheck.txt", "DATA") then
+		elseif game.GetMap() == "d2_coast_08" and game.GetGlobalState("hl2cr_extendedmap") then
 			RunConsoleCommand("changelevel", "d2_coast_07")
 			return
 		end
 		
-		if game.GetMap() == "d2_coast_07" and file.Exists("hl2cr_data/bridgecheck.txt", "DATA") then
+		if game.GetMap() == "d2_coast_07" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
+			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
 			RunConsoleCommand("changelevel", "d2_coast_09")
 			return 
 		end
@@ -309,4 +312,20 @@ function FailedMap()
 	timer.Simple(10, function()
 		RunConsoleCommand("ChangeLevel", game.GetMap())
 	end)
+end
+
+local mapChange = false
+
+function CheckPlayerCompleted()
+	if mapChange then return end
+	
+	--If the player count is over 4, check if completers is greater than total players divided
+	if #player.GetAll() >= 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > math.ceil((team.NumPlayers(TEAM_ALIVE) / 2)) then		
+		mapChange = true
+		StartMapCountdown()
+	--else just check if completers is greater than alive players
+	elseif #player.GetAll() < 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > team.NumPlayers(TEAM_ALIVE) then		
+		mapChange = true
+		StartMapCountdown()
+	end
 end

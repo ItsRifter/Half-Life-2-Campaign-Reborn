@@ -1,9 +1,24 @@
 ENT.Base = "base_brush"
 ENT.Type = "brush"
-ENT.MapChange = false
+
+local achievement_items = {
+	["models/props_c17/doll01.mdl"] = function()
+		game.SetGlobalState("hl2cr_bringitem_whatbaby", GLOBAL_ON)
+	end,
+
+	["models/roller.mdl"] = function()
+		if game.GetMap() == "d1_town_04" then
+			for _, v in ipairs(player.GetAll()) do
+				v:GrantAchievement("Ravenholm Ball")
+			end
+			
+			game.SetGlobalState("hl2cr_bringitem_rollermine", GLOBAL_DEAD)
+		end
+		game.SetGlobalState("hl2cr_bringitem_rollermine", GLOBAL_ON)
+	end
+}
 
 function ENT:Initialize()
-	
 	self:DrawShadow(false)
 	self:SetCollisionBoundsWS(self.Min, self.Max)
 	self:SetSolid(SOLID_BBOX)
@@ -14,12 +29,17 @@ end
 
 function ENT:Touch(ent)	
 	
-	if self.Func then
-		self.Func()
+	if ent:GetClass() == "prop_physics" and achievement_items[ent:GetModel()] then
+		achievement_items[ent:GetModel()]()
+		ent:Remove()
 	end
 	
 	if ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
 		
+		if self.Func then
+			self.Func()
+		end
+
 		ent:SetTeam(TEAM_COMPLETED_MAP)
 		
 		BroadcastMessageToAll(HL2CR_PlayerColour, ent:Nick(), HL2CR_StandardColour, translate.Get("Player_CompletedMap"), string.FormattedTime(CurTime(), "%02i:%02i"))
@@ -34,18 +54,8 @@ function ENT:Touch(ent)
 		end
 
 		ent:ToggleSpectator(true)
+		ent:Flashlight(false)
 	end
 
-	//If we're not changing, check if we should start changing the map
-	if not self.MapChange then
-		--If the player count is over 4, check if completers is greater than total players divided
-		if #player.GetAll() >= 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > math.ceil((team.NumPlayers(TEAM_ALIVE) / 2) + 1) then		
-			self.MapChange = true
-			StartMapCountdown()
-		--else just check if completers is greater than alive players
-		elseif #player.GetAll() < 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > team.NumPlayers(TEAM_ALIVE) then		
-			self.MapChange = true
-			StartMapCountdown()
-		end
-	end
+	CheckPlayerCompleted()
 end

@@ -10,20 +10,14 @@ function SetUpLobbyMap()
 	game.SetGlobalState("gordon_precriminal", 0)
 	game.SetGlobalState("friendly_encounter", 0)
 	
-	--Remove the Ravenholm check so players can't accidently skip maps
-	if file.Exists("hl2cr_data/ravenholmcheck.txt", "DATA") then
-		file.Delete("hl2cr_data/ravenholmcheck.txt", "DATA")
-	end
-	
+	--Remove the extended map check so players can't accidently skip maps
+	game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
+	game.SetGlobalState("hl2cr_bringitem_whatbaby", GLOBAL_DEAD)
+
 	SPAWNING_WEAPONS = {
 		"weapon_crowbar",
 		"weapon_physcannon"
 	}
-
-	--Same as above but for the bridge maps
-	if file.Exists("hl2cr_data/bridgecheck.txt", "DATA") then
-		file.Delete("hl2cr_data/bridgecheck.txt", "DATA")
-	end
 end
 
 --Called from the map, plays a specific chapter of the map

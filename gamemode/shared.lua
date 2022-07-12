@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
-GM.Name = "Half-Life 2: Campaign - Reborn"
-GM.Author = "Rifter"
+GM.Name = "Half-Life 2: Co-Op RPG"
+GM.Author = "ItsRifter"
 GM.Email = "d_thomas_smith30@hotmail.com"
 GM.Website = "N/A"
 

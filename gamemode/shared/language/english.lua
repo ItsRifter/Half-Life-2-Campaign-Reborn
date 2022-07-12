@@ -3,12 +3,32 @@ translate.AddLanguage("en", "English")
 //Template
 //LANGUAGE.Example_Test = "Example test"
 
+LANGUAGE.Chat_Announce_Difficulty = "Check or change the difficulty with !diff [1-5]"
+LANGUAGE.Chat_Announce_NotGordon = "Remember you are not Gordon Freeman, you won't survive everything"
+LANGUAGE.Chat_Announce_ReturnLobby = "Return to the lobby with !lobby"
+
 LANGUAGE.Player_Checkpoint = " activated the checkpoint"
 LANGUAGE.Player_CompletedMap = " has finished the map in "
 LANGUAGE.Player_Levelup = "System upgraded to level "
 LANGUAGE.Map_Finished = "Proceeding to next map in 20 seconds"
 
 LANGUAGE.Player_Class_Default = "Citizen"
+LANGUAGE.Player_Class_Default_Desc = "Standard citizen without any unique traits"
+LANGUAGE.Player_Class_FieldMedic = "Field Medic"
+LANGUAGE.Player_Class_FieldMedic_Desc = "Trained with a PH.D, medics are the rebels healer during a fire-fight"
+
+LANGUAGE.Player_Class_Advantages = "Advantages"
+LANGUAGE.Player_Class_Disadvantages = "Disadvantages"
+
+LANGUAGE.Player_Class_NoBuffDeBuff = "None"
+LANGUAGE.Player_Class_Buff_Recovery = "Self-Healing"
+LANGUAGE.Player_Class_Buff_HealEffective = "Medical Knowledge"
+
+LANGUAGE.Player_Class_Debuff_ArmorReduction = "Armor Reduction: "
+
+LANGUAGE.Class_Assigned = "You will be assigned to this class next spawn"
+
+LANGUAGE.Player_CosmeticApply = " has been equipped"
 
 LANGUAGE.Error_Player_Vehicle_TooFast = "Slow down, you can respawn your vehicle in "
 LANGUAGE.Error_Player_Vehicle_Exists = "Your vehicle already exists!"
@@ -22,6 +42,8 @@ LANGUAGE.Error_CMD_Invalid_Owner = "This jeep doesn't belong to you"
 LANGUAGE.Error_CMD_Invalid_Vehicle = "This command only works on Jeeps"
 LANGUAGE.Error_CMD_Seat_Exists = "You already have a passenger seat"
 LANGUAGE.Error_CMD_DiffSetOn = "This difficulty is already set to that level!"
+LANGUAGE.Error_Class_AlreadyAssigned = "You are already assigned to this class!"
+LANGUAGE.Error_Class_LowLevel = "You do not meet the level requirements for this class"
 
 LANGUAGE.Map_Enabled_Vehicles_Airboat = "The Airboat is now enabled"
 LANGUAGE.Map_Enabled_Vehicles_Airboat_WithGun = "The Airboat with mounted rifle is now enabled"
@@ -56,13 +78,26 @@ LANGUAGE.Chat_Player_Connect = " has joined the server"
 LANGUAGE.Chat_Player_Disconnect = " has left the server - REASON: "
 
 LANGUAGE.Skill_HPBoost_1_Name = "Health Boost I"
-LANGUAGE.Skill_HPBoost_1_Desc = "Increases your health by 5"
 LANGUAGE.Skill_HPBoost_2_Name = "Health Boost II"
-LANGUAGE.Skill_HPBoost_2_Desc = "Increases your health by 10"
-LANGUAGE.Skill_HPBoost_3_Name = "Health Boost II"
-LANGUAGE.Skill_HPBoost_3_Desc = "Increases your health by 10"
+LANGUAGE.Skill_HPBoost_3_Name = "Health Boost III"
+LANGUAGE.Skill_HPBoost_Desc = "Increases your health by "
+LANGUAGE.Skill_Armor_1_Name = "Armor Boost I"
+LANGUAGE.Skill_Armor_2_Name = "Armor Boost II"
+LANGUAGE.Skill_Armor_3_Name = "Armor Boost III"
+LANGUAGE.Skill_Armor_Desc = "Increases your Armor by "
 
 LANGUAGE.HUD_Stat_XP = "XP"
+
+LANGUAGE.Hat_Dollhead_Name = "Doll Head"
+LANGUAGE.Hat_Ballhead_Name = "Rollermine Head"
+
+LANGUAGE.HUD_Weapon_Crowsaw = "Crow-Saw"
+LANGUAGE.HUD_Weapon_RampageSMG = "Rampage SMG"
+LANGUAGE.HUD_Weapon_AutoPistol = "Auto-Pistol"
+LANGUAGE.HUD_Weapon_AmmoBox = "Ammo Box"
+LANGUAGE.HUD_Weapon_Crossbow = "Multi-Bolt Crossbow"
+
+LANGUAGE.HUD_Notice_UnspentSkills = " unspent skillpoints"
 
 LANGUAGE.MapResults_Title = "Map Results"
 LANGUAGE.MapResults_Kills = "Total Kills: "
@@ -92,17 +127,23 @@ LANGUAGE.Scoreboard_Player_Status_SuperAdmin = "This player is a super admin"
 LANGUAGE.QMenu_Gender_Update = "Your characters gender will be updated next spawn"
 LANGUAGE.QMenu_Panels_Main = "Inventory"
 LANGUAGE.QMenu_Panels_Skills = "Skills"
+LANGUAGE.QMenu_Panels_Classes = "Classes"
 LANGUAGE.QMenu_SkillPnl_SkillCost = "Cost: "
+LANGUAGE.QMenu_Class_Assign = "Assign Class"
+LANGUAGE.QMenu_Class_LevelReq = "Level Required: "
 
-LANGUAGE.Server_Warning_AFK  = "You are AFK, you will be kicked in 5 minutes"
+LANGUAGE.Server_Warning_AFK  = "You are AFK, you will be kicked if you don't return"
 LANGUAGE.Server_Warning_Returned = "You have returned from being AFK"
 LANGUAGE.Server_Announce_Achievement_Normal = " has earned the achievement "
 LANGUAGE.Server_Announce_Achievement_Rare = " has earned a rare achievement "
 
+LANGUAGE.Server_Announce_Vortex_Found = " has found the vortex"
+LANGUAGE.Server_Announce_Vortex_Spawn = "A vortex has spawned somewhere on the map"
+
 LANGUAGE.Achievement_XPReward = "XP Reward: "
 
-LANGUAGE.Achievement_HL2_RiseShine_Name = "Rise and Shine"
-LANGUAGE.Achievement_HL2_RiseShine_Desc = "Play Half-Life 2 Campaign Reborn for the first time"
+LANGUAGE.Achievement_Misc_RiseShine_Name = "Rise and Shine"
+LANGUAGE.Achievement_Misc_RiseShine_Desc = "Play Half-Life 2 Campaign Reborn for the first time"
 
 LANGUAGE.Achievement_HL2_Malcontent_Name = "Malcontent"
 LANGUAGE.Achievement_HL2_Malcontent_Desc = "Escape the apartment block raid"
@@ -110,8 +151,8 @@ LANGUAGE.Achievement_HL2_Submissive_Name = "Submissive"
 LANGUAGE.Achievement_HL2_Submissive_Desc = "Put the can in the trash"
 LANGUAGE.Achievement_HL2_Defiant_Name = "Defiant"
 LANGUAGE.Achievement_HL2_Defiant_Desc = "Hit the trashcan cop with the can"
-LANGUAGE.Achievement_HL2_RedBaby_Name = "Red Letter Baby?"
-LANGUAGE.Achievement_HL2_RedBaby_Desc = "Take the doll to Dr.Kleiner"
+LANGUAGE.Achievement_HL2_WhatBaby_Name = "What Baby?"
+LANGUAGE.Achievement_HL2_WhatBaby_Desc = "Bring the doll to Dr.Kleiner's main teleporter"
 LANGUAGE.Achievement_HL2_WhatCat_Name = "What Cat?"
 LANGUAGE.Achievement_HL2_WhatCat_Desc = "Break the mini-teleporter in Kleiner's lab"
 LANGUAGE.Achievement_HL2_TrustyHardware_Name = "Trusty Hardware"
@@ -150,3 +191,7 @@ LANGUAGE.Achievement_HL2_LambdaLocator_Name = "Lambda Locator"
 LANGUAGE.Achievement_HL2_LambdaLocator_Desc = "Find all lambda caches in Half-Life 2"
 LANGUAGE.Achievement_HL2_HackAttack_Name = "Hack Attack"
 LANGUAGE.Achievement_HL2_HackAttack_Desc = "Kill five enemies with a Manhack"
+
+LANGUAGE.Failed_HL2_Sand = "Keep off the sand failed by "
+
+LANGUAGE.Campaign_Finished_HL2 = "Congratulations on finishing Half-Life 2, returning to lobby in 60 seconds"

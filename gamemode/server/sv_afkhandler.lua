@@ -1,6 +1,6 @@
 --Afk Kicker by Salamafet, fitted for hl2cr
-AFK_WARN_TIME = 300
-AFK_TIME = 600
+AFK_WARN_TIME = 150
+AFK_TIME = 300
 
 hook.Add("PlayerInitialSpawn", "MakeAFKVar", function(ply)
 	ply.NextAFK = CurTime() + AFK_TIME

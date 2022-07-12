@@ -1,6 +1,6 @@
 local hl2cr_npc = FindMetaTable( "Entity" )
 
-local npc_base_damge = {
+local npc_base_damage = {
 	["npc_headcrab"] = {
 		["minDMG"] = 1,
 		["maxDMG"] = 5
@@ -17,12 +17,12 @@ function hl2cr_npc:SetStatsTraits()
 	timer.Simple(0.15, function()
 		if not self:IsValid() then return end
 
-		local newHealth = self:Health() * ( math.abs(1 + ((GetConVar("hl2cr_difficulty"):GetInt() - 1) * 0.25) ) )
+		local newHealth = self:Health() *  math.abs(1 + ( (GetConVar("hl2cr_difficulty"):GetInt() - 1) * 0.25) ) 
 		self:SetMaxHealth(newHealth)
 		self:SetHealth(newHealth)
 
-		if npc_base_damge[self:GetClass()] then
-			self.Damage = math.random(npc_base_damge[self:GetClass()].minDMG, npc_base_damge[self:GetClass()].maxDMG) * GetConVar("hl2cr_difficulty"):GetInt()
+		if npc_base_damage[self:GetClass()] then
+			self.Damage = math.random(npc_base_damage[self:GetClass()].minDMG, npc_base_damage[self:GetClass()].maxDMG) * GetConVar("hl2cr_difficulty"):GetInt()
 		end
 	end)
 end

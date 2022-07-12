@@ -45,20 +45,9 @@ Administrator.ClientCommands = {
 	["!petremove"] = { "Remove pet" },
 	["!petname"] = { "Name your pet" },
 	["!petfollow"] = { "Starts/Stops following you" },
-	["!ach"] = { "Opens Achievements" },
-	["!achievement"] = { "Opens Achievements" },
-	["!config"] = { "Opens Settings Menu" },
-	["!settings"] = { "Opens Settings Menu" },
 	["!seat"] = { "How to use: get in your Buggy", "", "Adds second seat in Buggy" },
 	["!afk"] = { "Sets you in Spectator mode" },
 	["!custom"] = { "Opens custom campaign menu" },
-	["!kickuser"] = { "Name", "", "Vote to kick somebody" },
-	["!vbb"] = { "Vote to teleport Barney nearby" },
-	["!vba"] = { "Vote to teleport Alyx nearby" },
-	["!votebringbarney"] = { "Vote to teleport Barney nearby" },
-	["!specnpc"] = { "Enable/Disable Special NPCs" },
-	["!specialnpcs"] = { "Enable/Disable Special NPCs" },
-	["!votebringalyx"] = { "Vote to teleport Alyx nearby" }
 }
 
 -- "!petsummon" = {""},
@@ -936,40 +925,31 @@ function Administrator.Chat.Chat.Think( )
 	end
 end
 
-local lastMessage = 60
-local nextMessageTime = 120
-
---[[
-local randomAutoMessage = {
-	[1] = "Type !custom while in lobby to play a custom campaign",
-	[2]	= "Difficulty too easy or hard? type !diff [1-5] (1 being lowest, 5 being highest)",
-	[3] = "Looking for an easier or one shot chance? type !surv",
-	[4]	= "Remember you are not gordon freeman, you won't survive everything",
-	[5] = "Need help or want to ask a question? ask a member of staff",
-	[6] = "Want to return to the lobby? type !lobby"
-}
+lastMessage = lastMessage or 60
 
 
-	[1] = translate.Get("ChatAnnounce_CustomMaps"),
-	[2]	= translate.Get("ChatAnnounce_Difficulty"),
-	[3] = translate.Get("ChatAnnounce_Survival"),
-	[4]	= translate.Get("ChatAnnounce_NotGordon"),
-	[5] = translate.Get("ChatAnnounce_Help"),
-	[6] = translate.Get("ChatAnnounce_ReturnLobby")
-
+local randomAutoMessage = {}
 
 function ChatAutoMessage()
 	if lastMessage > CurTime() then return end
 
+	if table.IsEmpty(randomAutoMessage) then
+		randomAutoMessage = {
+			[1]	= translate.Get("Chat_Announce_Difficulty"),
+			//[2] = translate.Get("Chat_Announce_Survival"),
+			[2]	= translate.Get("Chat_Announce_NotGordon"),
+			[3] = translate.Get("Chat_Announce_ReturnLobby")
+		}
+	end
+
 	local tab = {}
-	table.insert( tab, Color( 235, 100, 0) )
-	table.insert( tab, randomAutoMessage[math.random(1, 5)] )
+	table.insert( tab, Color( 255, 174, 0) )
+	table.insert( tab, randomAutoMessage[math.random(1, #randomAutoMessage)] )
 	chat.AddText( unpack( tab ) )
 	
-	lastMessage = nextMessageTime + CurTime()
+	lastMessage = math.random(120, 300) + CurTime()
 end
 
---]]
 
 hook.Add( "Think", "Administrator.Chat.Chat.Think", Administrator.Chat.Chat.Think )
 
@@ -1027,3 +1007,7 @@ function GM:OnPlayerChat( ply, strText, bTeamOnly, bPlayerIsDead )
 
 	return true
 end
+
+net.Receive("HL2CR_ChatHistory", function()
+	local message = net.ReadTable()
+end)

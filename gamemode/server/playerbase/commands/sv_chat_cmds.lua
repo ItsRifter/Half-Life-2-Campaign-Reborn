@@ -57,11 +57,6 @@ local chat_cmds = {
     ["!diff"] = function(ply, text)
         if not ply:IsValid() then return end
 
-        if CMD_TimeWaitVote > CurTime() then 
-            ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Vote_TooEarly"), tostring(math.Round(CMD_TimeWaitVote - CurTime()) ) )
-            return
-        end
-
         local diff_check = {
             [1] = translate.Get("CMD_Diff_Check_Normal"),
             [2] = translate.Get("CMD_Diff_Check_Hard"),
@@ -80,7 +75,12 @@ local chat_cmds = {
 
         if string.len(text) == 5 then
             ply:BroadcastMessage(HL2CR_GreenColour, translate.Get("CMD_Diff_Check"), HL2CR_StandardColour, diff_check[GetConVar("hl2cr_difficulty"):GetInt()])
-        else
+        elseif string.len(text) > 5 and string.len(text) <= 7 then
+            if CMD_TimeWaitVote > CurTime() then 
+                ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Vote_TooEarly"), tostring(math.Round(CMD_TimeWaitVote - CurTime()) ) )
+                return
+            end
+
             local num = string.sub(text, #text)
             num = tonumber(num)
 
@@ -99,6 +99,10 @@ local chat_cmds = {
     ["!pet"] = function(ply, text)
 
     end,
+
+    ["!discord"] = function(ply, text)
+        ply:SendLua([[gui.OpenURL("https://discord.gg/zvvZ2ugHQY")]])
+    end,
 }
 
 hook.Add("PlayerSay", "HL2CR_PlayerSayCMDs", function(ply, text)
@@ -106,7 +110,7 @@ hook.Add("PlayerSay", "HL2CR_PlayerSayCMDs", function(ply, text)
     if text[1] ~= "!" then return end
 
     local cmd = string.lower(text)
-    cmd = string.Left(cmd, #cmd - 2)
+    cmd = string.Split(cmd, " ")[1]
 
     if chat_cmds[cmd] then
         chat_cmds[cmd](ply, text)

@@ -53,6 +53,10 @@ if SERVER then
     power
     ]]
     hook.Add("Move", "auxpow_sprint_move", function(player, mv)
+        if player:IsBot() then
+            return false 
+        end
+        
         if (CanSprint(player) or player:Crouching()) then return end
         mv:SetMaxSpeed(player:GetWalkSpeed())
     end)
@@ -61,6 +65,10 @@ if SERVER then
     Runs the sprinting logic
   ]]
     hook.Add("AuxPowerTick", "auxpow_sprint", function(player)
+        if player:IsBot() then
+            return false 
+        end
+        
         if player:GetMoveType() == MOVETYPE_NOCLIP then HL2CR_AUX:RemoveExpense(player, ID) return end
         -- Temporaly disable player ability to sprint if it's exhausted
         if not HL2CR_AUX:HasPower(player) and not player.HL2CR_AUX.exhaust then
@@ -83,12 +91,21 @@ if SERVER then
   --[[
     Spawns the player with the variable to know if player is exhausted
   ]]
-    hook.Add("AuxPowerInitialize", "auxpow_sprint_init", function(player)
+    hook.Add("HL2CR_AuxPowerInitialize", "auxpow_sprint_init", function(player)
         player.HL2CR_AUX.exhaust = false
     end)
 end
 
 if CLIENT then
+   
+    local aux_no_suit = {
+        ["d1_trainstation_01"] = true,
+        ["d1_trainstation_02"] = true,
+        ["d1_trainstation_03"] = true,
+        ["d1_trainstation_04"] = true,
+        ["d1_trainstation_05"] = true
+    }
+   
     -- Parameters
     local SPRINT_SOUND = "player/suit_sprint.wav"
     local EXHAUST_SOUND = "common/wpn_denyselect.wav"
@@ -108,6 +125,7 @@ if CLIENT then
         
         if LocalPlayer():IsSprinting() then
             if canSprint then
+                if aux_no_suit[game.GetMap()] and not GetGlobalBool("HL2CR_GLOBAL_SUIT") then return end
                 if not sprinted then
                    surface.PlaySound(SPRINT_SOUND)
                     sprinted = true

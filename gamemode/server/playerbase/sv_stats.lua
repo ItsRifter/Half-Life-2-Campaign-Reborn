@@ -23,6 +23,33 @@ local XP_BASE_RANDOM = {
 	["npc_antlion_worker"] = {xpMin = 35, xpMax = 60},
 }
 
+local ALLOWED_ANTLIONS_XP = {
+	["ep2_outland_01"] = true,
+	["ep2_outland_01a"] = true,
+	["ep2_outland_02"] = true,
+	["ep2_outland_03"] = true,
+	["ep2_outland_04"] = true
+}
+
+local barnacleKilled = 0
+
+local MAP_ACHS = {
+	["d1_canals_01a"] = function(ply, npcKilled)
+
+		if ply:HasAchievement("Barnacle Bowling") then return end
+		
+		barnacleKilled = barnacleKilled + 1
+
+		if barnacleKilled >= 5 then
+			ply:GrantAchievement("Barnacle Bowling")
+		end
+
+		timer.Create("hl2cr_ach_barnacle_" .. ply:EntIndex(), 0.25, 1, function()
+			barnacleKilled = 0
+		end)
+	end
+}
+
 function hl2cr_player:AddXP(XP)
 
 	self.hl2cr.Exp = self.hl2cr.Exp + (XP * GetConVar("hl2cr_difficulty"):GetInt())
@@ -34,12 +61,11 @@ function hl2cr_player:AddXP(XP)
 	local notifyLevelUp = false
 
 	while self.hl2cr.Exp >= self.hl2cr.ReqExp do
-			
+
 		self.hl2cr.Exp = self.hl2cr.Exp - self.hl2cr.ReqExp
 		self.hl2cr.Level = self.hl2cr.Level + 1
 		self.hl2cr.SkillPoints = self.hl2cr.SkillPoints + 1
-		self.hl2cr.ReqExp = self.hl2cr.ReqExp + (750 * self.hl2cr.Level) / 2
-		
+		self.hl2cr.ReqExp = self.hl2cr.ReqExp + (375 * self.hl2cr.Level)
 		
 		notifyLevelUp = true
 	end
@@ -58,6 +84,12 @@ end
 
 hook.Add( "OnNPCKilled", "HL2CR_GiveXP", function( npc, attacker, inflictor )
 	if attacker:IsPlayer() then
+		if MAP_ACHS[game.GetMap()] then
+			MAP_ACHS[game.GetMap()](attacker, npc)
+		end
+		
+		if npc:GetClass() == "npc_antlion" and not ALLOWED_ANTLIONS_XP[game.GetMap()] then return end
+
 		if not XP_BASE_RANDOM[npc:GetClass()] then return end
 
 		attacker.MapStats.Kills = attacker.MapStats.Kills + 1

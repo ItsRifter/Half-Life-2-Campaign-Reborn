@@ -199,6 +199,14 @@ end
 
 if CLIENT then
 
+    local aux_no_suit = {
+        ["d1_trainstation_01"] = true,
+        ["d1_trainstation_02"] = true,
+        ["d1_trainstation_03"] = true,
+        ["d1_trainstation_04"] = true,
+        ["d1_trainstation_05"] = true
+    }
+
     local LABEL = "AUX POWER"
     local WIDTH, HEIGHT = 163, 41
     local EXPENSE_HEIGHT = 16
@@ -324,7 +332,7 @@ if CLIENT then
       ]]
       hook.Add("HUDPaint", "auxpow_drawhud", function()
         local shouldDraw = hook.Run("AuxPowerHUDPaint", client_auxpower, labels) ~= true
-        if shouldDraw and GetConVar("cl_drawhud"):GetInt() > 0 then
+        if shouldDraw and GetConVar("cl_drawhud"):GetInt() > 0 and not (aux_no_suit[game.GetMap()] and not GetGlobalBool("HL2CR_GLOBAL_SUIT")) then
             local x, y = 25, 87
             HL2CR_AUX:DrawHUDPanel(x * HL2CR_AUX:GetScale(), ScrH() - (y * HL2CR_AUX:GetScale()))
         end

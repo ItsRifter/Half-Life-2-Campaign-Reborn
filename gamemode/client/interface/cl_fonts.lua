@@ -39,14 +39,25 @@ surface.CreateFont( "hl2cr_scoreboard_version", {
 } )
 
 surface.CreateFont( "hl2cr_scoreboard_player", {
-	font = "Arial",
+	font = "Lato",
 	extended = false,
-	size = 24,
+	size = 26,
 	weight = 500,
 	blursize = 0,
 	scanlines = 0,
 	antialias = true,
 } )
+
+surface.CreateFont( "hl2cr_scoreboard_stats", {
+	font = "Open Sans",
+	extended = false,
+	size = 22,
+	weight = 250,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+} )
+
 
 surface.CreateFont( "hl2cr_voting_title", {
 	font = "Roboto",
@@ -101,6 +112,37 @@ surface.CreateFont( "hl2cr_qmenu_skill", {
 	extended = false,
 	size = 20,
 	weight = 400,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+} )
+
+
+surface.CreateFont( "hl2cr_qmenu_class_title", {
+	font = "Roboto",
+	extended = false,
+	size = 32,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+} )
+
+surface.CreateFont( "hl2cr_qmenu_class_desc", {
+	font = "Roboto",
+	extended = false,
+	size = 20,
+	weight = 500,
+	blursize = 0,
+	scanlines = 0,
+	antialias = true,
+} )
+
+surface.CreateFont( "hl2cr_qmenu_class_buffdebuff", {
+	font = "Nunito",
+	extended = false,
+	size = 24,
+	weight = 500,
 	blursize = 0,
 	scanlines = 0,
 	antialias = true,

@@ -8,6 +8,9 @@ local client_maps_no_suit = {
 local client_hidehud = {
 	["CHudHealth"] = true,
 	["CHudBattery"] = true,
+}
+
+local client_musthidehud = {
 	["CHudChat"] = true
 }
 
@@ -40,9 +43,7 @@ local fadeOut = 255
 
 hook.Add( "HUDPaint", "HL2CR_XPBar", function()
 
-	if client_maps_no_suit[game.GetMap()] or (game.GetMap() == "d1_trainstation_05" and not GetGlobalBool("HL2CR_GLOBAL_SUIT")) then
-		return 
-	end
+	if client_maps_no_suit[game.GetMap()] or (game.GetMap() == "d1_trainstation_05" and not GetGlobalBool("HL2CR_GLOBAL_SUIT")) then return end
 
 	if ( !IsValid( LocalPlayer() ) ) then return end
 
@@ -74,13 +75,19 @@ hook.Add( "HUDPaint", "HL2CR_XPBar", function()
 	end
 
 	//Empty
-	draw.RoundedBox( 4, ScrW() / 2.55, ScrH() - 80, barW, 45, Color(0, 0, 0, fadeOut) )
+	draw.RoundedBox( 4, ScrW() / 2.25, ScrH() / 1.075, barW, 45, Color(0, 0, 0, fadeOut) )
 
 	//Fill
-	draw.RoundedBox( 4, ScrW() / 2.55, ScrH() - 80, math.max( 0, smoothXP ) / reqXP * barW, 45, Color(255, 174, 0, fadeOut) )
+	draw.RoundedBox( 4, ScrW() / 2.25, ScrH() / 1.075, math.max( 0, smoothXP ) / reqXP * barW, 45, Color(255, 174, 0, fadeOut) )
 	
+	local percentage = math.Round((100 * xp) / reqXP, 1) .. "%"
+
 	//Text
-	draw.SimpleText(translate.Get("HUD_Stat_XP"), "hl2cr_hud_xp", ScrW() / 2.55, ScrH() - 55, Color(255, 200, 0, fadeOut), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	draw.SimpleText(translate.Get("HUD_Stat_XP") .. " " .. percentage, "hl2cr_hud_xp", ScrW() / 2.10, ScrH() / 1.05, Color(255, 200, 0, fadeOut), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
+	if LocalPlayer():GetNWInt("hl2cr_stat_skillpoints", -1 ) > 0 then
+		draw.SimpleText(LocalPlayer():GetNWInt("hl2cr_stat_skillpoints", -1 ) .. translate.Get("HUD_Notice_UnspentSkills") , "hl2cr_hud_xp", ScrW() / 2.3, ScrH() / 1.105, Color(255, 0, 0, fadeOut), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	end
 end )
 
 
@@ -97,11 +104,14 @@ net.Receive("HL2CR_ChatMessage", function()
 end)
 
 local curXPNotify = {}
+local xpTotalText = nil 
+local xpTotal = 0
 
 net.Receive("HL2CR_Update_XP", function()
 	lastUpdate = 6 + CurTime()
 	
 	newXP = net.ReadInt(32)
+	xpTotal = xpTotal + newXP
 
 	local xpText = vgui.Create("DLabel", xpPopup)
 	xpText:SetPos(ScrW() / 2.40, ScrH() - 115)
@@ -112,15 +122,49 @@ net.Receive("HL2CR_Update_XP", function()
 
 	table.insert(curXPNotify, xpText)
 
+	if #curXPNotify > 1 then
+		if xpTotalText then
+			xpTotalText:Remove()
+			xpTotalText = nil
+		end
+		
+		xpTotalText = vgui.Create("DLabel", xpPopup)
+
+		xpTotalText:SetPos(ScrW() / 2.175, ScrH() - 150)
+		xpTotalText:SetText(" = " .. xpTotal)
+		xpTotalText:SetTextColor(Color(255, 200, 0))
+		xpTotalText:SetFont("hl2cr_hud_xp")
+		xpTotalText:SizeToContents()
+
+		xpTotalText.Think = function(self)
+			if (lastUpdate - CurTime()) <= 4 then
+				xpTotalText:AlphaTo( 0, 1.25, 0, function()
+					xpTotal = 0
+					if not xpTotalText then return end
+					xpTotalText:Remove()
+					xpTotalText = nil
+				end)
+			end
+			if (lastUpdate - CurTime()) <= 2.85 then
+				xpTotal = 0
+			end
+		end
+	end
+
 	xpText:MoveTo( ScrW() / 2.40, ScrH() - 125 - (25 * #curXPNotify), 1, 0, -1, function()
-		xpText:AlphaTo( 0, 1, 0, function()
+		xpText:AlphaTo( 0, 1, 1, function()
 			table.remove(curXPNotify, #curXPNotify)
+			xpTotal = 0
 			xpText:Remove()
 		end)
 	end)
 end)
 
 hook.Add( "HUDShouldDraw", "HL2CR_HideHUD", function( name )
+	if client_musthidehud[name] and not Administrator.Chat.Chat.OpenOnce then
+		return false
+	end
+
 	if client_hidehud[name] and client_maps_no_suit[game.GetMap()] then
 		return false
 	elseif client_hidehud[name] and (game.GetMap() == "d1_trainstation_05" and not GetGlobalBool("HL2CR_GLOBAL_SUIT")) then

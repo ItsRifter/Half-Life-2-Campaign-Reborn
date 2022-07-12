@@ -1,7 +1,7 @@
 "Gamemode"
 {
 	"base" 			"base"
-	"title" 		"Half-Life 2: Campaign - Reborn"
+	"title" 		"Half-Life 2 Co-Op RPG"
 	"maps" 			""
 	"category"		"pve"
 	"menusystem" 		"0"

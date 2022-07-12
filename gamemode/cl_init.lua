@@ -17,6 +17,7 @@ include("shared/achievements/sh_ach_base.lua")
 
 include("shared/playerbase/sh_player_models.lua")
 include("shared/playerbase/skills/sh_skill_base.lua")
+include("shared/playerbase/classes/sh_class_base.lua")
 
 include("shared/playerbase/suit/sh_power.lua")
 include("shared/playerbase/suit/modules/sh_flashlight.lua")
@@ -25,3 +26,6 @@ include("shared/playerbase/suit/modules/sh_sprinting.lua")
 
 include("shared/pets/sh_pet_skills.lua")
 include("shared/pets/sh_pets.lua")
+
+include("shared/items/cosmetics/sh_cosmetic_base.lua")
+include("shared/items/cosmetics/sh_basic_cosmetics.lua")

@@ -7,8 +7,8 @@ local function InitData(ply)
 	--Player's name and model
 	ply.hl2cr.Name = ply.hl2cr.Name or ply:Nick()
 	ply.hl2cr.ModelType = ply.hl2cr.ModelType or {
-		["Type"] = "citizen",
-		["Gender"] = "male"
+		["Type"] = "Citizen",
+		["Gender"] = "Male"
 	}
 	
 	--Level
@@ -35,15 +35,27 @@ local function InitData(ply)
 		["Buffs"] = {},
 		["Debuffs"] = {}
 	}
+	
+	ply.hl2cr.Buffs = ply.hl2cr.Buffs or {}
+	ply.hl2cr.Debuffs = ply.hl2cr.Debuffs or {}
 
 	--Money/Experience
 	ply.hl2cr.Resin = ply.hl2cr.Resin or 0
 	ply.hl2cr.Exp = ply.hl2cr.Exp or 0
-	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 3000
+	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 2500
 	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints or 0
 
 	--Achievements
 	ply.hl2cr.Achievements = ply.hl2cr.Achievements or {}
+
+	--Inventory
+	ply.hl2cr.Inventory = ply.hl2cr.Inventory or {}
+	ply.hl2cr.Inventory.Items = ply.hl2cr.Inventory.Items or {}
+	ply.hl2cr.Inventory.Weapons = ply.hl2cr.Inventory.Weapons or {}
+	ply.hl2cr.Inventory.Cosmetics = ply.hl2cr.Inventory.Cosmetics or {}
+
+	--Cosmetics
+	ply.hl2cr.CurCosmetic = ply.hl2cr.CurCosmetic or ""
 end
 
 local function CreateData(ply)
@@ -87,19 +99,25 @@ end
 --If there isn't a HL2CR data folder, create one
 hook.Add("Initialize", "CreateDataFolder", function()
 	if not file.IsDir( "hl2cr_data", "DATA") then
-		print("MISSING HL2CR FOLDER: Making new one")
+		MsgC(HL2CR_GreenColour, "MISSING HL2CR FOLDER: Making new one\n")
 		file.CreateDir("hl2cr_data", "DATA")
 	end
 end)
 
 --When the player disconnects, save their data
 hook.Add("PlayerDisconnected", "HL2CR_SavePlayerDataDisconnect", function(ply) 
+	if ply:IsBot() then return end
+
 	SavePlayerData(ply)
+
+	CheckPlayerCompleted()
 end)
 
 --Upon a map change or server shutdown, save everyones progress
 hook.Add( "ShutDown", "HL2CR_MapChangeSave", function() 
 	for _, ply in ipairs( player.GetAll() ) do
+		if ply:IsBot() then continue end
+
 		SavePlayerData(ply)
 	end
 end)
