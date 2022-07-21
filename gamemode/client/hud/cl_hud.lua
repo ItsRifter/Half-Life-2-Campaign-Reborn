@@ -199,5 +199,28 @@ hook.Add( "player_connect_client", "HL2CR_PlayerConnect", function( data )
 	end
 
 	chat.AddText(Color(240, 175, 0), name .. translate.Get("Chat_Player_Connect"))
-
 end)
+
+local isDebugging = false
+
+concommand.Add("hl2cr_debugmode", function(ply)
+	if not ply:IsAdmin() then return end
+
+	if isDebugging then
+		isDebugging = false
+	else
+		isDebugging = true
+	end
+end)
+
+hook.Add("PostDrawHUD", "HL2CR_DebugDraw", function()
+	if isDebugging == false then return end
+
+	local trace = LocalPlayer():GetEyeTrace()
+	local angle = trace.HitNormal:Angle()
+				
+	surface.SetDrawColor(Color(0, 0, 0, 255))
+	surface.SetTextPos( ScrW() / 2.5, ScrH() / 1.90 )
+	surface.SetFont("hl2cr_scoreboard_player")
+	surface.DrawText( tostring(trace.HitPos) )
+end )

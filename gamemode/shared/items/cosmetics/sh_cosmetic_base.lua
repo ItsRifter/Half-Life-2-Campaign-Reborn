@@ -34,22 +34,6 @@ local ravenhead = {
 
 CreateCosmetic(ravenhead)
 
-if SERVER then
-    concommand.Add("hl2cr_hat_test", function(ply)
-        table.Empty(ply.hl2cr.Inventory.Cosmetics)
-        table.insert(ply.hl2cr.Inventory.Cosmetics, dollhead)
-
-        local cosmetics = {}
-
-        for _, c in ipairs(ply.hl2cr.Inventory.Cosmetics) do
-            table.insert(cosmetics, c.Name)
-        end
-
-        ply:SetNWString("hl2cr_items_cosmetics", table.concat(cosmetics, " "))
-
-    end)
-end
-
 if CLIENT then
     pastOutfit = pastOutfit or nil
 

@@ -26,10 +26,6 @@ local function CreateMainPanel()
 
 	mainPnlPlayerModel.Angles = Angle(0, 25, 0)
 
-	if pastOutfit then
-		//Figure out how to do PAC stuff in the menu
-	end
-
 	function mainPnlPlayerModel:DragMousePress()
 		self.PressX, self.PressY = input.GetCursorPos()
 		self.Pressed = true
@@ -70,7 +66,7 @@ local function CreateMainPanel()
 			net.WriteString(value)
 		net.SendToServer()
 	end
-	print(LocalPlayer():GetNWString("hl2cr_items_cosmetics"))
+	
 	local cosmetics = string.Explode("  ", LocalPlayer():GetNWString("hl2cr_items_cosmetics"))
 
 	local playerCosmeticCombo = vgui.Create( "DComboBox", mainPnlPlayer )
@@ -95,6 +91,10 @@ local function CreateMainPanel()
 			net.WriteString(value)
 		net.SendToServer()
 	end
+
+	local invPnl = vgui.Create("DPanel", mainPnl)
+	invPnl:SetSize(mainPnl:GetWide() / 1.5, mainPnl:GetTall() / 2)
+	invPnl:SetPos(mainPnl:GetWide() / 1.5 - 500, mainPnl:GetTall() / 2 - 275)
 
 	return mainPnl
 end

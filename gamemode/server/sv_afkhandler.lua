@@ -6,7 +6,7 @@ hook.Add("PlayerInitialSpawn", "MakeAFKVar", function(ply)
 	ply.NextAFK = CurTime() + AFK_TIME
 end)
 
-hook.Add("Think", "HandleAFKPlayers", function()
+hook.Add("Tick", "HandleAFKPlayers", function()
 	for _, ply in ipairs(player.GetAll()) do
 		if ( ply:IsConnected() and ply:IsFullyAuthenticated() ) then
 			if ply:IsAdmin() then continue end

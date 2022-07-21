@@ -20,23 +20,6 @@ function SetUpLobbyMap()
 	}
 end
 
---Called from the map, plays a specific chapter of the map
-function BeginHL2(chapter)
-	if chapter == "D1" then
-		RunConsoleCommand("changelevel", "d1_trainstation_01")
-	elseif chapter == "D2" then
-		RunConsoleCommand("changelevel", "d2_coast_01")
-	elseif chapter == "D3" then
-		RunConsoleCommand("changelevel", "d3_c17_02")
-	elseif chapter == "lostcoast" then
-		RunConsoleCommand("changelevel", "d2_lostcoast")
-	end
-end
-
-function BeginEP1()
-	RunConsoleCommand("changelevel", "ep1_citadel_00")
-end
-
 function BeginCustom(map)
 	RunConsoleCommand("changelevel", map)
 end

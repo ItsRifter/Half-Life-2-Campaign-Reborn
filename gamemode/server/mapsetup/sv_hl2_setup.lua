@@ -413,6 +413,14 @@ local HL2_TRIGGERS = {
                         v.vehicle = nil
                     end
                 end
+
+                local tempAirboat = ents.Create(Airboat.Class)
+                tempAirboat:SetModel(Airboat.Model)
+                tempAirboat:SetPos(Vector(6340, 4855, -945))
+                tempAirboat:SetAngles(Angle(0, 90, 0))
+                tempAirboat:Activate()
+                tempAirboat:Fire( "addoutput", "targetname airboat" );
+                tempAirboat:Spawn()
             end,
 
             [2] = function()
@@ -1493,6 +1501,36 @@ local HL2_TRIGGERS = {
             [2] = Vector(-635, 4, -248),
             [3] = Vector(-680, -420, 1292)
         }
+    },
+
+    ["d2_lostcoast"] = {
+        ["changelevels"] = {
+            [1] = Vector(1155, 2902, 2528),
+            [2] = Vector(1046, 3018, 2556)
+        },
+
+        ["checkpoints"] = {
+            [1] = {
+                [1] = Vector(1857, 4768, 2564),
+                [2] = Vector(1922, 4731, 2696),
+            },
+            
+            [2] = {
+                [1] = Vector(1723, 3482, 2853),
+                [2] = Vector(1219, 3521, 2700)
+            },
+
+            [3] = {
+                [1] = Vector(2094, 3008, 2692),
+                [2] = Vector(1987, 3064, 2899)
+            }
+        },
+
+        ["checkpoint_spot"] = {
+            [1] = Vector(1888, 4662, 2571),
+            [2] = Vector(1474, 3536, 2714),
+            [3] = Vector(2041, 2979, 2698)
+        }
     }
 }
 
@@ -1561,7 +1599,7 @@ local function SetHL2Checkpoints()
 
     //If this map doesn't have support, throw a message and stop here
     if not HL2_TRIGGERS[game.GetMap()] then
-        print(MsgC(Color(255, 0, 0), "HL2 Co-Op RPG ERROR - MAP IS NOT SUPPORTED"))
+        print(MsgC(Color(255, 0, 0), "HL2 CO-OP RPG ERROR - MAP IS NOT SUPPORTED"))
         return
     end
 
@@ -1795,6 +1833,7 @@ local function SetUpMisc()
 		blocker_2:Spawn()
 
         ents.FindByName("gatehouse_door2")[1]:Fire("AddOutput", "OnOpen hl2crlua:RunPassedCode:RemoveBlockers()")
+        ents.FindByModel("models/props_c17/oildrum001_explosive.mdl")[5]:Remove()
 	end
 	
 	if game.GetMap() == "d1_canals_10" then
@@ -2053,3 +2092,7 @@ function ResetLaserTrap()
 	
 	ents.FindByName("s_room_panelswitch")[1]:Fire("UnLock")
 end
+
+concommand.Add("hl2cr_entinfo", function(ply)
+    print(ply:GetEyeTrace().Entity)
+end)

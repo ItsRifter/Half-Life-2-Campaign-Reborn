@@ -35,7 +35,3 @@ function SetUpVortex()
 
 end
 
-concommand.Add("hl2cr_vortex", function(ply)
-    SetUpVortex()
-end)
-

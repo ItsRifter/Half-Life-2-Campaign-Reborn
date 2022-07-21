@@ -165,10 +165,10 @@ votingTypes["BeginHL2"] = {
 		local positive, negative = countVotes(state)
 		
 		if positive > negative then
-			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Sucess_Map_HL2"))
+			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Success_Map_HL2"))
 			BroadcastSoundToAll("hl2cr/begin_game.wav")
 			timer.Simple(10, function()
-				RunConsoleCommand("ChangeLevel", "d1_trainstation_01")
+				RunConsoleCommand("changelevel", "d1_trainstation_01")
 			end)
 		else
 			BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Vote_Fail_Default"))
@@ -182,10 +182,10 @@ votingTypes["BeginEP1"] = {
 		local positive, negative = countVotes(state)
 		
 		if positive > negative then
-			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Sucess_Map_EP1"))
+			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Success_Map_EP1"))
 			BroadcastSoundToAll("hl2cr/begin_game.wav")
 			timer.Simple(10, function()
-				BeginEP1()
+				RunConsoleCommand("changelevel", "ep1_citadel_00")
 			end)
 		else
 			BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Vote_Fail_Default"))
@@ -193,33 +193,16 @@ votingTypes["BeginEP1"] = {
 	end
 }
 
-votingTypes["BeginRND"] = {
-	Description = translate.Get("Vote_Type_MapSeries_HL2"),
+votingTypes["BeginLostCoast"] = {
+	Description = translate.Get("Vote_Type_MapSeries_HL2_LostCoast"),
 	Callback = function(state)
 		local positive, negative = countVotes(state)
 		
 		if positive > negative then
-			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Sucess_Map_Custom"))
-			BroadcastSound("hl2cr/begin_game.wav")
+			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Success_Map_HL2_LostCoast"))
+			BroadcastSoundToAll("hl2cr/begin_game.wav")
 			timer.Simple(10, function()
-				RunConsoleCommand("ChangeLevel", "level_1a")
-			end)
-		else
-			BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Vote_Fail_Default"))
-		end
-	end
-}
-
-votingTypes["BeginPursoups"] = {
-	Description = translate.Get("Vote_Type_MapSeries_Custom_Pursoup"),
-	Callback = function(state)
-		local positive, negative = countVotes(state)
-		
-		if positive > negative then
-			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Sucess_Map_Custom"))
-			BroadcastSound("hl2cr/begin_game.wav")
-			timer.Simple(10, function()
-				RunConsoleCommand("ChangeLevel", "level01_synb2_entryway_of_doom")
+				RunConsoleCommand("changelevel", "d2_lostcoast")
 			end)
 		else
 			BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Vote_Fail_Default"))
