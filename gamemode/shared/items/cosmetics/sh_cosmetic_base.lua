@@ -24,7 +24,7 @@ local ravenhead = {
         
         dmgInfo = DamageInfo()
         dmgInfo:SetDamageType(DMG_SHOCK)
-        dmgInfo:SetDamage(20)
+        dmgInfo:SetDamage(25)
         dmgInfo:SetAttacker(ply)
 
         attacker:TakeDamageInfo(dmgInfo)
@@ -39,6 +39,8 @@ if CLIENT then
 
     function ApplyCosmetic(outfit, owner)
         pac.SetupENT(owner)
+
+        if owner == nil then return end
 
         if pastOutfit then
             owner:RemovePACPart(pastOutfit)

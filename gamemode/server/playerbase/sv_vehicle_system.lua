@@ -165,7 +165,7 @@ function GM:ShowSpare2(ply)
 	
 	ply.HasSeat = false
 
-	if ply.vehicle:IsValid() then
+	if ply.vehicle and ply.vehicle:IsValid() then
 		ply.vehicle:Remove()
 	end
 

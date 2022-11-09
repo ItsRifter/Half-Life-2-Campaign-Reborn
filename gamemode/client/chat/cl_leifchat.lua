@@ -927,7 +927,6 @@ end
 
 lastMessage = lastMessage or 60
 
-
 local randomAutoMessage = {}
 
 function ChatAutoMessage()
@@ -938,7 +937,8 @@ function ChatAutoMessage()
 			[1]	= translate.Get("Chat_Announce_Difficulty"),
 			//[2] = translate.Get("Chat_Announce_Survival"),
 			[2]	= translate.Get("Chat_Announce_NotGordon"),
-			[3] = translate.Get("Chat_Announce_ReturnLobby")
+			[3] = translate.Get("Chat_Announce_ReturnLobby"),
+			//[4] = translate.Get("Chat_Announce_Discord")
 		}
 	end
 

@@ -36,7 +36,6 @@ HOSTILE_NPCS = {
     ["npc_metropolice"] = true,
     ["npc_manhack"] = true,
     ["npc_combine_s"] = true,
-    ["npc_combine_s"] = true,
     ["npc_antlionguard"] = true,
     ["npc_antlionguardian"] = true,
     ["npc_barnacle"] = true,
@@ -51,32 +50,41 @@ local poison_npcs = {
 }
 
 function hl2cr_npc:IsFriendly()
-	if self:IsValid() and self:IsNPC() and (FRIENDLY_NPCS[self:GetClass()] or FRIENDLY_HARMABLE_NPCS[self:GetClass()]) then
-		return true
-	else
-		return false
-	end
+	if self:IsValid() and self:IsNPC() then
+        if FRIENDLY_NPCS[self:GetClass()] or FRIENDLY_HARMABLE_NPCS[self:GetClass()] then
+            return true
+        end
+
+        if self:GetClass() == "npc_vortigaunt" and !MAPS_VORT_HOSTILE[game.GetMap()] then
+            return true 
+        end
+    end
+
+    return false
 end
 
 function hl2cr_npc:IsHostile()
 	if self:IsValid() and self:IsNPC() and HOSTILE_NPCS[self:GetClass()] then
 		return true
-	else
-		return false
-	end
+    end
+
+    return false
 end
 
+local weapon_melees = {
+	["weapon_crowbar"] = true
+}
+
 hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo )
+    local attacker = dmgInfo:GetAttacker()
 
     if target:IsPlayer() then
     
-        local npcAttacker = dmgInfo:GetAttacker()
-
-        if target.hl2cr.CurCosmetic ~= "" then
+        if target.hl2cr.CurCosmetic ~= "" and !attacker:IsPlayer() then
             for _, c in ipairs(HL2CR_Cosmetics) do
                 if c.Class == target.hl2cr.CurCosmetic then
                     if not c.TakeDamageFunc then break end
-                    c.TakeDamageFunc(target, npcAttacker, dmgInfo:GetDamageType())
+                    c.TakeDamageFunc(target, attacker, dmgInfo:GetDamageType())
                     break
                 end
             end
@@ -87,7 +95,7 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
 			return
 		end
 
-        if npcAttacker:GetClass() == "npc_rollermine" and game.GetMap() == "d1_eli_02" then
+        if attacker:GetClass() == "npc_rollermine" and game.GetMap() == "d1_eli_02" then
             dmgInfo:SetDamage(0)
         end
 
@@ -95,10 +103,10 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
             return false
         end
 
-        if npcAttacker:GetCustomDamage() then
-            dmgInfo:SetDamage(npcAttacker:GetCustomDamage()) 
+        if attacker:GetCustomDamage() then
+            dmgInfo:SetDamage(attacker:GetCustomDamage()) 
         else
-            if poison_npcs[npcAttacker:GetClass()] then return false end
+            if poison_npcs[attacker:GetClass()] then return false end
 
             dmgInfo:SetDamage(dmgInfo:GetDamage() * GetConVar("hl2cr_difficulty"):GetInt())
         end
@@ -111,14 +119,6 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
         if target:IsPet() then
             return true
         end
-
-        if target:GetClass() == "npc_vortigaunt" and not MAPS_VORT_HOSTILE[game.GetMap()] then
-            return true
-        end
-
-        if (FRIENDLY_NPCS[target:GetClass()] or (FRIENDLY_HARMABLE_NPCS[target:GetClass()]) and playerAtt:IsPlayer()) then
-            return true
-        end
     else
         if target:GetClass() == "item_ammo_crate" then
             local playerAtt = dmgInfo:GetAttacker()
@@ -129,6 +129,20 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
             timer.Create("hl2cr_itemcrate_wait_" .. playerAtt:EntIndex(), 0.85, 2, function()
                 playerAtt:CheckAllAmmo()
             end)
+        end
+    end
+end)
+
+hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo )
+	local attacker = dmgInfo:GetAttacker()
+
+    if target:IsFriendly() and attacker:IsPlayer() then return true end
+
+    if attacker:IsPlayer() then
+        if attacker.hl2cr.Buffs.MeleeDMG and weapon_melees[attacker:GetActiveWeapon():GetClass()] then
+            dmgInfo:ScaleDamage(attacker.hl2cr.Buffs.MeleeDMG)
+        elseif attacker.hl2cr.Debuffs.WeaponDMGDivide then
+            dmgInfo:ScaleDamage(attacker.hl2cr.Buffs.WeaponDMGDivide)
         end
     end
 end)

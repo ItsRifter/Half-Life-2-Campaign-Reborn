@@ -24,7 +24,7 @@ include("shared/playerbase/suit/modules/sh_flashlight.lua")
 include("shared/playerbase/suit/modules/sh_oxygen.lua")
 include("shared/playerbase/suit/modules/sh_sprinting.lua")
 
-include("shared/pets/sh_pet_skills.lua")
+include("shared/pets/sh_pets_setup.lua")
 include("shared/pets/sh_pets.lua")
 
 include("shared/items/cosmetics/sh_cosmetic_base.lua")

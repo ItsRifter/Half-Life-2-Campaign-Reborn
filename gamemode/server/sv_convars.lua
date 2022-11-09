@@ -20,10 +20,10 @@ CreateConVar("hl2cr_specials", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Enable/Dis
 //Flashlight
 CreateConVar("hl2cr_suit_default_rate", 0.05, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 100)
 CreateConVar("hl2cr_suit_default_delay", 0.01, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 100)
-CreateConVar("hl2cr_suit_default_flashlight_rate", 0.05, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 100)
-CreateConVar("hl2cr_suit_default_flashlight_delay", 0.01, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 10)
-CreateConVar("hl2cr_suit_default_recharge_rate", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 10)
-CreateConVar("hl2cr_suit_default_recharge_delay", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 10)
+CreateConVar("hl2cr_suit_default_flashlight_rate", 0.05, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the flashlight drain power", 0, 100)
+CreateConVar("hl2cr_suit_default_flashlight_delay", 0.01, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the flashlight regain power", 0, 10)
+CreateConVar("hl2cr_suit_default_recharge_rate", 0.05, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit regain power", 0, 10)
+CreateConVar("hl2cr_suit_default_recharge_delay", 0.01, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit regain power", 0, 10)
 
 --Misc
 CreateConVar("hl2cr_vortex_chance", 65, {FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, "The chance of a vortex spawning in a specific map", 1, 100)

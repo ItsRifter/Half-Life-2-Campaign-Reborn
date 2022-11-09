@@ -589,8 +589,8 @@ local HL2_TRIGGERS = {
 
     ["d1_town_02a"] = {
         ["changelevels"] = {
-            [1] = Vector(-6531, -641, -3140),
-            [2] = Vector(-6638, -722, -3261)
+            [1] = Vector(-6637, -745, -3257),
+            [2] = Vector(-6529, -593, -3094)
         },
 
         ["checkpoints"] = {
@@ -728,6 +728,7 @@ local HL2_TRIGGERS = {
             [1] = Vector(3051, 1601, 1536),		
             [2] = Vector(3135, 1786, 1665)
         },
+        
         ["checkpoints"] = {
             [1] = {
                 [1] = Vector(3062, -6920, 1922),
@@ -1547,6 +1548,7 @@ MAPS_NO_PETS = {
 	["d1_trainstation_03"] = true,
 	["d1_trainstation_04"] = true,
 	["d1_trainstation_05"] = true,
+    ["d1_eli_01"] = true,
 	["d3_breen_01"] = true
 }
 
@@ -1587,6 +1589,18 @@ NO_RESULT_MAPS = {
 	["d1_trainstation_05"] = true,
 	["d1_eli_01"] = true,
 	["d3_citadel_05"] = true,
+}
+
+MAPS_NO_HL2CR_WEAPONS = {
+    ["d1_trainstation_01"] = true,
+	["d1_trainstation_02"] = true,
+	["d1_trainstation_03"] = true,
+	["d1_trainstation_04"] = true,
+	["d1_trainstation_05"] = true,
+    ["d3_citadel_03"] = true,
+	["d3_citadel_04"] = true,
+	["d3_citadel_05"] = true,
+	["d3_breen_01"] = true
 }
 
 local function SetHL2Checkpoints()
@@ -1740,6 +1754,8 @@ local function SetUpMisc()
     end
     
     if game.GetGlobalState("hl2cr_bringitem_rollermine") == GLOBAL_ON then
+        game.SetGlobalState("hl2cr_bringitem_rollermine", GLOBAL_DEAD)
+        
         local ball = ents.Create("prop_physics")
         ball:SetModel("models/roller.mdl")
 
@@ -1749,7 +1765,6 @@ local function SetUpMisc()
             ball:SetPos(ravenball_pos[game.GetMap()])
         end
         
-        game.SetGlobalState("hl2cr_bringitem_rollermine", GLOBAL_DEAD)
         ball:Spawn()
     end
 
@@ -1785,6 +1800,14 @@ local function SetUpMisc()
 	if game.GetMap() == "d1_trainstation_01" then
 		game.SetGlobalState("gordon_precriminal", 1)
 		game.SetGlobalState("gordon_invulnerable", 1)
+
+        for _, v in ipairs(ents.FindByClass("point_viewcontrol")) do
+            v:Remove()
+        end
+
+        for _, t in ipairs(ents.FindByName("track_viewcontrol_final_*")) do
+            t:Remove()
+        end
 	end
 
     if game.GetMap() == "d1_trainstation_02" then
@@ -2032,6 +2055,7 @@ function RemoveBridgeBlocker()
     blocker:Remove()
 end
 
+
 function RemoveBlockers()
     if ents.FindByName("blocker_1")[1] then
         ents.FindByName("blocker_1")[1]:Remove()
@@ -2045,6 +2069,14 @@ end
 function RemovePushTrigger()
 	ents.FindByClass("trigger_pushback")[1]:Remove()
 end
+
+hook.Add("GravGunOnPickedUp", "HL2CR_Achievement_BlastPast", function(ply, ent)
+    if game.GetMap() == "d1_eli_02" then
+        if ent:GetModel() == "models/props_lab/hevplate.mdl" then
+            ply:GrantAchievement("Blast from the Past")
+        end
+    end
+end)
 
 function GiveGravGun()
 	for _, v in ipairs(player.GetAll()) do

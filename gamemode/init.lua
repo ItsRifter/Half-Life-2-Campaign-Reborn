@@ -20,6 +20,8 @@ include("server/playerbase/commands/sv_chat_cmds.lua")
 include("server/mapsetup/sv_map_manager.lua")
 include("server/mapsetup/sv_lobby_setup.lua")
 include("server/mapsetup/sv_hl2_setup.lua")
+include("server/mapsetup/sv_ep1_setup.lua")
+include("server/mapsetup/sv_coop_setup.lua")
 include("server/mapsetup/sv_map_equipment.lua")
 include("server/mapsetup/sv_vortex_setup.lua")
 
@@ -60,7 +62,7 @@ include("shared/playerbase/classes/sh_class_base.lua")
 include("shared/playerbase/skills/sh_skill_base.lua")
 
 //Pets
-include("shared/pets/sh_pet_skills.lua")
+include("shared/pets/sh_pets_setup.lua")
 include("shared/pets/sh_pets.lua")
 
 //Suit
@@ -73,10 +75,10 @@ include("shared/playerbase/suit/modules/sh_sprinting.lua")
 include("shared/achievements/sh_ach_base.lua")
 
 hook.Add("PrePACConfigApply", "HL2CR_PreventPac3Autoload", function(ply, outfit_data)
-    if ply.CanLoadPac3 or ply:IsAdmin() then
-        ply.CanLoadPac3 = false
-        return true
-    end
+    -- if ply.CanLoadPac3 or ply:IsAdmin() then
+    --     ply.CanLoadPac3 = false
+    --     return false
+    -- end
 
     return false
 end)

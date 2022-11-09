@@ -105,7 +105,7 @@ if SERVER then
     @param {number|nil} how many seconds of downtime will the aux. power have after being drained
     ]]
     function HL2CR_AUX:AddExpense(player, id, label, rate, expense, downtime)
-        expense = expense or 0.01
+        expense = expense or 0.05
         downtime = downtime or 0
     
         if (HL2CR_AUX:GetExpenses(player)[id] ~= nil) then return end
@@ -172,7 +172,7 @@ if SERVER then
             regenTick = 0, -- Power regeneration tick time
             expense = {} -- Power expenses
         }
-
+        
         player.HL2CR_AUX.flashlight = {power = 1, tick = 0}
 
         -- Setup timer if it doesn't exist

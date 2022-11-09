@@ -4,6 +4,8 @@ local chat_cmds = {
     ["!vrm"] = function(ply, text)
         if not ply:IsValid() then return end
 
+        if MAPS_LOBBY[game.GetMap()] then return end
+        
         if CMD_TimeWaitVote > CurTime() then 
             ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Vote_TooEarly"), tostring(math.Round(CMD_TimeWaitVote - CurTime()) ) )
             return
@@ -15,6 +17,8 @@ local chat_cmds = {
 
     ["!lobby"] = function(ply, text)
         if not ply:IsValid() then return end
+
+        if MAPS_LOBBY[game.GetMap()] then return end
 
         if CMD_TimeWaitVote > CurTime() then 
             ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Vote_TooEarly"), tostring(math.Round(CMD_TimeWaitVote - CurTime()) ) )
@@ -100,9 +104,36 @@ local chat_cmds = {
 
     end,
 
-    ["!discord"] = function(ply, text)
-        ply:SendLua([[gui.OpenURL("https://discord.gg/zvvZ2ugHQY")]])
+    ["!petspawn"] = function(ply, text)
+        CreatePet(ply)
     end,
+
+    ["!petremove"] = function(ply, text)
+        if ply.activePet then
+            ply.activePet:RemovePet()
+        end
+    end,
+
+    ["!petbring"] = function(ply, text)
+        BringPetToPlayer(ply)
+    end,
+
+    ["!petname"] = function(ply, text)
+        local newName = string.sub(text, 9)
+        
+        for _, p in ipairs(ply.hl2cr.Pets) do
+            if p.Active then
+                p.Name = newName
+                break
+            end
+        end
+        
+        ply:SetNWString("hl2cr_petstat_name", newName)
+    end,
+
+    //["!discord"] = function(ply, text)
+    //    ply:SendLua([[gui.OpenURL("https://discord.gg/zvvZ2ugHQY")]])
+    //end,
 }
 
 hook.Add("PlayerSay", "HL2CR_PlayerSayCMDs", function(ply, text)

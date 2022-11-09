@@ -163,7 +163,7 @@ function hl2cr_player:ChangeModel()
 	[math.random(1, #ServerModels[self.hl2cr.ModelType.Type][self.hl2cr.ModelType.Gender])])
 end
 
-function hl2cr_player:UpdateClass(className)
+function hl2cr_player:SetClass(className)
 	
 	if self.hl2cr.Class.Name == className then
 		self:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Class_AlreadyAssigned"))
@@ -184,7 +184,7 @@ function hl2cr_player:UpdateClass(className)
 		return
 	end
 
-	assignClass.Func(self)
+	self.NewClass = assignClass
 
 	self:BroadcastMessage(HL2CR_GreenColour, translate.Get("Class_Assigned"))
 end
@@ -197,17 +197,10 @@ function hl2cr_player:SetUpPlayer()
 
 	self:ChangeModel()
 	
-	timer.Simple(1, function()
+	timer.Simple(2, function()
 		self:SetupHands()
 		self:ApplyCosmeticSpawn()
 	end)
-
-	self:SetNWInt("hl2cr_stat_level", self.hl2cr.Level)
-	self:SetNWInt("hl2cr_stat_exp", self.hl2cr.Exp)
-	self:SetNWInt("hl2cr_stat_expreq", self.hl2cr.ReqExp)
-	self:SetNWInt("hl2cr_stat_skillpoints", self.hl2cr.SkillPoints)
-	self:SetNWString("hl2cr_stat_skills", table.concat(self.hl2cr.Skills, " "))
-	self:SetNWString("hl2cr_class", self.hl2cr.Class.Name)
 
 	local cosmetics = {}
 
@@ -217,13 +210,13 @@ function hl2cr_player:SetUpPlayer()
 
 	self:SetNWString("hl2cr_items_cosmetics", table.concat(cosmetics, "  "))
 
-	if self.hl2cr.Statistics.HealthBonus > 0 then
-		self:SetMaxHealth(self:Health() + self.hl2cr.Statistics.HealthBonus)
+	if self.statHP then
+		self:SetMaxHealth(self:Health() + self.statHP)
 		self:SetHealth(self:GetMaxHealth())
 	end
 
-	if self.hl2cr.Statistics.SuitBonus > 0 then
-		self:SetMaxArmor(100 + self.hl2cr.Statistics.SuitBonus)
+	if self.statArmor then
+		self:SetMaxArmor(100 + self.statArmor)
 	end
 
 	if not table.IsEmpty(self.hl2cr.Class.Buffs) then
@@ -243,15 +236,12 @@ function hl2cr_player:AdjustSpeed()
 	if MAPS_NO_SUIT[game.GetMap()] then
 		self:SetMaxSpeed(35)
 		self:SetRunSpeed(200)
-		self:SprintDisable()
     elseif game.GetMap() == "d1_trainstation_05" and not GetGlobalBool("HL2CR_GLOBAL_SUIT") then
 		self:SetMaxSpeed(35)
 		self:SetRunSpeed(200)
-		self:SprintDisable()
 	else
 		self:SetMaxSpeed(200)
 		self:SetRunSpeed(350)
-		self:SprintEnable()
 	end
 end
 
@@ -298,10 +288,12 @@ end
 
 function hl2cr_player:SetUpInitialSpawn()
     if self:IsBot() then return end
-
+	
+	self:LoadSkills()
 	self:SetUpPlayer()
 	self:GiveWeaponsSpawn()
 	self:AdjustSpeed()
+	self:UpdateClass()
 
 	self.MapStats = {
 		["Kills"] = 0,
@@ -331,24 +323,55 @@ function hl2cr_player:SetUpRespawnRevive()
 	self:GiveEquipment()
 	self:GiveWeaponsSpawn()
 	self:AdjustSpeed()
+	self:UpdateClass()
 end
 
 function hl2cr_player:SetUpRespawn()
     if self:IsBot() then return end
 	
-	if self.Ragdoll then
+	if self.Ragdoll == nil then
+		self:LoadSkills()
+		self:UnSpectate()
+		self:SetUpPlayer()
+		self:GiveWeaponsSpawn()
+		self:GiveEquipment()
+		self:AdjustSpeed()
+		self:UpdateNetworks()
+		self:UpdateClass()
+		return
+	end
+
+	if self.Ragdoll:IsValid() then
 		self.Ragdoll:Remove()
 		self.Ragdoll = nil 
 	end
 
 	self:UnSpectate()
-	//self:SpectateEntity(nil)
-	//self:SetObserverMode(OBS_MODE_NONE)
 
+	self:LoadSkills()
 	self:SetUpPlayer()
 	self:GiveWeaponsSpawn()
 	self:GiveEquipment()
 	self:AdjustSpeed()
+	self:UpdateNetworks()
+	self:UpdateClass()
+end
+
+function hl2cr_player:LoadSkills()
+	for _, gS in ipairs(HL2CR_Skills) do
+		for i, s in ipairs(self.hl2cr.Skills) do
+			if gS.Class == s then
+				gS.Func(self)
+			end
+		end	
+	end
+end
+
+function hl2cr_player:UpdateClass()
+	if self.NewClass then
+		self.NewClass.Func(self)
+		self.NewClass = nil
+	end
 end
 
 function hl2cr_player:GiveEquipment()
@@ -368,6 +391,8 @@ function hl2cr_player:GiveEquipment()
 end
 
 function hl2cr_player:GiveWeaponsSpawn()
+	if MAPS_NO_HL2CR_WEAPONS[game.GetMap()] then return end
+	
 	for _, weapon in ipairs(SPAWNING_WEAPONS) do
 		self:Give(weapon)
 	end
@@ -574,18 +599,29 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 	victim:SetTeam(TEAM_DEAD)
 	victim.MapStats.Deaths = victim.MapStats.Deaths + 1
 
+	victim.CanRespawn = false
 	victim.TimeDied = (10 * GetConVar("hl2cr_difficulty"):GetInt()) + CurTime()
 end
 
 function GM:PlayerDeathThink( ply )
 
-	if ply.TimeDied < CurTime() and ply:Team() == TEAM_DEAD then
-		ply:Spawn()
+	ply:SetNWInt("hl2cr_respawntimer", math.Round(ply.TimeDied - CurTime()))
+
+	if ply.TimeDied < CurTime() and ply:Team() == TEAM_DEAD and not ply.CanRespawn then
+		ply.CanRespawn = true
+		ply:BroadcastSound("hl2cr/standardbeep.wav")
 	end
 
 	return false
 
 end
+
+hook.Add("KeyPress", "HL2CR_Key_Respawn", function( ply, key )
+	if key == IN_ATTACK and ply:Team() == TEAM_DEAD and ply.CanRespawn then
+		ply:Spawn()
+		ply.CanRespawn = nil
+	end
+end)
 
 --Bullet Ignoring player code collision so players can't block bullets
 hook.Add("EntityFireBullets", "HL2CR_NoBulletPlayer", function(ent, data)
@@ -652,9 +688,41 @@ function GM:GravGunPunt( ply, ent )
     return true
 end
 
+function hl2cr_player:UpdateNetworks()
+	self:SetNWInt("hl2cr_stat_level", self.hl2cr.Level)
+	self:SetNWInt("hl2cr_stat_exp", self.hl2cr.Exp)
+	self:SetNWInt("hl2cr_stat_expreq", self.hl2cr.ReqExp)
+	self:SetNWInt("hl2cr_stat_skillpoints", self.hl2cr.SkillPoints)
+	self:SetNWString("hl2cr_stat_skills", table.concat(self.hl2cr.Skills, " ") )
+	self:SetNWString("hl2cr_achievements", table.concat(self.hl2cr.Achievements, " ") )
+	self:SetNWString("hl2cr_class", self.hl2cr.Class.Name)
+	self:SetNWInt("hl2cr_inv_weight", self.hl2cr.Inventory.Weight)
+	self:SetNWInt("hl2cr_inv_curweight", self.hl2cr.Inventory.CurWeight)
+
+	if not table.IsEmpty(self.hl2cr.Pets) then
+		local activePet = nil
+
+		for _, p in ipairs(self.hl2cr.Pets) do
+            if p.Active then
+                activePet = p
+                break
+            end
+        end
+
+		if activePet == nil then return end
+		
+		self:SetNWString("hl2cr_petstat_name", activePet.Name)
+	end
+end
+
 --Player spawning
 hook.Add("PlayerInitialSpawn", "HL2CR_InitialPlayerSpawn", function(ply, transition)
     ply:SetUpInitialSpawn()
+
+	for _, v in ipairs(player.GetAll()) do
+		if not v.activePet then continue end
+		v.activePet:UpdatePlayerRelationship(ply)
+	end
 end)
 
 function GM:PlayerSpawn(ply)
@@ -690,7 +758,7 @@ hook.Add( "PlayerUse", "HL2CR_PlayerUse", function( ply, ent )
 		ply:SetAllowWeaponsInVehicle(true)
 	end
 
-	if ent:GetClass() == "prop_vehicle_jeep" then
+	if ent:GetClass() == "prop_vehicle_jeep" or ent:GetClass() == "prop_vehicle_airboat" then
 	
 		if ent:GetOwner():IsValid() and ent:GetOwner() ~= ply then
 			return false
@@ -700,7 +768,7 @@ hook.Add( "PlayerUse", "HL2CR_PlayerUse", function( ply, ent )
 			ply:CheckAmmo("item_ammo_smg1")
 		end)
 	elseif ent:GetClass() == "item_ammo_crate" then
-		timer.Create("hl2cr_itemcrate_wait_" .. ply:EntIndex(), 0.85, 1, function()
+		timer.Create("hl2cr_itemcrate_wait_" .. ply:EntIndex(), 1, 2, function()
 			ply:CheckAllAmmo()
 		end)
 	end
@@ -761,7 +829,7 @@ end)
 net.Receive("HL2CR_Class_Update", function(len, ply)
 	if not ply then return end
 
-	ply:UpdateClass(net.ReadString())
+	ply:SetClass(net.ReadString())
 end)
 
 net.Receive("HL2CR_Cosmetic", function(len, ply)

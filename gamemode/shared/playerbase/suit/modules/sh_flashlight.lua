@@ -9,7 +9,7 @@ if SERVER then
     -- Parameters
     local DEFAULT_FLASHLIGHT_RATE = 0.4
     local DEFAULT_DOWNTIME = 0.5
-    local DEFAULT_RATE = 1.23
+    local DEFAULT_RATE = 0.01
     local DEFAULT_RECOVERY_RATE = 0.01
     local ID, LABEL = "flashlight", "FLASHLIGHT"
 
@@ -47,7 +47,7 @@ if SERVER then
     ]]
     function HL2CR_AUX:AddFlashlightPower(player, amount)
         -- Add power
-        HL2CR_AUX:SetFlashlightPower(player, math.Clamp(HL2CR_AUX:GetFlashlightPower(player) + amount, 0, 1))
+        HL2CR_AUX:SetFlashlightPower(player, math.Clamp(HL2CR_AUX:GetFlashlightPower(player) + amount, 0, 1 + (player.statFlashBatt or 0)))
         
         -- Check if it ran out of battery
         if (not HL2CR_AUX:HasFlashlightPower(player) or player:Team() ~= TEAM_ALIVE) and player:FlashlightIsOn() then
@@ -66,16 +66,16 @@ if SERVER then
     runs out of battery and regenerates it if off
     @param {Player} player
     ]]
-    local function UseFlashlight(player)
-        HL2CR_AUX:RemoveExpense(player, ID)
+    local function UseFlashlight(pl)
+        HL2CR_AUX:RemoveExpense(pl, ID)
         
-        if player.HL2CR_AUX.flashlight.tick < CurTime() then
-            if player:FlashlightIsOn() then
-                HL2CR_AUX:AddFlashlightPower(player, -GetConVar("hl2cr_suit_default_flashlight_rate"):GetFloat())
-                player.HL2CR_AUX.flashlight.tick = CurTime() + DEFAULT_RATE / GetConVar("hl2cr_suit_default_flashlight_delay"):GetFloat()
+        if pl.HL2CR_AUX.flashlight.tick < CurTime() then
+            if pl:FlashlightIsOn() then
+                HL2CR_AUX:AddFlashlightPower(pl, -GetConVar("hl2cr_suit_default_flashlight_rate"):GetFloat())
+                pl.HL2CR_AUX.flashlight.tick = CurTime() + DEFAULT_RATE / GetConVar("hl2cr_suit_default_flashlight_delay"):GetFloat()
             else
-                HL2CR_AUX:AddFlashlightPower(player, GetConVar("hl2cr_suit_default_recharge_rate"):GetFloat())
-                player.HL2CR_AUX.flashlight.tick = CurTime() + DEFAULT_RECOVERY_RATE / GetConVar("hl2cr_suit_default_recharge_delay"):GetFloat()
+                HL2CR_AUX:AddFlashlightPower(pl, GetConVar("hl2cr_suit_default_recharge_rate"):GetFloat())
+                pl.HL2CR_AUX.flashlight.tick = CurTime() + DEFAULT_RECOVERY_RATE / GetConVar("hl2cr_suit_default_recharge_delay"):GetFloat()
             end
         end
     end

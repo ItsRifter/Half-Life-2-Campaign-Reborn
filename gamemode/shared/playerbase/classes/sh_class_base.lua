@@ -19,16 +19,17 @@ local citizen = {
         [1] = translate.Get("Player_Class_NoBuffDeBuff")
     },
     ["Func"] = function(ply)
+        table.Empty(ply.hl2cr.Buffs)
+        table.Empty(ply.hl2cr.Debuffs)
+
         ply.hl2cr.Class = {
             ["Name"] = translate.Get("Player_Class_Default"),
             ["Buffs"] = {
                 ["BuffFunc"] = function(ply)
-                    table.Empty(ply.hl2cr.Buffs)
                 end
             },
             ["Debuffs"] = {
                 ["DebuffFunc"] = function(ply)
-                    table.Empty(ply.hl2cr.Debuffs)
                 end
             },
             ["Weapons"] = {}
@@ -47,12 +48,15 @@ local fieldmedic = {
     ["LevelReq"] = 5,
     ["Buffs"] = {
         [1] = translate.Get("Player_Class_Buff_Recovery"),
-        [2] = translate.Get("Player_Class_Buff_HealEffective")
+        [2] = translate.Get("Player_Class_Buff_HealEffective"),
+        [3] = translate.Get("Player_Class_Buff_Defibrillator")
     },
     ["Debuffs"] = {
         [1] = translate.Get("Player_Class_Debuff_ArmorReduction") .. 15
     },
     ["Func"] = function(ply)
+        table.Empty(ply.hl2cr.Buffs)
+        table.Empty(ply.hl2cr.Debuffs)
         ply.hl2cr.Class = {
             ["Name"] = translate.Get("Player_Class_FieldMedic"),
             ["Buffs"] = {
@@ -78,3 +82,40 @@ local fieldmedic = {
 }
 
 AddPlayerClass(fieldmedic)
+
+local melee_specialist = {
+    ["Name"] = translate.Get("Player_Class_Specialist"),
+    ["Desc"] = translate.Get("Player_Class_Specialist_Desc"),
+    ["Icon"] = "materials/hl2cr/class/specialist.jpg",
+    ["LevelReq"] = 10,
+    ["Buffs"] = {
+        [1] = translate.Get("Player_Class_Buff_Melee"),
+    },
+    ["Debuffs"] = {
+        [1] = translate.Get("Player_Class_Debuff_WeakFirearms_Bullets")
+    },
+    ["Func"] = function(ply)
+        table.Empty(ply.hl2cr.Buffs)
+        table.Empty(ply.hl2cr.Debuffs)
+        ply.hl2cr.Class = {
+            ["Name"] = translate.Get("Player_Class_Specialist"),
+            ["Buffs"] = {
+                ["BuffFunc"] = function(ply)
+                    ply.hl2cr.Buffs.MeleeDMG = 1.5
+                end
+            },
+            
+            ["Debuffs"] = {
+                ["DebuffFunc"] = function(ply)
+                    ply.hl2cr.Debuffs.WeaponDMGDivide = 0.25
+                end
+            },
+            
+            ["Weapons"] = {}
+        }
+        
+        ply.hl2cr.ModelType.Type = "Rebel"
+    end
+}
+
+AddPlayerClass(melee_specialist)

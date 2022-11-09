@@ -19,11 +19,13 @@ function hl2cr_player:GrantAchievement(achName)
 		return 
 	end
 	
+	local fixupName = string.Replace(achName, " ", "_") 
+
 	--If player already has the achievement, stop here
-	if table.HasValue(self.hl2cr.Achievements, ach.Name) then return end
+	if self:HasAchievement(fixupName) then return end
 
 	--Insert the achievement to the player's data
-	table.insert(self.hl2cr.Achievements, ach.Name)
+	table.insert(self.hl2cr.Achievements, fixupName)
 	
 	local displayAch = {
 		["Name"] = ach.Name,
@@ -55,8 +57,12 @@ function hl2cr_player:GrantAchievement(achName)
 	if ach.Rewards.Items then
 		ach.Rewards.Items(self)
 	end
+
+	self:UpdateNetworks()
 end
 
 function hl2cr_player:HasAchievement(achName)
-	return string.find(table.concat(self.hl2cr.Achievements, " "), achName)
+	local fixName = string.Replace(achName, " ", "_")
+
+	return table.HasValue(self.hl2cr.Achievements, fixName)
 end

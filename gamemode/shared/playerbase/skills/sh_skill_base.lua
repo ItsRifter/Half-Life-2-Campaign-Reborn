@@ -18,7 +18,7 @@ local health_boost_1 = {
         ["YPos"] = 0
     },
     ["Func"] = function(ply)
-        ply.hl2cr.Statistics.HealthBonus = ply.hl2cr.Statistics.HealthBonus + 5
+        ply.statHP = 5
     end
 }
 
@@ -36,7 +36,7 @@ local health_boost_2 = {
         ["YPos"] = 50
     },
     ["Func"] = function(ply)
-        ply.hl2cr.Statistics.HealthBonus = ply.hl2cr.Statistics.HealthBonus + 10
+        ply.statHP = ply.statHP + 10
     end
 }
 
@@ -54,7 +54,7 @@ local health_boost_3 = {
         ["YPos"] = 75
     },
     ["Func"] = function(ply)
-        ply.hl2cr.Statistics.HealthBonus = ply.hl2cr.Statistics.HealthBonus + 15
+        ply.statHP = ply.statHP + 15
     end
 }
 
@@ -72,7 +72,7 @@ local armor_boost_1 = {
         ["YPos"] = 175
     },
     ["Func"] = function(ply)
-        ply.hl2cr.Statistics.SuitBonus = ply.hl2cr.Statistics.SuitBonus + 5
+        ply.statArmor = 5
     end
 }
 
@@ -90,7 +90,7 @@ local armor_boost_2 = {
         ["YPos"] = 225
     },
     ["Func"] = function(ply)
-        ply.hl2cr.Statistics.SuitBonus = ply.hl2cr.Statistics.SuitBonus + 5
+        ply.statArmor = 10
     end
 }
 
@@ -108,8 +108,26 @@ local armor_boost_3 = {
         ["YPos"] = 350
     },
     ["Func"] = function(ply)
-        ply.hl2cr.Statistics.SuitBonus = ply.hl2cr.Statistics.SuitBonus + 10
+        ply.statArmor = 20
     end
 }
 
 CreateSkillSet(armor_boost_3)
+
+local flashbatt_1 = {
+    ["Class"] = "flashbatt_1",
+    ["Name"] = translate.Get("Skill_FlashBatt_1_Name"),
+    ["Desc"] = translate.Get("Skill_FlashBatt_Desc"),
+    ["Icon"] = "materials/hl2cr/skills/flashpower_1.jpg",
+    ["Cost"] = 1,
+    ["SkillNeeded"] = "armorboost_2",
+    ["PosInPanel"] = {
+        ["XPos"] = 250,
+        ["YPos"] = 225
+    },
+    ["Func"] = function(ply)
+        ply.statFlashBatt = 0.5 
+    end
+}
+
+CreateSkillSet(flashbatt_1)

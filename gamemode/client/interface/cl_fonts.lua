@@ -168,3 +168,39 @@ surface.CreateFont( "hl2cr_endresults_result", {
 	scanlines = 0,
 	antialias = true,
 } )
+
+surface.CreateFont( "hl2cr_qmenu_ach_name", {
+	font = "Roboto",
+	extended = false,
+	size = 16,
+	weight = 450,
+	blursize = 0,
+	scanlines = 0,
+} )
+
+surface.CreateFont( "hl2cr_qmenu_ach_desc", {
+	font = "Roboto",
+	extended = false,
+	size = 14,
+	weight = 425,
+	blursize = 0,
+	scanlines = 0,
+} )
+
+surface.CreateFont( "hl2cr_hud_pet", {
+	font = "Roboto",
+	extended = false,
+	size = 26,
+	weight = 425,
+	blursize = 0,
+	scanlines = 0,
+} )
+
+surface.CreateFont( "hl2cr_respawntimer", {
+	font = "Roboto",
+	extended = false,
+	size = 48,
+	weight = 425,
+	blursize = 0,
+	scanlines = 0,
+} )

@@ -14,26 +14,11 @@ local function InitData(ply)
 	--Level
 	ply.hl2cr.Level = ply.hl2cr.Level or 0
 	
-	ply.hl2cr.Statistics = ply.hl2cr.Statistics or {
-		["HealthBonus"] = 0,
-		["SuitBonus"] = 0,
-		["AmmoBoost"] = {
-			["Pistol"] = 0,
-			["357"] = 0,
-			["SMG"] = 0,
-			["AR2"] = 0,
-			["Buckshot"] = 0,
-			["Crossbow"] = 0,
-			["RPG"] = 0,
-			["Frags"] = 0
-		},
-	}
-
 	ply.hl2cr.Skills = ply.hl2cr.Skills or {}
 	ply.hl2cr.Class = ply.hl2cr.Class or {
-		["Name"] = translate.Get("Player_Class_Default"),
-		["Buffs"] = {},
-		["Debuffs"] = {}
+		Name = translate.Get("Player_Class_Default"),
+		Buffs = {},
+		Debuffs = {}
 	}
 	
 	ply.hl2cr.Buffs = ply.hl2cr.Buffs or {}
@@ -50,12 +35,19 @@ local function InitData(ply)
 
 	--Inventory
 	ply.hl2cr.Inventory = ply.hl2cr.Inventory or {}
+	ply.hl2cr.Inventory.Weight = ply.hl2cr.Inventory.Weight or 30.0
+	ply.hl2cr.Inventory.CurWeight = ply.hl2cr.Inventory.CurWeight or 0.0
 	ply.hl2cr.Inventory.Items = ply.hl2cr.Inventory.Items or {}
 	ply.hl2cr.Inventory.Weapons = ply.hl2cr.Inventory.Weapons or {}
 	ply.hl2cr.Inventory.Cosmetics = ply.hl2cr.Inventory.Cosmetics or {}
-
+	
 	--Cosmetics
 	ply.hl2cr.CurCosmetic = ply.hl2cr.CurCosmetic or ""
+
+	--Pets
+	ply.hl2cr.Pets = ply.hl2cr.Pets or {}
+
+	ply:UpdateNetworks()
 end
 
 local function CreateData(ply)
@@ -67,7 +59,7 @@ local function CreateData(ply)
 	-- Store all persistent data as JSON
 	file.Write("hl2cr_data/" .. PlayerID .. ".txt", util.TableToJSON(ply.hl2cr, true))
 
-	timer.Simple(2, function()
+	timer.Simple(5, function()
 		ply:GrantAchievement("Rise and Shine")
 	end)
 end
@@ -109,6 +101,10 @@ hook.Add("PlayerDisconnected", "HL2CR_SavePlayerDataDisconnect", function(ply)
 	if ply:IsBot() then return end
 
 	SavePlayerData(ply)
+
+	if ply.activePet then
+		ply.activePet:RemovePet()
+	end
 
 	CheckPlayerCompleted()
 end)

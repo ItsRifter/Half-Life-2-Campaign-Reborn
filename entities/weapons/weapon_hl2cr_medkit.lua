@@ -26,6 +26,8 @@ SWEP.Secondary.Ammo = "none"
 SWEP.HealAmount = 20 -- Maximum heal amount per use
 SWEP.MaxAmmo = 100 -- Maxumum ammo
 
+SWEP.Range = 76
+
 local HealSound = Sound( "HealthKit.Touch" )
 local DenySound = Sound( "WallHealth.Deny" )
 
@@ -51,7 +53,7 @@ function SWEP:PrimaryAttack()
 
 	local tr = util.TraceLine( {
 		start = self.Owner:GetShootPos(),
-		endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 64,
+		endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * self.Range,
 		filter = self.Owner
 	} )
 
@@ -76,7 +78,7 @@ function SWEP:PrimaryAttack()
 		self:SetNextPrimaryFire( CurTime() + self:SequenceDuration() + 0.5 )
 		self.Owner:SetAnimation( PLAYER_ATTACK1 )
 
-		self.Owner:AddXP(need)
+		self.Owner:AddXP(need * self.Owner.hl2cr.Level)
 
 		-- Even though the viewmodel has looping IDLE anim at all times, we need this to make fire animation work in multiplayer
 		timer.Create( "weapon_idle" .. self:EntIndex(), self:SequenceDuration(), 1, function() if ( IsValid( self ) ) then self:SendWeaponAnim( ACT_VM_IDLE ) end end )
@@ -93,7 +95,7 @@ function SWEP:SecondaryAttack()
 
 	local tr = util.TraceLine( {
 		start = self.Owner:GetShootPos(),
-		endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 64,
+		endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * self.Range,
 		filter = self.Owner
 	} )
 
@@ -115,15 +117,15 @@ function SWEP:SecondaryAttack()
 			
 			local tr2 = util.TraceLine( {
 				start = self.Owner:GetShootPos(),
-				endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 64,
+				endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * self.Range,
 				filter = self.Owner
 			} )
 			
-			local checkAim = tr2.Entity:GetOwner() or nil 
-			
-			if not checkAim then return end
+			if not tr2.Entity:IsValid() then return end
 
-			local revived = tr2.Entity:GetOwner()
+			local checkAim = tr2.Entity
+
+			local revived = checkAim:GetOwner()
 			local lastMdl = revived:GetModel()
 
 			self:SendWeaponAnim( ACT_VM_PRIMARYATTACK )
@@ -137,7 +139,7 @@ function SWEP:SecondaryAttack()
 
 			revived:SetEyeAngles(-( revived:GetShootPos() + self.Owner:GetShootPos() ):Angle())
 
-			self.Owner:AddXP(need)
+			self.Owner:AddXP(need * self.Owner.hl2cr.Level * 2)
 		end)
 			
 

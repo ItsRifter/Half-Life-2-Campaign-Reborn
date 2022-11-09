@@ -33,13 +33,16 @@ local function CreateMainPanel()
 
 	function mainPnlPlayerModel:DragMouseRelease() self.Pressed = false end
 
-	local eyepos = mainPnlPlayerModel.Entity:GetBonePosition(mainPnlPlayerModel.Entity:LookupBone("ValveBiped.Bip01_Head1"))
+	local eyepos = mainPnlPlayerModel.Entity:GetBonePosition(mainPnlPlayerModel.Entity:LookupBone("ValveBiped.Bip01_Head1")) or nil
 
-	eyepos:Add(Vector(0, 0, -2))
+	if eyepos ~= nil then
 
-	mainPnlPlayerModel:SetLookAt(eyepos)
-	mainPnlPlayerModel.Entity:SetPos(mainPnlPlayerModel.Entity:GetPos() + Vector(0, 0, -0.5))
-	mainPnlPlayerModel:SetCamPos(eyepos - Vector(-20, 0, 0))
+		eyepos:Add(Vector(0, 0, -2))
+
+		mainPnlPlayerModel:SetLookAt(eyepos)
+		mainPnlPlayerModel.Entity:SetPos(mainPnlPlayerModel.Entity:GetPos() + Vector(0, 0, -0.5))
+		mainPnlPlayerModel:SetCamPos(eyepos - Vector(-20, 0, 0))
+	end
 
 	function mainPnlPlayerModel:LayoutEntity(ent)
 		if self.bAnimated then self:RunAnimation() end
@@ -74,11 +77,13 @@ local function CreateMainPanel()
 	playerCosmeticCombo:SetSize( 100, 20 )
 	playerCosmeticCombo:SetValue( "Select Hat" )
 	playerCosmeticCombo:AddChoice("Clear")
-	for _, c in ipairs(cosmetics) do
-		if c == nil then continue end
-		playerCosmeticCombo:AddChoice( c )
+	if table.Count(cosmetics) > 1 then
+		for _, c in ipairs(cosmetics) do
+			if c == nil then continue end
+			playerCosmeticCombo:AddChoice( c )
+		end
 	end
-	
+
 	playerCosmeticCombo.OnSelect = function( self, index, value )
 		if value == "Clear" then
 			net.Start("HL2CR_Cosmetic")
@@ -95,6 +100,16 @@ local function CreateMainPanel()
 	local invPnl = vgui.Create("DPanel", mainPnl)
 	invPnl:SetSize(mainPnl:GetWide() / 1.5, mainPnl:GetTall() / 2)
 	invPnl:SetPos(mainPnl:GetWide() / 1.5 - 500, mainPnl:GetTall() / 2 - 275)
+	invPnl.Paint = function(self, w, h)
+		draw.RoundedBoxEx(8, 0, 0, w, h, HL2CR.Theme.qMenuPlayer, true, true, true, true)
+	end
+
+	local invLbl = vgui.Create("DLabel", invPnl)
+	invLbl:SetPos(invPnl:GetWide() / 2 - 50, 5)
+	invLbl:SetFont("hl2cr_qmenu_class_desc")
+	invLbl:SetTextColor(Color(0, 0, 0))
+	invLbl:SetText(translate.Get("QMenu_InvTitle") .. string.format("%g/%g", LocalPlayer():GetNWInt("hl2cr_inv_curweight", -1), LocalPlayer():GetNWInt("hl2cr_inv_weight", -1)))
+	invLbl:SizeToContents()
 
 	return mainPnl
 end
@@ -340,6 +355,95 @@ local function CreateClassPanel()
 	return mainClassPnl
 end
 
+local function CreateAchPanel()
+	local mainAchPanel = vgui.Create("DPanel")
+	mainAchPanel:SetSize(qMenuFrame:GetWide(), qMenuFrame:GetTall() - 100)
+	mainAchPanel:SetPos(0, 0)
+	mainAchPanel.Paint = function(self, w, h) return end
+
+	local listPnl = vgui.Create("DPanel", mainAchPanel)
+	listPnl:SetSize(mainAchPanel:GetWide() - 25, mainAchPanel:GetTall())
+	listPnl:SetPos(mainAchPanel:GetWide() / 16 - 65, 0)
+	listPnl.Paint = function(self, w, h)
+		draw.RoundedBox(8, 0, 0, w, h, HL2CR.Theme.classPanel)
+	end
+
+	local achs = LocalPlayer():GetNWString("hl2cr_achievements", "")
+
+	local explodeString = string.Explode(" ", achs)
+	local tblString = {}
+
+	for _, s in ipairs(explodeString) do
+		local removeFixup = string.Replace(s, "_", " ")
+		table.insert(tblString, removeFixup)
+	end
+
+	local achScroll = vgui.Create( "DScrollPanel", mainAchPanel )
+	achScroll:Dock( FILL )
+
+	local achList = vgui.Create("DIconLayout", achScroll)
+	achList:DockMargin(16, 0, 0, 0)
+	achList:Dock( FILL )
+	achList:SetSpaceY(32)
+	achList:SetSpaceX(8)
+
+	for _, a in ipairs(GAMEMODE.Achievements) do
+		local hasAch = table.HasValue(tblString, a.Name)
+		
+		local achPnl = vgui.Create("DPanel")
+		achPnl:SetSize(198, 96)
+		achPnl.Paint = function(self, w, h)
+			draw.RoundedBox(8, 0, 0, w, h, HL2CR.Theme.achPnl)
+		end
+
+		local achIcon = vgui.Create("DImage", achPnl)
+
+		if hasAch then
+			achIcon:SetImage(a.Mat)
+		else
+			achIcon:SetImage("vgui/hud/icon_locked")
+		end
+
+		achIcon:SetSize(64, 64)
+
+		local achLabel = vgui.Create("DLabel", achPnl)
+
+		if hasAch then
+			achLabel:SetText(translate.Get("QMenu_Ach_Name") .. a.Name)
+		else
+			achLabel:SetText(translate.Get("QMenu_Ach_Locked"))
+		end
+
+		achLabel:SetPos(64, 0)
+		achLabel:SetFont("hl2cr_qmenu_ach_name")
+		
+		if hasAch then
+			achLabel:SetText(translate.Get("QMenu_Ach_Name") .. a.Name)
+		else
+			achLabel:SetText(translate.Get("QMenu_Ach_Locked"))
+		end
+		achLabel:SizeToContents()
+
+		local achDesc = vgui.Create("DLabel", achPnl)
+		achDesc:SetPos(0, 64)
+		achDesc:SetFont("hl2cr_qmenu_ach_desc")
+		
+		if hasAch then
+			achDesc:SetText(a.Desc)
+		else
+			achDesc:SetText("")
+		end
+
+		achDesc:SizeToContents()
+		
+		achPnl:SetSize(string.len(a.Desc) * 1.5 + achPnl:GetWide(), achPnl:GetTall())
+
+		achList:Add(achPnl)
+	end
+
+	return mainAchPanel
+end
+
 function SetActiveTab(index, tabs)
 	for i, t in ipairs(tabs) do
 		if i == index then
@@ -389,6 +493,7 @@ function StartQMenu(toggleOpen)
 		qMenuTabs:Add(CreateMainPanel())
 		qMenuTabs:Add(CreateSkillsPanel())
 		qMenuTabs:Add(CreateClassPanel())
+		qMenuTabs:Add(CreateAchPanel())
 
 		local mainPnlBtn = vgui.Create("DButton", qMenuTabHeader)
 		mainPnlBtn:SetPos(0, 30)
@@ -415,6 +520,15 @@ function StartQMenu(toggleOpen)
 		
 		classPnlBtn.DoClick = function(self)
 			SetActiveTab(3, qMenuTabs:GetChildren())
+		end
+
+		local achPnlBtn = vgui.Create("DButton", qMenuTabHeader)
+		achPnlBtn:SetPos(192, 30)
+		achPnlBtn:SetSize(96, 32)
+		achPnlBtn:SetText(translate.Get("QMenu_Panels_Achievements"))
+		
+		achPnlBtn.DoClick = function(self)
+			SetActiveTab(4, qMenuTabs:GetChildren())
 		end
 
 		SetActiveTab(1, qMenuTabs:GetChildren())

@@ -29,7 +29,8 @@ end
 
 function ENT:Touch(ent)	
 	
-	if ent:GetClass() == "prop_physics" and achievement_items[ent:GetModel()] then
+	if achievement_items[ent:GetModel()] then
+		
 		achievement_items[ent:GetModel()]()
 		ent:Remove()
 	end
@@ -55,6 +56,7 @@ function ENT:Touch(ent)
 
 		ent:ToggleSpectator(true)
 		ent:Flashlight(false)
+		ent:UpdateClass()
 	end
 
 	CheckPlayerCompleted()

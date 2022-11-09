@@ -6,6 +6,7 @@ translate.AddLanguage("en", "English")
 LANGUAGE.Chat_Announce_Difficulty = "Check or change the difficulty with !diff [1-5]"
 LANGUAGE.Chat_Announce_NotGordon = "Remember you are not Gordon Freeman, you won't survive everything"
 LANGUAGE.Chat_Announce_ReturnLobby = "Return to the lobby with !lobby"
+//LANGUAGE.Chat_Announce_Discord = "Join the discord with !discord"
 
 LANGUAGE.Player_Checkpoint = " activated the checkpoint"
 LANGUAGE.Player_CompletedMap = " has finished the map in "
@@ -16,6 +17,8 @@ LANGUAGE.Player_Class_Default = "Citizen"
 LANGUAGE.Player_Class_Default_Desc = "Standard citizen without any unique traits"
 LANGUAGE.Player_Class_FieldMedic = "Field Medic"
 LANGUAGE.Player_Class_FieldMedic_Desc = "Trained with a PH.D, medics are the rebels healer during a fire-fight"
+LANGUAGE.Player_Class_Specialist = "Melee Specialist"
+LANGUAGE.Player_Class_Specialist_Desc = "A specialist experienced into melee combat"
 
 LANGUAGE.Player_Class_Advantages = "Advantages"
 LANGUAGE.Player_Class_Disadvantages = "Disadvantages"
@@ -23,12 +26,16 @@ LANGUAGE.Player_Class_Disadvantages = "Disadvantages"
 LANGUAGE.Player_Class_NoBuffDeBuff = "None"
 LANGUAGE.Player_Class_Buff_Recovery = "Self-Healing"
 LANGUAGE.Player_Class_Buff_HealEffective = "Medical Knowledge"
+LANGUAGE.Player_Class_Buff_Defibrillator = "Defibrillator"
+LANGUAGE.Player_Class_Buff_Melee = "Stronger Melee"
 
 LANGUAGE.Player_Class_Debuff_ArmorReduction = "Armor Reduction: "
+LANGUAGE.Player_Class_Debuff_WeakFirearms_Bullets = "Non-Melee weapons are less effective"
 
 LANGUAGE.Class_Assigned = "You will be assigned to this class next spawn"
 
 LANGUAGE.Player_CosmeticApply = " has been equipped"
+LANGUAGE.Player_Levelgain_Pet = "You obtained a headcrab pet, use !petspawn | !petremove"
 
 LANGUAGE.Error_Player_Vehicle_TooFast = "Slow down, you can respawn your vehicle in "
 LANGUAGE.Error_Player_Vehicle_Exists = "Your vehicle already exists!"
@@ -88,6 +95,9 @@ LANGUAGE.Skill_Armor_1_Name = "Armor Boost I"
 LANGUAGE.Skill_Armor_2_Name = "Armor Boost II"
 LANGUAGE.Skill_Armor_3_Name = "Armor Boost III"
 LANGUAGE.Skill_Armor_Desc = "Increases your Armor by "
+LANGUAGE.Skill_FlashBatt_1_Name = "Flashlight Capacity I"
+LANGUAGE.Skill_FlashBatt_2_Name = "Flashlight Capacity II"
+LANGUAGE.Skill_FlashBatt_Desc = "Increases flashlight battery capacity"
 
 LANGUAGE.HUD_Stat_XP = "XP"
 
@@ -131,9 +141,15 @@ LANGUAGE.QMenu_Gender_Update = "Your characters gender will be updated next spaw
 LANGUAGE.QMenu_Panels_Main = "Inventory"
 LANGUAGE.QMenu_Panels_Skills = "Skills"
 LANGUAGE.QMenu_Panels_Classes = "Classes"
+LANGUAGE.QMenu_Panels_Achievements = "Achievements"
 LANGUAGE.QMenu_SkillPnl_SkillCost = "Cost: "
 LANGUAGE.QMenu_Class_Assign = "Assign Class"
 LANGUAGE.QMenu_Class_LevelReq = "Level Required: "
+
+LANGUAGE.QMenu_InvTitle = "Inventory: " 
+
+LANGUAGE.QMenu_Ach_Name = "Achievement:\n"
+LANGUAGE.QMenu_Ach_Locked = "LOCKED"
 
 LANGUAGE.Server_Warning_AFK  = "You are AFK, you will be kicked if you don't return"
 LANGUAGE.Server_Warning_Returned = "You have returned from being AFK"
@@ -195,6 +211,19 @@ LANGUAGE.Achievement_HL2_LambdaLocator_Desc = "Find all lambda caches in Half-Li
 LANGUAGE.Achievement_HL2_HackAttack_Name = "Hack Attack"
 LANGUAGE.Achievement_HL2_HackAttack_Desc = "Kill five enemies with a Manhack"
 
+LANGUAGE.Achievement_EP1_ElevatorShaft_Name = "Watch Your Head!"
+LANGUAGE.Achievement_EP1_ElevatorShaft_Desc = "Make it to the bottom of the Citadel's main elevator shaft in one piece"
+LANGUAGE.Achievement_EP1_Containment_Name = "Containment"
+LANGUAGE.Achievement_EP1_Containment_Desc = "Contain the Citadel core"
+LANGUAGE.Achievement_EP1_Pacifist_Name = "Pacifist"
+LANGUAGE.Achievement_EP1_Pacifist_Desc = "Contain the Citadel core without killing any stalkers"
+
+LANGUAGE.Pet_Owner = "'s Pet"
+
 LANGUAGE.Failed_HL2_Sand = "Keep off the sand failed by "
+LANGUAGE.Failed_EP1_Pacifist = " killed a stalker"
+
+LANGUAGE.Respawn_Remain = "You can respawn in "
+LANGUAGE.Respawn_Ready = "'Primary Fire' to respawn"
 
 LANGUAGE.Campaign_Finished_HL2 = "Congratulations on finishing Half-Life 2, returning to lobby in 60 seconds"

@@ -186,7 +186,7 @@ function StartMapCountdown()
 			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
 			RunConsoleCommand("changelevel", "d2_coast_08")
 			return
-		elseif game.GetMap() == "d2_coast_08" and game.GetGlobalState("hl2cr_extendedmap") then
+		elseif game.GetMap() == "d2_coast_08" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
 			RunConsoleCommand("changelevel", "d2_coast_07")
 			return
 		end
@@ -251,6 +251,8 @@ function StartMapCountdown()
 			end
 		end
 	end)
+
+	game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
 end
 
 function StartFinalMapCountdown()

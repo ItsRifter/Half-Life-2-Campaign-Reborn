@@ -33,6 +33,16 @@ local ALLOWED_ANTLIONS_XP = {
 
 local barnacleKilled = 0
 
+local LEVEL_REWARDS = {
+	[8] = function(ply)
+		local starterPet = HL2CR_Pets[1]
+		starterPet.Active = true
+
+		table.insert(ply.hl2cr.Pets, starterPet)
+		ply:BroadcastMessage(HL2CR_LevelupColour, translate.Get("Player_Levelgain_Pet"))
+	end,
+}
+
 local MAP_ACHS = {
 	["d1_canals_01a"] = function(ply, npcKilled)
 
@@ -52,7 +62,7 @@ local MAP_ACHS = {
 
 function hl2cr_player:AddXP(XP)
 
-	self.hl2cr.Exp = self.hl2cr.Exp + (XP * GetConVar("hl2cr_difficulty"):GetInt())
+	self.hl2cr.Exp = self.hl2cr.Exp + XP * GetConVar("hl2cr_difficulty"):GetInt()
 	
 	self:UpdateXPClient(XP)
 
@@ -65,8 +75,12 @@ function hl2cr_player:AddXP(XP)
 		self.hl2cr.Exp = self.hl2cr.Exp - self.hl2cr.ReqExp
 		self.hl2cr.Level = self.hl2cr.Level + 1
 		self.hl2cr.SkillPoints = self.hl2cr.SkillPoints + 1
-		self.hl2cr.ReqExp = self.hl2cr.ReqExp + (375 * self.hl2cr.Level)
-		
+		self.hl2cr.ReqExp = self.hl2cr.ReqExp + math.Round(4 * math.pow( self.hl2cr.Level + 9, 3 ) / 5);
+		//self.hl2cr.ReqExp = self.hl2cr.ReqExp + (375 * self.hl2cr.Level)
+		if LEVEL_REWARDS[self.hl2cr.Level] then
+			LEVEL_REWARDS[self.hl2cr.Level](self)
+		end
+
 		notifyLevelUp = true
 	end
 
@@ -97,4 +111,11 @@ hook.Add( "OnNPCKilled", "HL2CR_GiveXP", function( npc, attacker, inflictor )
 		
 		attacker:AddXP(gainXP)
 	end
+end)
+
+concommand.Add("hl2cr_addxp", function(ply, cmd, args)
+	if not ply:IsAdmin() then return end
+	if not args[1] then return end
+	
+	ply:AddXP(args[1])
 end)

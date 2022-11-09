@@ -224,3 +224,35 @@ hook.Add("PostDrawHUD", "HL2CR_DebugDraw", function()
 	surface.SetFont("hl2cr_scoreboard_player")
 	surface.DrawText( tostring(trace.HitPos) )
 end )
+
+hook.Add("HUDPaint", "HL2CR_Respawn_Timer", function()
+	if LocalPlayer():Alive() then return end
+	
+	local resTime = LocalPlayer():GetNWInt("hl2cr_respawntimer")
+
+	if resTime > 0 then
+		draw.SimpleText(translate.Get("Respawn_Remain") .. LocalPlayer():GetNWInt("hl2cr_respawntimer"), "hl2cr_respawntimer", ScrW() / 1.15, ScrH() - 50, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	else
+		draw.SimpleText(translate.Get("Respawn_Ready"), "hl2cr_respawntimer",  ScrW() / 1.15, ScrH() - 50, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
+	
+end)
+
+hook.Add("HUDPaint", "HL2CR_DrawPetStats", function()
+	for _, e in ipairs(ents.FindByClass("npc_*")) do
+		if e:IsPet() then
+			local pet = e
+
+			local dist = LocalPlayer():GetPos():Distance(pet:GetPos())
+			local pos = pet:GetPos()
+				pos.z = pet:GetPos().z + 20 + (dist * 0.0325)
+				
+			local ScrPos = pos:ToScreen()
+			if pet:GetOwner() and dist <= 250 then
+				//draw.SimpleText(translate.Get("NPCLevel") .. pet:GetOwner():GetNWInt("pet_level", -1), "HL2CR_NPCStats", ScrPos.x, ScrPos.y - 35, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(pet:GetOwner():Nick() .. translate.Get("Pet_Owner"), "hl2cr_hud_pet", ScrPos.x, ScrPos.y, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(pet:GetOwner():GetNWString("hl2cr_petstat_name"), "hl2cr_hud_pet", ScrPos.x, ScrPos.y + 35, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+			end
+		end
+	end
+end)
