@@ -1934,15 +1934,16 @@ local function SetUpMisc()
 			end
 		end)
 	end
-
+    
     if game.GetMap() == "d2_coast_08" then
-		blocker = ents.Create("prop_dynamic")
+        game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
+        blocker = ents.Create("prop_dynamic")
 		blocker:SetModel("models/props_doors/door03_slotted_left.mdl")
 		blocker:SetPos(Vector(3305, 1542, 1588))
 		blocker:SetAngles(Angle(0, -90, 0))
 		blocker:PhysicsInit(SOLID_VPHYSICS)
 		blocker:Spawn()
-	
+        
 		ents.FindByClass("info_player_start")[1]:SetPos(Vector(3330, 1471, 1600))
 		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, -90, 0))
 		

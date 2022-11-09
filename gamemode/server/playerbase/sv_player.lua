@@ -593,6 +593,16 @@ function GM:DoPlayerDeath(ply, att, dmgInfo)
 	ply:Spectate( OBS_MODE_CHASE )
 	ply:SpectateEntity(ply.Ragdoll)
 	CheckPlayerCompleted()
+
+	local notifyTbl = {
+		["victim"] = ply,
+		["attacker"] = att,
+		["inflictor"] = dmgInfo:GetInflictor(),
+	}
+
+	net.Start("HL2CR_Player_NotifyKilled")
+		net.WriteTable(notifyTbl)
+	net.Broadcast()
 end
 
 function GM:PlayerDeath( victim, inflictor, attacker )

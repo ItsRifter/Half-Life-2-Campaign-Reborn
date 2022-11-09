@@ -160,6 +160,18 @@ net.Receive("HL2CR_Update_XP", function()
 	end)
 end)
 
+local function DisplayDeathNotification(msgTbl)
+	if msgTbl.Attacker == nil or msgTbl.Victim == msgTbl.Attacker then
+		hook.Run("AddDeathNotice", nil, nil, "suicide", msgTbl.victim:Nick(), nil )
+	else
+		hook.Run("AddDeathNotice", msgTbl.attacker, nil, msgTbl.inflictor, msgTbl.victim:Nick(), nil )
+	end
+end
+
+net.Receive("HL2CR_Player_NotifyKilled", function()
+	DisplayDeathNotification(net.ReadTable())
+end)
+
 hook.Add( "HUDShouldDraw", "HL2CR_HideHUD", function( name )
 	if client_musthidehud[name] and not Administrator.Chat.Chat.OpenOnce then
 		return false

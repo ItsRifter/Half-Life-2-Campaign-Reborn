@@ -99,7 +99,7 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
             dmgInfo:SetDamage(0)
         end
 
-        if not npcAttacker:IsNPC() then
+        if not attacker:IsNPC() then
             return false
         end
 

@@ -19,6 +19,7 @@ util.AddNetworkString("HL2CR_Vote")
 util.AddNetworkString("HL2CR_EndVote")
 
 util.AddNetworkString("HL2CR_ChatHistory")
+util.AddNetworkString("HL2CR_Player_NotifyKilled")
 
 util.AddNetworkString("HL2CR_Cosmetic_Use")
 util.AddNetworkString("HL2CR_Cosmetic")

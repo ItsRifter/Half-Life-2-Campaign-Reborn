@@ -2999,7 +2999,7 @@ EP1_WEAPONS = {
 	},
 }
 
-local EP1_EQUIPMENT = {
+EP1_EQUIPMENT = {
 	["ep1_c17_00a"] = {		
 		[1] = {
 			["Type"] = "Armor",
@@ -3236,3 +3236,4 @@ local EP1_EQUIPMENT = {
 		}
 	},
 }
+

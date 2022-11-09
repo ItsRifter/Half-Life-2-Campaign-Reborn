@@ -546,11 +546,8 @@ local function SetUpMisc()
 	end
 
     if game.GetMap() == "ep1_citadel_03" then
-		local fixAlyx = ents.Create("trigger_once")
-        fixAlyx:SetCollisionBoundsWS(Vector(1308, 12208, 5504), Vector(1454, 11969, 5313))
-        fixAlyx:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FixAlyxCitadel")
-        fixAlyx:SetTrigger(true)
-        fixAlyx:Spawn()
+		
+        ents.FindByName("trigger_closedoors")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FixAlyxCitadel")
 
         for k, spawn in ipairs(ents.FindByClass("info_player_start")) do 
 			if k ~= 1 then

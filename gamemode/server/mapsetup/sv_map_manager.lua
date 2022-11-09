@@ -168,33 +168,33 @@ function StartMapCountdown()
 			return
 		end
 		
-		if game.GetMap() == "d1_town_02" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
-			RunConsoleCommand("changelevel", "d1_town_03")
-			return
-		elseif game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
-			RunConsoleCommand("changelevel", "d1_town_02a")
-			return
+		if game.GetMap() == "d1_town_02" then 
+			if game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
+				RunConsoleCommand("changelevel", "d1_town_03")
+			else
+				RunConsoleCommand("changelevel", "d1_town_02a")
+			end
 		end
 		
 		if game.GetMap() == "d1_town_03" then
 			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
 			RunConsoleCommand("changelevel", "d1_town_02")
-			return
 		end
 		
-		if game.GetMap() == "d2_coast_07" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
+		if game.GetMap() == "d2_coast_07" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then 
 			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
 			RunConsoleCommand("changelevel", "d2_coast_08")
-			return
-		elseif game.GetMap() == "d2_coast_08" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
-			RunConsoleCommand("changelevel", "d2_coast_07")
-			return
 		end
 		
+		if game.GetMap() == "d2_coast_08" then
+			RunConsoleCommand("changelevel", "d2_coast_07")
+			return 
+		end
+
 		if game.GetMap() == "d2_coast_07" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
 			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
 			RunConsoleCommand("changelevel", "d2_coast_09")
-			return 
+			return
 		end
 		
 		for k = 1, #MAPS_HL2 do

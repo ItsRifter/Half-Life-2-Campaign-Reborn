@@ -42,6 +42,7 @@ AddCSLuaFile("client/interface/cl_ui_elements.lua")
 AddCSLuaFile("client/interface/cl_ach_notify.lua")
 AddCSLuaFile("client/interface/panels/cl_ui_dragpanel.lua")
 AddCSLuaFile("client/chat/cl_leifchat.lua")
+AddCSLuaFile("client/hud/cl_autoicons.lua")
 
 //Shared
 include("shared/sh_language_support.lua")
