@@ -131,14 +131,14 @@ if SERVER then
         if ply.activePet then return end
 
         if MAPS_NO_PETS[game.GetMap()] then return end
+        ply:UpdateNetworks()
 
         ply.activePet = SpawnPet(ply)
-
         if ply.activePet == nil then return end
 
         ply.activePet:UpdateRelationships()
         ply.activePet:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-        
+
         for _, npc in ipairs(ents.FindByClass("npc_*")) do
             if npc:IsNPC() then
                if npc:IsFriendly() then ply.activePet:MakeFriendlyNotFear(npc) end

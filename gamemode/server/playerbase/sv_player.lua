@@ -722,6 +722,8 @@ function hl2cr_player:UpdateNetworks()
 		if activePet == nil then return end
 		
 		self:SetNWString("hl2cr_petstat_name", activePet.Name)
+		self:SetNWInt("hl2cr_petstat_xp", activePet.XP)
+		self:SetNWInt("hl2cr_petstat_reqxp", activePet.ReqXP)
 	end
 end
 

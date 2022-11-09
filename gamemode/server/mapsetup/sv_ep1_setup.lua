@@ -252,7 +252,7 @@ local ep1_triggers = {
 
         ["checkpoint_spot"] = {
             [1] = Vector(3387, 11756, 3618),
-            [2] = Vector(3500, -143, 3463),
+            [2] = Vector(3530, -172, 3449),
             [3] = Vector(3772, 7959, 3602)
         },
     },
