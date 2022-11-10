@@ -592,7 +592,6 @@ function GM:DoPlayerDeath(ply, att, dmgInfo)
 	ply:CreateRagdollBody(dmgInfo)
 	ply:Spectate( OBS_MODE_CHASE )
 	ply:SpectateEntity(ply.Ragdoll)
-	CheckPlayerCompleted()
 
 	local notifyTbl = {
 		["victim"] = ply,
@@ -611,6 +610,8 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 
 	victim.CanRespawn = false
 	victim.TimeDied = (10 * GetConVar("hl2cr_difficulty"):GetInt()) + CurTime()
+
+	CheckPlayerCompleted()
 end
 
 function GM:PlayerDeathThink( ply )
@@ -724,6 +725,7 @@ function hl2cr_player:UpdateNetworks()
 		self:SetNWString("hl2cr_petstat_name", activePet.Name)
 		self:SetNWInt("hl2cr_petstat_xp", activePet.XP)
 		self:SetNWInt("hl2cr_petstat_reqxp", activePet.ReqXP)
+		self:SetNWInt("hl2cr_petstat_level", activePet.Level)
 	end
 end
 

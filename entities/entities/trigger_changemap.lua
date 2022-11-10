@@ -42,7 +42,8 @@ function ENT:Touch(ent)
 		end
 
 		ent:SetTeam(TEAM_COMPLETED_MAP)
-		
+		ent:Flashlight(false)
+
 		BroadcastMessageToAll(HL2CR_PlayerColour, ent:Nick(), HL2CR_StandardColour, translate.Get("Player_CompletedMap"), string.FormattedTime(CurTime(), "%02i:%02i"))
 
 		ent:DisplayResults()
@@ -55,7 +56,6 @@ function ENT:Touch(ent)
 		end
 
 		ent:ToggleSpectator(true)
-		ent:Flashlight(false)
 		ent:UpdateClass()
 	end
 

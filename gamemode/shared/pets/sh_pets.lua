@@ -48,26 +48,28 @@ if SERVER then
     
     function SpawnPet(spawner)
         if table.IsEmpty(spawner.hl2cr.Pets) then return nil end
-        local petClass = nil
+        local petToSpawn = nil
 
         for _, p in ipairs(spawner.hl2cr.Pets) do
             if p.Active then
-                petClass = p.Class
+                petToSpawn = p
                 break
             end
         end
         
-        if petClass == nil then return nil end
+        if petToSpawn == nil then return nil end
 
-        local pet = ents.Create(petClass)
+        local pet = ents.Create(petToSpawn.Class)
         pet:SetNWBool("hl2cr_pet", true)
         pet:Spawn()
         pet:SetOwner(spawner)
         pet:SetPos(spawner:GetPos())
-        pet:SetHealth(25)
-
+        pet:SetHealth(petToSpawn.Stats.HP)
+        
         return pet
     end
+
+
 
     function hl2cr_pet:UpdatePlayerRelationship(pl)
         self:AddEntityRelationship(pl, D_LI, 99)
@@ -127,6 +129,20 @@ if SERVER then
         ply.activePet:SetPos(ply:GetPos())
     end
 
+    function hl2cr_pet:DoRelationChecks()
+        for _, npc in ipairs(ents.FindByClass("npc_*")) do
+            
+            
+            if npc:IsNPC() then
+               if npc:IsFriendly() then self:MakeFriendlyNotFear(npc) end
+
+               if npc:IsHostile() then self:MakeHostileTarget(npc) end
+
+               if npc:IsPet() then self:MakeFriendlyTowardsPet(npc) end
+            end
+        end
+    end
+
     function CreatePet(ply)
         if ply.activePet then return end
 
@@ -137,17 +153,8 @@ if SERVER then
         if ply.activePet == nil then return end
 
         ply.activePet:UpdateRelationships()
-        ply.activePet:SetCollisionGroup(COLLISION_GROUP_WEAPON)
-
-        for _, npc in ipairs(ents.FindByClass("npc_*")) do
-            if npc:IsNPC() then
-               if npc:IsFriendly() then ply.activePet:MakeFriendlyNotFear(npc) end
-
-               if npc:IsHostile() then ply.activePet:MakeHostileTarget(npc) end
-
-               if npc:IsPet() then ply.activePet:MakeFriendlyTowardsPet(npc) end
-            end
-        end
+        ply.activePet:SetCollisionGroup(COLLISION_GROUP_PASSABLE_DOOR)
+        ply.activePet:DoRelationChecks()
     end
 
     concommand.Add("hl2cr_pet_spawn", function(ply)
@@ -170,14 +177,7 @@ if SERVER then
         timer.Simple(0.1, function()
             for _, v in ipairs(player.GetAll()) do
                 if not v.activePet then continue end
-                
-                if ent:IsFriendly() then
-                    v.activePet:MakeFriendlyNotFear(ent)
-                elseif ent:IsPet() then 
-                    v.activePet:MakeFriendlyTowardsPet(ent)
-                elseif ent:IsHostile() then
-                    v.activePet:MakeHostileTarget(ent)
-                end
+                v.activePet:DoRelationChecks()
             end
         end)
     end)

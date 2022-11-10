@@ -171,8 +171,10 @@ function StartMapCountdown()
 		if game.GetMap() == "d1_town_02" then 
 			if game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
 				RunConsoleCommand("changelevel", "d1_town_03")
-			else
+				return 
+			elseif game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
 				RunConsoleCommand("changelevel", "d1_town_02a")
+				return 
 			end
 		end
 		
@@ -180,19 +182,14 @@ function StartMapCountdown()
 			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
 			RunConsoleCommand("changelevel", "d1_town_02")
 		end
-		
-		if game.GetMap() == "d2_coast_07" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then 
-			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
-			RunConsoleCommand("changelevel", "d2_coast_08")
-		end
-		
+				
 		if game.GetMap() == "d2_coast_08" then
+			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
 			RunConsoleCommand("changelevel", "d2_coast_07")
 			return 
 		end
 
 		if game.GetMap() == "d2_coast_07" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
-			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
 			RunConsoleCommand("changelevel", "d2_coast_09")
 			return
 		end
@@ -251,8 +248,6 @@ function StartMapCountdown()
 			end
 		end
 	end)
-
-	game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
 end
 
 function StartFinalMapCountdown()
@@ -322,11 +317,11 @@ function CheckPlayerCompleted()
 	if mapChange then return end
 	
 	--If the player count is over 4, check if completers is greater than total players divided
-	if #player.GetAll() >= 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > math.ceil((team.NumPlayers(TEAM_ALIVE) / 2)) then		
+	if #player.GetAll() >= 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > (math.ceil((team.NumPlayers(TEAM_ALIVE) / 2)) - team.NumPlayers(TEAM_DEAD)) then		
 		mapChange = true
 		StartMapCountdown()
 	--else just check if completers is greater than alive players
-	elseif #player.GetAll() < 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > team.NumPlayers(TEAM_ALIVE) then		
+	elseif #player.GetAll() < 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > (team.NumPlayers(TEAM_ALIVE) - team.NumPlayers(TEAM_DEAD))  then		
 		mapChange = true
 		StartMapCountdown()
 	end

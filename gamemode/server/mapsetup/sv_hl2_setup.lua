@@ -628,8 +628,8 @@ local HL2_TRIGGERS = {
 
         ["checkpoints"] = {
             [1] = {
-                [1] = Vector(-7479, -290, -3293),
-                [2] = Vector(-7547, -154, -3405)
+                [1] = Vector(-1041, 10321, 898),
+                [2] = Vector(-1224, 10465, 1014)
             }
         },
 
@@ -1713,6 +1713,7 @@ local fix_spawns_maps = {
     ["d1_trainstation_02"] = true,
     ["d2_coast_10"] = true,
     ["d2_prison_01"] = true,
+    ["d2_prison_03"] = true,
     ["d2_prison_05"] = true,
     ["d3_c17_07"] = true,
     ["d3_c17_12"] = true,
@@ -1884,7 +1885,7 @@ local function SetUpMisc()
 		end
     end
 
-    if game.GetMap() == "d1_town_02a" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
+    if ( game.GetMap() == "d1_town_02a" or game.GetMap() == "d2_coast_09" ) and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
 		game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
 	end
 
@@ -1936,7 +1937,6 @@ local function SetUpMisc()
 	end
     
     if game.GetMap() == "d2_coast_08" then
-        game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
         blocker = ents.Create("prop_dynamic")
 		blocker:SetModel("models/props_doors/door03_slotted_left.mdl")
 		blocker:SetPos(Vector(3305, 1542, 1588))
@@ -1989,8 +1989,8 @@ local function SetUpMisc()
 end
 
 function StartHL2()
-	SetHL2Checkpoints()
 	SetUpMisc()
+	SetHL2Checkpoints()
 	//SetUpLambdas()
     SetUpVortex()
 end

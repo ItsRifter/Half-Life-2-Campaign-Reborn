@@ -75,7 +75,7 @@ function hl2cr_player:AddXP(XP)
 		self.hl2cr.Exp = self.hl2cr.Exp - self.hl2cr.ReqExp
 		self.hl2cr.Level = self.hl2cr.Level + 1
 		self.hl2cr.SkillPoints = self.hl2cr.SkillPoints + 1
-		self.hl2cr.ReqExp = self.hl2cr.ReqExp + math.Round(4 * math.pow( self.hl2cr.Level + 9, 3 ) / 5);
+		self.hl2cr.ReqExp = self.hl2cr.ReqExp + math.Round(4 * math.pow( self.hl2cr.Level + 5, 3 ) / 5);
 		//self.hl2cr.ReqExp = self.hl2cr.ReqExp + (375 * self.hl2cr.Level)
 		if LEVEL_REWARDS[self.hl2cr.Level] then
 			LEVEL_REWARDS[self.hl2cr.Level](self)
@@ -110,6 +110,16 @@ hook.Add( "OnNPCKilled", "HL2CR_GiveXP", function( npc, attacker, inflictor )
 		local gainXP = math.random(XP_BASE_RANDOM[npc:GetClass()].xpMin, XP_BASE_RANDOM[npc:GetClass()].xpMax)
 		
 		attacker:AddXP(gainXP)
+	end
+
+	if attacker:IsPet() then
+		if npc:GetClass() == "npc_antlion" and not ALLOWED_ANTLIONS_XP[game.GetMap()] then return end
+
+		if not XP_BASE_RANDOM[npc:GetClass()] then return end
+
+		local gainXP = math.random(XP_BASE_RANDOM[npc:GetClass()].xpMin, XP_BASE_RANDOM[npc:GetClass()].xpMax) / 2
+
+		attacker:AddXP(math.Round(gainXP))
 	end
 end)
 

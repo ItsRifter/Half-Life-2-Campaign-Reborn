@@ -266,7 +266,8 @@ hook.Add("HUDPaint", "HL2CR_DrawPetStats", function()
 				draw.SimpleText(pet:GetOwner():GetNWString("hl2cr_petstat_name"), "hl2cr_hud_pet", ScrPos.x, ScrPos.y + 35, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 				//TEMPORARY
-				draw.SimpleText(pet:GetOwner():GetNWString("hl2cr_petstat_xp") .. "/" .. pet:GetOwner():GetNWString("hl2cr_petstat_reqxp"), "hl2cr_hud_pet", ScrPos.x, ScrPos.y + 65, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.SimpleText(pet:Health() .. "/" .. pet:GetMaxHealth(), "hl2cr_hud_pet", ScrPos.x, ScrPos.y + 65, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				//draw.SimpleText(pet:GetOwner():GetNWString("hl2cr_petstat_xp") .. "/" .. pet:GetOwner():GetNWString("hl2cr_petstat_reqxp"), "hl2cr_hud_pet", ScrPos.x, ScrPos.y + 65, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 			end
 		end
 	end

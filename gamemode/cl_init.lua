@@ -27,6 +27,7 @@ include("shared/playerbase/suit/modules/sh_sprinting.lua")
 
 include("shared/pets/sh_pets_setup.lua")
 include("shared/pets/sh_pets.lua")
+include("shared/pets/sh_pets_stats.lua")
 
 include("shared/items/cosmetics/sh_cosmetic_base.lua")
 include("shared/items/cosmetics/sh_basic_cosmetics.lua")

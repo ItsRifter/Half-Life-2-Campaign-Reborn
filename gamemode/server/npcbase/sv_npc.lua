@@ -114,9 +114,8 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
         return false
 
     elseif target:IsNPC() then
-        local playerAtt = dmgInfo:GetAttacker()
-
-        if target:IsPet() then
+        
+        if target:IsPet() and attacker:IsPlayer() then
             return true
         end
     else
