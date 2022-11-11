@@ -68,11 +68,12 @@ function AchNotice(achTbl)
 	end
 end
 
-function AchUpdateNotice(achTitle, achImg, achProgress, achMaxValue)
+function AchUpdateNotice(achTbl)
 	
-	if not achTitle then achTitle = "BUG" end
-	if not achImg then achImg = "entities/npc_kleiner.png" end
-	if not achProgress then achProgress = -1 end
+	if not achTbl.name then achTbl.name = "BUG" end
+	if not achTbl.icon then achTbl.icon = "entities/npc_kleiner.png" end
+	if not achTbl.progress then achTbl.progress = -1 end
+	if not achTbl.max then achTbl.max = -1 end
 	
 	local achPopUp = vgui.Create("DNotify")
 	achPopUp:SetSize(340, 100)
@@ -91,18 +92,18 @@ function AchUpdateNotice(achTitle, achImg, achProgress, achMaxValue)
 	local icon = vgui.Create("DImage", FGPnl)
 	icon:SetPos(5, 10)
 	icon:SetSize(64, 64)
-	icon:SetImage(achImg)
+	icon:SetImage(achTbl.icon)
 	
 	local text = vgui.Create("DLabel", FGPnl)
 	text:SetPos(75, 5)
-	text:SetText(achTitle)
+	text:SetText(achTbl.name)
 	text:SetTextColor(Color(230, 230, 230))
 	text:SetFont("ChatFont")
 	text:SizeToContents()
 	
 	local progress = vgui.Create("DLabel", FGPnl)
 	progress:SetPos(70, 45)
-	progress:SetText(achProgress .. "/" .. achMaxValue)
+	progress:SetText(achTbl.progress .. "/" .. achTbl.max)
 	progress:SetTextColor(Color(230, 230, 230))
 	progress:SetFont("ChatFont")
 	progress:SizeToContents()
@@ -123,9 +124,6 @@ net.Receive("HL2CR_AchievementEarned", function()
 end)
 
 net.Receive("HL2CR_AchievementUpdate", function()
-	local achTitle = net.ReadString()
-	local achImg = net.ReadString()
-	local achProgress = net.ReadInt(16)
-	local achMaxValue = net.ReadInt(16)
-	--AchUpdateNotice(achTitle, achImg, achProgress, achMaxValue)
+	local achNotifyTbl = net.ReadTable()
+	AchUpdateNotice(achNotifyTbl)
 end)

@@ -80,7 +80,28 @@ if SERVER then
 end
 
 if CLIENT then 
-    Client_ShowcaseModels = {
+    ClientLevelModels = {
+        [1] = {
+            [1] = "models/player/group01/male_01.mdl",
+            [2] = "models/player/group01/male_02.mdl",
+            [3] = "models/player/group01/male_03.mdl",
+            [4] = "models/player/group01/male_04.mdl",
+            [5] = "models/player/group01/male_05.mdl",
+            [6] = "models/player/group01/male_06.mdl",
+            [7] = "models/player/group01/male_07.mdl",
+            [8] = "models/player/group01/male_08.mdl",
+            [9] = "models/player/group01/male_09.mdl",
+
+            [10] = "models/player/group01/female_01.mdl",
+            [11] = "models/player/group01/female_02.mdl", 
+            [12] = "models/player/group01/female_03.mdl",
+            [13] = "models/player/group01/female_04.mdl",
+            [14] = "models/player/group01/female_05.mdl",
+            [15] = "models/player/group01/female_06.mdl"
+        }
+    }
+
+    ClientModels = {
         ["Citizen"] = {
             [1] = "models/player/group01/male_01.mdl",
             [2] = "models/player/group01/male_02.mdl",

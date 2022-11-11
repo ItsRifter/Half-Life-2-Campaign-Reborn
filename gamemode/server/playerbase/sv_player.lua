@@ -20,6 +20,7 @@ local NO_SUICIDE_MAPS = {
 RESTRICTED_WEAPONS = {
 	["weapon_physgun"] = true,
 	["weapon_stunstick"] = true,
+	["weapon_medkit"] = true,
 	//Admin stuff
 	["swep_construction_kit"] = true,
 	//HL2CR weapons
@@ -122,6 +123,15 @@ local weapon_melees = {
 	["weapon_crowbar"] = true
 }
 
+local mapach_setup = {
+	["d1_town_01"] = function(ply)
+		if table.HasValue(ply.hl2cr.AchProgress, "ZombieChopperActive") or ply:HasAchievement("Zombie Chopper") then return end
+		
+		table.insert(ply.hl2cr.AchProgress, "ZombieChopperActive")
+		ply:BroadcastMessage(HL2CR_AchNotifyColour, translate.Get("Achievement_HL2_ZombieChopper_Name"), HL2CR_StandardColour, translate.Get("Achievement_Notify_Begin"))
+	end
+}
+
 function GM:PlayerShouldTakeDamage( ply, attacker )
 	if attacker:IsPlayer() and ply ~= attacker then
 		return false
@@ -138,32 +148,21 @@ function hl2cr_player:DisplayResults()
 	net.Send(self)
 end
 
-function hl2cr_player:UpdateModelNetwork(type, gender)
-	local newType = self.hl2cr.ModelType.Type
-	local newGender = self.hl2cr.ModelType.Gender
-	
-	if type ~= "" then
-		newType = type
-	end
-
-	if gender ~= "" then
-		newGender = gender
-		self:BroadcastMessage(Color(240, 135, 0), translate.Get("QMenu_Gender_Update"))
-	end
-
-	self.hl2cr.ModelType = {
-		["Type"] = newType,
-		["Gender"] = newGender
-	}
+function hl2cr_player:UpdateModelNetwork(newMdl)	
+	self:BroadcastMessage(Color(240, 135, 0), translate.Get("QMenu_Model_Update"))
+	self.hl2cr.PMModel = newMdl
 end
 
-function hl2cr_player:ChangeModel()
+function hl2cr_player:ChangeModel(newModel)
 	if !self.loaded then 
 		self:SetModel("models/player/kleiner.mdl")
 		return 
 	end
-	self:SetModel(ServerModels[self.hl2cr.ModelType.Type][self.hl2cr.ModelType.Gender]
-	[math.random(1, #ServerModels[self.hl2cr.ModelType.Type][self.hl2cr.ModelType.Gender])])
+
+	self:SetModel(newModel)
+
+	//self:SetModel(ServerModels[self.hl2cr.ModelType.Type][self.hl2cr.ModelType.Gender]
+	//[math.random(1, #ServerModels[self.hl2cr.ModelType.Type][self.hl2cr.ModelType.Gender])])
 end
 
 function hl2cr_player:SetClass(className)
@@ -199,7 +198,7 @@ function hl2cr_player:SetUpPlayer()
 	self:SetCustomCollisionCheck(true)
 	self:SetNoCollideWithTeammates(true)
 
-	self:ChangeModel()
+	self:ChangeModel(self.hl2cr.PMModel)
 	
 	timer.Simple(2, function()
 		self:SetupHands()
@@ -295,6 +294,11 @@ function hl2cr_player:SetUpInitialSpawn()
 	
 	self:LoadSkills()
 	self:SetUpPlayer()
+
+	if mapach_setup[game.GetMap()] then
+		mapach_setup[game.GetMap()](self)
+	end
+
 	self:GiveWeaponsSpawn()
 	self:AdjustSpeed()
 	self:UpdateClass()
@@ -331,8 +335,8 @@ function hl2cr_player:SetUpRespawnRevive()
 end
 
 function hl2cr_player:SetUpRespawn()
-    if self:IsBot() then return end
-	
+	if self:IsBot() then return end
+
 	if self.Ragdoll == nil then
 		self:LoadSkills()
 		self:UnSpectate()
@@ -843,7 +847,7 @@ end)
 net.Receive("HL2CR_Model_Update", function(len, ply)
 	if not ply then return end
 
-	ply:UpdateModelNetwork(net.ReadString(), net.ReadString())
+	ply:UpdateModelNetwork(net.ReadString())
 end)
 
 net.Receive("HL2CR_Class_Update", function(len, ply)

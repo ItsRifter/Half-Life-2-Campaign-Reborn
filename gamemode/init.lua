@@ -84,7 +84,7 @@ hook.Add("PrePACConfigApply", "HL2CR_PreventPac3Autoload", function(ply, outfit_
     --     return false
     -- end
 
-    return false
+    return ply:IsAdmin()
 end)
 
 hook.Add( "PrePACEditorOpen", "HL2CR_RestrictPac3", function( ply )

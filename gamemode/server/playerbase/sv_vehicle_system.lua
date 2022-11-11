@@ -158,6 +158,8 @@ end
 function GM:ShowSpare2(ply)
 	if ply.antiExploit and ply.antiExploit > CurTime() then return end
 	
+	if not ply.nextSpawn then return end
+
 	if ply.nextSpawn > CurTime() then
 		ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Vehicle_TooFast"), tostring(math.Round(ply.nextSpawn - CurTime())))
 		return

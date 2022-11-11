@@ -4,6 +4,8 @@ ENT.Type = "brush"
 local achievement_items = {
 	["models/props_c17/doll01.mdl"] = function()
 		game.SetGlobalState("hl2cr_bringitem_whatbaby", GLOBAL_ON)
+		BroadcastMessageToAll(HL2CR_AchNotifyColour, translate.Get("Achievement_HL2_WhatBaby_Name"), HL2CR_StandardColour, translate.Get("Achievement_Notify_Progress"))
+		BroadcastSoundToAll("hl2cr/standardbeep.wav")
 	end,
 
 	["models/roller.mdl"] = function()
@@ -13,7 +15,11 @@ local achievement_items = {
 			end
 			
 			game.SetGlobalState("hl2cr_bringitem_rollermine", GLOBAL_DEAD)
+			return 
 		end
+
+		BroadcastMessageToAll(HL2CR_AchNotifyColour, translate.Get("Achievement_HL2_RavenBall_Name"), HL2CR_StandardColour, translate.Get("Achievement_Notify_Progress"))
+		BroadcastSoundToAll("hl2cr/standardbeep.wav")
 		game.SetGlobalState("hl2cr_bringitem_rollermine", GLOBAL_ON)
 	end
 }
@@ -38,7 +44,7 @@ function ENT:Touch(ent)
 	if ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
 		
 		if self.Func then
-			self.Func()
+			self.Func(ent)
 		end
 
 		ent:SetTeam(TEAM_COMPLETED_MAP)

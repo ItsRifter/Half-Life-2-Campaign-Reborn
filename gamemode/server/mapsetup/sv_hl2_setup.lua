@@ -28,6 +28,159 @@
 }
 --]]
 
+local HL2_LAMBDA_TRIGGERS = {
+    ["d1_trainstation_05"] = {
+        [1] = {
+            [1] = Vector(-6512, -1086, 2),
+            [2] = Vector(-6585, -1007, 105)
+        }
+    },
+
+    ["d1_canals_01"] = {
+        [1] = {
+            [1] = Vector(803, -6250, 622),
+            [2] = Vector(748, -6154, 513)
+        },
+
+        [2] = {
+            [1] = Vector(589, -4978, 553),
+            [2] = Vector(626, -4940, 512)
+        }
+    },
+
+    ["d1_canals_01a"] = {
+        [1] = {
+            [1] = Vector(129, 6018, -88),
+            [2] = Vector(71, 6094, 3)
+        },
+    },
+
+    ["d1_canals_02"] = {
+        [1] = {
+            [1] = Vector(-181, -1008, -1069),
+            [2] = Vector(-270, -945, -959)
+        },
+    },
+
+    ["d1_canals_03"] = {
+        [1] = {
+            [1] = Vector(-190, -447, -1012),
+            [2] = Vector(-48, -573, -878)
+        },
+    },
+
+    ["d1_canals_05"] = {
+        [1] = {
+            [1] = Vector(4024, 4937, -126),
+            [2] = Vector(4151, 4971, -28)
+        },
+    },
+
+    ["d1_canals_06"] = {
+        [1] = {
+            [1] = Vector(7875, 9116, -125),
+            [2] = Vector(7936, 9027, -234)
+        },
+
+        [2] = {
+            [1] = Vector(4584, 5892, 97),
+            [2] = Vector(4499, 6031, 172),
+        },
+        
+        [3] = {
+            [1] = Vector(-8082, 14007, -28),
+            [2] = Vector(-8392, 13762, 92),
+        },
+    },
+
+    ["d1_canals_07"] = {
+        [1] = {
+            [1] = Vector(-4549, -14917, -767),
+            [2] = Vector(-4352, -14813, -894),
+        }
+    },
+
+    ["d1_canals_08"] = {
+        [1] = {
+            [1] = Vector(-6918, 775, -427),
+            [2] = Vector(-6773, 576, -604),
+        }
+    },
+
+    ["d1_canals_09"] = {
+        [1] = {
+            [1] = Vector(7167, -9349, -315),
+            [2] = Vector(6913, -9216, -173)
+        }
+    },
+
+    ["d1_canals_10"] = {
+        [1] = {
+            [1] = Vector(12000, -1920, -191),
+            [2] = Vector(11773, -1699, -25)
+        },
+
+        [2] = {
+            [1] = Vector(11231, 457, -379),
+            [2] = Vector(11129, 301, -263)
+        }
+    },
+    
+    ["d1_canals_12"] = {
+        [1] = {
+            [1] = Vector(551, 10888, 609),
+            [2] = Vector(450, 11087, 500)
+        }
+    },
+
+    ["d1_eli_01"] = {
+        [1] = {
+            [1] = Vector(88, 4337, -1234),
+            [2] = Vector(197, 4490, -1406)
+        }
+    },
+
+    ["d1_town_01"] = {
+        [1] = {
+            [1] = Vector(641, -1663, -3645),
+            [2] = Vector(813, -1602, -3563)
+        },
+
+        [2] = {
+            [1] = Vector(943, 1137, -3556),
+            [2] = Vector(777, 1056, -3645)
+        }
+    },
+
+    ["d1_town_01a"] = {
+        [1] = {
+            [1] = Vector(62, 271, -3248),
+            [2] = Vector(125, 138, -3325)
+        }
+    },
+
+    ["d2_coast_07"] = {
+        [1] = {
+            [1] = Vector(1827, 9462, 1680),
+            [2] = Vector(1681, 9296, 1842)
+        }
+    },
+
+    ["d2_coast_09"] = {
+        [1] = {
+            [1] = Vector(11076, 8852, -27),
+            [2] = Vector(11175, 8753, -43)
+        }
+    },
+
+    ["d2_coast_11"] = {
+        [1] = {
+            [1] = Vector(3166, 956, 994),
+            [2] = Vector(3435, 620, 817)
+        }
+    },
+}
+
 local HL2_TRIGGERS = {
     ["d1_trainstation_01"] = {
         ["checkpoints"] = {
@@ -618,6 +771,15 @@ local HL2_TRIGGERS = {
             [1] = Vector(-2688, 1024, -4735),
             [2] = Vector(-2679, 1278, -4862)
         },
+
+        ["changelevel_func"] = {
+            [1] = function(ply) 
+                if not table.HasValue(ply.hl2cr.AchProgress, "ZombieChopperActive") then return end
+                ply:GrantAchievement("Zombie Chopper")
+                table.RemoveByValue(ply.hl2cr.AchProgress, "ZombieChopperActive")
+                SavePlayerData(ply)
+            end
+        },
     },
 
     ["d1_town_05"] = {
@@ -1095,7 +1257,7 @@ local HL2_TRIGGERS = {
             [2] = Vector(-960, -3583, 128)
         },
         ["changelevel_func"] = {
-            [1] = function() 
+            [1] = function(ply)
                 for _, v in ipairs(player.GetAll()) do
 				v:GrantAchievement("Follow Freeman")
                 end
@@ -1135,7 +1297,7 @@ local HL2_TRIGGERS = {
         },
 
         ["changelevel_func"] = {
-            [1] = function()
+            [1] = function(ply)
                 for _, v in ipairs(player.GetAll()) do
                     v:GrantAchievement("Radiation Levels Detected")
                 end
@@ -1319,7 +1481,7 @@ local HL2_TRIGGERS = {
         },
 
         ["changelevel_func"] = {
-            [1] = function()
+            [1] = function(ply)
                 for _, v in ipairs(player.GetAll()) do
                     v:GrantAchievement("Giant Killer")
                 end
@@ -1375,7 +1537,7 @@ local HL2_TRIGGERS = {
         },
 
         ["changelevel_func"] = {
-            [1] = function()
+            [1] = function(ply)
                 for k, v in ipairs(player.GetAll()) do
                     if v:InVehicle() then v:ExitVehicle() end
                     v:SetPos(Vector(11539, 5926, -1643))
@@ -1470,7 +1632,7 @@ local HL2_TRIGGERS = {
         },
 
         ["changelevel_func"] = {
-            [1] = function()
+            [1] = function(ply)
                 for k, v in ipairs(player.GetAll()) do 
                     if v:InVehicle() then v:ExitVehicle() end
                     v:SetPos(Vector(14347, -9935, 8741))
@@ -1692,6 +1854,18 @@ local function SetHL2Checkpoints()
             pusher:SetPos(pusher.Pos)
             pusher:Spawn()
             pusher.TPSpot = HL2_TRIGGERS[game.GetMap()]["pusher_spot"][i]
+        end
+    end
+
+    if HL2_LAMBDA_TRIGGERS[game.GetMap()] then
+        for i, l in ipairs(HL2_LAMBDA_TRIGGERS[game.GetMap()]) do
+            local lambdaTrigger = ents.Create("trigger_lambda")
+            lambdaTrigger.Min = Vector(l[1])
+            lambdaTrigger.Max = Vector(l[2])
+            lambdaTrigger.Pos = Vector(l[2]) - ( ( Vector(l[2]) - Vector(l[1])) / 2 )
+            lambdaTrigger:SetPos(lambdaTrigger.Pos)
+            lambdaTrigger:Spawn()
+            lambdaTrigger.Index = i
         end
     end
 end

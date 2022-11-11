@@ -271,6 +271,7 @@ end
 
 --On a cleanup or post map start, Initialize the map to support HL2-CR
 function GM:PostCleanupMap()
+	BroadcastMessageToAll(HL2CR_StandardColour, translate.Get("Admin_Notify_Cleanup"))
 	ClearHL2CREntities()
 	InitMap()
 end
@@ -316,6 +317,8 @@ local mapChange = false
 function CheckPlayerCompleted()
 	if mapChange then return end
 	
+	if team.NumPlayers(TEAM_COMPLETED_MAP) <= 0 then return end
+
 	--If the player count is over 4, check if completers is greater than total players divided
 	if #player.GetAll() >= 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > (math.ceil((team.NumPlayers(TEAM_ALIVE) / 2)) - team.NumPlayers(TEAM_DEAD)) then		
 		mapChange = true

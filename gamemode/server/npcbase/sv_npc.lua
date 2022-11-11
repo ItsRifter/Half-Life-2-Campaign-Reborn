@@ -19,7 +19,9 @@ FRIENDLY_HARMABLE_NPCS = {
 }
 
 MAPS_VORT_HOSTILE = {
-
+    ["level01_synb2_entryway_of_doom"] = true,
+    ["level02_synb2_tricks_and_traps"] = true,
+    
 }
 
 HOSTILE_NPCS = {

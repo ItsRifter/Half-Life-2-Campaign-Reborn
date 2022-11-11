@@ -20,7 +20,7 @@ local ravenhead = {
     ["Name"] = translate.Get("Hat_Ballhead_Name"),
     ["Class"] = "hat_ballhead",
     ["TakeDamageFunc"] = function(ply, attacker, dmgType)
-        if dmgType ~= DMG_SLASH then return end
+        if dmgType ~= DMG_SLASH and dmgType ~= DMG_GENERIC then return end
         
         dmgInfo = DamageInfo()
         dmgInfo:SetDamageType(DMG_SHOCK)

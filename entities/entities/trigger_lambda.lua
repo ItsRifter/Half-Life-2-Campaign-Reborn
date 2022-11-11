@@ -1,7 +1,7 @@
 ENT.Base = "base_brush"
 ENT.Type = "brush"
 ENT.Triggered = false
-
+ENT.Index = -1
 function ENT:Initialize()
 
 	--Set width, length and height of the lambda trigger
@@ -24,7 +24,7 @@ end
 function ENT:StartTouch(ent)
 	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_ALIVE and not self.Triggered then
 		self.Triggered = true
-		UpdateAchievement(ent, "HL2", "Lambda_Locator")
+		ent:UpdateLambdaLocator(game.GetMap() .. "_" .. self.Index)
 	end
 	
 	timer.Simple(2, function()

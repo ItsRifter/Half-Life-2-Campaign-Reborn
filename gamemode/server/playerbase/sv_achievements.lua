@@ -61,6 +61,45 @@ function hl2cr_player:GrantAchievement(achName)
 	self:UpdateNetworks()
 end
 
+function hl2cr_player:UpdateAchievement(achName, value)
+	if self:HasAchievement(achName) then return end
+end
+
+function hl2cr_player:UpdateLambdaLocator(value)
+	if self:HasAchievement("lambda_locator") then return end
+
+	if self.hl2cr.AchProgress["lambda_locator"] == nil then 
+		self.hl2cr.AchProgress["lambda_locator"] = {}
+	end
+
+	if table.HasValue(self.hl2cr.AchProgress["lambda_locator"], value) then return end
+
+	table.insert(self.hl2cr.AchProgress["lambda_locator"], value)
+	
+	local ach = nil 
+		for i, v in ipairs(GAMEMODE.Achievements) do
+			if v.Name == "Lambda Locator" then
+				ach = v
+				break
+			end
+		end
+
+	if table.Count(self.hl2cr.AchProgress["lambda_locator"]) >= ach.Max then
+		self:GrantAchievement("Lambda Locator")
+		table.Empty(self.hl2cr.AchProgress["lambda_locator"])
+		self.hl2cr.AchProgress["lambda_locator"] = nil  
+	else
+		net.Start("HL2CR_AchievementUpdate")
+			net.WriteTable({
+				["name"] = "Lambda Locator",
+				["icon"] = ach.Mat,
+				["progress"] = table.Count(self.hl2cr.AchProgress["lambda_locator"]),
+				["max"] = ach.Max
+			})
+		net.Send(self)
+	end
+end
+
 function hl2cr_player:HasAchievement(achName)
 	local fixName = string.Replace(achName, " ", "_")
 

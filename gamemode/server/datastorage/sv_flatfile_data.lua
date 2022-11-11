@@ -6,10 +6,7 @@ local function InitData(ply)
 	
 	--Player's name and model
 	ply.hl2cr.Name = ply.hl2cr.Name or ply:Nick()
-	ply.hl2cr.ModelType = ply.hl2cr.ModelType or {
-		["Type"] = "Citizen",
-		["Gender"] = "Male"
-	}
+	ply.hl2cr.PMModel = ply.hl2cr.PMModel or "models/player/group01/male_07.mdl"
 	
 	--Level
 	ply.hl2cr.Level = ply.hl2cr.Level or 0
@@ -32,6 +29,7 @@ local function InitData(ply)
 
 	--Achievements
 	ply.hl2cr.Achievements = ply.hl2cr.Achievements or {}
+	ply.hl2cr.AchProgress = ply.hl2cr.AchProgress or {}
 
 	--Inventory
 	ply.hl2cr.Inventory = ply.hl2cr.Inventory or {}
@@ -85,7 +83,7 @@ local function LoadData(ply)
 	return true -- Return true to signal that the settings could be loaded
 end
 
-local function SavePlayerData(ply)
+function SavePlayerData(ply)
 	if !ply.loaded then return end
 	local PlayerID = string.Replace(ply:SteamID(), ":", "!")
 
@@ -112,6 +110,7 @@ hook.Add("PlayerDisconnected", "HL2CR_SavePlayerDataDisconnect", function(ply)
 		ply.activePet:RemovePet()
 	end
 
+	table.RemoveByValue(ply.hl2cr.AchProgress, "ZombieChopperActive")
 	CheckPlayerCompleted()
 end)
 

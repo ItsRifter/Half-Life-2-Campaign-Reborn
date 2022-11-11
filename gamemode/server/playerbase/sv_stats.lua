@@ -57,7 +57,16 @@ local MAP_ACHS = {
 		timer.Create("hl2cr_ach_barnacle_" .. ply:EntIndex(), 0.25, 1, function()
 			barnacleKilled = 0
 		end)
-	end
+	end,
+}
+
+local MAP_PROGRESSIVE_ACHS = {
+	[1] = function(ply)
+		if ply:GetActiveWeapon():GetClass() ~= "weapon_physcannon" and table.HasValue(ply.hl2cr.AchProgress, "ZombieChopperActive") then
+			table.RemoveByValue(ply.hl2cr.AchProgress, "ZombieChopperActive")
+			ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Achievement_HL2_ZombieChopper_Name") .. translate.Get("Achievement_Notify_Fail"))
+		end
+	end,
 }
 
 function hl2cr_player:AddXP(XP)
@@ -101,7 +110,13 @@ hook.Add( "OnNPCKilled", "HL2CR_GiveXP", function( npc, attacker, inflictor )
 		if MAP_ACHS[game.GetMap()] then
 			MAP_ACHS[game.GetMap()](attacker, npc)
 		end
-		
+
+		if table.Count(attacker.hl2cr.AchProgress) > 0 then
+			for i, _ in ipairs(MAP_PROGRESSIVE_ACHS) do
+				MAP_PROGRESSIVE_ACHS[i](attacker)
+			end
+		end
+
 		if npc:GetClass() == "npc_antlion" and not ALLOWED_ANTLIONS_XP[game.GetMap()] then return end
 
 		if not XP_BASE_RANDOM[npc:GetClass()] then return end

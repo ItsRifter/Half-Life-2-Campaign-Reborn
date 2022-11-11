@@ -57,15 +57,19 @@ local function CreateMainPanel()
 		ent:SetAngles(self.Angles)
 	end
 
-	local playerGenderCombo = vgui.Create( "DComboBox", mainPnlPlayer )
-	playerGenderCombo:SetPos( 0, 20 )
-	playerGenderCombo:SetSize( 100, 20 )
-	playerGenderCombo:SetValue( "Select Gender" )
-	playerGenderCombo:AddChoice( "Male" )
-	playerGenderCombo:AddChoice( "Female" )
-	playerGenderCombo.OnSelect = function( self, index, value )
+	local playerModelCombo = vgui.Create( "DComboBox", mainPnlPlayer )
+	playerModelCombo:SetPos( 0, 20 )
+	playerModelCombo:SetSize( 100, 20 )
+	playerModelCombo:SetValue( "Select Character" )
+	for lvl, mdls in ipairs(ClientLevelModels) do
+		if LocalPlayer():GetNWInt("hl2cr_stat_level") >= lvl then
+			for i, m in ipairs(mdls) do
+				playerModelCombo:AddChoice(m)
+			end
+		end
+	end
+	playerModelCombo.OnSelect = function( self, index, value )
 		net.Start("HL2CR_Model_Update")
-			net.WriteString("")
 			net.WriteString(value)
 		net.SendToServer()
 	end
@@ -77,7 +81,7 @@ local function CreateMainPanel()
 	playerCosmeticCombo:SetSize( 100, 20 )
 	playerCosmeticCombo:SetValue( "Select Hat" )
 	playerCosmeticCombo:AddChoice("Clear")
-	if table.Count(cosmetics) > 1 then
+	if table.Count(cosmetics) >= 1 then
 		for _, c in ipairs(cosmetics) do
 			if c == nil then continue end
 			playerCosmeticCombo:AddChoice( c )
@@ -240,7 +244,7 @@ function ShowClass(class, panel)
 	showcaseModel:SetDirectionalLight(BOX_RIGHT, Color(255, 160, 80, 255))
 	showcaseModel:SetDirectionalLight(BOX_LEFT, Color(80, 160, 255, 255))
 	showcaseModel:SetAmbientLight(Vector(-64, -64, -64))
-	showcaseModel:SetModel( Client_ShowcaseModels[class.Name][math.random(1, #Client_ShowcaseModels[class.Name])] )
+	showcaseModel:SetModel( ClientModels[class.Name][math.random(1, #ClientModels[class.Name])] )
 
 	local eyepos = showcaseModel.Entity:GetBonePosition(showcaseModel.Entity:LookupBone("ValveBiped.Bip01_Head1"))
 

@@ -164,6 +164,16 @@ ACHIEVEMENT = {
         IsRare = false
     },
     
+    Zombie_Chopper = {
+        Name = translate.Get("Achievement_HL2_ZombieChopper_Name"),
+        Mat = "vgui/achievements/hl2_beat_ravenholm_noweapons.png",
+        Desc = translate.Get("Achievement_HL2_ZombieChopper_Desc"),
+        Rewards = {
+            XP = 1250,
+            Items = nil
+        },
+        IsRare = false
+    },
     
     Barnacle_Bowling = {
         Name = translate.Get("Achievement_HL2_BarnacleBowling_Name"),
@@ -193,6 +203,7 @@ ACHIEVEMENT = {
                 end
 
                 table.insert(ply.hl2cr.Inventory.Cosmetics, hat)
+                ply:BroadcastMessage(HL2CR_StandardColour, translate.Get("Hat_Unlocked") .. translate.Get("Hat_Ballhead_Name"))
             end
         },
         IsRare = false
