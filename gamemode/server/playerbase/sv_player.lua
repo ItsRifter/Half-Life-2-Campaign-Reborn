@@ -158,7 +158,10 @@ function hl2cr_player:UpdateModelNetwork(type, gender)
 end
 
 function hl2cr_player:ChangeModel()
-
+	if !self.loaded then 
+		self:SetModel("models/player/kleiner.mdl")
+		return 
+	end
 	self:SetModel(ServerModels[self.hl2cr.ModelType.Type][self.hl2cr.ModelType.Gender]
 	[math.random(1, #ServerModels[self.hl2cr.ModelType.Type][self.hl2cr.ModelType.Gender])])
 end
@@ -190,6 +193,7 @@ function hl2cr_player:SetClass(className)
 end
 
 function hl2cr_player:SetUpPlayer()	
+	if !self.loaded then return end
 	self:SetTeam(TEAM_ALIVE)
 
 	self:SetCustomCollisionCheck(true)
@@ -358,6 +362,7 @@ function hl2cr_player:SetUpRespawn()
 end
 
 function hl2cr_player:LoadSkills()
+	if !self.loaded then return end
 	for _, gS in ipairs(HL2CR_Skills) do
 		for i, s in ipairs(self.hl2cr.Skills) do
 			if gS.Class == s then
@@ -397,6 +402,7 @@ function hl2cr_player:GiveWeaponsSpawn()
 		self:Give(weapon)
 	end
 
+	if !self.loaded then return end
 	if self.hl2cr.Class.Weapons then
 		for _, classWep in ipairs(self.hl2cr.Class.Weapons) do
 			self:Give(classWep)

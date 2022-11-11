@@ -23,3 +23,6 @@ util.AddNetworkString("HL2CR_Player_NotifyKilled")
 
 util.AddNetworkString("HL2CR_Cosmetic_Use")
 util.AddNetworkString("HL2CR_Cosmetic")
+
+
+util.AddNetworkString("HL2CR_Loaded")	--

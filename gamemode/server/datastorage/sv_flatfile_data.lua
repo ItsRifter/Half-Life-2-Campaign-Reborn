@@ -47,6 +47,11 @@ local function InitData(ply)
 	--Pets
 	ply.hl2cr.Pets = ply.hl2cr.Pets or {}
 
+	ply.loaded = true --data is always init on load
+
+	net.Start("HL2CR_Loaded")
+	net.Send(ply)
+
 	ply:UpdateNetworks()
 end
 
@@ -81,6 +86,7 @@ local function LoadData(ply)
 end
 
 local function SavePlayerData(ply)
+	if !ply.loaded then return end
 	local PlayerID = string.Replace(ply:SteamID(), ":", "!")
 
 	-- Store all persistent data as JSON
@@ -118,8 +124,7 @@ hook.Add( "ShutDown", "HL2CR_MapChangeSave", function()
 	end
 end)
 
-hook.Add("PlayerInitialSpawn", "HL2CR_NewPlayerCheck", function(ply)
-	
+local function InitPlayer(ply)
     --If the player is a bot, set model to kleiner and stop there
 	if ply:IsBot() then
 		ply:SetModel("models/player/kleiner.mdl")
@@ -133,5 +138,16 @@ hook.Add("PlayerInitialSpawn", "HL2CR_NewPlayerCheck", function(ply)
 	end
 	
 	--If its a returning player, load their save file
-	LoadData(ply)
+	--LoadData(ply)
+end
+
+hook.Add("PlayerInitialSpawn", "HL2CR_NewPlayerCheck", function(ply)
+	InitPlayer(ply)
 end)
+
+local function InitialisePlayers() 
+	for k, v in pairs(player.GetAll()) do 
+		InitPlayer(v) 
+	end
+end
+timer.Simple(1, InitialisePlayers);
