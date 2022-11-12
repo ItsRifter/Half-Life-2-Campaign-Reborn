@@ -63,6 +63,35 @@ end
 
 function hl2cr_player:UpdateAchievement(achName, value)
 	if self:HasAchievement(achName) then return end
+
+	local achFixup = string.Replace(achName, " ", "_") 
+
+	if self.hl2cr.AchProgress[achFixup] == nil then
+		self.hl2cr.AchProgress[achFixup] = 0
+	end
+
+	self.hl2cr.AchProgress[achFixup] = self.hl2cr.AchProgress[achFixup] + value
+	local ach = nil
+	for i, v in ipairs(GAMEMODE.Achievements) do
+		if v.Name == achName then
+			ach = v
+			break
+		end
+	end
+
+	if table.Count(self.hl2cr.AchProgress[achFixup]) >= ach.Max then
+		self:GrantAchievement(achName)
+		self.hl2cr.AchProgress[achFixup] = nil
+	elseif self.hl2cr.AchProgress[achFixup] % ach.Update == 0 then 
+		net.Start("HL2CR_AchievementUpdate")
+			net.WriteTable({
+				["name"] = ach.Name,
+				["icon"] = ach.Mat,
+				["progress"] = table.Count(self.hl2cr.AchProgress[achName]),
+				["max"] = ach.Max
+			})
+		net.Send(self)
+	end
 end
 
 function hl2cr_player:UpdateLambdaLocator(value)
@@ -76,13 +105,13 @@ function hl2cr_player:UpdateLambdaLocator(value)
 
 	table.insert(self.hl2cr.AchProgress["lambda_locator"], value)
 	
-	local ach = nil 
-		for i, v in ipairs(GAMEMODE.Achievements) do
-			if v.Name == "Lambda Locator" then
-				ach = v
-				break
-			end
+	local ach = nil
+	for i, v in ipairs(GAMEMODE.Achievements) do
+		if v.Name == "Lambda Locator" then
+			ach = v
+			break
 		end
+	end
 
 	if table.Count(self.hl2cr.AchProgress["lambda_locator"]) >= ach.Max then
 		self:GrantAchievement("Lambda Locator")
@@ -91,7 +120,7 @@ function hl2cr_player:UpdateLambdaLocator(value)
 	else
 		net.Start("HL2CR_AchievementUpdate")
 			net.WriteTable({
-				["name"] = "Lambda Locator",
+				["name"] = ach.Name,
 				["icon"] = ach.Mat,
 				["progress"] = table.Count(self.hl2cr.AchProgress["lambda_locator"]),
 				["max"] = ach.Max

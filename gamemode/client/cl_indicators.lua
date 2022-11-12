@@ -8,7 +8,7 @@ surface.CreateFont( "Tahoma32",
 
 local tblIndacators = tblIndacators or {}
 local intLifeTime = 2
-local intFadeRate = 4
+local intFadeRate = 1
 local intGravity = 0.03
 local intFriction = 1.2
 local function DrawIndacators()
