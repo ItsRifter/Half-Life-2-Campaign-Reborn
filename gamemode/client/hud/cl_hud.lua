@@ -14,6 +14,8 @@ local client_musthidehud = {
 	["CHudChat"] = true
 }
 
+local tankNPCs = {}
+
 local function DisplayChatMessage(message)
 	chat.AddText(unpack(message))
 end
@@ -168,6 +170,15 @@ local function DisplayDeathNotification(msgTbl)
 	end
 end
 
+local function UpdateTankHud(ent)
+	if table.HasValue(tankNPCs, ent) then return end
+	table.insert(tankNPCs, ent)
+end
+
+net.Receive("HL2CR_TankNPC_Display", function()
+	UpdateTankHud(net.ReadEntity())
+end)
+
 net.Receive("HL2CR_Player_NotifyKilled", function()
 	DisplayDeathNotification(net.ReadTable())
 end)
@@ -236,6 +247,28 @@ hook.Add("PostDrawHUD", "HL2CR_DebugDraw", function()
 	surface.SetFont("hl2cr_scoreboard_player")
 	surface.DrawText( tostring(trace.HitPos) )
 end )
+
+local xPos = 1.25
+local yPos = 65
+
+hook.Add("PostDrawHUD", "HL2CR_TankNPCStatus", function()
+	if table.IsEmpty(tankNPCs) then return end
+
+	for i, t in ipairs(tankNPCs) do
+		if t == nil or t:Health() <= 0 then
+			table.remove(tankNPCs, i)
+			break
+		end
+		
+		//base bar
+		surface.SetDrawColor(Color(0, 0, 0))
+		surface.DrawRect(ScrW() / xPos, ScrH() / 2.5 + yPos * i, t:GetMaxHealth() / 2, 25)
+
+		//health bar
+		surface.SetDrawColor(Color(100, 255, 100))
+		surface.DrawRect(ScrW() / xPos, ScrH() / 2.5 + yPos * i, t:Health() / 2, 25)
+	end
+end)
 
 hook.Add("HUDPaint", "HL2CR_Respawn_Timer", function()
 	if LocalPlayer():Alive() then return end

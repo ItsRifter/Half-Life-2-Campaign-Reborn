@@ -13,6 +13,7 @@ function SetUpLobbyMap()
 	--Remove the extended map check so players can't accidently skip maps
 	game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
 	game.SetGlobalState("hl2cr_bringitem_whatbaby", GLOBAL_DEAD)
+	game.SetGlobalState("hl2cr_bringitem_rollermine", GLOBAL_DEAD)
 
 	SPAWNING_WEAPONS = {
 		"weapon_crowbar",

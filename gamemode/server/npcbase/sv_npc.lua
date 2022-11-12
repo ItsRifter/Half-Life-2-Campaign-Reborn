@@ -51,6 +51,13 @@ local poison_npcs = {
     ["npc_headcrab_black"] = true
 }
 
+local tank_npcs = {
+    ["npc_combinegunship"] = true,
+    ["npc_strider"] = true,
+    ["npc_antlionguard"] = true,
+    ["npc_helicopter"] = true
+}
+
 function hl2cr_npc:IsFriendly()
 	if self:IsValid() and self:IsNPC() then
         if FRIENDLY_NPCS[self:GetClass()] or FRIENDLY_HARMABLE_NPCS[self:GetClass()] then
@@ -79,9 +86,8 @@ local weapon_melees = {
 
 hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo )
     local attacker = dmgInfo:GetAttacker()
-
-    if target:IsPlayer() then
     
+    if target:IsPlayer() then
         if target.hl2cr.CurCosmetic ~= "" and !attacker:IsPlayer() then
             for _, c in ipairs(HL2CR_Cosmetics) do
                 if c.Class == target.hl2cr.CurCosmetic then
@@ -115,10 +121,15 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
 
         return false
 
-    elseif target:IsNPC() then
-        
-        if target:IsPet() and attacker:IsPlayer() then
+    elseif target:IsNPC() and attacker:IsPlayer() then
+        if target:IsPet() then
             return true
+        end
+        
+        if tank_npcs[target:GetClass()] then
+            net.Start("HL2CR_TankNPC_Display")
+                net.WriteEntity(target)
+            net.Send(attacker)
         end
     else
         if target:GetClass() == "item_ammo_crate" then
