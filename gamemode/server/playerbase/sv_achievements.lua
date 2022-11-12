@@ -66,7 +66,7 @@ function hl2cr_player:UpdateAchievement(achName, value)
 end
 
 function hl2cr_player:UpdateLambdaLocator(value)
-	if self:HasAchievement("lambda_locator") then return end
+	if self:HasAchievement("Lambda Locator") then return end
 
 	if self.hl2cr.AchProgress["lambda_locator"] == nil then 
 		self.hl2cr.AchProgress["lambda_locator"] = {}
