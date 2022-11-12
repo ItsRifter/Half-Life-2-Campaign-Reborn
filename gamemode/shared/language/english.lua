@@ -51,6 +51,8 @@ LANGUAGE.Error_CMD_Seat_Exists = "You already have a passenger seat"
 LANGUAGE.Error_CMD_DiffSetOn = "This difficulty is already set to that level!"
 LANGUAGE.Error_Class_AlreadyAssigned = "You are already assigned to this class!"
 LANGUAGE.Error_Class_LowLevel = "You do not meet the level requirements for this class"
+LANGUAGE.Error_CMD_NotOnHL2 = "You are not currently playing HalfLife 2"
+LANGUAGE.Error_CMD_AlreadyAchieved = "You have completed this achievement"
 
 LANGUAGE.Map_Enabled_Vehicles_Airboat = "The Airboat is now enabled"
 LANGUAGE.Map_Enabled_Vehicles_Airboat_WithGun = "The Airboat with mounted rifle is now enabled"
@@ -233,6 +235,7 @@ LANGUAGE.Campaign_Finished_HL2 = "Congratulations on finishing Half-Life 2, retu
 LANGUAGE.Achievement_Notify_Progress = " will progress to the next map"
 LANGUAGE.Achievement_Notify_Begin = " is now active"
 LANGUAGE.Achievement_Notify_Fail = " failed"
+LANGUAGE.Achievement_Progress = "You have currently collected "
 
 LANGUAGE.Hat_Unlocked = "You unlocked the "
 LANGUAGE.Admin_Notify_Cleanup = "An admin has done a map cleanup, EXPECT ISSUES"

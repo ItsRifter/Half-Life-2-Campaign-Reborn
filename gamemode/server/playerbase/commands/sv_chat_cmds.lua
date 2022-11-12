@@ -131,6 +131,39 @@ local chat_cmds = {
         ply:SetNWString("hl2cr_petstat_name", newName)
     end,
 
+    ["!lambada"] = function(ply, text)	--Command to help players keep track of lambda_locator
+        if not ply:IsValid() then return end
+		if not ply.loaded then return end
+		 
+		
+		if  !table.HasValue( MAPS_HL2, game.GetMap() ) then 
+			ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_CMD_NotOnHL2"))
+			return 
+		end
+		
+		if ply:HasAchievement("Lambda Locator") then 
+			ply:BroadcastMessage(HL2CR_GreenColour, translate.Get("Error_CMD_AlreadyAchieved"))
+			return 
+		end
+
+		if ply.hl2cr.AchProgress["lambda_locator"] == nil then 
+			ply.hl2cr.AchProgress["lambda_locator"] = {}
+		end
+		
+		local ach = nil 
+			for i, v in ipairs(GAMEMODE.Achievements) do
+				if v.Name == "Lambda Locator" then
+					ach = v
+					break
+				end
+			end
+		
+		local achcount = table.Count(ply.hl2cr.AchProgress["lambda_locator"])
+		ply:BroadcastMessage(HL2CR_YellowColour, translate.Get("Achievement_Progress")..achcount.."/"..ach.Max)
+		PrintTable(ply.hl2cr.AchProgress["lambda_locator"])
+		print("debugging")
+    end,
+
     //["!discord"] = function(ply, text)
     //    ply:SendLua([[gui.OpenURL("https://discord.gg/zvvZ2ugHQY")]])
     //end,

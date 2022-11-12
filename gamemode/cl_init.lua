@@ -11,12 +11,15 @@ include("client/interface/cl_ach_notify.lua")
 include("client/interface/panels/cl_ui_dragpanel.lua")
 include("client/chat/cl_leifchat.lua")
 
+include("client/cl_indicators.lua")
 include("client/cl_network.lua")
 
 include("shared/sh_language_support.lua")
 include("shared/voting/sh_voting.lua")
 include("shared/voting/sh_vote_types.lua")
 include("shared/achievements/sh_ach_base.lua")
+
+include("shared/sh_colour.lua")
 
 include("shared/playerbase/sh_player_models.lua")
 include("shared/playerbase/skills/sh_skill_base.lua")

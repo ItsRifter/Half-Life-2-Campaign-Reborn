@@ -134,6 +134,29 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
     end
 end)
 
+local Valid_NPC_Targets = {
+	["npc_headcrab"] = true,
+	["npc_headcrab_fast"] = true,
+	["npc_headcrab_black"] = true,
+	["npc_headcrab_poison"] = true,
+	["npc_zombie_torso"] = true,
+	["npc_zombie"] = true,
+	["npc_fastzombie"] = true,
+	["npc_poisonzombie"] = true,
+	["npc_zombine"] = true,
+	["npc_cscanner"] = true,
+	["npc_metropolice"] = true,
+	["npc_manhack"] = true,
+	["npc_combine_s"] = true,
+	["npc_antlionguard"] = true,
+	["npc_antlionguardian"] = true,
+	["npc_barnacle"] = true,
+	["npc_turret_ground"] = true,
+	["npc_vortigaunt"] = true,
+	["npc_antlion"] = true,
+	["npc_antlion_worker"] = true
+}
+
 hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo )
 	local attacker = dmgInfo:GetAttacker()
 
@@ -145,5 +168,17 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
         elseif attacker.hl2cr.Debuffs.WeaponDMGDivide then
             dmgInfo:ScaleDamage(attacker.hl2cr.Buffs.WeaponDMGDivide)
         end
+		
+		if not Valid_NPC_Targets[target:GetClass()] then return end
+		local damagedone = dmgInfo:GetDamage()
+		if damagedone > target:Health() then damagedone = target:Health()end
+		
+		if damagedone > 0 then	--prevents erronious negatives
+			net.Start( "HL2CR_Indicator" )
+				net.WriteString(string.format("%1.1d",damagedone))	--Todo format better
+				net.WriteVector(dmgInfo:GetDamagePosition())
+				net.WriteUInt(1,7)	--1=Red Text
+				net.Send(attacker)
+		end
     end
 end)

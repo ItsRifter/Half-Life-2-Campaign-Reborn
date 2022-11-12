@@ -45,11 +45,13 @@ AddCSLuaFile("client/chat/cl_leifchat.lua")
 AddCSLuaFile("client/hud/cl_autoicons.lua")
 
 AddCSLuaFile("client/cl_network.lua")
+AddCSLuaFile("client/cl_indicators.lua")
 
 //Shared
 include("shared/sh_language_support.lua")
 include("shared/voting/sh_voting.lua")
 include("shared/voting/sh_vote_types.lua")
+include("shared/sh_colour.lua")
 
 //Cosmetics
 include("shared/items/cosmetics/sh_cosmetic_base.lua")

@@ -26,3 +26,4 @@ util.AddNetworkString("HL2CR_Cosmetic")
 util.AddNetworkString("HL2CR_AchievementUpdate")
 
 util.AddNetworkString("HL2CR_Loaded")
+util.AddNetworkString("HL2CR_Indicator")
