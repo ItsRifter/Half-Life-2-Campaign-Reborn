@@ -35,6 +35,16 @@ function ENT:Touch(ent)
 
 		BroadcastMessageToAll(HL2CR_PlayerColour, ent:Nick(), HL2CR_StandardColour, translate.Get("Player_Checkpoint"))
 
+		if ents.FindByClass("info_player_start")[1]:IsValid() then	
+			for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+				spawn:SetPos(self.TPPoint)
+			end
+		elseif ents.FindByClass("info_player_deathmatch")[1]:IsValid() then
+			for l, spawn in pairs(ents.FindByClass("info_player_deathmatch")) do
+				spawn:SetPos(self.TPPoint)
+			end
+		end
+
 		for _, p in pairs(player.GetAll()) do
 			
 			if p == ent then continue end
@@ -54,18 +64,7 @@ function ENT:Touch(ent)
 				p.vehicle = nil
 				p.HasSeat = false
 			end
-			
-			if ents.FindByClass("info_player_start")[1]:IsValid() then	
-				for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-					spawn:SetPos(self.TPPoint)
-					p:SetPos(self.TPPoint)
-				end
-			elseif ents.FindByClass("info_player_deathmatch")[1]:IsValid() then
-				for l, spawn in pairs(ents.FindByClass("info_player_deathmatch")) do
-					spawn:SetPos(self.TPPoint)
-					p:SetPos(self.TPPoint)
-				end
-			end
+			p:SetPos(self.TPPoint)
 		end
 		
 		self:EmitSound("hl1/ambience/port_suckin1.wav", 100, 100)

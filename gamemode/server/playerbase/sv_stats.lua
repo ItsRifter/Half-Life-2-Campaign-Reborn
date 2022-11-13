@@ -62,7 +62,7 @@ local MAP_ACHS = {
 
 local MAP_PROGRESSIVE_ACHS = {
 	[1] = function(ply)
-		if ply:GetActiveWeapon():GetClass() ~= "weapon_physcannon" and table.HasValue(ply.hl2cr.AchProgress, "ZombieChopperActive") then
+		if ply:GetActiveWeapon():IsWeapon() and ply:GetActiveWeapon():GetClass() ~= "weapon_physcannon" and table.HasValue(ply.hl2cr.AchProgress, "ZombieChopperActive") then
 			table.RemoveByValue(ply.hl2cr.AchProgress, "ZombieChopperActive")
 			ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Achievement_HL2_ZombieChopper_Name") .. translate.Get("Achievement_Notify_Fail"))
 		end
