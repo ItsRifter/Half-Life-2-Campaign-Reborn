@@ -171,9 +171,13 @@ local Valid_NPC_Targets = {
 hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo )
 	local attacker = dmgInfo:GetAttacker()
 
+	if attacker:IsVehicle() and attacker:GetDriver() then
+		attacker = attacker:GetDriver()
+	end
+
     if target:IsFriendly() and attacker:IsPlayer() then return true end
 
-    if attacker:IsPlayer() then
+    if attacker:IsPlayer() and attacker:IsConnected() then
         if attacker.hl2cr.Buffs.MeleeDMG and weapon_melees[attacker:GetActiveWeapon():GetClass()] then
             dmgInfo:ScaleDamage(attacker.hl2cr.Buffs.MeleeDMG)
         elseif attacker.hl2cr.Debuffs.WeaponDMGDivide then
@@ -188,7 +192,7 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 			net.Start( "HL2CR_Indicator" )
 				net.WriteString(string.format("%1.1d",damagedone))	--Todo format better
 				net.WriteVector(dmgInfo:GetDamagePosition())
-				net.WriteUInt(1,7)	--1=Red Text
+					net.WriteUInt(1,7)	--1=Red Text
 				net.Send(attacker)
 		end
     end

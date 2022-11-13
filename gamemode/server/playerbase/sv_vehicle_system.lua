@@ -63,6 +63,7 @@ function hl2cr_player:SpawnAirboat()
     boat:Spawn()
             
     boat:SetAngles(self:EyeAngles() - Angle(0, 90, 0))
+	
     boat:SetCustomCollisionCheck( true )
     
     self.vehicle = boat
@@ -153,6 +154,7 @@ function GM:ShowSpare1(ply)
 	
 	ply.vehicle:SetOwner(ply)
 	ply:EnterVehicle(ply.vehicle)
+	ply:SetEyeAngles(Angle(0,90,0) )	--Sets players eyes to front of vehicle
 end
 
 function GM:ShowSpare2(ply)
