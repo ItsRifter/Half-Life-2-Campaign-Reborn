@@ -163,6 +163,13 @@ local chat_cmds = {
 		print("debugging")
     end,
 
+    ["!eyes"] = function(ply, text)	--returns eye angles for debug
+		if ply:Alive() then
+			print(ply:EyeAngles())
+			print(ply:GetPos())
+		end
+    end,
+
     //["!discord"] = function(ply, text)
     //    ply:SendLua([[gui.OpenURL("https://discord.gg/zvvZ2ugHQY")]])
     //end,

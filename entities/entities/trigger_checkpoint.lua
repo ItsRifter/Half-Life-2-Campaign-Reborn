@@ -2,6 +2,7 @@ ENT.Base = "base_brush"
 ENT.Type = "brush"
 
 ENT.TPPoint = Vector(0, 0, 0)
+ENT.TPAngles = Angle(0, 0, 0)
 ENT.Mat = "hl2cr/models/checkpoint.vtf"
 ENT.Triggered = false
 
@@ -38,10 +39,12 @@ function ENT:Touch(ent)
 		if ents.FindByClass("info_player_start")[1]:IsValid() then	
 			for l, spawn in pairs(ents.FindByClass("info_player_start")) do
 				spawn:SetPos(self.TPPoint)
+				spawn:SetAngles( self.TPAngles )
 			end
 		elseif ents.FindByClass("info_player_deathmatch")[1]:IsValid() then
 			for l, spawn in pairs(ents.FindByClass("info_player_deathmatch")) do
 				spawn:SetPos(self.TPPoint)
+				spawn:SetAngles( self.TPAngles )
 			end
 		end
 

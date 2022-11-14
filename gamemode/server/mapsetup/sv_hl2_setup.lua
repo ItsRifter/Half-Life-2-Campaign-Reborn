@@ -10,20 +10,28 @@
     ["checkpoint_spot"] = {
         
     },
+	
+	["checkpoint_angle"] = {
+		[1] = Angle(0, 0, 0),
+		[2] = Angle(0, 0, 0),
+		[3] = Angle(0, 0, 0),
+		[4] = Angle(0, 0, 0)
+	},
     
     ["changelevels"] = {
         
-    }
+    },
     
     ["checkpoint_functions"] = {
 
-    }
+    },
 
     ["pushers"] = {
         
-        ["spot"] = {
+    }
+	
+	["pusher_spot"] = {
 
-        }
     }
 }
 --]]
@@ -371,6 +379,13 @@ local HL2_TRIGGERS = {
             [4] = Vector(-3549, -10, -19)
         },
 
+        ["checkpoint_angle"] = {
+            [1] = Angle(0, 15, 0),
+            [2] = Angle(0, 0, 0),
+            [3] = Angle(0, -30, 0),
+            [4] = Angle(0, 40, 0)
+        },
+
         ["changelevels"] = {
             [1] = Vector(-3130, -164, -61),
             [2] = Vector(-3073, -209, 59)
@@ -402,6 +417,11 @@ local HL2_TRIGGERS = {
             [2] = Vector(-4990, -4788, 520)
         },
         
+		["checkpoint_angle"] = {
+            [1] = Angle(0, -180, 0),
+            [2] = Angle(0, 190, 0)
+        },
+		
         ["changelevels"] = {
             [1] = Vector(-5206, -4756, 578),
             [2] = Vector(-5263, -4867, 688)
@@ -450,6 +470,12 @@ local HL2_TRIGGERS = {
             [2] = Vector(-7063, -4036, 522),
             [3] = Vector(-7872, -4126, -246)
         },
+		
+        ["checkpoint_angle"] = {
+            [1] = Angle(0, 185, 0),
+            [2] = Angle(0, 105, 0),
+            [3] = Angle(0, 180, 0)
+        },
         
         ["changelevels"] = {
             [1] = Vector(-8076, -4157, -253),
@@ -480,6 +506,12 @@ local HL2_TRIGGERS = {
             [1] = Vector(-6488, -1199, 8),
             [2] = Vector(-7167, -1377, 5),
             [3] = Vector(-10337, -4717, 328)
+        },
+		
+        ["checkpoint_angle"] = {
+            [1] = Angle(0, 230, 0),
+            [2] = Angle(0, 100, 0),
+            [3] = Angle(0, 210, 0)
         },
         
         ["changelevels"] = {
@@ -512,6 +544,11 @@ local HL2_TRIGGERS = {
             [1] = Vector(111, -3459, 260),
             [2] = Vector(623, 2873, -88),
         },
+		
+        ["checkpoint_angle"] = {
+            [1] = Angle(0, 0, 0),
+            [2] = Angle(0, 20, 0)
+        },
         
         ["changelevels"] = {
             [1] = Vector(689, 2859, -98), 
@@ -541,6 +578,10 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(-2821, 5296, -37)
         },
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 180, 0)
+        },
         
         ["changelevels"] = {
             [1] = Vector(-5758, 9295, -94), 		
@@ -559,10 +600,15 @@ local HL2_TRIGGERS = {
                 [1] = Vector(88, -56, -495),
                 [2] = Vector(533, 100, -896)
             },
+			[2] = {	--Prevent falling into seesaw at start
+                [1] = Vector(2560, -2530, -750),
+                [2] = Vector(3310, -2300, -450)
+            },
         },
 
         ["pusher_spot"] = {
-            [1] = Vector(440, -317, -793)
+            [1] = Vector(440, -317, -793),
+			[2] = Vector(2890, -2180, -640)
         }
     },
 
@@ -587,6 +633,11 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(-1579, 523, -1042),
             [2] = Vector(-2073, -885, -1223)
+        },
+		        
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 270, 0),
+            [2] = Angle(0, 180, 0)
         }
     },
 
@@ -611,7 +662,12 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(4135, 1519, -455),
             [2] = Vector(6744, 1567, -439)
-        }
+        },
+			
+		["checkpoint_angle"] = {
+		[1] = Angle(0, 310, 0),
+		[2] = Angle(0, 0, 0)
+		}
     },
 
     ["d1_canals_06"] = {
@@ -632,11 +688,21 @@ local HL2_TRIGGERS = {
                 [1] = Vector(7583, 1658, -2545), 		
                 [2] = Vector(7666, 1797, -83)
             },
+			[2] = {	--added point before rpg trucks airboat section
+                [1] = Vector(6600, 650, -660), 		
+                [2] = Vector(7100, 1450, -140)
+            },
         },
 
         ["checkpoint_spot"] = {
-            [1] = Vector(7611, 1745, -245)
-        }
+            [1] = Vector(7611, 1745, -245),
+			[2] = Vector(6800, 1010, -420)
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 0, 0),
+			[2] = Angle(0, 180, 0)
+		}
     },
 
     ["d1_canals_08"] = {
@@ -660,7 +726,12 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(-775, -559, -571),
             [2] = Vector(-1910, -4146, -629)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 270, 0),
+			[2] = Angle(0, 180, 0)
+		}
     },
 
     ["d1_canals_09"] = {
@@ -695,7 +766,7 @@ local HL2_TRIGGERS = {
             },
 
             [3] = {
-                [1] = Vector(1792, -7423, -929),
+                [1] = Vector(1792, -8100, -929),
                 [2] = Vector(1917, -7171, -753)
             }
         },
@@ -705,6 +776,12 @@ local HL2_TRIGGERS = {
             [2] = Vector(5703, 4901, -931),
             [3] = Vector(1852, -7389, -919)
         },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 170, 0),
+			[2] = Angle(0, 180, 0),
+			[3] = Angle(0, 180, 0)
+		},
 
         ["checkpoint_functions"] = {
             [1] = function()
@@ -747,14 +824,33 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_spot"] = {
             [1] = Vector(-4509, 3346, 332)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 270, 0)
+		}
     },
 
     ["d1_canals_13"] = {
         ["changelevels"] = {
             [1] = Vector(-760, -3764, -225),
             [2] = Vector(-514, -3840, -381)
-        }
+        },
+		        
+		["checkpoints"] = {
+            [1] = {	--Added checkpoint after helicopter defeat
+                [1] = Vector(4250, -2470, -150),
+                [2] = Vector(5270, 1200, 150)
+            }
+        },
+
+        ["checkpoint_spot"] = {
+            [1] = Vector(4990, 1060, -135)
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 240, 0)
+		}
     },
 
     ["d1_eli_01"] = {
@@ -1935,6 +2031,7 @@ local function SetHL2Checkpoints()
             checkpoint.Max = Vector(t[2])
             checkpoint.Pos = Vector(t[2]) - ( Vector(t[1]) - Vector(t[1])) / 2
             checkpoint.TPPoint = Vector(HL2_TRIGGERS[game.GetMap()]["checkpoint_spot"][i])
+			if HL2_TRIGGERS[game.GetMap()]["checkpoint_angle"] then checkpoint.TPAngles = Angle(HL2_TRIGGERS[game.GetMap()]["checkpoint_angle"][i]) or checkpoint.TPAngles end	--default to 0,0,0
             checkpoint.PointIndex = i
             checkpoint:SetPos(checkpoint.Pos)
             checkpoint:Spawn()

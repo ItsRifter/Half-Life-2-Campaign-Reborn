@@ -248,25 +248,30 @@ hook.Add("PostDrawHUD", "HL2CR_DebugDraw", function()
 	surface.DrawText( tostring(trace.HitPos) )
 end )
 
-local xPos = 1.25
+local xPos = 0.75
 local yPos = 65
 
 hook.Add("PostDrawHUD", "HL2CR_TankNPCStatus", function()
 	if table.IsEmpty(tankNPCs) then return end
 
 	for i, t in ipairs(tankNPCs) do
-		if t == nil or t:Health() <= 0 then
+		if !IsValid(t) or t:Health() <= 0 then
 			table.remove(tankNPCs, i)
 			break
 		end
 		
+		local healthwidth = ScrW() * 0.24
+		local healthpercent = (healthwidth / t:GetMaxHealth()) * t:Health()
+		
 		//base bar
 		surface.SetDrawColor(Color(0, 0, 0))
-		surface.DrawRect(ScrW() / xPos, ScrH() / 2.5 + yPos * i, t:GetMaxHealth() / 2, 25)
+		--surface.DrawRect(ScrW() * xPos, ScrH() * 0.4 + yPos * i, t:GetMaxHealth() / 2, 25)
+		surface.DrawRect(ScrW() * xPos, ScrH() * 0.4 + yPos * i, healthwidth, 25)
 
 		//health bar
 		surface.SetDrawColor(Color(100, 255, 100))
-		surface.DrawRect(ScrW() / xPos, ScrH() / 2.5 + yPos * i, t:Health() / 2, 25)
+		--surface.DrawRect(ScrW() * xPos, ScrH() * 0.4 + yPos * i, t:Health() / 2, 25)
+		surface.DrawRect(ScrW() * xPos, ScrH() * 0.4 + yPos * i, healthpercent, 25)
 	end
 end)
 
