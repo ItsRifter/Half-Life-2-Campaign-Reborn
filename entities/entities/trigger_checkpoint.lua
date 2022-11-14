@@ -68,6 +68,7 @@ function ENT:Touch(ent)
 				p.HasSeat = false
 			end
 			p:SetPos(self.TPPoint)
+			p:SetEyeAngles(self.TPAngles)
 		end
 		
 		self:EmitSound("hl1/ambience/port_suckin1.wav", 100, 100)
