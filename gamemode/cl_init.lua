@@ -23,7 +23,6 @@ include("shared/sh_colour.lua")
 
 include("shared/playerbase/sh_player_models.lua")
 include("shared/playerbase/skills/sh_skill_base.lua")
-include("shared/playerbase/classes/sh_class_base.lua")
 
 include("shared/playerbase/suit/sh_power.lua")
 include("shared/playerbase/suit/modules/sh_flashlight.lua")
@@ -36,3 +35,4 @@ include("shared/pets/sh_pets_stats.lua")
 
 include("shared/items/cosmetics/sh_cosmetic_base.lua")
 include("shared/items/cosmetics/sh_basic_cosmetics.lua")
+include("shared/items/shop/sh_shopitems.lua")

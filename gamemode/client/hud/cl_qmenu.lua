@@ -218,145 +218,123 @@ local function CreateSkillsPanel()
 	return dragPnl
 end
 
-function ShowClass(class, panel)
-	for _, old in ipairs(panel:GetChildren()) do
-		old:Remove()
-	end
+-- function ShowClass(class, panel)
+-- 	for _, old in ipairs(panel:GetChildren()) do
+-- 		old:Remove()
+-- 	end
 
-	local showcaseText = vgui.Create("DLabel", panel)
-	showcaseText:SetText(class.Name)
-	showcaseText:SetFont("hl2cr_qmenu_class_title")
-	showcaseText:Center()
-	showcaseText:SetPos(showcaseText:GetX() - 40, showcaseText:GetY() / 6)
-	showcaseText:SizeToContents()
-	showcaseText:SetTextColor(Color(0, 0, 0))
+-- 	local showcaseText = vgui.Create("DLabel", panel)
+-- 	showcaseText:SetText(class.Name)
+-- 	showcaseText:SetFont("hl2cr_qmenu_class_title")
+-- 	showcaseText:Center()
+-- 	showcaseText:SetPos(showcaseText:GetX() - 40, showcaseText:GetY() / 6)
+-- 	showcaseText:SizeToContents()
+-- 	showcaseText:SetTextColor(Color(0, 0, 0))
 
-	local showcaseDesc = vgui.Create("DLabel", panel)
-	showcaseDesc:SetText(class.Desc)
-	showcaseDesc:SetFont("hl2cr_qmenu_class_desc")
-	showcaseDesc:Center()
-	showcaseDesc:SetPos(panel:GetWide() / (string.len(class.Desc) * 8) + 150, panel:GetTall() / 2 - 225)
-	showcaseDesc:SizeToContents()
-	showcaseDesc:SetTextColor(Color(0, 0, 0))
+-- 	local showcaseDesc = vgui.Create("DLabel", panel)
+-- 	showcaseDesc:SetText(class.Desc)
+-- 	showcaseDesc:SetFont("hl2cr_qmenu_class_desc")
+-- 	showcaseDesc:Center()
+-- 	showcaseDesc:SetPos(panel:GetWide() / (string.len(class.Desc) * 8) + 150, panel:GetTall() / 2 - 225)
+-- 	showcaseDesc:SizeToContents()
+-- 	showcaseDesc:SetTextColor(Color(0, 0, 0))
 
-	local showcaseModel = vgui.Create("DModelPanel", panel)
-	showcaseModel:SetSize(panel:GetWide(), panel:GetTall())
-	showcaseModel:SetDirectionalLight(BOX_RIGHT, Color(255, 160, 80, 255))
-	showcaseModel:SetDirectionalLight(BOX_LEFT, Color(80, 160, 255, 255))
-	showcaseModel:SetAmbientLight(Vector(-64, -64, -64))
-	showcaseModel:SetModel( ClientModels[class.Name][math.random(1, #ClientModels[class.Name])] )
+-- 	local showcaseModel = vgui.Create("DModelPanel", panel)
+-- 	showcaseModel:SetSize(panel:GetWide(), panel:GetTall())
+-- 	showcaseModel:SetDirectionalLight(BOX_RIGHT, Color(255, 160, 80, 255))
+-- 	showcaseModel:SetDirectionalLight(BOX_LEFT, Color(80, 160, 255, 255))
+-- 	showcaseModel:SetAmbientLight(Vector(-64, -64, -64))
+-- 	showcaseModel:SetModel( ClientModels[class.Name][math.random(1, #ClientModels[class.Name])] )
 
-	local eyepos = showcaseModel.Entity:GetBonePosition(showcaseModel.Entity:LookupBone("ValveBiped.Bip01_Head1"))
+-- 	local eyepos = showcaseModel.Entity:GetBonePosition(showcaseModel.Entity:LookupBone("ValveBiped.Bip01_Head1"))
 
-	eyepos:Add(Vector(50, 0, -2))
+-- 	eyepos:Add(Vector(50, 0, -2))
 
-	showcaseModel:SetLookAt(eyepos)
-	showcaseModel.Entity:SetPos(showcaseModel.Entity:GetPos() + Vector(0, 0, 10))
-	showcaseModel:SetCamPos(eyepos - Vector(-20, 0, 0))
-	function showcaseModel:LayoutEntity(ent) return end
+-- 	showcaseModel:SetLookAt(eyepos)
+-- 	showcaseModel.Entity:SetPos(showcaseModel.Entity:GetPos() + Vector(0, 0, 10))
+-- 	showcaseModel:SetCamPos(eyepos - Vector(-20, 0, 0))
+-- 	function showcaseModel:LayoutEntity(ent) return end
 
-	local showcaseBuffs = vgui.Create("DLabel", panel)
-	showcaseBuffs:SetText(translate.Get("Player_Class_Advantages"))
-	showcaseBuffs:SetPos(panel:GetWide() / 2 - 200, 150)
-	showcaseBuffs:SetFont("hl2cr_qmenu_class_desc")
-	showcaseBuffs:SizeToContents()
-	showcaseBuffs:SetTextColor(Color(0, 0, 0))
+-- 	local showcaseBuffs = vgui.Create("DLabel", panel)
+-- 	showcaseBuffs:SetText(translate.Get("Player_Class_Advantages"))
+-- 	showcaseBuffs:SetPos(panel:GetWide() / 2 - 200, 150)
+-- 	showcaseBuffs:SetFont("hl2cr_qmenu_class_desc")
+-- 	showcaseBuffs:SizeToContents()
+-- 	showcaseBuffs:SetTextColor(Color(0, 0, 0))
 
-	local buffPanel = vgui.Create("DPanel", panel)
-	buffPanel:SetPos(panel:GetWide() / 2 - 250, 175)
-	buffPanel:SetSize(256, 250)
-	buffPanel.Paint = function() return end
+-- 	local buffPanel = vgui.Create("DPanel", panel)
+-- 	buffPanel:SetPos(panel:GetWide() / 2 - 250, 175)
+-- 	buffPanel:SetSize(256, 250)
+-- 	buffPanel.Paint = function() return end
 
-	for i, _ in ipairs(class.Buffs) do 
-		local buff = vgui.Create("DLabel", buffPanel)
-		buff:SetText(class.Buffs[i])
-		buff:SetPos(buffPanel:GetWide() / 2 - 100, (i-1) * 25)
-		buff:SetFont("hl2cr_qmenu_class_buffdebuff")
-		buff:SetTextColor(Color(0, 0, 0))
-		buff:SizeToContents()
-	end
+-- 	for i, _ in ipairs(class.Buffs) do 
+-- 		local buff = vgui.Create("DLabel", buffPanel)
+-- 		buff:SetText(class.Buffs[i])
+-- 		buff:SetPos(buffPanel:GetWide() / 2 - 100, (i-1) * 25)
+-- 		buff:SetFont("hl2cr_qmenu_class_buffdebuff")
+-- 		buff:SetTextColor(Color(0, 0, 0))
+-- 		buff:SizeToContents()
+-- 	end
 
-	local showcaseDebuffs = vgui.Create("DLabel", panel)
-	showcaseDebuffs:SetText(translate.Get("Player_Class_Disadvantages"))
-	showcaseDebuffs:SetPos(panel:GetWide() / 2 + 75, 150)
-	showcaseDebuffs:SetFont("hl2cr_qmenu_class_desc")
-	showcaseDebuffs:SizeToContents()
-	showcaseDebuffs:SetTextColor(Color(0, 0, 0))
+-- 	local showcaseDebuffs = vgui.Create("DLabel", panel)
+-- 	showcaseDebuffs:SetText(translate.Get("Player_Class_Disadvantages"))
+-- 	showcaseDebuffs:SetPos(panel:GetWide() / 2 + 75, 150)
+-- 	showcaseDebuffs:SetFont("hl2cr_qmenu_class_desc")
+-- 	showcaseDebuffs:SizeToContents()
+-- 	showcaseDebuffs:SetTextColor(Color(0, 0, 0))
 
-	local debuffPanel = vgui.Create("DPanel", panel)
-	debuffPanel:SetPos(panel:GetWide() / 2 + 50, 175)
-	debuffPanel:SetSize(256, 250)
-	debuffPanel.Paint = function() return end
+-- 	local debuffPanel = vgui.Create("DPanel", panel)
+-- 	debuffPanel:SetPos(panel:GetWide() / 2 + 50, 175)
+-- 	debuffPanel:SetSize(256, 250)
+-- 	debuffPanel.Paint = function() return end
 
-	for i, _ in ipairs(class.Debuffs) do 
-		local debuff = vgui.Create("DLabel", debuffPanel)
-		debuff:SetText(class.Debuffs[i])
-		debuff:Center()
-		debuff:SetPos(buffPanel:GetWide() / 2 - 125, (i-1) * 25)
-		debuff:SetFont("hl2cr_qmenu_class_buffdebuff")
-		debuff:SetTextColor(Color(0, 0, 0))
-		debuff:SizeToContents()
-	end
+-- 	for i, _ in ipairs(class.Debuffs) do 
+-- 		local debuff = vgui.Create("DLabel", debuffPanel)
+-- 		debuff:SetText(class.Debuffs[i])
+-- 		debuff:Center()
+-- 		debuff:SetPos(buffPanel:GetWide() / 2 - 125, (i-1) * 25)
+-- 		debuff:SetFont("hl2cr_qmenu_class_buffdebuff")
+-- 		debuff:SetTextColor(Color(0, 0, 0))
+-- 		debuff:SizeToContents()
+-- 	end
 
-	local setClassbtn = vgui.Create("DButton", panel)
-	setClassbtn:SetText(translate.Get("QMenu_Class_Assign"))
-	setClassbtn:SetSize(128, 64)
-	setClassbtn:SetPos(panel:GetWide() / 1.25 - 80, panel:GetTall() - 64)
+-- 	local setClassbtn = vgui.Create("DButton", panel)
+-- 	setClassbtn:SetText(translate.Get("QMenu_Class_Assign"))
+-- 	setClassbtn:SetSize(128, 64)
+-- 	setClassbtn:SetPos(panel:GetWide() / 1.25 - 80, panel:GetTall() - 64)
 	
-	setClassbtn.DoClick = function()
-		net.Start("HL2CR_Class_Update")
-		net.WriteString(class.Name)
-		net.SendToServer()
-	end
+-- 	setClassbtn.DoClick = function()
+-- 		net.Start("HL2CR_Class_Update")
+-- 		net.WriteString(class.Name)
+-- 		net.SendToServer()
+-- 	end
 	
-	local classLevelReq = vgui.Create("DLabel", panel)
-	classLevelReq:SetText(translate.Get("QMenu_Class_LevelReq") .. class.LevelReq)
-	classLevelReq:SetFont("hl2cr_qmenu_class_desc")
-	classLevelReq:SetPos(setClassbtn:GetX(), setClassbtn:GetY() - 32)
-	classLevelReq:SetTextColor(Color(0, 0, 0))
-	classLevelReq:SizeToContents()
-end
+-- 	local classLevelReq = vgui.Create("DLabel", panel)
+-- 	classLevelReq:SetText(translate.Get("QMenu_Class_LevelReq") .. class.LevelReq)
+-- 	classLevelReq:SetFont("hl2cr_qmenu_class_desc")
+-- 	classLevelReq:SetPos(setClassbtn:GetX(), setClassbtn:GetY() - 32)
+-- 	classLevelReq:SetTextColor(Color(0, 0, 0))
+-- 	classLevelReq:SizeToContents()
+-- end
 
-local function CreateClassPanel()
-	local mainClassPnl = vgui.Create("DPanel")
-	mainClassPnl:SetSize(qMenuFrame:GetWide(), qMenuFrame:GetTall() - 100)
-	mainClassPnl:SetPos(0, 0)
-	mainClassPnl.Paint = function(self, w, h) return end
-	
-	local showcasePnl = vgui.Create("DPanel", mainClassPnl)
-	showcasePnl:SetSize(mainClassPnl:GetWide() / 1.40, mainClassPnl:GetTall())
-	showcasePnl:SetPos(mainClassPnl:GetWide() / 2 - 200, 0)
-	showcasePnl.Paint = function(self, w, h)
-		draw.RoundedBoxEx(8, 0, 0, w, h, HL2CR.Theme.classPanel, false, false, true, true)
+local function CreateShopPanel()
+	local mainShopPnl = vgui.Create("DPanel")
+	mainShopPnl:SetSize(qMenuFrame:GetWide(), qMenuFrame:GetTall() - 100)
+	mainShopPnl:SetPos(0, 0)
+	mainShopPnl.Paint = function(self, w, h) return end
+
+	local listPnl = vgui.Create("DPanel", mainShopPnl)
+	listPnl:SetSize(mainShopPnl:GetWide() - 75, mainShopPnl:GetTall() - 25)
+	listPnl:SetPos(75 / 2, 25)
+	listPnl.Paint = function(self, w, h)
+		draw.RoundedBox(8, 0, 0, w, h, HL2CR.Theme.classPanel)
 	end
 
-	local classPnl = vgui.Create("DPanel", mainClassPnl)
-	classPnl:SetSize(128, mainClassPnl:GetTall() / 2)
-	classPnl:SetPos(32, 128)
-	classPnl.Paint = function(self, w, h) 
-		surface.SetDrawColor(HL2CR.Theme.standard)
-		surface.DrawRect(0, 0, w, h)
+	for i, itm in ipairs(GAMEMODE.ShopItems) do
+		print(itm.Name)
 	end
 
-	local classList = vgui.Create( "DIconLayout", classPnl )
-	classList:Dock( FILL )
-
-	for _, c in ipairs(HL2CR_Classes) do
-		local panel = vgui.Create("DPanel")
-		panel:SetSize(64, 64)
-		panel.Paint = function() return end
-
-		local imageBtn = vgui.Create("DImageButton", panel)
-		imageBtn:SetSize(panel:GetWide(), panel:GetTall())
-		imageBtn:SetImage(c.Icon)
-		imageBtn.DoClick = function(self)
-			ShowClass(c, showcasePnl)
-		end
-
-		classList:Add(panel)
-	end
-
-	return mainClassPnl
+	return mainShopPnl
 end
 
 local function CreateAchPanel()
@@ -496,11 +474,11 @@ function StartQMenu(toggleOpen)
 
 		qMenuTabs:Add(CreateMainPanel())
 		qMenuTabs:Add(CreateSkillsPanel())
-		qMenuTabs:Add(CreateClassPanel())
+		qMenuTabs:Add(CreateShopPanel())
 		qMenuTabs:Add(CreateAchPanel())
 
 		local mainPnlBtn = vgui.Create("DButton", qMenuTabHeader)
-		mainPnlBtn:SetPos(0, 30)
+		mainPnlBtn:Dock(LEFT)
 		mainPnlBtn:SetSize(64, 32)
 		mainPnlBtn:SetText(translate.Get("QMenu_Panels_Main"))
 		
@@ -509,7 +487,7 @@ function StartQMenu(toggleOpen)
 		end
 
 		local skillsPnlBtn = vgui.Create("DButton", qMenuTabHeader)
-		skillsPnlBtn:SetPos(64, 30)
+		skillsPnlBtn:Dock(LEFT)
 		skillsPnlBtn:SetSize(64, 32)
 		skillsPnlBtn:SetText(translate.Get("QMenu_Panels_Skills"))
 		
@@ -517,18 +495,17 @@ function StartQMenu(toggleOpen)
 			SetActiveTab(2, qMenuTabs:GetChildren())
 		end
 
-		local classPnlBtn = vgui.Create("DButton", qMenuTabHeader)
-		classPnlBtn:SetPos(128, 30)
-		classPnlBtn:SetSize(64, 32)
-		classPnlBtn:SetText(translate.Get("QMenu_Panels_Classes"))
-		
-		classPnlBtn.DoClick = function(self)
+		local shopPnlBtn = vgui.Create("DButton", qMenuTabHeader)
+		shopPnlBtn:SetSize(96, 32)
+		shopPnlBtn:Dock(LEFT)
+		shopPnlBtn:SetText(translate.Get("QMenu_Panels_Shop"))
+		shopPnlBtn.DoClick = function(self)
 			SetActiveTab(3, qMenuTabs:GetChildren())
 		end
 
 		local achPnlBtn = vgui.Create("DButton", qMenuTabHeader)
-		achPnlBtn:SetPos(192, 30)
 		achPnlBtn:SetSize(96, 32)
+		achPnlBtn:Dock(LEFT)
 		achPnlBtn:SetText(translate.Get("QMenu_Panels_Achievements"))
 		
 		achPnlBtn.DoClick = function(self)

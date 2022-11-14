@@ -142,11 +142,13 @@ LANGUAGE.Scoreboard_Player_Status_SuperAdmin = "This player is a super admin"
 LANGUAGE.QMenu_Model_Update = "Your characters model will be updated next spawn"
 LANGUAGE.QMenu_Panels_Main = "Inventory"
 LANGUAGE.QMenu_Panels_Skills = "Skills"
-LANGUAGE.QMenu_Panels_Classes = "Classes"
+LANGUAGE.QMenu_Panels_Shop = "Shop"
 LANGUAGE.QMenu_Panels_Achievements = "Achievements"
 LANGUAGE.QMenu_SkillPnl_SkillCost = "Cost: "
-LANGUAGE.QMenu_Class_Assign = "Assign Class"
-LANGUAGE.QMenu_Class_LevelReq = "Level Required: "
+LANGUAGE.QMenu_Item_LevelReq = "Level Required: "
+
+LANGUAGE.Shop_Item_Medkit_Name = "Medical Kit with defibrillator"
+LANGUAGE.Shop_Item_Medkit_Desc = "A medical kit with a defibrillator to revive downed friendlies"
 
 LANGUAGE.QMenu_InvTitle = "Inventory: " 
 
@@ -239,3 +241,5 @@ LANGUAGE.Achievement_Progress = "You have currently collected "
 
 LANGUAGE.Hat_Unlocked = "You unlocked the "
 LANGUAGE.Admin_Notify_Cleanup = "An admin has done a map cleanup, EXPECT ISSUES"
+
+LANGUAGE.Map_Warning_XPFarm = "Due to the nature of this map, EXP Kills will be reduced"

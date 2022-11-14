@@ -6,7 +6,6 @@ ENT.TPAngles = Angle(0, 0, 0)
 ENT.Mat = "hl2cr/models/checkpoint.vtf"
 ENT.Triggered = false
 
-local AchTrigger = {}
 function ENT:Initialize()
 	
 	if self.TPPoint == Vector(0, 0, 0) then

@@ -124,7 +124,10 @@ hook.Add( "OnNPCKilled", "HL2CR_GiveXP", function( npc, attacker, inflictor )
 		attacker.MapStats.Kills = attacker.MapStats.Kills + 1
 		local gainXP = math.random(XP_BASE_RANDOM[npc:GetClass()].xpMin, XP_BASE_RANDOM[npc:GetClass()].xpMax)
 		
-		attacker:AddXP(gainXP)
+		local xpFarmDivide = 1
+
+		if XPFARM_MAPS[game.GetMap()] then attacker:AddXP(math.Round(math.Clamp(gainXP / 2, 1, 9999)))
+		else attacker:AddXP(gainXP) end
 	end
 
 	if attacker:IsPet() then
@@ -132,9 +135,10 @@ hook.Add( "OnNPCKilled", "HL2CR_GiveXP", function( npc, attacker, inflictor )
 
 		if not XP_BASE_RANDOM[npc:GetClass()] then return end
 
-		local gainXP = math.random(XP_BASE_RANDOM[npc:GetClass()].xpMin, XP_BASE_RANDOM[npc:GetClass()].xpMax) / 2
+		local gainXP = math.Round(math.random(XP_BASE_RANDOM[npc:GetClass()].xpMin, XP_BASE_RANDOM[npc:GetClass()].xpMax) / 2)
 
-		attacker:AddXP(math.Round(gainXP))
+		if XPFARM_MAPS[game.GetMap()] then attacker:AddXP(math.Round(math.Clamp(gainXP / 4, 1, 9999)))
+		else attacker:AddXP(gainXP) end
 	end
 end)
 

@@ -60,8 +60,8 @@ include("shared/items/cosmetics/sh_basic_cosmetics.lua")
 //Players
 include("shared/playerbase/sh_player_models.lua")
 
-//Classes
-include("shared/playerbase/classes/sh_class_base.lua")
+//Shop
+include("shared/items/shop/sh_shopitems.lua")
 
 //Skills
 include("shared/playerbase/skills/sh_skill_base.lua")

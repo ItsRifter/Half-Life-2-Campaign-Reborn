@@ -165,31 +165,31 @@ function hl2cr_player:ChangeModel(newModel)
 	//[math.random(1, #ServerModels[self.hl2cr.ModelType.Type][self.hl2cr.ModelType.Gender])])
 end
 
-function hl2cr_player:SetClass(className)
+-- function hl2cr_player:SetClass(className)
 	
-	if self.hl2cr.Class.Name == className then
-		self:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Class_AlreadyAssigned"))
-		return
-	end
+-- 	if self.hl2cr.Class.Name == className then
+-- 		self:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Class_AlreadyAssigned"))
+-- 		return
+-- 	end
 	
-	local assignClass = nil
+-- 	local assignClass = nil
 
-	for _, class in ipairs(HL2CR_Classes) do
-		if class.Name == className then
-			assignClass = class
-			break
-		end
-	end
+-- 	for _, class in ipairs(HL2CR_Classes) do
+-- 		if class.Name == className then
+-- 			assignClass = class
+-- 			break
+-- 		end
+-- 	end
 
-	if self.hl2cr.Level < assignClass.LevelReq then
-		self:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Class_LowLevel"))
-		return
-	end
+-- 	if self.hl2cr.Level < assignClass.LevelReq then
+-- 		self:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Class_LowLevel"))
+-- 		return
+-- 	end
 
-	self.NewClass = assignClass
+-- 	self.NewClass = assignClass
 
-	self:BroadcastMessage(HL2CR_GreenColour, translate.Get("Class_Assigned"))
-end
+-- 	self:BroadcastMessage(HL2CR_GreenColour, translate.Get("Class_Assigned"))
+-- end
 
 function hl2cr_player:SetUpPlayer()	
 	if !self.loaded then return end
@@ -742,6 +742,10 @@ end
 --Player spawning
 hook.Add("PlayerInitialSpawn", "HL2CR_InitialPlayerSpawn", function(ply, transition)
     ply:SetUpInitialSpawn()
+
+	if XPFARM_MAPS[game.GetMap()] then
+		ply:BroadcastMessage(HL2CR_WarningColour, translate.Get("Map_Warning_XPFarm"))
+	end
 
 	for _, v in ipairs(player.GetAll()) do
 		if not v.activePet then continue end
