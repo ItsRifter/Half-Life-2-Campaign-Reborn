@@ -23,7 +23,7 @@ local XP_BASE_RANDOM = {
 	["npc_antlion_worker"] = {xpMin = 35, xpMax = 60},
 }
 
-local ALLOWED_ANTLIONS_XP = {
+ALLOWED_ANTLIONS_XP = {
 	["ep2_outland_01"] = true,
 	["ep2_outland_01a"] = true,
 	["ep2_outland_02"] = true,

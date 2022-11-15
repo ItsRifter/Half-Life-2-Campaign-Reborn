@@ -886,7 +886,14 @@ local HL2_TRIGGERS = {
             [2] = Vector(455, 1672, -1273),
             [3] = Vector(448, 1833, -2722),
             [4] = Vector(-703, 2119, -2729)
-        }
+        },
+			
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 0, 0),
+			[2] = Angle(0, 270, 0),
+			[3] = Angle(0, 90, 0),
+			[4] = Angle(0, 270, 0)
+		}
     },
 
     ["d1_eli_02"] = {
@@ -916,7 +923,13 @@ local HL2_TRIGGERS = {
             [1] = Vector(-600, 750, -2676),
             [2] = Vector(-667, 1308, -2674),
             [3] = Vector(-2011, 1908, -2725)
-        }
+        },
+			
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 260, 0),
+			[2] = Angle(0, 100, 0),
+			[3] = Angle(0, 150, 0)
+		}
     },
 
     ["d1_town_01"] = {
@@ -934,7 +947,11 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_spot"] = {
             [1] = Vector(1223, -361, -3507)
-        }
+        },
+			
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 90, 0)
+		}
     },
 
     ["d1_town_01a"] = {
@@ -956,7 +973,7 @@ local HL2_TRIGGERS = {
         },
 
         ["checkpoints"] = {
-            [1] = {
+            [1] = {		--Checkpoint for 2nd map run
                 [1] = Vector(-4737, 952, -3085),
                 [2] = Vector(-4531, 800, -3255)
             }
@@ -964,6 +981,21 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_spot"] = {
             [1] = Vector(-4809, 589, -3246)
+        },
+			
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 120, 0)
+		},
+        
+        ["pushers"] = {		--Prevent skipping lift section
+            [1] = {
+                [1] = Vector(-3400, 370, -3180),
+                [2] = Vector(-2650, 810, -3170)
+            }
+        },
+
+        ["pusher_spot"] = {
+            [1] = Vector(-2410, 640, -3250)
         }
     },
 
@@ -974,7 +1006,7 @@ local HL2_TRIGGERS = {
         },
 
         ["pushers"] = {
-            [1] = {
+            [1] = {		--Anti shortcut
                 [1] = Vector(-2361, -1211, -3436),
                 [2] = Vector(-2563, -1586, -3232)
             }
@@ -1001,6 +1033,10 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(-7458, -208, -3402)
         },
+			
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 160, 0)
+		},
 
         ["checkpoint_functions"] = {
             [1] = function()
@@ -1043,6 +1079,10 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(-1101, 10431, 905)
         },
+			
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 150, 0)
+		}
     },
 
     ["d2_coast_01"] = {
@@ -1068,6 +1108,10 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(8777, 4344, 267)
         },
+			
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 180, 0)
+		},
 
         ["checkpoint_functions"] = {
             [1] = function()
@@ -1079,6 +1123,17 @@ local HL2_TRIGGERS = {
                     end
 				end
 			end
+        },
+		
+		["pushers"] = {		--Prevents skipping gunship battle
+            [1] = {
+                [1] = Vector(5900, 5750, 510),
+                [2] = Vector(7050, 6910, 840)
+            }
+        },
+
+        ["pusher_spot"] = {
+            [1] = Vector(7840, 4450, 430)
         }
     },
 
@@ -1098,6 +1153,10 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(6049, -3863, 391)
         },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 270, 0)
+		}
     },
 
     ["d2_coast_05"] = {
@@ -1116,6 +1175,9 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(-4839, -1420, 1097)
         },
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 35, 0)
+		}
     },
     
     ["d2_coast_07"] = {
@@ -1144,7 +1206,10 @@ local HL2_TRIGGERS = {
         },
         ["checkpoint_spot"] = {
             [1] = Vector(2954, -6999, 1927)
-        }
+        },
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 280, 0)
+		}
     },
 
     ["d2_coast_09"] = {
@@ -1160,8 +1225,13 @@ local HL2_TRIGGERS = {
         },
         ["checkpoint_spot"] = {
             [1] = Vector(11012, 8545, -182)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 140, 0)
+		}
     },
+	
     ["d2_coast_10"] = {
         ["changelevels"] = {
             [1] = Vector(5161, 2652, 512),
@@ -1183,6 +1253,11 @@ local HL2_TRIGGERS = {
             [1] = Vector(4838, -415, 928),
             [2] = Vector(8223, 1839, 966)
         },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 0, 0),
+			[2] = Angle(0, 160, 0)
+		},
 
         ["checkpoint_functions"] = {
             [1] = function()
@@ -1209,7 +1284,12 @@ local HL2_TRIGGERS = {
                 [2] = Vector(4665, 6785, 577)
             },
 
-            [2] = {
+            [2] = {	--extra checkpoint for just after ant queen kill
+                [1] = Vector(4510, 9700, 120),		
+                [2] = Vector(4970, 10460, 510)
+            },
+
+            [3] = {
                 [1] = Vector(669, 11687, 481),		
                 [2] = Vector(690, 11475, 663)
             }
@@ -1217,8 +1297,15 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_spot"] = {
             [1] = Vector(4412, 6692, 588),
-            [2] = Vector(591, 11602, 473)
+			[2] = Vector(4870, 9950, 220),
+            [3] = Vector(591, 11602, 473)
         },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 80, 0),
+			[2] = Angle(0, 160, 0),
+			[3] = Angle(0, 160, 0)
+		},
 
         ["pushers"] = {
             [1] = {
@@ -1270,6 +1357,11 @@ local HL2_TRIGGERS = {
             [1] = Vector(2138, -275, 681),
             [2] = Vector(8966, 7884, 924)
         },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 90, 0),
+			[2] = Angle(0, 140, 0)
+		}
     },
 
     ["d2_prison_01"] = {
@@ -1288,6 +1380,10 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(1005, -1484, 1608)
         },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 120, 0)
+		}
     },
 
     ["d2_prison_02"] = {
@@ -1312,7 +1408,11 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_spot"] = {
             [1] = Vector(-3474, 3376, 4)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 40, 0)
+		}
     },
 
     ["d2_prison_04"] = {
@@ -1349,9 +1449,16 @@ local HL2_TRIGGERS = {
             [1] = Vector(-2253, 423, 778),		
             [2] = Vector(-4543, -571, 539),
 			[3] = Vector(-4547, -924, 720)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 55, 0),
+			[2] = Angle(0, 180, 0),
+			[3] = Angle(0, 330, 0)
+		}
     },
 
+	--Alyx level that often derps
     ["d2_prison_06"] = {
         ["changelevels"] = {
             [1] = Vector(247, -2687, -240),
@@ -1377,7 +1484,13 @@ local HL2_TRIGGERS = {
             [1] = Vector(1564, 677, -245),
             [2] = Vector(310, -410, -54),
             [3] = Vector(576, -928, 9)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 180, 0),
+			[2] = Angle(0, 310, 0),
+			[3] = Angle(0, 310, 0)
+		}
     },
 
     ["d2_prison_07"] = {
@@ -1407,6 +1520,12 @@ local HL2_TRIGGERS = {
             [2] = Vector(1505, -3317, -672),
             [3] = Vector(4152, -3989, -536)
         },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 270, 0),
+			[2] = Angle(0, 340, 0),
+			[3] = Angle(0, 200, 0)
+		},
 
         ["pushers"] = {
             [1] = {
@@ -1453,6 +1572,13 @@ local HL2_TRIGGERS = {
             [3] = Vector(124, 276, 998),
             [4] = Vector(125, 3, 1215)
         },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 310, 0),
+			[2] = Angle(0, 320, 0),
+			[3] = Angle(0, 200, 0),
+			[4] = Angle(0, 90, 0)
+		}
     },
 
     ["d3_c17_01"] = {
@@ -2294,7 +2420,11 @@ local function SetUpMisc()
 		end
 	end
 
-    if game.GetMap() == "d1_town_03" then
+    if game.GetMap() == "d1_town_02" then	--Remove pusher when lift down button activated
+		ents.FindByName("freight_lift_button_2")[1]:Fire("AddOutput", "OnPressed hl2crlua:RunPassedCode:RemovePushTrigger()")
+	end
+
+    if game.GetMap() == "d1_town_03" then	--Remove pusher that prevents skipping lever
 		ents.FindByName("street_lever")[1]:Fire("AddOutput", "OnPressed hl2crlua:RunPassedCode:RemovePushTrigger()")
 	end
 
@@ -2303,6 +2433,7 @@ local function SetUpMisc()
 			s:SetPos(Vector(-3763, -36, -3439))
 			s:SetAngles(Angle(0, 90, 0))
 		end
+		timer.Simple(3, function()RemovePushTrigger() end)	--Removes lift skip Pusher trigger
     end
 
     if ( game.GetMap() == "d1_town_02a" or game.GetMap() == "d2_coast_09" ) and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
@@ -2327,6 +2458,7 @@ local function SetUpMisc()
 	
 	if game.GetMap() == "d2_coast_03" then
 		ents.FindByName("gunship_spawner_2")[1]:Fire("AddOutput", "OnAllSpawnedDead hl2crlua:RunPassedCode:OpenGateCoast():0:-1" )
+		ents.FindByName("gunship_spawner_2")[1]:Fire("AddOutput", "OnAllSpawnedDead hl2crlua:RunPassedCode:RemovePushTrigger():0:-1" )
 	end
 	
 	if game.GetMap() == "d2_coast_04" then
@@ -2356,7 +2488,7 @@ local function SetUpMisc()
 		end)
 	end
     
-    if game.GetMap() == "d2_coast_08" then
+    if game.GetMap() == "d2_coast_08" then	--Under bridge level
         blocker = ents.Create("prop_dynamic")
 		blocker:SetModel("models/props_doors/door03_slotted_left.mdl")
 		blocker:SetPos(Vector(3305, 1542, 1588))
@@ -2367,11 +2499,16 @@ local function SetUpMisc()
 		ents.FindByClass("info_player_start")[1]:SetPos(Vector(3330, 1471, 1600))
 		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, -90, 0))
 		
-		for k, fog in ipairs(ents.FindByClass("env_fog_controller")) do
-			fog:Remove()
-		end
+		--for k, fog in ipairs(ents.FindByClass("env_fog_controller")) do
+			--fog:Remove()
+		--end
 
-        ents.FindByName("button_trigger")[1]:Fire("AddOutput", "OnClose hl2crlua:RunPassedCode:RemoveBridgeBlocker():0:-1" )
+        --ents.FindByName("button_trigger")[1]:Fire("AddOutput", "OnClose hl2crlua:RunPassedCode:RemoveBridgeBlocker():0:-1" )
+		ents.FindByName("gunship")[1]:Fire("AddOutput", "OnDeath hl2crlua:RunPassedCode:RemoveBridgeBlocker():0:-1" )	--Force gunship fight
+	end
+	
+	if game.GetMap() == "d2_coast_09" then	--Corrects spawn angle being sideways
+		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, -90, 0))
 	end
 	
 	if game.GetMap() == "d2_coast_11" then
@@ -2382,6 +2519,10 @@ local function SetUpMisc()
     if game.GetMap() == "d2_coast_11" then
         ents.FindByName("scene_tutorial_exit")[1]:Fire("AddOutput", "OnCompletion hl2crlua:RunPassedCode:RemovePushTrigger()")
     end
+
+	if game.GetMap() == "d2_prison_06" then	--Corrects spawn angle being sideways
+		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, -70, 0))
+	end
 
     if game.GetMap() == "d2_prison_07" then
 		ents.FindByName("logic_finished_betrayal")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:RemovePushTrigger()")
@@ -2488,7 +2629,8 @@ function RemoveBlockers()
 end
 
 function RemovePushTrigger()
-	ents.FindByClass("trigger_pushback")[1]:Remove()
+	local pusher = ents.FindByClass("trigger_pushback")
+	if pusher then ents.FindByClass("trigger_pushback")[1]:Remove() end
 end
 
 hook.Add("GravGunOnPickedUp", "HL2CR_Achievement_BlastPast", function(ply, ent)

@@ -188,11 +188,14 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 		local damagedone = dmgInfo:GetDamage()
 		if damagedone > target:Health() then damagedone = target:Health()end
 		
+		local colour = 1
+		if target:GetClass() == "npc_antlion" and not ALLOWED_ANTLIONS_XP[game.GetMap()] then colour = 2 end
+		
 		if damagedone > 0 then	--prevents erronious negatives
 			net.Start( "HL2CR_Indicator" )
 				net.WriteString(string.format("%1.1d",damagedone))	--Todo format better
 				net.WriteVector(dmgInfo:GetDamagePosition())
-					net.WriteUInt(1,7)	--1=Red Text
+					net.WriteUInt(colour,7)	--1=Red Text default
 				net.Send(attacker)
 		end
     end
