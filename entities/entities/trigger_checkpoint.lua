@@ -58,32 +58,34 @@ function ENT:Touch(ent)
 			end
 			
 			
-			if false then --debug
-				if p:InVehicle() then
-					p:ExitVehicle()
-					if p.vehicle and p.vehicle:IsValid() then
-						p.vehicle:Remove()
-						p.vehicle.owner = nil
-					end
-					p.vehicle = nil
-					p.HasSeat = false
+			
+			if p:InVehicle() then
+				p:ExitVehicle()
+				if p.vehicle and p.vehicle:IsValid() then
+					p.vehicle:Remove()
+					p.vehicle.owner = nil
 				end
-				p:SetPos(self.TPPoint)
-				p:SetEyeAngles(self.TPAngles)
+				p.vehicle = nil
+				p.HasSeat = false
 			end
+			p:SetPos(self.TPPoint)
+			p:SetEyeAngles(self.TPAngles)
+
 		end
 		
-		if ent:InVehicle() then
-			ent:ExitVehicle()
-			if ent.vehicle and ent.vehicle:IsValid() then
-				ent.vehicle:Remove()
-				ent.vehicle.owner = nil
+		if false then --debug
+			if ent:InVehicle() then
+				ent:ExitVehicle()
+				if ent.vehicle and ent.vehicle:IsValid() then
+					ent.vehicle:Remove()
+					ent.vehicle.owner = nil
+				end
+				ent.vehicle = nil
+				ent.HasSeat = false
 			end
-			ent.vehicle = nil
-			ent.HasSeat = false
+			ent:SetPos(self.TPPoint)
+			ent:SetEyeAngles(self.TPAngles)
 		end
-		ent:SetPos(self.TPPoint)
-		ent:SetEyeAngles(self.TPAngles)
 			
 		self:EmitSound("hl1/ambience/port_suckin1.wav", 100, 100)
 		self.lambdaModel:Remove()
