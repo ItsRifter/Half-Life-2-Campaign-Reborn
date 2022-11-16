@@ -400,7 +400,12 @@ function hl2cr_player:GiveEquipment()
 end
 
 function hl2cr_player:GiveWeaponsSpawn()
-	if MAPS_NO_HL2CR_WEAPONS[game.GetMap()] then return end
+	if MAPS_NO_HL2CR_WEAPONS[game.GetMap()] then 
+		if MAPS_SUPERGRAVGUN[game.GetMap()] then	--Players need this else cant progress
+			self:Give("weapon_physcannon")
+		end
+		return 
+	end
 	
 	for _, weapon in ipairs(SPAWNING_WEAPONS) do
 		self:Give(weapon)

@@ -1601,7 +1601,12 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(-6896, -1404, 9),	
             [2] = Vector(-6481, -930, 10)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 330, 0),
+			[2] = Angle(0, 150, 0)
+		}
     },
     
     ["d3_c17_02"] = {
@@ -1619,7 +1624,11 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_spot"] = {
             [1] = Vector(-5501, -5247, 5)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 80, 0)
+		}
     },
     
     ["d3_c17_03"] = {
@@ -1658,9 +1667,14 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_spot"] = {
             [1] = Vector(1789, -3462, 453)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 120, 0)
+		}
     },
 
+	--level seems to have infinite manhacks spawner? may need limiting on exp
     ["d3_c17_06a"] = {
         ["changelevels"] = {
             [1] = Vector(2112, 2916, -35),
@@ -1684,7 +1698,11 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_spot"] = {
             [1] = Vector(2963, 2255, -312)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 100, 0)
+		}
     },
 
     ["d3_c17_06b"] = {
@@ -1708,7 +1726,12 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(2984, 1346, 5),
             [2] = Vector(4427, 1918, 388)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 0, 0),
+			[2] = Angle(0, 210, 0)
+		}
     },
 
     ["d3_c17_07"] = {
@@ -1732,7 +1755,12 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(5602, 1401, 5),
             [2] = Vector(7487, 1544, 2)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 0, 0),
+			[2] = Angle(0, 0, 0)
+		}
     },
 
     ["d3_c17_08"] = {
@@ -1756,7 +1784,12 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(1257, -573, -374),
             [2] = Vector(922, 579, 406)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 80, 0),
+			[2] = Angle(0, 320, 0)
+		}
     },
 
     ["d3_c17_09"] = {
@@ -1774,7 +1807,11 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_spot"] = {
             [1] = Vector(6244, 6448, 201)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 30, 0)
+		}
     },
 		
     ["d3_c17_10a"] = {
@@ -1799,6 +1836,11 @@ local HL2_TRIGGERS = {
             [1] = Vector(-3023, 6760, 146),
             [2] = Vector(-1397, 8149, 192)
         },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 270, 0),
+			[2] = Angle(0, 20, 0)
+		},
 
         ["checkpoint_functions"] = {
             [1] = function()
@@ -1828,7 +1870,12 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(2443, -851, 281),
             [2] = Vector(2690, 1029, 268)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 50, 0),
+			[2] = Angle(0, 30, 0)
+		}
     },
 
     ["d3_c17_11"] = {
@@ -1868,7 +1915,11 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_spot"] = {
             [1] = Vector(-8669, -912, -222)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 0, 0)
+		}
     },
 
     ["d3_c17_13"] = {
@@ -1898,7 +1949,13 @@ local HL2_TRIGGERS = {
             [1] = Vector(6146, -1343, 12),
             [2] = Vector(5134, 449, 8),
             [3] = Vector(8393, 993, -189)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 300, 0),
+			[2] = Angle(0, 60, 0),
+			[3] = Angle(0, 100, 0)
+		}
     },
 
     ["d3_citadel_01"] = {
@@ -1950,7 +2007,12 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(7684, -995, 2138),
             [2] = Vector(3156, 197, 2373)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 90, 0),
+			[2] = Angle(0, 180, 0)
+		}
     },
 
     ["d3_citadel_04"] = {
@@ -1993,7 +2055,12 @@ local HL2_TRIGGERS = {
         ["checkpoint_spot"] = {
             [1] = Vector(271, 822, 2612),
             [2] = Vector(260, 72, 6406)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 320, 0),
+			[2] = Angle(0, 270, 0)
+		}
     },
 
     ["d3_citadel_05"] = {
@@ -2034,7 +2101,13 @@ local HL2_TRIGGERS = {
             [1] = Vector(-1576, -3, 1368),
             [2] = Vector(-635, 4, -248),
             [3] = Vector(-680, -420, 1292)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 0, 0),
+			[2] = Angle(0, 270, 0),
+			[3] = Angle(0, 60, 0)
+		}
     },
 
     ["d2_lostcoast"] = {
@@ -2526,6 +2599,15 @@ local function SetUpMisc()
 
     if game.GetMap() == "d2_prison_07" then
 		ents.FindByName("logic_finished_betrayal")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:RemovePushTrigger()")
+	end
+
+	if game.GetMap() == "d3_c17_10a" then	--Has multiple spawns strangly?
+		if ents.FindByClass("info_player_start")[1]:IsValid() then	
+			for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+				spawn:SetPos(Vector(-3930, 6780, 5))
+				spawn:SetAngles(Angle(0, 0, 0))
+			end
+		end
 	end
 
     if game.GetMap() == "d3_c17_10b" then

@@ -186,7 +186,8 @@ end
 function GM:CanExitVehicle(veh, ply)
 	if ply.antiExploit and ply.antiExploit > CurTime() then return false end
 
-	if veh:GetClass() == "prop_vehicle_prisoner_pod" and not veh:GetOwner() then return false end
+	--if veh:GetClass() == "prop_vehicle_prisoner_pod" and not veh:GetOwner() then return false end
+	if veh:GetClass() == "prop_vehicle_prisoner_pod" then return false end	--Is owner even relevant/needed?
 	
 	return true
 end

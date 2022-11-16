@@ -73,7 +73,7 @@ function ENT:Touch(ent)
 
 		end
 		
-		if false then --debug
+		if false then --debug for checkpoint verifying in solo
 			if ent:InVehicle() then
 				ent:ExitVehicle()
 				if ent.vehicle and ent.vehicle:IsValid() then
