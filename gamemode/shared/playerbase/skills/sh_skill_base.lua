@@ -131,3 +131,39 @@ local flashbatt_1 = {
 }
 
 CreateSkillSet(flashbatt_1)
+
+local hp_regen_1 = {
+    ["Class"] = "hp_regen_1",
+    ["Name"] = translate.Get("Skill_HPRegen_1_Name"),
+    ["Desc"] = translate.Get("Skill_HPRegen_Desc"),
+    ["Icon"] = "materials/hl2cr/misc/placeholder.jpg",
+    ["Cost"] = 2,
+    ["SkillNeeded"] = "hpboost_3",
+    ["PosInPanel"] = {
+        ["XPos"] = 375,
+        ["YPos"] = 25
+    },
+    ["Func"] = function(ply)
+        ply.hpRegen = 5
+    end
+}
+
+CreateSkillSet(hp_regen_1)
+
+local hp_regen_2 = {
+    ["Class"] = "hp_regen_2",
+    ["Name"] = translate.Get("Skill_HPRegen_2_Name"),
+    ["Desc"] = translate.Get("Skill_HPRegen_Desc"),
+    ["Icon"] = "materials/hl2cr/misc/placeholder.jpg",
+    ["Cost"] = 3,
+    ["SkillNeeded"] = "hp_regen_1",
+    ["PosInPanel"] = {
+        ["XPos"] = 500,
+        ["YPos"] = 125
+    },
+    ["Func"] = function(ply)
+        ply.hpRegen = ply.hpRegen + 5
+    end
+}
+
+CreateSkillSet(hp_regen_2)

@@ -51,17 +51,9 @@ XPFARM_MAPS = {
 }
 --]]
 
-local COOP_TRIGGERS = {
-    ["level01_synb2_entryway_of_doom"] = {
-        ["changelevels"] = {
-            [1] = Vector(2934, -5766, -317),
-            [2] = Vector(3054, -5870, -457)
-        }
-    }
-    }
-
-local function SetUpCoop()
-    if game.GetMap() == "syn_trials4" then
+--Hopefully to declutter the SetUpCoop function
+local COOP_FUNCTIONS = {
+    ["syn_trials4"] = function()
         ents.FindByName("intro_waiter")[1]:Remove()
         ents.FindByName("intro_stopwaiting")[1]:Fire("trigger")
         ents.FindByName("game_start")[1]:Fire("trigger")
@@ -70,6 +62,22 @@ local function SetUpCoop()
             s:Remove()
         end
     end
+}
+
+local COOP_TRIGGERS = {
+    ["level01_synb2_entryway_of_doom"] = {
+        ["changelevels"] = {
+            [1] = Vector(2934, -5766, -317),
+            [2] = Vector(3054, -5870, -457)
+        }
+    }
+}
+
+local function SetUpCoop()
+    COOP_FUNCTIONS[game.GetMap()]()
+
+    table.insert(SPAWNING_WEAPONS, "weapon_crowbar")
+    table.insert(SPAWNING_WEAPONS, "weapon_physcannon")
 end
 
 local function SetUpCheckpoints()
@@ -98,9 +106,6 @@ local function SetUpCheckpoints()
 end
 
 function StartCoop()
-    table.insert(SPAWNING_WEAPONS, "weapon_crowbar")
-    table.insert(SPAWNING_WEAPONS, "weapon_physcannon")
-
     SetUpCoop()
     SetUpCheckpoints()
 end

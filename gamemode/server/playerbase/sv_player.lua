@@ -440,16 +440,16 @@ end
 
 function GM:PostEntityTakeDamage( ent, dmg, took )
 	if ent:IsPlayer() then
-		if ent.hl2cr.Buffs.SelfHealing and ent:Health() < ent:GetMaxHealth() then
+		if ent.hpRegen and ent:Health() < ent:GetMaxHealth() then
 			if ent:Health() >= ent:GetMaxHealth() then
 				return 
 			end
 
-			timer.Create("HL2CR_Selfhealing_" .. ent:EntIndex(), 10, 999, function()
-				ent:SetHealth(ent:Health() + 5)
+			timer.Create("HL2CR_HPRegen_" .. ent:EntIndex(), 15, 999, function()
+				ent:SetHealth(ent:Health() + ent.hpRegen)
 				if ent:Health() >= ent:GetMaxHealth() then
 					ent:SetHealth(ent:GetMaxHealth())
-					timer.Remove("HL2CR_Selfhealing_" .. ent:EntIndex())
+					timer.Remove("HL2CR_HPRegen_" .. ent:EntIndex())
 				end
 			end)
 		end

@@ -101,6 +101,10 @@ LANGUAGE.Skill_FlashBatt_1_Name = "Flashlight Capacity I"
 LANGUAGE.Skill_FlashBatt_2_Name = "Flashlight Capacity II"
 LANGUAGE.Skill_FlashBatt_Desc = "Increases flashlight battery capacity"
 
+LANGUAGE.Skill_HPRegen_1_Name = "Regenative Health I"
+LANGUAGE.Skill_HPRegen_2_Name = "Regenative Health II"
+LANGUAGE.Skill_HPRegen_Desc = "Regenerates health provided user doesn't get attacked"
+
 LANGUAGE.HUD_Stat_XP = "XP"
 
 LANGUAGE.Hat_Dollhead_Name = "Doll Head"

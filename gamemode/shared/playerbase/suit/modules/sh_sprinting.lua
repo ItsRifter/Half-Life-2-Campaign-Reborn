@@ -16,7 +16,7 @@ if SERVER then
     }
 
     -- Parameters
-    local DEFAULT_SPRINT_RATE = 0.5
+    local DEFAULT_SPRINT_RATE = 0.05
     local DEFAULT_DOWNTIME = 1
     local ID, LABEL = "sprint", "SPRINT"
 
