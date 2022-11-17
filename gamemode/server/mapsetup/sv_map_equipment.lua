@@ -3237,3 +3237,38 @@ EP1_EQUIPMENT = {
 	},
 }
 
+EP2_WEAPONS = {
+	["ep2_outland_01a"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar"
+	},
+		
+	["ep2_outland_02"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357"
+	}
+}
+
+EP2_EQUIPMENT = {
+	["ep2_outland_02"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 0
+		}
+	}
+}

@@ -1,5 +1,5 @@
 
-local scoreboard = nil
+local scoreboard = scoreboard or nil
 
 local function GetPlayerTeamColours(player)
 	if player:Team() == 1 then
@@ -24,6 +24,10 @@ end
 
 function ToggleBoard(toggle)
 	if toggle then
+		if not toggle and scoreboard:IsValid() then
+			scoreboard:Remove()
+			scoreboard = nil
+		end
 		scoreboard = vgui.Create("DFrame")
 		scoreboard:SetSize(1000, 600)
 		scoreboard:SetPos(ScrW() / 2 - 500, ScrH() / 15)

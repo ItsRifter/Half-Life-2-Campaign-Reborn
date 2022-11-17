@@ -57,32 +57,15 @@ function ENT:Touch(ent)
 				p:Spawn()
 			end
 			
+			GAMEMODE:RemoveVehicle(p)
 			
-			
-			if p:InVehicle() then
-				p:ExitVehicle()
-				if p.vehicle and p.vehicle:IsValid() then
-					p.vehicle:Remove()
-					p.vehicle.owner = nil
-				end
-				p.vehicle = nil
-				p.HasSeat = false
-			end
 			p:SetPos(self.TPPoint)
 			p:SetEyeAngles(self.TPAngles)
-
 		end
 		
 		if false then --debug for checkpoint verifying in solo
-			if ent:InVehicle() then
-				ent:ExitVehicle()
-				if ent.vehicle and ent.vehicle:IsValid() then
-					ent.vehicle:Remove()
-					ent.vehicle.owner = nil
-				end
-				ent.vehicle = nil
-				ent.HasSeat = false
-			end
+			GAMEMODE:RemoveVehicle(ent)
+			
 			ent:SetPos(self.TPPoint)
 			ent:SetEyeAngles(self.TPAngles)
 		end

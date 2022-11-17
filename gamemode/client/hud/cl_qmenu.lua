@@ -1,7 +1,7 @@
 
-local toggleOpen = false
+local toggleOpen = toggleOpen or false
 local timeLastOpen = 0
-local qMenuFrame = nil
+local qMenuFrame = qMenuFrame or nil
 
 local function CreateMainPanel()
 	local mainPnl = vgui.Create("DPanel")
@@ -441,6 +441,10 @@ function StartQMenu(toggleOpen)
     timeLastOpen = 0.3 + CurTime()
 
 	if toggleOpen then 
+		if qMenuFrame and qMenuFrame:IsValid() then
+			qMenuFrame:Remove()
+            qMenuFrame = nil
+		end
 		qMenuFrame = vgui.Create("DFrame")
 		qMenuFrame:SetSize(ScrW() / 1.5, ScrH() / 1.5)
 		qMenuFrame:Center()

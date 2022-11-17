@@ -166,15 +166,28 @@ function GM:ShowSpare2(ply)
 		ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Vehicle_TooFast"), tostring(math.Round(ply.nextSpawn - CurTime())))
 		return
 	end
-	
+	GAMEMODE:RemoveVehicle(ply)
+	--ply.HasSeat = false
+
+	--if ply.vehicle and ply.vehicle:IsValid() then
+	--	ply.vehicle:Remove()
+	--end
+
+	--ply.vehicle = nil
+
+end
+
+function GM:RemoveVehicle(ply)
 	ply.HasSeat = false
 
+	if ply:InVehicle() then ply:ExitVehicle() end
+
 	if ply.vehicle and ply.vehicle:IsValid() then
+		ply.vehicle.owner = nil
 		ply.vehicle:Remove()
 	end
 
 	ply.vehicle = nil
-
 end
 
 function GM:PlayerLeaveVehicle( ply, veh )

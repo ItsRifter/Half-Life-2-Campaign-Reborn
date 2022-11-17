@@ -13,7 +13,10 @@ local NO_SUICIDE_MAPS = {
 	["d1_trainstation_05"] = true,
 	["d1_eli_01"] = true,
 	["d1_eli_02"] = true,
-	["d3_breen_01"] = true
+	["d3_breen_01"] = true,
+	
+	--Ep2
+	["ep2_outland_01"] = true
 }
 
 --Restrict these weapons from being picked up/used

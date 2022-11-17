@@ -787,10 +787,7 @@ local HL2_TRIGGERS = {
             [1] = function()
                 disableAirboatGlobal = true
                 for _, v in ipairs(player.GetAll()) do
-                    if v.vehicle and v.vehicle:IsValid() then
-                        v.vehicle:Remove()
-                        v.vehicle = nil
-                    end
+					GAMEMODE:RemoveVehicle(v)
                 end
 
                 local tempAirboat = ents.Create(Airboat.Class)
@@ -1117,10 +1114,7 @@ local HL2_TRIGGERS = {
             [1] = function()
                 disableJeepGlobal = true
 			    for _, v in ipairs(player.GetAll()) do
-					if v.vehicle and v.vehicle:IsValid() then
-                        v.vehicle:Remove()
-                        v.vehicle = nil
-                    end
+					GAMEMODE:RemoveVehicle(v)
 				end
 			end
         },
@@ -1263,10 +1257,11 @@ local HL2_TRIGGERS = {
             [1] = function()
                 disableJeepGlobal = true
 			    for _, v in ipairs(player.GetAll()) do
-					if v.vehicle and v.vehicle:IsValid() then
-                        v.vehicle:Remove()
-                        v.vehicle = nil
-                    end
+					GAMEMODE:RemoveVehicle(v)
+					--if v.vehicle and v.vehicle:IsValid() then
+                    --    v.vehicle:Remove()
+                    --    v.vehicle = nil
+                    --end
 				end
 			end
         }

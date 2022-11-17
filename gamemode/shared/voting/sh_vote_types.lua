@@ -193,6 +193,26 @@ votingTypes["BeginEP1"] = {
 	end
 }
 
+--EP2 
+votingTypes["BeginEP2"] = {
+	
+	Description = translate.Get("Vote_Type_MapSeries_HL2_EP2"),
+	Callback = function(state)
+		if true then return end	--stops from running
+		local positive, negative = countVotes(state)
+		
+		if positive > negative then
+			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Success_Map_EP2"))
+			BroadcastSoundToAll("hl2cr/begin_game.wav")
+			timer.Simple(10, function()
+				RunConsoleCommand("changelevel", "ep2_outland_01")
+			end)
+		else
+			BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Vote_Fail_Default"))
+		end
+	end
+}
+
 votingTypes["BeginLostCoast"] = {
 	Description = translate.Get("Vote_Type_MapSeries_HL2_LostCoast"),
 	Callback = function(state)
