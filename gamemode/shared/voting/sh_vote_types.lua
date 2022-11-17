@@ -195,10 +195,8 @@ votingTypes["BeginEP1"] = {
 
 --EP2 
 votingTypes["BeginEP2"] = {
-	
 	Description = translate.Get("Vote_Type_MapSeries_HL2_EP2"),
 	Callback = function(state)
-		if true then return end	--stops from running
 		local positive, negative = countVotes(state)
 		
 		if positive > negative then

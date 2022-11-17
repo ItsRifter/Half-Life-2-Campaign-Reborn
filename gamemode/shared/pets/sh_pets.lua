@@ -43,7 +43,8 @@ if SERVER then
         [7] = "npc_fisherman D_LI 99",
         [8] = "npc_mossman D_LI 99",
         [9] = "npc_gman D_LI 99",
-        [10] = "npc_breen D_LI 99"
+        [10] = "npc_breen D_LI 99",
+        [11] = "npc_citizen D_LI 99"
     }
     
     function SpawnPet(spawner)
