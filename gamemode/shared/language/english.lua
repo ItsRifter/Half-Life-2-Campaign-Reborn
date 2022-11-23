@@ -13,27 +13,6 @@ LANGUAGE.Player_CompletedMap = " has finished the map in "
 LANGUAGE.Player_Levelup = "System upgraded to level "
 LANGUAGE.Map_Finished = "Proceeding to next map in 20 seconds"
 
-LANGUAGE.Player_Class_Default = "Citizen"
-LANGUAGE.Player_Class_Default_Desc = "Standard citizen without any unique traits"
-LANGUAGE.Player_Class_FieldMedic = "Field Medic"
-LANGUAGE.Player_Class_FieldMedic_Desc = "Trained with a PH.D, medics are the rebels healer during a fire-fight"
-LANGUAGE.Player_Class_Specialist = "Melee Specialist"
-LANGUAGE.Player_Class_Specialist_Desc = "A specialist experienced into melee combat"
-
-LANGUAGE.Player_Class_Advantages = "Advantages"
-LANGUAGE.Player_Class_Disadvantages = "Disadvantages"
-
-LANGUAGE.Player_Class_NoBuffDeBuff = "None"
-LANGUAGE.Player_Class_Buff_Recovery = "Self-Healing"
-LANGUAGE.Player_Class_Buff_HealEffective = "Medical Knowledge"
-LANGUAGE.Player_Class_Buff_Defibrillator = "Defibrillator"
-LANGUAGE.Player_Class_Buff_Melee = "Stronger Melee"
-
-LANGUAGE.Player_Class_Debuff_ArmorReduction = "Armor Reduction: "
-LANGUAGE.Player_Class_Debuff_WeakFirearms_Bullets = "Non-Melee weapons are less effective"
-
-LANGUAGE.Class_Assigned = "You will be assigned to this class next spawn"
-
 LANGUAGE.Player_CosmeticApply = " has been equipped"
 LANGUAGE.Player_Levelgain_Pet = "You obtained a headcrab pet, use !petspawn | !petremove"
 

@@ -10,16 +10,7 @@ local function InitData(ply)
 	
 	--Level
 	ply.hl2cr.Level = ply.hl2cr.Level or 0
-	
 	ply.hl2cr.Skills = ply.hl2cr.Skills or {}
-	ply.hl2cr.Class = ply.hl2cr.Class or {
-		Name = translate.Get("Player_Class_Default"),
-		Buffs = {},
-		Debuffs = {}
-	}
-	
-	ply.hl2cr.Buffs = ply.hl2cr.Buffs or {}
-	ply.hl2cr.Debuffs = ply.hl2cr.Debuffs or {}
 
 	--Money/Experience
 	ply.hl2cr.Resin = ply.hl2cr.Resin or 0

@@ -225,14 +225,6 @@ function hl2cr_player:SetUpPlayer()
 		self:SetMaxArmor(100 + self.statArmor)
 	end
 
-	if not table.IsEmpty(self.hl2cr.Class.Buffs) then
-		self.hl2cr.Class.Buffs.BuffFunc(self)
-	end
-
-	if not table.IsEmpty(self.hl2cr.Class.Debuffs) then
-		self.hl2cr.Class.Debuffs.DebuffFunc(self)
-	end
-
 	HL2CR_AUX:SetupAuxPower(self)
 	hook.Run("HL2CR_AuxPowerInitialize", self)
 end
@@ -724,7 +716,6 @@ function hl2cr_player:UpdateNetworks()
 	self:SetNWInt("hl2cr_stat_skillpoints", self.hl2cr.SkillPoints)
 	self:SetNWString("hl2cr_stat_skills", table.concat(self.hl2cr.Skills, " ") )
 	self:SetNWString("hl2cr_achievements", table.concat(self.hl2cr.Achievements, " ") )
-	self:SetNWString("hl2cr_class", self.hl2cr.Class.Name)
 	self:SetNWInt("hl2cr_inv_weight", self.hl2cr.Inventory.Weight)
 	self:SetNWInt("hl2cr_inv_curweight", self.hl2cr.Inventory.CurWeight)
 
