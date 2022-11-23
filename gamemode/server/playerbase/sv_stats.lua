@@ -142,7 +142,7 @@ hook.Add( "OnNPCKilled", "HL2CR_GiveXP", function( npc, attacker, inflictor )
 	end
 end)
 
-concommand.Add("hl2cr_addxp", function(ply, cmd, args)
+concommand.Add("hl2cr_admin_addxp", function(ply, cmd, args)
 	if not ply:IsAdmin() then return end
 	if not args[1] then return end
 	

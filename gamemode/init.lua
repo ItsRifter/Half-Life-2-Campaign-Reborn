@@ -71,6 +71,7 @@ include("shared/playerbase/skills/sh_skill_base.lua")
 include("shared/pets/sh_pets_setup.lua")
 include("shared/pets/sh_pets.lua")
 include("shared/pets/sh_pets_stats.lua")
+include("shared/pets/sh_pets_levelstats.lua")
 
 //Suit
 include("shared/playerbase/suit/sh_power.lua")

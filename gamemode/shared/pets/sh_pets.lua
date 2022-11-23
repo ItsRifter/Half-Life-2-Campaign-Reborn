@@ -128,6 +128,7 @@ if SERVER then
         timeSinceTele = 5 + CurTime()
 
         ply.activePet:SetPos(ply:GetPos())
+        ply.activePet:SetAngles(ply:GetAngles())
     end
 
     function hl2cr_pet:DoRelationChecks()

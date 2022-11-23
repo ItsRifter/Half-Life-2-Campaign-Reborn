@@ -3,6 +3,25 @@ AddCSLuaFile()
 local hl2cr_pet = FindMetaTable("Entity")
 
 if SERVER then
+    
+    function hl2cr_pet:DoStatLevelUp()
+        if not self:CheckLevel() then
+            //Do evolving stuff
+            return
+        end
+
+        local curStats = self:GetStats()
+        local newStats = PET_LEVELS[self:GetClass()][curStats.Level]
+        
+        curStats.Stats.HP = curStats.Stats.HP + newStats.HP
+        curStats.Stats.Damage = curStats.Stats.Damage + newStats.Damage
+
+        self:SetMaxHealth(curStats.Stats.HP)
+        self:SetHealth(self:GetMaxHealth())
+
+        return curStats
+    end
+    
     function hl2cr_pet:GetStats()
         local stats = nil
         for _, p in ipairs(self:GetOwner().hl2cr.Pets) do
@@ -48,7 +67,9 @@ if SERVER then
         while updStats.XP >= updStats.ReqXP do
             updStats.XP = updStats.XP - updStats.ReqXP
             updStats.Level = updStats.Level + 1
-            updStats.ReqXP = updStats.ReqXP + math.Round(4 * math.pow( updStats.Level + 7, 3 ) / 5);
+            updStats.ReqXP = updStats.ReqXP + math.Round(4 * math.pow( updStats.Level + 4, 3 ) / 5);
+
+            table.Merge(updStats, self:DoStatLevelUp())
 
             notify = true
         end
@@ -61,4 +82,12 @@ if SERVER then
         self:GetOwner():SetNWInt("hl2cr_petstat_xp", updStats.XP)
         self:UpdateStats(updStats)
     end
+
+    concommand.Add("hl2cr_admin_givexp_pet", function(ply, cmd, args)
+        local pet = ply.activePet or nil
+
+        if pet == nil then return end
+
+        pet:AddXP(args[1])
+    end)
 end
