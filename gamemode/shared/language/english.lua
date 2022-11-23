@@ -207,6 +207,13 @@ LANGUAGE.Achievement_EP1_Containment_Desc = "Contain the Citadel core"
 LANGUAGE.Achievement_EP1_Pacifist_Name = "Pacifist"
 LANGUAGE.Achievement_EP1_Pacifist_Desc = "Contain the Citadel core without killing any stalkers"
 
+LANGUAGE.Achievement_EP2_Gnome_Name = "Rocket Gnome"
+LANGUAGE.Achievement_EP2_Gnome_Desc = "Be there when Gnomechompshi lifts off into space"
+LANGUAGE.Achievement_EP2_Antlions = "Antlion Assault"
+LANGUAGE.Achievement_EP2_Antlions_Event = " Started, dont die till its over!"
+LANGUAGE.Achievement_EP2_Antlions_Desc = "Survived the Antlion Assault event without dying"
+LANGUAGE.Achievement_EP2_Antlions_Failed = "You have died and failed"
+
 LANGUAGE.Pet_Owner = "'s Pet"
 
 LANGUAGE.Failed_HL2_Sand = "Keep off the sand failed by "

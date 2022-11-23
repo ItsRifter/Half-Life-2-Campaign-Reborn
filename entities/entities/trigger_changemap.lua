@@ -21,6 +21,21 @@ local achievement_items = {
 		BroadcastMessageToAll(HL2CR_AchNotifyColour, translate.Get("Achievement_HL2_RavenBall_Name"), HL2CR_StandardColour, translate.Get("Achievement_Notify_Progress"))
 		BroadcastSoundToAll("hl2cr/standardbeep.wav")
 		game.SetGlobalState("hl2cr_bringitem_rollermine", GLOBAL_ON)
+	end,
+	
+	["models/props_junk/gnome.mdl"] = function()
+		--if game.GetMap() == "d1_town_04" then
+			--for _, v in ipairs(player.GetAll()) do
+			--	v:GrantAchievement("Ravenholm Ball")
+			--end
+			
+			--game.SetGlobalState("hl2cr_bringitem_gnome", GLOBAL_DEAD)
+			--return 
+		--end
+
+		BroadcastMessageToAll(HL2CR_AchNotifyColour, translate.Get("Achievement_EP2_Gnome_Name"), HL2CR_StandardColour, translate.Get("Achievement_Notify_Progress"))
+		BroadcastSoundToAll("hl2cr/standardbeep.wav")
+		game.SetGlobalState("hl2cr_bringitem_gnome", GLOBAL_ON)
 	end
 }
 
@@ -36,7 +51,6 @@ end
 function ENT:Touch(ent)	
 	
 	if achievement_items[ent:GetModel()] then
-		
 		achievement_items[ent:GetModel()]()
 		ent:Remove()
 	end

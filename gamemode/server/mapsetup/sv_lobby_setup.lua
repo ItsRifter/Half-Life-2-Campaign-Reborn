@@ -14,6 +14,7 @@ function SetUpLobbyMap()
 	game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
 	game.SetGlobalState("hl2cr_bringitem_whatbaby", GLOBAL_DEAD)
 	game.SetGlobalState("hl2cr_bringitem_rollermine", GLOBAL_DEAD)
+	game.SetGlobalState("hl2cr_bringitem_gnome", GLOBAL_DEAD)
 
 	SPAWNING_WEAPONS = {
 		"weapon_crowbar",

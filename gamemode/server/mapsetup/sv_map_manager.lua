@@ -163,11 +163,13 @@ function StartMapCountdown()
 
 	timer.Create("HL2CR_Countdown", 20, 1, function()
 				
+		--Lost Coast
 		if game.GetMap() == "d2_lostcoast" then
 			RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
 			return
 		end
 		
+		--Half Life 2
 		if game.GetMap() == "d1_town_02" then 
 			if game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
 				RunConsoleCommand("changelevel", "d1_town_03")
@@ -181,6 +183,7 @@ function StartMapCountdown()
 		if game.GetMap() == "d1_town_03" then
 			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
 			RunConsoleCommand("changelevel", "d1_town_02")
+			return
 		end
 				
 		if game.GetMap() == "d2_coast_08" then
@@ -194,12 +197,33 @@ function StartMapCountdown()
 			return
 		end
 		
+		--Episode 2
+		
+		if game.GetMap() == "ep2_outland_02" then 
+			if game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
+				RunConsoleCommand("changelevel", "ep2_outland_03")
+				return 
+			elseif game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
+				game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
+				RunConsoleCommand("changelevel", "ep2_outland_05")
+				return 
+			end
+		end
+		
+		if game.GetMap() == "ep2_outland_04" then
+			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
+			RunConsoleCommand("changelevel", "ep2_outland_02")
+			return 
+		end
+		
 		for k = 1, #MAPS_HL2 do
 			if game.GetMap() == MAPS_HL2[k] then
 				if not MAPS_HL2[k+1] then
 					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+					return
 				end
 				RunConsoleCommand("changelevel", MAPS_HL2[k+1])
+				return
 			end
 		end
 		
@@ -207,8 +231,10 @@ function StartMapCountdown()
 			if game.GetMap() == MAPS_EP1[k] then
 				if not MAPS_EP1[k+1] then
 					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+					return
 				end
 				RunConsoleCommand("changelevel", MAPS_EP1[k+1])
+				return
 			end
 		end
 		
@@ -216,8 +242,10 @@ function StartMapCountdown()
 			if game.GetMap() == MAPS_EP2[k] then
 				if not MAPS_EP2[k+1] then
 					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+					return
 				end
 				RunConsoleCommand("changelevel", MAPS_EP2[k+1])
+				return
 			end
 		end
 
@@ -225,8 +253,10 @@ function StartMapCountdown()
 			if game.GetMap() == MAPS_COOP_SYNB2[k] then
 				if not MAPS_COOP_SYNB2[k+1] then
 					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+					return
 				end
 				RunConsoleCommand("changelevel", MAPS_COOP_SYNB2[k+1])
+				return
 			end
 		end
 		
@@ -234,8 +264,10 @@ function StartMapCountdown()
 			if game.GetMap() == MAPS_COOP_RND[k] then
 				if not MAPS_COOP_RND[k+1] then
 					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+					return
 				end
 				RunConsoleCommand("changelevel", MAPS_COOP_RND[k+1])
+				return
 			end
 		end
 
@@ -243,8 +275,10 @@ function StartMapCountdown()
 			if game.GetMap() == MAPS_COOP_IMPROBABLE[k] then
 				if not MAPS_COOP_IMPROBABLE[k+1] then
 					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+					return
 				end
 				RunConsoleCommand("changelevel", MAPS_COOP_IMPROBABLE[k+1])
+				return
 			end
 		end
 	end)
@@ -328,4 +362,23 @@ function CheckPlayerCompleted()
 		mapChange = true
 		StartMapCountdown()
 	end
+end
+
+function CreateCheckpoint(Min,Max,TPos,TAngle)
+	local checkpoint = ents.Create("trigger_checkpoint")
+	checkpoint.Min = Min
+	checkpoint.Max = Max
+	checkpoint.Pos = (Max + Min)/2
+	checkpoint.TPPoint = TPos
+	checkpoint.TPAngles = TAngle
+	checkpoint.PointIndex = 99
+	checkpoint:SetPos(checkpoint.Pos)
+	checkpoint:Spawn()
+	
+	checkpoint.lambdaModel = ents.Create("prop_dynamic")
+	checkpoint.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
+	checkpoint.lambdaModel:SetPos( checkpoint.TPPoint + Vector(0, 0, 75))
+	checkpoint.lambdaModel:Spawn()
+	checkpoint.lambdaModel:ResetSequence("idle")
+	checkpoint.lambdaModel:SetMaterial(checkpoint.Mat)
 end

@@ -395,18 +395,13 @@ function hl2cr_player:GiveEquipment()
 end
 
 function hl2cr_player:GiveWeaponsSpawn()
-	if MAPS_NO_HL2CR_WEAPONS[game.GetMap()] then 
-		if MAPS_SUPERGRAVGUN[game.GetMap()] then	--Players need this else cant progress
-			self:Give("weapon_physcannon")
-		end
-		return 
-	end
-	
 	for _, weapon in ipairs(SPAWNING_WEAPONS) do
 		self:Give(weapon)
 	end
 
 	if !self.loaded then return end
+	
+	if MAPS_NO_HL2CR_WEAPONS[game.GetMap()] then return end	--There isnt any class weapons right now but this prevents any being added if we change it to bonus skill weapons at some point
 	if self.hl2cr.Class.Weapons then
 		for _, classWep in ipairs(self.hl2cr.Class.Weapons) do
 			self:Give(classWep)
@@ -617,6 +612,14 @@ end
 function GM:PlayerDeath( victim, inflictor, attacker )
 	victim:SetTeam(TEAM_DEAD)
 	victim.MapStats.Deaths = victim.MapStats.Deaths + 1
+
+	if game.GetMap() == "ep2_outland_02" then
+		if victim.NoDeaths then
+			victim:BroadcastMessage(HL2CR_RedColour, translate.Get("Achievement_EP2_Antlions_Failed"), translate.Get("Achievement_EP2_Antlions"))
+			victim.NoDeaths = false
+		end
+		victim.NoDeaths = false
+	end
 
 	victim.CanRespawn = false
 	victim.TimeDied = (10 * GetConVar("hl2cr_difficulty"):GetInt()) + CurTime()

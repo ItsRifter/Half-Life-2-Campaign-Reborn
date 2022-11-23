@@ -90,7 +90,7 @@ end
 function hl2cr_player:SpawnJalopy()
     local jalopy = ents.Create(Jalopy.Class)
     jalopy:SetModel(Jalopy.Model)
-    jalopy:SetPos(self:GetPos() + Vector(0, 0, 45) )
+    jalopy:SetPos(self:GetPos() + Vector(0, 0, 55) )
     
     for i, key in pairs(Jalopy.KeyValues) do
         jalopy:SetKeyValue(i, key)
@@ -108,7 +108,7 @@ end
 function hl2cr_player:SpawnJeep()
     local jeep = ents.Create(Jeep.Class)
     jeep:SetModel(Jeep.Model)
-    jeep:SetPos(self:GetPos() + Vector(0, 0, 65)	 )
+    jeep:SetPos(self:GetPos() + Vector(0, 0, 50)	 )
     jeep:SetAngles(self:EyeAngles() - Angle(0, 90, 0))
     
     for i, key in pairs(Jeep.KeyValues) do
@@ -127,7 +127,10 @@ end
 function GM:ShowSpare1(ply)
 	if ply:Team() == TEAM_DEAD or ply:Team() == TEAM_COMPLETED_MAP then return end
 
-	if ply.nextSpawn and ply.nextSpawn > CurTime() then return end
+	if ply.nextSpawn and ply.nextSpawn > CurTime() then 
+		ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Vehicle_TooFast"), tostring(math.Round(ply.nextSpawn - CurTime())))
+		return 
+	end
 	
 	if ply:InVehicle() or not ply:Alive() then return end
 	
@@ -143,8 +146,8 @@ function GM:ShowSpare1(ply)
 		ply:SpawnAirboat()
 	elseif AIRBOAT_GUN_MAPS[game.GetMap()] or canSpawnGlobalGun then
 		ply:SpawnAirboatWithGun()
-	//elseif (JALOPY_MAPS[game.GetMap()] or canSpawnJalopyGlobal) or (game.GetMap() == "mimp1" and not disableJalopyGlobal) then
-	//	ply:SpawnJalopy()
+	elseif (JALOPY_MAPS[game.GetMap()] or canSpawnJalopyGlobal) or (game.GetMap() == "mimp1" and not disableJalopyGlobal) then
+		ply:SpawnJalopy()
 	elseif (JEEP_MAPS[game.GetMap()] or canSpawnJeepGlobal) and not disableJeepGlobal then
 		ply:SpawnJeep()
 	else
@@ -162,10 +165,10 @@ function GM:ShowSpare2(ply)
 	
 	if not ply.nextSpawn then return end
 
-	if ply.nextSpawn > CurTime() then
-		ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Vehicle_TooFast"), tostring(math.Round(ply.nextSpawn - CurTime())))
-		return
-	end
+	--if ply.nextSpawn > CurTime() then
+	--	ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Vehicle_TooFast"), tostring(math.Round(ply.nextSpawn - CurTime())))
+	--	return
+	--end
 	GAMEMODE:RemoveVehicle(ply)
 	--ply.HasSeat = false
 

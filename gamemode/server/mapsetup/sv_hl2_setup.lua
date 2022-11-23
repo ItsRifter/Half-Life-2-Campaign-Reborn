@@ -1987,17 +1987,18 @@ local HL2_TRIGGERS = {
             }
         },
 
-        -- ["checkpoint_functions"] = {
-        --     [1] = function()
-        --         table.Empty(SPAWNING_WEAPONS)
-        --         table.insert(SPAWNING_WEAPONS, "weapon_physcannon")
+         ["checkpoint_functions"] = {
+             [1] = function()
+                 table.Empty(SPAWNING_WEAPONS)
+                 table.insert(SPAWNING_WEAPONS, "weapon_physcannon")
                 
-        --         for _, v in ipairs(player.GetAll()) do
-        --             v:StripWeapons()
-        --             v:Give("weapon_physcannon")
-        --         end
-		-- 	end
-        -- },
+                 for _, v in ipairs(player.GetAll()) do
+                     v:StripWeapons()
+                     v:Give("weapon_physcannon")
+                 end
+				 game.ConsoleCommand( "physcannon_mega_enabled 1" )
+		 	end
+        },
 
         ["checkpoint_spot"] = {
             [1] = Vector(7684, -995, 2138),
@@ -2506,6 +2507,7 @@ local function SetUpMisc()
 
     if ( game.GetMap() == "d1_town_02a" or game.GetMap() == "d2_coast_09" ) and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
 		game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
+		print("---KILLING GLOBAL---")
 	end
 
     if game.GetMap() == "d2_coast_01" then
@@ -2607,6 +2609,16 @@ local function SetUpMisc()
 
     if game.GetMap() == "d3_c17_10b" then
 		ents.FindByName("s_room_detected_relay")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:ResetLaserTrap():15:-1" )
+	end
+
+	if game.GetMap() == "d3_citadel_03" then
+		--logic_weapon_strip_physcannon_start trigger
+		timer.Simple(18, function()	--trapdoor does not seem to wake up blocking progress so removing it
+			for _, logic in ipairs(ents.FindByName("logic_weapon_strip_physcannon_start")) do
+				--game.ConsoleCommand( "ent_fire logic_weapon_strip_physcannon_start trigger" )
+				logic:Fire("Trigger")
+			end
+		end)
 	end
 
     if game.GetMap() == "d3_breen_01" then
@@ -2765,6 +2777,12 @@ function ResetLaserTrap()
 	ents.FindByName("s_room_panelswitch")[1]:Fire("UnLock")
 end
 
+--Added additional info for helping find ent name/model as well
 concommand.Add("hl2cr_entinfo", function(ply)
-    print(ply:GetEyeTrace().Entity)
+	local Ent = ply:GetEyeTrace().Entity
+	if Ent then
+		print(Ent)
+		print("Name  "..Ent:GetName())
+		print("Model "..Ent:GetModel())
+	end
 end)

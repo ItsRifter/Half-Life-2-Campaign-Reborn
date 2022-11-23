@@ -563,15 +563,6 @@ HL2_WEAPONS = {
 	},
 	
 	["d3_citadel_03"] = {
-		[1] = "weapon_crowbar",
-		[2] = "weapon_pistol",
-		[3] = "weapon_smg1",
-		[4] = "weapon_357",
-		[5] = "weapon_physcannon",
-		[6] = "weapon_shotgun",
-		[7] = "weapon_ar2",
-		[8] = "weapon_rpg",
-		[9] = "weapon_crossbow"
 	},
 	
 	["d3_citadel_04"] = {
@@ -581,6 +572,9 @@ HL2_WEAPONS = {
 	["d3_citadel_05"] = {
 		[1] = "weapon_physcannon",
 	},
+	["d3_breen_01"] = {
+
+	}
 }
 
 HL2_EQUIPMENT = {
@@ -3249,6 +3243,57 @@ EP2_WEAPONS = {
 		[3] = "weapon_pistol",
 		[4] = "weapon_shotgun",
 		[5] = "weapon_357"
+	},
+	
+	["ep2_outland_03"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357",
+		[6] = "weapon_smg1",
+		[7] = "weapon_frag"
+	},
+	
+	["ep2_outland_04"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357",
+		[6] = "weapon_smg1",
+		[7] = "weapon_frag"
+	},
+		
+	["ep2_outland_05"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357",
+		[6] = "weapon_smg1",
+		[7] = "weapon_frag"
+	},
+		
+	["ep2_outland_06"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357",
+		[6] = "weapon_smg1",
+		[7] = "weapon_frag"
+	},
+	
+	["ep2_outland_06a"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357",
+		[6] = "weapon_smg1",
+		[7] = "weapon_ar2",
+		[8] = "weapon_frag"
 	}
 }
 
@@ -3270,5 +3315,162 @@ EP2_EQUIPMENT = {
 			["Type"] = "357",
 			["Amount"] = 0
 		}
-	}
+	},
+		
+	["ep2_outland_03"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 0
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[6] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+	},
+		
+	["ep2_outland_04"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 0
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		}
+	},
+	
+	["ep2_outland_05"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 0
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[6] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+	},
+	
+	["ep2_outland_06"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 6
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[6] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 2,
+		},
+	},
+	
+	["ep2_outland_06a"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 6
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[6] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[8] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+	},
 }
+
+

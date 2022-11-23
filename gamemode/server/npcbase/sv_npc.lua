@@ -43,7 +43,8 @@ HOSTILE_NPCS = {
     ["npc_barnacle"] = true,
     ["npc_turret_ground"] = true,
     ["npc_antlion"] = true,
-    ["npc_antlion_worker"] = true
+    ["npc_antlion_worker"] = true,
+	["npc_hunter"] = true,
 }
 
 local poison_npcs = {
@@ -165,7 +166,8 @@ local Valid_NPC_Targets = {
 	["npc_turret_ground"] = true,
 	["npc_vortigaunt"] = true,
 	["npc_antlion"] = true,
-	["npc_antlion_worker"] = true
+	["npc_antlion_worker"] = true,
+	["npc_hunter"] = true
 }
 
 hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo )
