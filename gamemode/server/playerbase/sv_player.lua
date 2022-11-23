@@ -400,13 +400,6 @@ function hl2cr_player:GiveWeaponsSpawn()
 	end
 
 	if !self.loaded then return end
-	
-	if MAPS_NO_HL2CR_WEAPONS[game.GetMap()] then return end	--There isnt any class weapons right now but this prevents any being added if we change it to bonus skill weapons at some point
-	if self.hl2cr.Class.Weapons then
-		for _, classWep in ipairs(self.hl2cr.Class.Weapons) do
-			self:Give(classWep)
-		end
-	end
 end
 
 --Force the spawnpoint to be suitable making players not spawn into eachother
@@ -835,7 +828,7 @@ hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
 			ply:CheckAmmo(lastItem)
 		end)
 	end
-	
+
 	return true
 end)
 
