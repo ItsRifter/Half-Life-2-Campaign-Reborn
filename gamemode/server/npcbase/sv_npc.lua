@@ -179,13 +179,7 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 
     if target:IsFriendly() and attacker:IsPlayer() then return true end
 
-    if attacker:IsPlayer() and attacker:IsConnected() then
-        if attacker.hl2cr.Buffs.MeleeDMG and weapon_melees[attacker:GetActiveWeapon():GetClass()] then
-            dmgInfo:ScaleDamage(attacker.hl2cr.Buffs.MeleeDMG)
-        elseif attacker.hl2cr.Debuffs.WeaponDMGDivide then
-            dmgInfo:ScaleDamage(attacker.hl2cr.Buffs.WeaponDMGDivide)
-        end
-		
+    if attacker:IsPlayer() and attacker:IsConnected() then		
 		if not Valid_NPC_Targets[target:GetClass()] then return end
 		local damagedone = dmgInfo:GetDamage()
 		if damagedone > target:Health() then damagedone = target:Health()end

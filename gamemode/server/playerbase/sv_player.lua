@@ -835,12 +835,7 @@ hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
 			ply:CheckAmmo(lastItem)
 		end)
 	end
-	if item:GetClass() == "item_healthkit" or item:GetClass() == "item_healthvial" then
-		if ply.hl2cr.Buffs.MedicalKnowledge then
-			ply:SetHealth(math.Clamp(ply:Health() + ply.hl2cr.Buffs.MedicalKnowledge, 1, ply:GetMaxHealth()))
-		end
-	end
-
+	
 	return true
 end)
 

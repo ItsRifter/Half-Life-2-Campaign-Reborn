@@ -83,10 +83,6 @@ function SWEP:PrimaryAttack()
 	elseif IsValid(tr.Entity) and tr.Entity:IsNPC() then
 		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
 		tr.Entity:EmitSound(self.Primary.HitSound)
-
-		if SERVER then
-			tr.Entity:TakeDamage(self.Primary.Damage * (self:GetOwner().hl2cr.Buffs.MeleeDMG or 1), pl, self)
-		end
 	else
 		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
 		pl:EmitSound(self.Primary.HitSound)
