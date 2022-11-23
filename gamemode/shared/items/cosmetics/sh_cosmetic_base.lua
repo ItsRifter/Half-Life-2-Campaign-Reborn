@@ -39,17 +39,18 @@ if CLIENT then
 
     function ApplyCosmetic(outfit, owner)
         pac.SetupENT(owner)
-
-        if owner == nil then return end
-
-        if pastOutfit then
-            owner:RemovePACPart(pastOutfit)
-        end
-        
-        if outfit ~= nil then
-            pastOutfit = outfit
-            owner:AttachPACPart(outfit)
-        end
+        timer.Simple(0.1, function()
+            if owner == nil then return end
+    
+            if pastOutfit then
+                owner:RemovePACPart(pastOutfit)
+            end
+            
+            if outfit ~= nil then
+                pastOutfit = outfit
+                owner:AttachPACPart(outfit)
+            end
+        end)
     end
 
     net.Receive("HL2CR_Cosmetic_Use", function(len, ply)
