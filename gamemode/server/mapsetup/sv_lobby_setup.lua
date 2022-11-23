@@ -2,13 +2,13 @@ function SetUpLobbyMap()
 	
 	--GetConVar("hl2cr_survival"):SetInt(0)
 	
-	--Set each global state to 0
-	game.SetGlobalState("gordon_invulnerable", 0)
-	game.SetGlobalState("suit_no_sprint", 0)
-	game.SetGlobalState("antlion_allied", 0)
-	game.SetGlobalState("super_phys_gun", 0)
-	game.SetGlobalState("gordon_precriminal", 0)
-	game.SetGlobalState("friendly_encounter", 0)
+	--Set each global state to GLOBAL_OFF
+	game.SetGlobalState("gordon_invulnerable", GLOBAL_OFF)
+	game.SetGlobalState("suit_no_sprint", GLOBAL_OFF)
+	game.SetGlobalState("antlion_allied", GLOBAL_OFF)
+	game.SetGlobalState("super_phys_gun", GLOBAL_OFF)
+	game.SetGlobalState("gordon_precriminal", GLOBAL_OFF)
+	game.SetGlobalState("friendly_encounter", GLOBAL_OFF)
 	
 	--Remove the extended map check so players can't accidently skip maps
 	game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)

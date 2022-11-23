@@ -382,3 +382,37 @@ function CreateCheckpoint(Min,Max,TPos,TAngle)
 	checkpoint.lambdaModel:ResetSequence("idle")
 	checkpoint.lambdaModel:SetMaterial(checkpoint.Mat)
 end
+
+local cmd_globalcheck = {
+	["superphysgun"] = true,
+	["antlionfriendly"] = true,
+	["precriminal"] = true,
+}
+
+local cmd_globalconvert = {
+	["superphysgun"] = "super_phys_gun",
+	["antlionfriendly"] = "antlion_allied",
+	["precriminal"] = "gordon_precriminal",
+}
+
+local cmd_globals = {
+	[1] = "superphysgun",
+	[2] = "antlionfriendly",
+	[3] = "precriminal",
+}
+
+concommand.Add("hl2cr_admin_setglobal", function(ply, cmd, args)
+	if not ply:IsSuperAdmin() then return end
+
+	if not cmd_globalcheck[args[1]] then return end
+
+	game.SetGlobalState(cmd_globalconvert[args[1]], args[2])
+end)
+
+concommand.Add("hl2cr_admin_getglobals", function(ply, cmd, args)
+	if not ply:IsSuperAdmin() then return end
+
+	for _, g in ipairs(cmd_globals) do
+		ply:PrintMessage(HUD_PRINTCONSOLE, g)
+	end
+end)

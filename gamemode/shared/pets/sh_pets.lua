@@ -147,7 +147,7 @@ if SERVER then
 
     function CreatePet(ply)
         if ply.activePet then return end
-
+        
         if MAPS_NO_PETS[game.GetMap()] then return end
         ply:UpdateNetworks()
 

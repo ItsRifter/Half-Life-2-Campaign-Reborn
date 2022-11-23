@@ -2145,13 +2145,24 @@ MAPS_NO_SUIT = {
 }
 
 MAPS_NO_PETS = {
+    //HL2
     ["d1_trainstation_01"] = true,
 	["d1_trainstation_02"] = true,
 	["d1_trainstation_03"] = true,
 	["d1_trainstation_04"] = true,
 	["d1_trainstation_05"] = true,
     ["d1_eli_01"] = true,
-	["d3_breen_01"] = true
+    ["d3_citadel_03"] = true,
+	["d3_citadel_04"] = true,
+	["d3_citadel_05"] = true,
+	["d3_breen_01"] = true,
+
+    //EP1
+    ["ep1_citadel_01"] = true,
+    ["ep1_citadel_02"] = true,
+    ["ep1_citadel_02b"] = true,
+    ["ep1_citadel_03"] = true,
+    ["ep1_citadel_04"] = true,
 }
 
 MAPS_SUPERGRAVGUN = {
@@ -2612,6 +2623,8 @@ local function SetUpMisc()
 	end
 
 	if game.GetMap() == "d3_citadel_03" then
+        game.SetGlobalState("super_phys_gun", GLOBAL_ON)
+
 		--logic_weapon_strip_physcannon_start trigger
 		timer.Simple(18, function()	--trapdoor does not seem to wake up blocking progress so removing it
 			for _, logic in ipairs(ents.FindByName("logic_weapon_strip_physcannon_start")) do
