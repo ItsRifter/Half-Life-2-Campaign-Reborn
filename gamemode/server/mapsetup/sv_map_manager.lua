@@ -364,7 +364,7 @@ function CheckPlayerCompleted()
 	end
 end
 
-function CreateCheckpoint(Min,Max,TPos,TAngle)
+function CreateCheckpoint(Min,Max,TPos,TAngle,func)
 	local checkpoint = ents.Create("trigger_checkpoint")
 	checkpoint.Min = Min
 	checkpoint.Max = Max
@@ -374,6 +374,10 @@ function CreateCheckpoint(Min,Max,TPos,TAngle)
 	checkpoint.PointIndex = 99
 	checkpoint:SetPos(checkpoint.Pos)
 	checkpoint:Spawn()
+	
+	if func then
+		checkpoint.Func = func
+	end
 	
 	checkpoint.lambdaModel = ents.Create("prop_dynamic")
 	checkpoint.lambdaModel:SetModel("models/hl2cr_lambda.mdl")

@@ -140,13 +140,12 @@ function GM:ShowSpare1(ply)
 	end
 	
 	ply.antiExploit = CurTime() + 3
-	ply.nextSpawn = CurTime() + 10
 	
 	if (AIRBOAT_MAPS[game.GetMap()] or canSpawnAirboatGlobal) or (game.GetMap() == "d1_canals_11" and not disableAirboatGlobal) then
 		ply:SpawnAirboat()
 	elseif AIRBOAT_GUN_MAPS[game.GetMap()] or canSpawnGlobalGun then
 		ply:SpawnAirboatWithGun()
-	elseif (JALOPY_MAPS[game.GetMap()] or canSpawnJalopyGlobal) or (game.GetMap() == "mimp1" and not disableJalopyGlobal) then
+	elseif (JALOPY_MAPS[game.GetMap()] or canSpawnJalopyGlobal or game.GetMap() == "mimp1") and not disableJalopyGlobal then
 		ply:SpawnJalopy()
 	elseif (JEEP_MAPS[game.GetMap()] or canSpawnJeepGlobal) and not disableJeepGlobal then
 		ply:SpawnJeep()
@@ -154,6 +153,8 @@ function GM:ShowSpare1(ply)
 		ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Vehicle_Disabled"))
 		return
 	end
+	
+	ply.nextSpawn = CurTime() + 10
 	
 	ply.vehicle:SetOwner(ply)
 	ply:EnterVehicle(ply.vehicle)

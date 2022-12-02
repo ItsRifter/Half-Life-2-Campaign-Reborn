@@ -152,58 +152,81 @@ local ep2_triggers = {
         ["changelevels"] = {
 			[1] = Vector(4950, -7520, -520),
             [2] = Vector(5250, -7240, -200)
-        },
-		
-		["changelevel_func"] = {	--For those who miss the lift back up
-            [1] = function(ply)
-                for k, v in ipairs(player.GetAll()) do
-                    v:SetPos(Vector(5100, -7580, -350))
-                end
-            end
         }
-
     }, 
 	
 	--Hunting the antlion--A lot of no return clips
 	["ep2_outland_04"] = {
         ["checkpoints"] = {	
             [1] = {
+                [1] = Vector(5600, -2520, -1240), 		
+                [2] = Vector(5830, -1930, -1140)
+            },
+			[2] = {
                 [1] = Vector(4180, -1420, -1480), 		
                 [2] = Vector(4630, -710, -1330)
             },
-			[2] = {
+			[3] = {
                 [1] = Vector(3190, 390, -1510), 		
                 [2] = Vector(3300, 465, -1470)
             },
-			[3] = {
+			[4] = {
                 [1] = Vector(2470, -490, -1830), 		
                 [2] = Vector(2690, -150, -1750)
             },
-			[4] = {
+			[5] = {
                 [1] = Vector(3310, -4110, -2050), 		
                 [2] = Vector(3820, -3710, -1970)
             }
         },
         
         ["checkpoint_spot"] = {
-            [1] = Vector(4440, -1230, -1450),
-			[2] = Vector(3250, 465, -1515),
-			[3] = Vector(2580, -270, -1790),
-			[4] = Vector(3500, -3850, -2055)
+			[1] = Vector(5800, -2320, -1200),
+            [2] = Vector(4440, -1230, -1450),
+			[3] = Vector(3248, 442, -1519),
+			[4] = Vector(2580, -270, -1790),
+			[5] = Vector(3500, -3850, -2055)
         },
 		
 		["checkpoint_angle"] = {
-			[1] = Angle(0, 90, 0),
+			[1] = Angle(0, 260, 0),
 			[2] = Angle(0, 90, 0),
-			[3] = Angle(0, 180, 0),
-			[4] = Angle(0, 330, 0)
+			[3] = Angle(0, 90, 0),
+			[4] = Angle(0, 180, 0),
+			[5] = Angle(0, 330, 0)
 		},
+		
+		["checkpoint_functions"] = {
+            [5] = function()	--Removed anti skip trigger
+                timer.Simple(0.1, function()
+                    RemovePushTrigger()
+                end)
+			end,
+        },
+		
+		["pushers"] = {
+            [1] = {	--Prevent skipping
+                [1] = Vector(4780, -1900, -20),
+                [2] = Vector(5210, -1400, -80)
+            }
+        },
+
+        ["pusher_spot"] = {
+            [1] = Vector(4770, -1280, 385)
+        },
         
         ["changelevels"] = {
-			[1] = Vector(4790, -1840, -1900),
-            [2] = Vector(5100, -1400, -1840)
+			[1] = Vector(4790, -1840, 1100),
+            [2] = Vector(5100, -1400, 1200)
+        },
+		
+		["changelevel_func"] = {	--For those who miss the lift back up
+            [1] = function(ply)
+                for k, v in ipairs(player.GetAll()) do
+                    v:SetPos(Vector(5000, -1600, 1150))
+                end
+            end
         }
-
     }, 
 
 	["ep2_outland_05"] = {	--Antlions fight quick map
@@ -228,6 +251,10 @@ local ep2_triggers = {
                 [2] = Vector(960, 2900, -170)
             },
 			[4] = {
+                [1] = Vector(2930, 1060, 190), 		
+                [2] = Vector(3120, 1400, 220)
+            },
+			[5] = {
                 [1] = Vector(-320, 1290, 810), 		
                 [2] = Vector(-510, 1420, 880)
             }
@@ -237,15 +264,27 @@ local ep2_triggers = {
             [1] = Vector(510, 640, 380),
 			[2] = Vector(385, 2165, 0),
 			[3] = Vector(1060, 2840, -240),
-			[4] = Vector(-550, 1350, 840)
+			[4] = Vector(2940, 1050, 195),
+			[5] = Vector(-550, 1350, 840)
         },
 		
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 270, 0),
 			[2] = Angle(0, 90, 0),
 			[3] = Angle(0, 270, 0),
-			[4] = Angle(0, 0, 0)
+			[4] = Angle(0, 340, 0),
+			[5] = Angle(0, 0, 0)
 		},
+		
+		["checkpoint_functions"] = {
+            [5] = function()	--Force car position, alyx does not care for other peoples jeeps
+                timer.Simple(0.1, function()
+                    local jeep = ents.FindByClass("prop_vehicle_jeep")[1]
+					jeep:SetPos(Vector(-170, 2310, 690))
+					jeep:SetAngles(Angle(0, 90, 0))
+                end)
+			end,
+        },
         
         ["changelevels"] = {
             [1] = Vector(-3380, 2080, 640),
@@ -256,11 +295,16 @@ local ep2_triggers = {
             [1] = {	--Dont let people jump off the edge at start
                 [1] = Vector(70, 900, 740),
                 [2] = Vector(320, 1500, 820)
+            },
+			[2] = {	--Dont let people jump off the edge at start
+                [1] = Vector(250, 1460, 740),
+                [2] = Vector(350, 760, 1400)
             }
         },
 
         ["pusher_spot"] = {
-            [1] = Vector(-160, 1280, 840)
+            [1] = Vector(-160, 1280, 840),
+			[2] = Vector(-160, 1280, 840)
         }
     }, 
 	
@@ -284,6 +328,25 @@ local ep2_triggers = {
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 180, 0)
 		},
+		
+		["checkpoint_functions"] = {
+            [1] = function()	--Force car position just incase
+                timer.Simple(0.1, function()
+                    local jeep = ents.FindByClass("prop_vehicle_jeep")[1]
+					jeep:SetPos(Vector(-2850, -8400, -1540))
+					jeep:SetAngles(Angle(0, 90, 0))
+					disableJalopyGlobal = true
+					for _, v in ipairs(player.GetAll()) do
+						GAMEMODE:RemoveVehicle(v)
+					end
+                end)
+			end,
+        },
+		
+		["changelevels"] = {
+            [1] = Vector(-10080, -4400, -2500),
+            [2] = Vector(-9800, -3400, -1810)
+        },
     }, 
 
 }
@@ -410,7 +473,7 @@ local function SetUpMisc()
 		ents.FindByName("trigger_Get_physgun")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:GiveGravgunEP2()")
 	end
 
-    if game.GetMap() == "ep2_outland_02" then	--DEBUGGING, DEFAULTS TO RETURN FOR NOW
+    if game.GetMap() == "ep2_outland_02" then
 		if game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then	--Return from antlions
 			--Find elevator so we can parent spawn to it and for placing vort
 			local elevator = ents.FindByName("elevator")[1]
@@ -419,6 +482,14 @@ local function SetUpMisc()
 				spawn:SetParent(elevator)
 				spawn:SetAngles(Angle(0, 0, 0))
 			end
+			
+			CreateCheckpoint(Vector(-3410, -9550, 80),Vector(-3250, -9300, 220),Vector(-3420, -9450, 120),Angle(0, 160, 0),
+				function()
+					for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+						spawn:SetParent(nil)
+					end
+				end
+			)
 			
 			local NewVort = ents.Create("npc_vortigaunt")	--Needs to be spawned in
 			NewVort:SetName("Vort")
@@ -429,8 +500,12 @@ local function SetUpMisc()
 			ents.FindByName("generator_start_relay")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FinishAntevent()")
 			
 			CreateCheckpoint(Vector(-2690, -9170, -740),Vector(-2290, -8900, -570),Vector(-2480, -9160, -690),Angle(0, 220, 0))
-			--CreateCheckpoint(Min,Max,TPos,TAngle)
+			--CreateCheckpoint(Min,Max,TPos,TAngle,func)
 		end
+	end
+
+	if game.GetMap() == "ep2_outland_06a" then
+		disableJalopyGlobal = false
 	end
 
     if game.GetGlobalState("hl2cr_bringitem_gnome") == GLOBAL_ON and gnome_pos[game.GetMap()] then
