@@ -3294,6 +3294,41 @@ EP2_WEAPONS = {
 		[6] = "weapon_smg1",
 		[7] = "weapon_ar2",
 		[8] = "weapon_frag"
+	},	
+	
+	["ep2_outland_07"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357",
+		[6] = "weapon_smg1",
+		[7] = "weapon_ar2",
+		[8] = "weapon_frag"
+	},	
+	
+	["ep2_outland_08"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357",
+		[6] = "weapon_smg1",
+		[7] = "weapon_ar2",
+		[8] = "weapon_frag",
+		[9] = "weapon_crossbow"
+	},
+	
+	["ep2_outland_09"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357",
+		[6] = "weapon_smg1",
+		[7] = "weapon_ar2",
+		[8] = "weapon_frag",
+		[9] = "weapon_crossbow"
 	}
 }
 
@@ -3470,6 +3505,133 @@ EP2_EQUIPMENT = {
 			["Type"] = "AR2",
 			["Amount"] = 30,
 		},
+	},
+	
+	["ep2_outland_07"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 6
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[6] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[8] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+	},
+	
+	["ep2_outland_08"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 40
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 6
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[6] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[8] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[9] = {
+			["Type"] = "XBowBolt",
+			["Amount"] = 3,
+		}
+	},
+	
+	["ep2_outland_09"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 40
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 6
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[6] = {
+			["Type"] = "Grenade",
+			["Amount"] = 1,
+		},
+		
+		[7] = {
+			["Type"] = "SMG1_Grenade",
+			["Amount"] = 1,
+		},
+		
+		[8] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[9] = {
+			["Type"] = "XBowBolt",
+			["Amount"] = 3,
+		}
 	},
 }
 

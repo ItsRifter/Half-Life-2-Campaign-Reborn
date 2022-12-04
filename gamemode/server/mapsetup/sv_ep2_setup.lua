@@ -29,6 +29,10 @@
 
 JALOPY_MAPS = {
 	["ep2_outland_06a"] = true,
+	["ep2_outland_07"] = true,
+	["ep2_outland_08"] = true,
+	--09 starts without it and enabled by doing event
+	["ep2_outland_10"] = true,
 }
 
 local ep2_triggers = {
@@ -335,10 +339,10 @@ local ep2_triggers = {
                     local jeep = ents.FindByClass("prop_vehicle_jeep")[1]
 					jeep:SetPos(Vector(-2850, -8400, -1540))
 					jeep:SetAngles(Angle(0, 90, 0))
-					disableJalopyGlobal = true
-					for _, v in ipairs(player.GetAll()) do
-						GAMEMODE:RemoveVehicle(v)
-					end
+					GAMEMODE:DisableVehicles(true)
+					--for _, v in ipairs(player.GetAll()) do
+					--	GAMEMODE:RemoveVehicle(v)
+					--end
                 end)
 			end,
         },
@@ -347,6 +351,132 @@ local ep2_triggers = {
             [1] = Vector(-10080, -4400, -2500),
             [2] = Vector(-9800, -3400, -1810)
         },
+    }, 
+	
+	["ep2_outland_07"] = {	--Advisor Attack
+        ["changelevels"] = {
+            [1] = Vector(2000, 6100, 540),
+            [2] = Vector(2130, 6410, 750)
+        },
+		
+		["checkpoints"] = {
+			[1] = {
+				[1] = Vector(-12190, -11100, 150),
+				[2] = Vector(-7780, -10600, 540)
+            },
+			[2] = {
+				[1] = Vector(-10140, -9430, 30),
+				[2] = Vector(-9950, -9210, 80)
+            }
+        },
+        
+        ["checkpoint_spot"] = {
+			[1] = Vector(-10070, -11590, 150),
+			[2] = Vector(-9986, -9296, 34)
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 60, 0),
+			[2] = Angle(0, 240, 0)
+		},
+		
+		["checkpoint_functions"] = {
+            [1] = function()	--Force car position just incase
+                timer.Simple(0.1, function()
+					GAMEMODE:DisableVehicles(true)
+                end)
+			end,
+        },
+		
+		["changelevels"] = {
+            [1] = Vector(-4560, 10860, -40),
+            [2] = Vector(-3100, 10950, 360)
+        },
+    }, 
+
+	["ep2_outland_08"] = {	--Roller Mine HeliBoss
+        ["checkpoints"] = {	
+            [1] = {
+                [1] = Vector(-330, 1100, 0), 		
+                [2] = Vector(-850, 1440, 290)
+            },
+			[2] = {
+                [1] = Vector(-1430, 1000, 50), 		
+                [2] = Vector(-1350, 1160, 110)
+            },
+			[3] = {
+                [1] = Vector(-3050, 1870, 60), 		
+                [2] = Vector(-2950, 2050, 140)
+            }
+        },
+        
+        ["checkpoint_spot"] = {
+			[1] = Vector(-440, 1120, 60),
+            [2] = Vector(-1365, 1080, 65),
+			[3] = Vector(-2930, 1990, 75)
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 90, 0),
+			[2] = Angle(0, 180, 0),
+			[3] = Angle(0, 180, 0)
+		},
+		
+		["checkpoint_functions"] = {
+            [1] = function()
+				GAMEMODE:DisableVehicles(true)
+			end,
+        },
+		
+        ["changelevels"] = {
+			[1] = Vector(-3270, 1850, 70),
+            [2] = Vector(-3180, 2060, 180)
+        }
+    }, 
+	
+	["ep2_outland_09"] = {	--JunkYard Combine Turret Funtime
+        ["checkpoints"] = {	
+            [1] = {
+                [1] = Vector(330, -9270, 50), 		
+                [2] = Vector(620, -9140, 100)
+            },
+			[2] = {
+                [1] = Vector(-1100, -7520, 60), 		
+                [2] = Vector(90, -7290, 320)
+            },
+			[3] = {
+                [1] = Vector(-3050, 1870, 60), 		
+                [2] = Vector(-2950, 2050, 140)
+            }
+        },
+        
+        ["checkpoint_spot"] = {
+			[1] = Vector(620, -9170, 80),
+            [2] = Vector(-180, -7520, 70),
+			[3] = Vector(-2930, 1990, 75)
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 240, 0),
+			[2] = Angle(0, 100, 0),
+			[3] = Angle(0, 180, 0)
+		},
+		
+		["pushers"] = {
+            [1] = {	--Dont let people skip turret event
+                [1] = Vector(-2500, -9170, 20),
+                [2] = Vector(-1580, -7500, 500)
+            }
+        },
+
+        ["pusher_spot"] = {
+            [1] = Vector(-940, -9990, 80)
+        },
+		
+        ["changelevels"] = {
+			[1] = Vector(3100, 7400, 90),
+            [2] = Vector(3540, 7600, 450)
+        }
     }, 
 
 }
@@ -450,7 +580,11 @@ local gnome_pos = {
 	["ep2_outland_04"] = Vector(4532, -1560, 384),
 	["ep2_outland_05"] = Vector(-2867, 697, 153),
 	["ep2_outland_06"] = Vector(-473, 763, 832),
-	["ep2_outland_06a"] = Vector(5190, 20, -2467)
+	["ep2_outland_06a"] = Vector(5190, 20, -2467),
+	["ep2_outland_07"] = Vector(-3175, -12284, 546),
+	["ep2_outland_08"] = Vector(-12580, -11050, 439),
+	["ep2_outland_09"] = Vector(729, -9233, 72),
+	["ep2_outland_10"] = Vector(4648, -10616, -1024)
 }
 
 local function SetUpMisc()
@@ -470,7 +604,7 @@ local function SetUpMisc()
 	end
 
     if game.GetMap() == "ep2_outland_01" then	--Make sure players get physgun
-		ents.FindByName("trigger_Get_physgun")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:GiveGravgunEP2()")
+		ents.FindByName("trigger_Get_physgun")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_GiveGravgunEP2()")
 	end
 
     if game.GetMap() == "ep2_outland_02" then
@@ -496,17 +630,49 @@ local function SetUpMisc()
 			NewVort:SetPos(elevator:GetPos() + Vector(0, -20, -50))
 			NewVort:Spawn()
 		else	--First visit and antlion attack
-			ents.FindByName("trigger_turret2_vcd")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:SetupAntevent()")
-			ents.FindByName("generator_start_relay")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FinishAntevent()")
+			ents.FindByName("trigger_turret2_vcd")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_SetupAntevent()")
+			ents.FindByName("generator_start_relay")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_FinishAntevent()")
 			
 			CreateCheckpoint(Vector(-2690, -9170, -740),Vector(-2290, -8900, -570),Vector(-2480, -9160, -690),Angle(0, 220, 0))
 			--CreateCheckpoint(Min,Max,TPos,TAngle,func)
 		end
 	end
 
-	if game.GetMap() == "ep2_outland_06a" then
-		disableJalopyGlobal = false
+	--trigger_useradio
+
+    if game.GetMap() == "ep2_outland_06a" then
+		ents.FindByName("trigger_useradio")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_AlyxRadioTalk()")
 	end
+	
+    if game.GetMap() == "ep2_outland_07" then
+		ents.FindByName("alyx_check_end_trigger")[1]:Remove()	--Prevents resets when alyx left behind
+		for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+			spawn:SetPos(Vector(-3020, -12280, 540))
+			spawn:SetAngles(Angle(0, 180, 0))
+		end
+		
+		ents.FindByName("logic_ballgenerator1_disabled")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_AdvisorAttack()")
+	end
+	
+    if game.GetMap() == "ep2_outland_08" then
+		for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+			spawn:SetPos(Vector(-12824, -12848, 450))
+			spawn:SetAngles(Angle(0, 80, 0))
+		end
+		ents.FindByName("alyx_check_end_trigger")[1]:Remove()	--Prevents resets when alyx left behind
+		ents.FindByName("alyx_check_end_trigger1")[1]:Remove()	--Prevents resets when alyx left behind
+	end
+	
+    if game.GetMap() == "ep2_outland_09" then
+		for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+			spawn:SetPos(Vector(1050, -9190, 75))
+			spawn:SetAngles(Angle(0, 180, 0))
+		end
+		ents.FindByName("alyx_check_end_trigger_0")[1]:Remove()	--Prevents resets when alyx left behind
+		
+		ents.FindByName("relay.power.off")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_TurretsDefeated()")
+	end
+	
 
     if game.GetGlobalState("hl2cr_bringitem_gnome") == GLOBAL_ON and gnome_pos[game.GetMap()] then
         game.SetGlobalState("hl2cr_bringitem_gnome", GLOBAL_DEAD)
@@ -534,13 +700,13 @@ function StartEP2()
 	SetUpMisc()
 end
 
-function GiveGravgunEP2()
+function EP2_GiveGravgunEP2()
 	for k, v in ipairs(player.GetAll()) do
 		v:Give("weapon_physcannon")
 	end
 end
 
-function SetupAntevent()
+function EP2_SetupAntevent()
     timer.Simple(40, function()	--Delay for talking and give time to connect
 		BroadcastMessageToAll(HL2CR_AchNotifyColour, translate.Get("Achievement_EP2_Antlions"), HL2CR_StandardColour, translate.Get("Achievement_EP2_Antlions_Event"))
 		for k, v in ipairs(player.GetAll()) do
@@ -549,10 +715,38 @@ function SetupAntevent()
 	end)
 end
 
-function FinishAntevent()
+function EP2_FinishAntevent()
 	for k, v in ipairs(player.GetAll()) do
 		if v.NoDeaths then
 			v:BroadcastMessage(HL2CR_AchNotifyColour, translate.Get("Achievement_EP2_Antlions"),  HL2CR_StandardColour, " debug yay you did it")
 		end
 	end
+end
+
+function EP2_AlyxRadioTalk()
+    timer.Simple(60, function()	--Delay for talking
+		GAMEMODE:DisableVehicles(false)
+	end)
+end
+
+function EP2_AdvisorAttack()
+    timer.Simple(30, function()	
+		ents.FindByName("speedmod_player")[1]:Fire("modifyspeed", "1")	--Give player control back
+		ents.FindByName("Advisor_Escape")[1]:Fire("Trigger")	
+		
+		CreateCheckpoint(Vector(-10050, -10360, 80),Vector(-8570, -10160, 210),Vector(-9200, -10200, 130),Angle(0, 320, 0),
+				function()
+					GAMEMODE:DisableVehicles(false)
+				end
+			)
+		
+	end)
+end
+
+function EP2_TurretsDefeated()
+	CreateCheckpoint(Vector(380, -9110, 30),Vector(550, -8730, 160),Vector(480, -9060, 75),Angle(0, 75, 0),
+			function()
+				RemovePushTrigger()
+			end
+		)
 end

@@ -127,6 +127,11 @@ end
 function GM:ShowSpare1(ply)
 	if ply:Team() == TEAM_DEAD or ply:Team() == TEAM_COMPLETED_MAP then return end
 
+	if disableVehiclesGlobal then
+		ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Vehicle_Disabled"))
+		return
+	end
+
 	if ply.nextSpawn and ply.nextSpawn > CurTime() then 
 		ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Vehicle_TooFast"), tostring(math.Round(ply.nextSpawn - CurTime())))
 		return 
@@ -141,13 +146,18 @@ function GM:ShowSpare1(ply)
 	
 	ply.antiExploit = CurTime() + 3
 	
-	if (AIRBOAT_MAPS[game.GetMap()] or canSpawnAirboatGlobal) or (game.GetMap() == "d1_canals_11" and not disableAirboatGlobal) then
+	if AIRBOAT_GUN_MAPS[game.GetMap()] or canSpawnGlobalGun then
+		ply:SpawnAirboatWithGun()
+	--if (AIRBOAT_MAPS[game.GetMap()] or canSpawnAirboatGlobal) or (game.GetMap() == "d1_canals_11" and not disableAirboatGlobal) then
+	elseif AIRBOAT_MAPS[game.GetMap()] or canSpawnAirboatGlobal or game.GetMap() == "d1_canals_11"  then
 		ply:SpawnAirboat()
 	elseif AIRBOAT_GUN_MAPS[game.GetMap()] or canSpawnGlobalGun then
 		ply:SpawnAirboatWithGun()
-	elseif (JALOPY_MAPS[game.GetMap()] or canSpawnJalopyGlobal or game.GetMap() == "mimp1") and not disableJalopyGlobal then
+	--elseif (JALOPY_MAPS[game.GetMap()] or canSpawnJalopyGlobal or game.GetMap() == "mimp1") and not disableJalopyGlobal then
+	elseif JALOPY_MAPS[game.GetMap()] or canSpawnJalopyGlobal or game.GetMap() == "mimp1" then
 		ply:SpawnJalopy()
-	elseif (JEEP_MAPS[game.GetMap()] or canSpawnJeepGlobal) and not disableJeepGlobal then
+	--elseif (JEEP_MAPS[game.GetMap()] or canSpawnJeepGlobal) and not disableJeepGlobal then
+	elseif (JEEP_MAPS[game.GetMap()] or canSpawnJeepGlobal) then
 		ply:SpawnJeep()
 	else
 		ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Vehicle_Disabled"))
@@ -159,6 +169,20 @@ function GM:ShowSpare1(ply)
 	ply.vehicle:SetOwner(ply)
 	ply:EnterVehicle(ply.vehicle)
 	ply:SetEyeAngles(Angle(0,90,0) )	--Sets players eyes to front of vehicle
+end
+
+disableVehiclesGlobal = disableVehiclesGlobal or false
+function GM:DisableVehicles(disable)
+	if disable then
+		for _, v in ipairs(player.GetAll()) do
+			GAMEMODE:RemoveVehicle(v)
+		end
+		BroadcastMessageToAll(HL2CR_WarningColour, translate.Get("Announce_Vehicle_Disabled"))
+		disableVehiclesGlobal = true
+	else
+		BroadcastMessageToAll(HL2CR_WarningColour, translate.Get("Announce_Vehicle_Enabled"))
+		disableVehiclesGlobal = false
+	end
 end
 
 function GM:ShowSpare2(ply)
@@ -224,7 +248,7 @@ hook.Add("PlayerEnteredVehicle", "HL2CR_ToggleVehicleSpawning", function(ply, ve
 		BroadcastMessageToAll(HL2CR_StandardColour, translate.Get("Map_Enabled_Vehicles_Tip"))
 	end
 	
-	if game.GetMap() == "ep2_outland_06" and not canSpawnJalopyGlobal then
+	if (game.GetMap() == "ep2_outland_06" or game.GetMap() == "ep2_outland_09") and not canSpawnJalopyGlobal then
 		canSpawnJalopyGlobal = true
 		
 		BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Map_Enabled_Vehicles_Jalopy"))

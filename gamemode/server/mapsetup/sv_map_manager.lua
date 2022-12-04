@@ -391,26 +391,30 @@ local cmd_globalcheck = {
 	["superphysgun"] = true,
 	["antlionfriendly"] = true,
 	["precriminal"] = true,
+	["gnome"] = true,
 }
 
 local cmd_globalconvert = {
 	["superphysgun"] = "super_phys_gun",
 	["antlionfriendly"] = "antlion_allied",
 	["precriminal"] = "gordon_precriminal",
+	["gnome"] = "hl2cr_bringitem_gnome",
 }
 
 local cmd_globals = {
 	[1] = "superphysgun",
 	[2] = "antlionfriendly",
 	[3] = "precriminal",
+	[4] = "gnome",
 }
 
 concommand.Add("hl2cr_admin_setglobal", function(ply, cmd, args)
 	if not ply:IsSuperAdmin() then return end
 
-	if not cmd_globalcheck[args[1]] then return end
+	if not cmd_globalcheck[args[1]] then ply:BroadcastMessage(HL2CR_RedColour, "Global not found") return end
 
 	game.SetGlobalState(cmd_globalconvert[args[1]], args[2])
+	ply:BroadcastMessage(HL2CR_GreenColour,args[1], " Set")
 end)
 
 concommand.Add("hl2cr_admin_getglobals", function(ply, cmd, args)

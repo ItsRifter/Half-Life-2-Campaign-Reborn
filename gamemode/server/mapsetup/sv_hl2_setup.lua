@@ -785,10 +785,11 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_functions"] = {
             [1] = function()
-                disableAirboatGlobal = true
-                for _, v in ipairs(player.GetAll()) do
-					GAMEMODE:RemoveVehicle(v)
-                end
+                --disableAirboatGlobal = true
+				GAMEMODE:DisableVehicles(true)
+                --for _, v in ipairs(player.GetAll()) do
+				--	GAMEMODE:RemoveVehicle(v)
+                --end
 
                 local tempAirboat = ents.Create(Airboat.Class)
                 tempAirboat:SetModel(Airboat.Model)
@@ -801,6 +802,7 @@ local HL2_TRIGGERS = {
 
             [2] = function()
                 canSpawnGlobalGun = true
+				GAMEMODE:DisableVehicles(false)
                 BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Map_Enabled_Vehicles_Airboat_WithGun"))
             end
         },
@@ -1112,10 +1114,11 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_functions"] = {
             [1] = function()
-                disableJeepGlobal = true
-			    for _, v in ipairs(player.GetAll()) do
-					GAMEMODE:RemoveVehicle(v)
-				end
+                --disableJeepGlobal = true
+				GAMEMODE:DisableVehicles(true)
+			    --for _, v in ipairs(player.GetAll()) do
+				--	GAMEMODE:RemoveVehicle(v)
+				--end
 			end
         },
 		
@@ -1255,14 +1258,15 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_functions"] = {
             [1] = function()
-                disableJeepGlobal = true
-			    for _, v in ipairs(player.GetAll()) do
-					GAMEMODE:RemoveVehicle(v)
+                --disableJeepGlobal = true
+				GAMEMODE:DisableVehicles(true)
+			    --for _, v in ipairs(player.GetAll()) do
+				--	GAMEMODE:RemoveVehicle(v)
 					--if v.vehicle and v.vehicle:IsValid() then
                     --    v.vehicle:Remove()
                     --    v.vehicle = nil
                     --end
-				end
+				--end
 			end
         }
     },
@@ -2767,8 +2771,8 @@ function OpenGateCoast()
 		v:Fire("Open")
 	end
 
-	disableJeepGlobal = false
-	
+	--disableJeepGlobal = false
+	GAMEMODE:DisableVehicles(false)
 	for _, v in ipairs(player.GetAll()) do
 		v:GrantAchievement("Where Cubbage Fears to Tread")
 	end

@@ -8,6 +8,9 @@ LANGUAGE.Chat_Announce_NotGordon = "Remember you are not Gordon Freeman, you won
 LANGUAGE.Chat_Announce_ReturnLobby = "Return to the lobby with !lobby"
 //LANGUAGE.Chat_Announce_Discord = "Join the discord with !discord"
 
+LANGUAGE.Announce_Vehicle_Disabled = "Vehicles are now disabled"
+LANGUAGE.Announce_Vehicle_Enabled = "Vehicles are now enabled again"
+
 LANGUAGE.Player_Checkpoint = " activated the checkpoint"
 LANGUAGE.Player_CompletedMap = " has finished the map in "
 LANGUAGE.Player_Levelup = "System upgraded to level "
