@@ -781,6 +781,18 @@ hook.Add( "PlayerUse", "HL2CR_PlayerUse", function( ply, ent )
 		ply:SetAllowWeaponsInVehicle(true)
 	end
 
+	if ent:IsVehicle() and disableVehiclesGlobal then
+		if !ply.LastErrorTime then
+			ply.LastErrorTime = 0
+		end
+		
+		if ply.LastErrorTime + 2< CurTime() then
+			ply.LastErrorTime = CurTime()
+			ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Player_Vehicle_Disabled"))
+		end
+		return false
+	end
+
 	if ent:GetClass() == "prop_vehicle_jeep" or ent:GetClass() == "prop_vehicle_airboat" then
 	
 		if ent:GetOwner():IsValid() and ent:GetOwner() ~= ply then

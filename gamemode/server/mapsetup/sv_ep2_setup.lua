@@ -33,6 +33,7 @@ JALOPY_MAPS = {
 	["ep2_outland_08"] = true,
 	--09 starts without it and enabled by doing event
 	["ep2_outland_10"] = true,
+	["ep2_outland_10a"] = true,
 }
 
 local ep2_triggers = {
@@ -478,6 +479,53 @@ local ep2_triggers = {
             [2] = Vector(3540, 7600, 450)
         }
     }, 
+	
+	["ep2_outland_10"] = {	--Ambush
+        ["checkpoints"] = {	
+            [1] = {
+                [1] = Vector(3120, -900, -160), 		
+                [2] = Vector(3650, -860, 0)
+            },
+			[2] = {
+                [1] = Vector(630, -2650, 134), 		
+                [2] = Vector(750, -2248, 264)
+            },
+			[3] = {
+                [1] = Vector(-3050, 1870, 60), 		
+                [2] = Vector(-2950, 2050, 140)
+            }
+        },
+        
+        ["checkpoint_spot"] = {
+			[1] = Vector(3610, -975, -130),
+            [2] = Vector(790, -2440, 170),
+			[3] = Vector(-2930, 1990, 75)
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0, 130, 0),
+			[2] = Angle(0, 130, 0),
+			[3] = Angle(0, 180, 0)
+		},
+		
+		["checkpoint_functions"] = {
+            [1] = function()
+				GAMEMODE:DisableVehicles(true)
+			end,
+			[2] = function()
+				CreateCheckpoint(Vector(1184,-2665,314),Vector(1217,-2132,76),Vector(1091,-2507,150),Angle(0,50,0),
+						function()
+							GAMEMODE:DisableVehicles(false)
+						end
+					)
+			end,
+        },
+		
+        ["changelevels"] = {
+			[1] = Vector(6195,8192,-1260),
+            [2] = Vector(6031,7764,-1515)
+        }
+    }, 
 
 }
 
@@ -584,7 +632,8 @@ local gnome_pos = {
 	["ep2_outland_07"] = Vector(-3175, -12284, 546),
 	["ep2_outland_08"] = Vector(-12580, -11050, 439),
 	["ep2_outland_09"] = Vector(729, -9233, 72),
-	["ep2_outland_10"] = Vector(4648, -10616, -1024)
+	["ep2_outland_10"] = Vector(4648, -10616, -1024),
+	["ep2_outland_10a"] = Vector(4793,-5961,-1542)
 }
 
 local function SetUpMisc()
@@ -638,8 +687,6 @@ local function SetUpMisc()
 		end
 	end
 
-	--trigger_useradio
-
     if game.GetMap() == "ep2_outland_06a" then
 		ents.FindByName("trigger_useradio")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_AlyxRadioTalk()")
 	end
@@ -673,6 +720,15 @@ local function SetUpMisc()
 		ents.FindByName("relay.power.off")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_TurretsDefeated()")
 	end
 	
+    if game.GetMap() == "ep2_outland_10a" then
+		local NewDog = ents.Create("npc_dog")	--Needs to be spawned in
+		NewDog:SetName("dog")
+		--NewDog:SetPos(Vector(903,-871,-1114))
+		NewDog:SetPos(Vector(2015,-776,-1904))
+
+		NewDog:Spawn()
+
+	end
 
     if game.GetGlobalState("hl2cr_bringitem_gnome") == GLOBAL_ON and gnome_pos[game.GetMap()] then
         game.SetGlobalState("hl2cr_bringitem_gnome", GLOBAL_DEAD)

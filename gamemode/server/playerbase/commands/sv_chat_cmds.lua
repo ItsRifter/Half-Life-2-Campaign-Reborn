@@ -163,10 +163,12 @@ local chat_cmds = {
 		print("debugging")
     end,
 
-    ["!eyes"] = function(ply, text)	--returns eye angles for debug
+    ["!eyes"] = function(ply, text)	--returns player pos and eye yaw for debug
 		if ply:Alive() then
-			print(ply:EyeAngles())
-			print(ply:GetPos())
+			local tempang = ply:EyeAngles()
+			print("Angle(0,"..math.Round(tempang[2])..",0)")
+			local temppos = ply:GetPos()
+			print("Vector("..math.Round(temppos[1])..","..math.Round(temppos[2])..","..math.Round(temppos[3])..")")
 		end
     end,
 
