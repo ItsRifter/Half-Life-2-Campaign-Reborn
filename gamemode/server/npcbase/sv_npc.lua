@@ -88,6 +88,7 @@ local weapon_melees = {
 hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo )
     local attacker = dmgInfo:GetAttacker()
     
+    --Player taking damage
     if target:IsPlayer() then
         if target.hl2cr.CurCosmetic ~= "" and !attacker:IsPlayer() then
             for _, c in ipairs(HL2CR_Cosmetics) do
@@ -122,15 +123,28 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
 
         return false
 
-    elseif target:IsNPC() and attacker:IsPlayer() then
+    --NPC taking damage
+    elseif target:IsNPC() then
+
+        --If its a player pet taking damage, do no harm to it
         if target:IsPet() then
             return true
         end
         
-        if tank_npcs[target:GetClass()] then
-            net.Start("HL2CR_TankNPC_Display")
-                net.WriteEntity(target)
-            net.Send(attacker)
+        --Attacker is a player pet
+        if attacker:IsPet() then
+            local pet = attacker:GetStats()
+
+            dmgInfo:SetDamage(pet.Stats.Damage)
+        end
+        
+        --Attacker is a player
+        if attacker:IsPlayer() then
+            if tank_npcs[target:GetClass()] then
+                net.Start("HL2CR_TankNPC_Display")
+                    net.WriteEntity(target)
+                net.Send(attacker)
+            end
         end
     else
         if target:GetClass() == "item_ammo_crate" then
@@ -177,7 +191,7 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 		attacker = attacker:GetDriver()
 	end
 
-    if target:IsFriendly() and attacker:IsPlayer() then return true end
+    if ( target:IsFriendly() or target:IsPet() ) and attacker:IsPlayer() then return true end
 
     if attacker:IsPlayer() and attacker:IsConnected() then		
 		if not Valid_NPC_Targets[target:GetClass()] then return end
@@ -192,7 +206,7 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 				net.WriteString(string.format("%1.1d",damagedone))	--Todo format better
 				net.WriteVector(dmgInfo:GetDamagePosition())
 					net.WriteUInt(colour,7)	--1=Red Text default
-				net.Send(attacker)
+            net.Send(attacker)
 		end
     end
 end)

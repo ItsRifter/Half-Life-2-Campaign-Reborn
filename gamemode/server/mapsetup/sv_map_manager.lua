@@ -414,7 +414,7 @@ concommand.Add("hl2cr_admin_setglobal", function(ply, cmd, args)
 	if not cmd_globalcheck[args[1]] then ply:BroadcastMessage(HL2CR_RedColour, "Global not found") return end
 
 	game.SetGlobalState(cmd_globalconvert[args[1]], args[2])
-	ply:BroadcastMessage(HL2CR_GreenColour,args[1], " Set")
+	ply:BroadcastMessage(HL2CR_GreenColour, args[1], " toggled")
 end)
 
 concommand.Add("hl2cr_admin_getglobals", function(ply, cmd, args)

@@ -39,7 +39,7 @@ if CLIENT then
 
     function ApplyCosmetic(outfit, owner)
         pac.SetupENT(owner)
-        timer.Simple(0.1, function()
+        timer.Simple(1.5, function()
             if owner == nil then return end
     
             if pastOutfit then

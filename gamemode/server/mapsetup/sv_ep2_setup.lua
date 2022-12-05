@@ -636,6 +636,10 @@ local gnome_pos = {
 	["ep2_outland_10a"] = Vector(4793,-5961,-1542)
 }
 
+local removeclip_maps = {
+    ["ep2_outland_04"] = true,
+}
+
 local function SetUpMisc()
     
     local MapLua = ents.Create("lua_run")
@@ -744,9 +748,22 @@ local function SetUpMisc()
 			gnome:Spawn()
 			gnome:GetPhysicsObject():Sleep()
 		end
+    end
 
+    if removeclip_maps[game.GetMap()] then
+        local validclips = {
+            "_block_player",
+            "_clip",
+        }
         
-		
+        for _, i in ipairs(ents.FindByClass("func_brush")) do
+            for _, c in ipairs(validclips) do 
+                if string.EndsWith(i:GetName(), c) then 
+                    i:Remove()
+                    break
+                end
+            end
+        end
     end
 
 end
