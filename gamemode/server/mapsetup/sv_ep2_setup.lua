@@ -168,37 +168,19 @@ local ep2_triggers = {
                 [2] = Vector(5830, -1930, -1140)
             },
 			[2] = {
-                [1] = Vector(4180, -1420, -1480), 		
-                [2] = Vector(4630, -710, -1330)
-            },
-			[3] = {
-                [1] = Vector(3190, 390, -1510), 		
-                [2] = Vector(3300, 465, -1470)
-            },
-			[4] = {
-                [1] = Vector(2470, -490, -1830), 		
-                [2] = Vector(2690, -150, -1750)
-            },
-			[5] = {
-                [1] = Vector(3310, -4110, -2050), 		
-                [2] = Vector(3820, -3710, -1970)
+                [1] = Vector(5105,-2809,-2220), 		
+                [2] = Vector(5582,-2663,-2352)
             }
         },
         
         ["checkpoint_spot"] = {
 			[1] = Vector(5800, -2320, -1200),
-            [2] = Vector(4440, -1230, -1450),
-			[3] = Vector(3248, 442, -1519),
-			[4] = Vector(2580, -270, -1790),
-			[5] = Vector(3500, -3850, -2055)
+            [2] = Vector(5374,-2653,-2289)
         },
 		
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 260, 0),
-			[2] = Angle(0, 90, 0),
-			[3] = Angle(0, 90, 0),
-			[4] = Angle(0, 180, 0),
-			[5] = Angle(0, 330, 0)
+			[2] = Angle(0, 90, 0)
 		},
 		
 		["checkpoint_functions"] = {
@@ -221,8 +203,8 @@ local ep2_triggers = {
         },
         
         ["changelevels"] = {
-			[1] = Vector(4790, -1840, 1100),
-            [2] = Vector(5100, -1400, 1200)
+			[1] = Vector(4790, -1840, 1500),
+            [2] = Vector(5100, -1400, 3200)
         },
 		
 		["changelevel_func"] = {	--For those who miss the lift back up
@@ -355,19 +337,14 @@ local ep2_triggers = {
     }, 
 	
 	["ep2_outland_07"] = {	--Advisor Attack
-        ["changelevels"] = {
-            [1] = Vector(2000, 6100, 540),
-            [2] = Vector(2130, 6410, 750)
-        },
-		
 		["checkpoints"] = {
 			[1] = {
 				[1] = Vector(-12190, -11100, 150),
 				[2] = Vector(-7780, -10600, 540)
             },
 			[2] = {
-				[1] = Vector(-10140, -9430, 30),
-				[2] = Vector(-9950, -9210, 80)
+				[1] = Vector(-10087,-9241,65),
+				[2] = Vector(-9274,-9956,20)
             }
         },
         
@@ -382,17 +359,18 @@ local ep2_triggers = {
 		},
 		
 		["checkpoint_functions"] = {
-            [1] = function()	--Force car position just incase
-                timer.Simple(0.1, function()
+            [1] = function()
+                --timer.Simple(0.1, function()
 					GAMEMODE:DisableVehicles(true)
-                end)
+                --end)
 			end,
         },
 		
 		["changelevels"] = {
             [1] = Vector(-4560, 10860, -40),
             [2] = Vector(-3100, 10950, 360)
-        },
+        },	
+
     }, 
 
 	["ep2_outland_08"] = {	--Roller Mine HeliBoss
@@ -636,10 +614,6 @@ local gnome_pos = {
 	["ep2_outland_10a"] = Vector(4793,-5961,-1542)
 }
 
-local removeclip_maps = {
-    ["ep2_outland_04"] = true,
-}
-
 local function SetUpMisc()
     
     local MapLua = ents.Create("lua_run")
@@ -689,6 +663,19 @@ local function SetUpMisc()
 			CreateCheckpoint(Vector(-2690, -9170, -740),Vector(-2290, -8900, -570),Vector(-2480, -9160, -690),Angle(0, 220, 0))
 			--CreateCheckpoint(Min,Max,TPos,TAngle,func)
 		end
+	end
+
+    if game.GetMap() == "ep2_outland_04" then
+		RemoveNamedBrushes({"_block_player","_clip","_playerblock"})
+		
+		ents.FindByName("elevator_exit_trigger")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_ElevatorSpawn()")
+		--elevator_call_bottom  --elevator --EP2_ElevatorSpawn
+	end
+
+	if game.GetMap() == "ep2_outland_06" then
+		ents.FindByName("trigger_goopit3_ladder_up")[1]:Remove()	--Stops a kill trigger activating
+		ents.FindByName("trigger_shutExitGate")[1]:Remove()			--Prevents end gate closing
+		
 	end
 
     if game.GetMap() == "ep2_outland_06a" then
@@ -750,21 +737,22 @@ local function SetUpMisc()
 		end
     end
 
-    if removeclip_maps[game.GetMap()] then
-        local validclips = {
-            "_block_player",
-            "_clip",
-        }
-        
-        for _, i in ipairs(ents.FindByClass("func_brush")) do
-            for _, c in ipairs(validclips) do 
-                if string.EndsWith(i:GetName(), c) then 
-                    i:Remove()
-                    break
-                end
-            end
-        end
-    end
+    --if removeclip_maps[game.GetMap()] then
+    --    local validclips = {
+    --        "_block_player",
+    --        "_clip",
+    --    }
+    --    
+    --    for _, i in ipairs(ents.FindByClass("func_brush")) do
+    --        for _, c in ipairs(validclips) do 
+    --            if string.EndsWith(i:GetName(), c) then 
+	--				print("removing "..i:GetName())
+    --               i:Remove()
+    --                break
+    --            end
+    --        end
+    --    end
+    --end
 
 end
 
@@ -793,6 +781,15 @@ function EP2_FinishAntevent()
 		if v.NoDeaths then
 			v:BroadcastMessage(HL2CR_AchNotifyColour, translate.Get("Achievement_EP2_Antlions"),  HL2CR_StandardColour, " debug yay you did it")
 		end
+	end
+end
+
+function EP2_ElevatorSpawn()
+	local elevator = ents.FindByName("elevator")[1]
+	for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+		spawn:SetPos(elevator:GetPos() + Vector(0, 20, -52))
+		spawn:SetParent(elevator)
+		spawn:SetAngles(Angle(0, 0, 0))
 	end
 end
 

@@ -387,10 +387,26 @@ function CreateCheckpoint(Min,Max,TPos,TAngle,func)
 	checkpoint.lambdaModel:SetMaterial(checkpoint.Mat)
 end
 
+function RemoveNamedBrushes(toremove)	--Remove func_brushes whos names end with anything in the table listed
+	for _, i in ipairs(ents.FindByClass("func_brush")) do
+		for _, c in ipairs(toremove) do 
+			if string.EndsWith(i:GetName(), c) then 
+				--print("removing "..i:GetName())
+				i:Remove()
+				break
+			end
+		end
+	end
+end
+
 local cmd_globalcheck = {
 	["superphysgun"] = true,
 	["antlionfriendly"] = true,
 	["precriminal"] = true,
+	["extend"] = true,
+	["gnome"] = true,
+	["whatbaby"] = true,
+	["rollermine"] = true,
 	["gnome"] = true,
 }
 
@@ -398,6 +414,9 @@ local cmd_globalconvert = {
 	["superphysgun"] = "super_phys_gun",
 	["antlionfriendly"] = "antlion_allied",
 	["precriminal"] = "gordon_precriminal",
+	["extend"] = "hl2cr_extendedmap",
+	["whatbaby"] = "hl2cr_bringitem_whatbaby",
+	["rollermine"] = "hl2cr_bringitem_rollermine",
 	["gnome"] = "hl2cr_bringitem_gnome",
 }
 
@@ -405,16 +424,22 @@ local cmd_globals = {
 	[1] = "superphysgun",
 	[2] = "antlionfriendly",
 	[3] = "precriminal",
-	[4] = "gnome",
+	[4] = "extend",
+	[5] = "whatbaby",
+	[6] = "rollermine",
+	[7] = "gnome",
 }
+
+local cmd_valid = {["0"]=true,["1"]=true,["2"]=true}
 
 concommand.Add("hl2cr_admin_setglobal", function(ply, cmd, args)
 	if not ply:IsSuperAdmin() then return end
 
 	if not cmd_globalcheck[args[1]] then ply:BroadcastMessage(HL2CR_RedColour, "Global not found") return end
+	if not cmd_valid[args[2]] then ply:BroadcastMessage(HL2CR_RedColour, "Invalid value, must be 0=off/1=on/2=dead") return end
 
 	game.SetGlobalState(cmd_globalconvert[args[1]], args[2])
-	ply:BroadcastMessage(HL2CR_GreenColour, args[1], " toggled")
+	BroadcastMessageToSupers(HL2CR_GreenColour, args[1], " set to ",args[2])
 end)
 
 concommand.Add("hl2cr_admin_getglobals", function(ply, cmd, args)

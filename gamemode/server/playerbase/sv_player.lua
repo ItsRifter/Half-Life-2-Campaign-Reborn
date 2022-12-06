@@ -467,6 +467,20 @@ function BroadcastMessageToAll(...)
 	net.Broadcast()
 end
 
+function BroadcastMessageToSupers(...)
+	local supers = player.GetAll()
+	for i=#supers, 1, -1 do
+		local v = supers[ i ]
+		if not v:IsSuperAdmin()  then
+			table.remove( supers, i )
+		end
+	end
+	
+	net.Start("HL2CR_ChatMessage")
+		net.WriteTable({...})
+	net.Send(supers)
+end
+
 function BroadcastPitchedSoundToAll(soundPath, pitch)
 	net.Start("HL2CR_MsgPitchSound")
 		net.WriteString(soundPath)

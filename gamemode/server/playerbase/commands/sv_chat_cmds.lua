@@ -158,17 +158,19 @@ local chat_cmds = {
         end
 		
 		local achcount = table.Count(ply.hl2cr.AchProgress["lambda_locator"])
-		ply:BroadcastMessage(HL2CR_YellowColour, translate.Get("Achievement_Progress") .. achcount.. "/" ..ach.Max)
+		ply:BroadcastMessage(HL2CR_StandardColour, translate.Get("Achievement_Progress") .. achcount.. "/" ..ach.Max)
 		PrintTable(ply.hl2cr.AchProgress["lambda_locator"])
 		print("debugging")
     end,
 
     ["!eyes"] = function(ply, text)	--returns player pos and eye yaw for debug
-		if ply:Alive() then
+		if ply:Alive() and ply:IsSuperAdmin() then
 			local tempang = ply:EyeAngles()
-			print("Angle(0,"..math.Round(tempang[2])..",0)")
+			--print("Angle(0,"..math.Round(tempang[2])..",0)")
+			ply:BroadcastMessage(HL2CR_StandardColour, "Angle(0,"..math.Round(tempang[2])..",0)")
 			local temppos = ply:GetPos()
-			print("Vector("..math.Round(temppos[1])..","..math.Round(temppos[2])..","..math.Round(temppos[3])..")")
+			--print("Vector("..math.Round(temppos[1])..","..math.Round(temppos[2])..","..math.Round(temppos[3])..")")
+			ply:BroadcastMessage(HL2CR_StandardColour, "Vector("..math.Round(temppos[1])..","..math.Round(temppos[2])..","..math.Round(temppos[3])..")")
 		end
     end,
 
