@@ -1,4 +1,4 @@
-local hl2cr_player = FindMetaTable("Player")
+hl2cr_player = hl2cr_player or FindMetaTable( "Player" )
 
 local alivePlayers = team.GetPlayers(TEAM_ALIVE)
 local specEnt = 1

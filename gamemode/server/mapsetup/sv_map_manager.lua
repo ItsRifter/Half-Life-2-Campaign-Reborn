@@ -432,14 +432,22 @@ local cmd_globals = {
 
 local cmd_valid = {["0"]=true,["1"]=true,["2"]=true}
 
+local cmd_convert_int = {
+	[0] = "OFF",
+	[1] = "ON",
+	[2] = "DEAD"
+}
+
 concommand.Add("hl2cr_admin_setglobal", function(ply, cmd, args)
 	if not ply:IsSuperAdmin() then return end
 
 	if not cmd_globalcheck[args[1]] then ply:BroadcastMessage(HL2CR_RedColour, "Global not found") return end
 	if not cmd_valid[args[2]] then ply:BroadcastMessage(HL2CR_RedColour, "Invalid value, must be 0=off/1=on/2=dead") return end
 
-	game.SetGlobalState(cmd_globalconvert[args[1]], args[2])
-	BroadcastMessageToSupers(HL2CR_GreenColour, args[1], " set to ",args[2])
+	local setter = tonumber(args[2])
+
+	game.SetGlobalState(cmd_globalconvert[args[1]], setter)
+	BroadcastMessageToAdmins(HL2CR_PlayerColour, ply:Nick(), HL2CR_GreenColour, " set global ", args[1], " ", cmd_convert_int[setter])
 end)
 
 concommand.Add("hl2cr_admin_getglobals", function(ply, cmd, args)

@@ -1,4 +1,4 @@
-local hl2cr_player = FindMetaTable( "Player" )
+hl2cr_player = hl2cr_player or FindMetaTable( "Player" )
 
 --Weapons/Items that the map start with upon player connected
 SPAWNING_WEAPONS = SPAWNING_WEAPONS or {}
@@ -467,18 +467,14 @@ function BroadcastMessageToAll(...)
 	net.Broadcast()
 end
 
-function BroadcastMessageToSupers(...)
-	local supers = player.GetAll()
-	for i=#supers, 1, -1 do
-		local v = supers[ i ]
-		if not v:IsSuperAdmin()  then
-			table.remove( supers, i )
+function BroadcastMessageToAdmins(...)	
+	for _, v in ipairs(player.GetAll()) do
+		if v:IsSuperAdmin() then
+			net.Start("HL2CR_ChatMessage")
+				net.WriteTable({...})
+			net.Send(v)
 		end
 	end
-	
-	net.Start("HL2CR_ChatMessage")
-		net.WriteTable({...})
-	net.Send(supers)
 end
 
 function BroadcastPitchedSoundToAll(soundPath, pitch)

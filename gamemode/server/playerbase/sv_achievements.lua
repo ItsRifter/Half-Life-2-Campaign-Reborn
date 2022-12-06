@@ -1,6 +1,3 @@
-
-local hl2cr_player = FindMetaTable( "Player" )
-
 function hl2cr_player:GrantAchievement(achName)
 	
 	local ach = nil

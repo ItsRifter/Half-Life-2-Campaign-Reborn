@@ -1,4 +1,4 @@
-local hl2cr_player = FindMetaTable( "Player" )
+hl2cr_player = hl2cr_player or FindMetaTable( "Player" )
 
 local XP_BASE_RANDOM = {
 	["npc_headcrab"] = {xpMin = 1, xpMax = 10},
@@ -84,7 +84,7 @@ function hl2cr_player:AddXP(XP)
 		self.hl2cr.Exp = self.hl2cr.Exp - self.hl2cr.ReqExp
 		self.hl2cr.Level = self.hl2cr.Level + 1
 		self.hl2cr.SkillPoints = self.hl2cr.SkillPoints + 1
-		self.hl2cr.ReqExp = self.hl2cr.ReqExp + math.Round(4 * math.pow( self.hl2cr.Level + 5, 3 ) / 5);
+		self.hl2cr.ReqExp = self.hl2cr.ReqExp + math.Round(4 * math.pow( self.hl2cr.Level + 5, 3 ) / 3);
 		//self.hl2cr.ReqExp = self.hl2cr.ReqExp + (375 * self.hl2cr.Level)
 		if LEVEL_REWARDS[self.hl2cr.Level] then
 			LEVEL_REWARDS[self.hl2cr.Level](self)

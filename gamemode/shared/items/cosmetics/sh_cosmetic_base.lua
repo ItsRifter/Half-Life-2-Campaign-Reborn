@@ -41,8 +41,8 @@ if CLIENT then
         pac.SetupENT(owner)
         timer.Simple(1.5, function()
             if owner == nil then return end
-    
-            if pastOutfit then
+            
+            if pastOutfit and owner ~= nil then
                 owner:RemovePACPart(pastOutfit)
             end
             
