@@ -190,23 +190,35 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 	if attacker:IsVehicle() and attacker:GetDriver() then
 		attacker = attacker:GetDriver()
 	end
-
+	
     if ( target:IsFriendly() or target:IsPet() ) and attacker:IsPlayer() then return true end
 
+	--if not Valid_NPC_Targets[target:GetClass()] then return end
+	if not CanPlayerTarget(target:GetClass()) then return end
+
+	--This moves indicator if damage position isnt real
+	if dmgInfo:GetDamagePosition():LengthSqr() < 1 then dmgInfo:SetDamagePosition(target:GetPos() + Vector(0,0,64))end
+	
     if attacker:IsPlayer() and attacker:IsConnected() then		
-		if not Valid_NPC_Targets[target:GetClass()] then return end
+		--if not Valid_NPC_Targets[target:GetClass()] then return end
 		local damagedone = dmgInfo:GetDamage()
+
 		if damagedone > target:Health() then damagedone = target:Health()end
 		
 		local colour = 1
 		if target:GetClass() == "npc_antlion" and not ALLOWED_ANTLIONS_XP[game.GetMap()] then colour = 2 end
 		
+		damagedone = math.Round(damagedone,1)
+		
 		if damagedone > 0 then	--prevents erronious negatives
 			net.Start( "HL2CR_Indicator" )
-				net.WriteString(string.format("%1.1d",damagedone))	--Todo format better
+				--net.WriteString(string.format("%1.1d",damagedone))	--Todo format better
+				net.WriteString(damagedone)	--Todo format better
 				net.WriteVector(dmgInfo:GetDamagePosition())
 					net.WriteUInt(colour,7)	--1=Red Text default
             net.Send(attacker)
+			
+			attacker:AddDamageExp(tonumber(damagedone),target:GetClass())
 		end
     end
 end)

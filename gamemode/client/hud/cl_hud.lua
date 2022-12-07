@@ -38,10 +38,10 @@ local function PlayUniqueLocalSound(soundName, setPitch)
 end
 
 local start, oldXP, newXP = SysTime(), -1, -1
-local barW = 200
+local barW = 400 --old 200
 local animationTime = 1.0
 local lastUpdate = 0
-local fadeOut = 255
+local fadeOut = 200
 
 hook.Add( "HUDPaint", "HL2CR_XPBar", function()
 
@@ -67,28 +67,31 @@ hook.Add( "HUDPaint", "HL2CR_XPBar", function()
 
 	local smoothNewXP = 0
 	
-	local smoothXP = Lerp( (SysTime() - start) / animationTime, oldXP, newXP )
+	local smoothXP = Lerp( math.Clamp((SysTime() - start) / animationTime,0,1), oldXP, newXP )
 
 	if newXP ~= xp then
-		fadeOut = 255
+		fadeOut = 200
 		oldXP = newXP
 		start = SysTime()
 		newXP = xp
 	end
 
 	//Empty
-	draw.RoundedBox( 4, ScrW() / 2.25, ScrH() / 1.075, barW, 45, Color(0, 0, 0, fadeOut) )
+	draw.RoundedBox( 4, (ScrW()-barW) * 0.5, ScrH() / 1.075, barW, 45, Color(0, 0, 0, fadeOut) )
 
 	//Fill
-	draw.RoundedBox( 4, ScrW() / 2.25, ScrH() / 1.075, math.max( 0, smoothXP ) / reqXP * barW, 45, Color(255, 174, 0, fadeOut) )
+	draw.RoundedBox( 4, (ScrW()-barW) * 0.5, ScrH() / 1.075, math.max( 0, smoothXP ) / reqXP * barW, 45, Color(250, 174, 0, fadeOut) )
 	
-	local percentage = math.Round((100 * xp) / reqXP, 1) .. "%"
+	local percentage = xp.."/"..reqXP
+	--local percentage = math.Round((100 * xp) / reqXP, 1) .. "%"
 
 	//Text
-	draw.SimpleText(translate.Get("HUD_Stat_XP") .. " " .. percentage, "hl2cr_hud_xp", ScrW() / 2.10, ScrH() / 1.05, Color(255, 200, 0, fadeOut), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	--draw.SimpleText(translate.Get("HUD_Stat_XP") .. " " .. percentage, "hl2cr_hud_xp", ScrW() / 2.10, ScrH() / 1.05, Color(255, 200, 100, fadeOut), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	
+	draw.SimpleTextOutlined(translate.Get("HUD_Stat_XP") .. " " .. percentage, "hl2cr_hud_xp", ScrW() * 0.5, ScrH() / 1.05, Color(255, 200, 100, fadeOut), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, fadeOut * 2 ) )
 
 	if LocalPlayer():GetNWInt("hl2cr_stat_skillpoints", -1 ) > 0 then
-		draw.SimpleText(LocalPlayer():GetNWInt("hl2cr_stat_skillpoints", -1 ) .. translate.Get("HUD_Notice_UnspentSkills") , "hl2cr_hud_xp", ScrW() / 2.3, ScrH() / 1.105, Color(255, 0, 0, fadeOut), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleTextOutlined(LocalPlayer():GetNWInt("hl2cr_stat_skillpoints", -1 ) .. translate.Get("HUD_Notice_UnspentSkills") , "hl2cr_hud_xp", ScrW() * 0.5, ScrH() / 1.105, Color(255, 0, 0, fadeOut), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1 , Color( 0, 0, 0, fadeOut * 2 ) )
 	end
 end )
 
@@ -112,12 +115,12 @@ local xpTotal = 0
 net.Receive("HL2CR_Update_XP", function()
 	lastUpdate = 6 + CurTime()
 	
-	newXP = net.ReadInt(32)
-	xpTotal = xpTotal + newXP
+	local addedXP = net.ReadInt(32)
+	xpTotal = xpTotal + addedXP
 
 	local xpText = vgui.Create("DLabel", xpPopup)
 	xpText:SetPos(ScrW() / 2.40, ScrH() - 115)
-	xpText:SetText(translate.Get("HUD_Stat_XP") .. ": " .. newXP)
+	xpText:SetText(translate.Get("HUD_Stat_XP") .. ": " .. addedXP)
 	xpText:SetTextColor(Color(255, 200, 0))
 	xpText:SetFont("hl2cr_hud_xp")
 	xpText:SizeToContents()

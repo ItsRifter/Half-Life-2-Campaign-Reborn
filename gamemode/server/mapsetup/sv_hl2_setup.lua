@@ -36,7 +36,7 @@
 }
 --]]
 
-local HL2_LAMBDA_TRIGGERS = {
+HL2_LAMBDA_TRIGGERS = {
     ["d1_trainstation_05"] = {
         [1] = {
             [1] = Vector(-6512, -1086, 2),
@@ -2543,7 +2543,7 @@ local function SetUpMisc()
 	
 	if game.GetMap() == "d2_coast_03" then
 		ents.FindByName("gunship_spawner_2")[1]:Fire("AddOutput", "OnAllSpawnedDead hl2crlua:RunPassedCode:OpenGateCoast():0:-1" )
-		ents.FindByName("gunship_spawner_2")[1]:Fire("AddOutput", "OnAllSpawnedDead hl2crlua:RunPassedCode:RemovePushTrigger():0:-1" )
+		--ents.FindByName("gunship_spawner_2")[1]:Fire("AddOutput", "OnAllSpawnedDead hl2crlua:RunPassedCode:RemovePushTrigger():0:-1" )
 	end
 	
 	if game.GetMap() == "d2_coast_04" then
@@ -2771,6 +2771,7 @@ function OpenGateCoast()
 		v:Fire("Open")
 	end
 
+	RemovePushTrigger()
 	--disableJeepGlobal = false
 	GAMEMODE:DisableVehicles(false)
 	for _, v in ipairs(player.GetAll()) do

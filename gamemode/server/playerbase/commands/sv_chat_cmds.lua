@@ -135,7 +135,9 @@ local chat_cmds = {
         if not ply:IsValid() then return end
 		if not ply.loaded then return end
 		 
-		if !table.HasValue( MAPS_HL2, game.GetMap() ) then 
+		local mapname = game.GetMap()
+		 
+		if !table.HasValue( MAPS_HL2, mapname ) then 
 			ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_CMD_NotOnHL2"))
 			return 
 		end
@@ -159,8 +161,18 @@ local chat_cmds = {
 		
 		local achcount = table.Count(ply.hl2cr.AchProgress["lambda_locator"])
 		ply:BroadcastMessage(HL2CR_StandardColour, translate.Get("Achievement_Progress") .. achcount.. "/" ..ach.Max)
-		PrintTable(ply.hl2cr.AchProgress["lambda_locator"])
-		print("debugging")
+		
+		if HL2_LAMBDA_TRIGGERS[mapname] then
+			local found = 0
+			for i, l in ipairs(HL2_LAMBDA_TRIGGERS[mapname]) do
+				if table.HasValue(ply.hl2cr.AchProgress["lambda_locator"], mapname.."_"..i) then found = found+1 end
+			end
+			ply:BroadcastMessage(HL2CR_StandardColour, translate.Get("Achievement_Found")..found.."/"..#HL2_LAMBDA_TRIGGERS[mapname] )
+		else
+			ply:BroadcastMessage(HL2CR_StandardColour, translate.Get("Achievement_None") )
+		end
+		--PrintTable(ply.hl2cr.AchProgress["lambda_locator"])
+		--print("debugging")
     end,
 
     ["!eyes"] = function(ply, text)	--returns player pos and eye yaw for debug

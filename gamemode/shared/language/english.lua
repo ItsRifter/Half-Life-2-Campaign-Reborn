@@ -231,6 +231,8 @@ LANGUAGE.Achievement_Notify_Progress = " will progress to the next map"
 LANGUAGE.Achievement_Notify_Begin = " is now active"
 LANGUAGE.Achievement_Notify_Fail = " failed"
 LANGUAGE.Achievement_Progress = "You have currently collected "
+LANGUAGE.Achievement_Found = "On this map you have found "
+LANGUAGE.Achievement_None = "There are none on this map"
 
 LANGUAGE.Hat_Unlocked = "You unlocked the "
 LANGUAGE.Admin_Notify_Cleanup = "An admin has done a map cleanup, EXPECT ISSUES"

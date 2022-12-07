@@ -294,6 +294,9 @@ function hl2cr_player:SetUpInitialSpawn()
 		mapach_setup[game.GetMap()](self)
 	end
 
+	self.damagexp = self.damagexp or 0
+	--self.damagexptotal = self.damagexptotal or 0
+
 	self:GiveWeaponsSpawn()
 	self:AdjustSpeed()
 	self:UpdateClass()

@@ -1,6 +1,6 @@
 ENT.Base = "base_brush"
 ENT.Type = "brush"
-ENT.Triggered = false
+--ENT.Triggered = false
 ENT.Index = -1
 function ENT:Initialize()
 
@@ -22,12 +22,13 @@ end
 
 --When the player touches the lambda trigger
 function ENT:StartTouch(ent)
+	--if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_ALIVE and not self.Triggered then
 	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_ALIVE and not self.Triggered then
-		self.Triggered = true
+		--self.Triggered = true
 		ent:UpdateLambdaLocator(game.GetMap() .. "_" .. self.Index)
 	end
 	
-	timer.Simple(2, function()
-		self.Triggered = false
-	end)
+	--timer.Simple(2, function()
+	--	self.Triggered = false
+	--end)
 end

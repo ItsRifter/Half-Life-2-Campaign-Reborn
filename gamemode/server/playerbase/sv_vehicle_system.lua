@@ -47,7 +47,7 @@ Jalopy = {
 
 list.Set( "Vehicles", "Jalopy", jalopy )
 
-hl2cr_player = hl2cr_player or FindMetaTable( "Player" )
+--hl2cr_player = hl2cr_player or FindMetaTable( "Player" )
 
 function hl2cr_player:SpawnAirboat()
     local boat = ents.Create(Airboat.Class)

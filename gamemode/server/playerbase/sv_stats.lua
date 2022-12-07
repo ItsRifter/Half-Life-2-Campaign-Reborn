@@ -1,4 +1,4 @@
-hl2cr_player = hl2cr_player or FindMetaTable( "Player" )
+--hl2cr_player = hl2cr_player or FindMetaTable( "Player" )
 
 local XP_BASE_RANDOM = {
 	["npc_headcrab"] = {xpMin = 1, xpMax = 10},
@@ -71,7 +71,8 @@ local MAP_PROGRESSIVE_ACHS = {
 
 function hl2cr_player:AddXP(XP)
 
-	self.hl2cr.Exp = self.hl2cr.Exp + XP * GetConVar("hl2cr_difficulty"):GetInt()
+	--self.hl2cr.Exp = self.hl2cr.Exp + XP * GetConVar("hl2cr_difficulty"):GetInt()
+	self.hl2cr.Exp = self.hl2cr.Exp + XP 
 	
 	self:UpdateXPClient(XP)
 
@@ -84,7 +85,8 @@ function hl2cr_player:AddXP(XP)
 		self.hl2cr.Exp = self.hl2cr.Exp - self.hl2cr.ReqExp
 		self.hl2cr.Level = self.hl2cr.Level + 1
 		self.hl2cr.SkillPoints = self.hl2cr.SkillPoints + 1
-		self.hl2cr.ReqExp = self.hl2cr.ReqExp + math.Round(4 * math.pow( self.hl2cr.Level + 5, 3 ) / 3);
+		--self.hl2cr.ReqExp = self.hl2cr.ReqExp + math.Round(4 * math.pow( self.hl2cr.Level + 5, 3 ) / 3);
+		self.hl2cr.ReqExp = 319 + math.floor(math.pow( self.hl2cr.Level + 8, 2.5+(self.hl2cr.Level * 0.025 )))
 		//self.hl2cr.ReqExp = self.hl2cr.ReqExp + (375 * self.hl2cr.Level)
 		if LEVEL_REWARDS[self.hl2cr.Level] then
 			LEVEL_REWARDS[self.hl2cr.Level](self)
@@ -117,17 +119,18 @@ hook.Add( "OnNPCKilled", "HL2CR_GiveXP", function( npc, attacker, inflictor )
 			end
 		end
 
-		if npc:GetClass() == "npc_antlion" and not ALLOWED_ANTLIONS_XP[game.GetMap()] then return end
+		--if npc:GetClass() == "npc_antlion" and not ALLOWED_ANTLIONS_XP[game.GetMap()] then return end
 
 		if not XP_BASE_RANDOM[npc:GetClass()] then return end
 
 		attacker.MapStats.Kills = attacker.MapStats.Kills + 1
-		local gainXP = math.random(XP_BASE_RANDOM[npc:GetClass()].xpMin, XP_BASE_RANDOM[npc:GetClass()].xpMax)
 		
-		local xpFarmDivide = 1
+		--local gainXP = math.random(XP_BASE_RANDOM[npc:GetClass()].xpMin, XP_BASE_RANDOM[npc:GetClass()].xpMax)
+		
+		--local xpFarmDivide = 1
 
-		if XPFARM_MAPS[game.GetMap()] then attacker:AddXP(math.Round(math.Clamp(gainXP / 2, 1, 9999)))
-		else attacker:AddXP(gainXP) end
+		--if XPFARM_MAPS[game.GetMap()] then attacker:AddXP(math.Round(math.Clamp(gainXP / 2, 1, 9999)))
+		--else attacker:AddXP(gainXP) end
 	end
 
 	if attacker:IsPet() then
