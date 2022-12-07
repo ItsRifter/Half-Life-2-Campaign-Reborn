@@ -111,6 +111,7 @@ end)
 local curXPNotify = {}
 local xpTotalText = nil 
 local xpTotal = 0
+local xPosDiv = 2.075
 
 net.Receive("HL2CR_Update_XP", function()
 	lastUpdate = 6 + CurTime()
@@ -119,46 +120,14 @@ net.Receive("HL2CR_Update_XP", function()
 	xpTotal = xpTotal + addedXP
 
 	local xpText = vgui.Create("DLabel", xpPopup)
-	xpText:SetPos(ScrW() / 2.40, ScrH() - 115)
+	xpText:SetPos(ScrW() / xPosDiv, ScrH() - 115)
 	xpText:SetText(translate.Get("HUD_Stat_XP") .. ": " .. addedXP)
 	xpText:SetTextColor(Color(255, 200, 0))
 	xpText:SetFont("hl2cr_hud_xp")
 	xpText:SizeToContents()
 
-	table.insert(curXPNotify, xpText)
-
-	if #curXPNotify > 1 then
-		if xpTotalText then
-			xpTotalText:Remove()
-			xpTotalText = nil
-		end
-		
-		xpTotalText = vgui.Create("DLabel", xpPopup)
-
-		xpTotalText:SetPos(ScrW() / 2.175, ScrH() - 150)
-		xpTotalText:SetText(" = " .. xpTotal)
-		xpTotalText:SetTextColor(Color(255, 200, 0))
-		xpTotalText:SetFont("hl2cr_hud_xp")
-		xpTotalText:SizeToContents()
-
-		xpTotalText.Think = function(self)
-			if (lastUpdate - CurTime()) <= 4 then
-				xpTotalText:AlphaTo( 0, 1.25, 0, function()
-					xpTotal = 0
-					if not xpTotalText then return end
-					xpTotalText:Remove()
-					xpTotalText = nil
-				end)
-			end
-			if (lastUpdate - CurTime()) <= 2.85 then
-				xpTotal = 0
-			end
-		end
-	end
-
-	xpText:MoveTo( ScrW() / 2.40, ScrH() - 125 - (25 * #curXPNotify), 1, 0, -1, function()
+	xpText:MoveTo( ScrW() / xPosDiv, ScrH() - 125, 1, 0, -1, function()
 		xpText:AlphaTo( 0, 1, 1, function()
-			table.remove(curXPNotify, #curXPNotify)
 			xpTotal = 0
 			xpText:Remove()
 		end)
