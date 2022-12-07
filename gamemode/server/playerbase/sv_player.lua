@@ -24,21 +24,24 @@ RESTRICTED_WEAPONS = {
 	["weapon_physgun"] = true,
 	["weapon_stunstick"] = true,
 	["weapon_medkit"] = true,
+
 	//Admin stuff
 	["swep_construction_kit"] = true,
-	//HL2CR weapons
+	
+	//HL2 Co-Op RPG stuff
 	["admire_hands"] = true,
 	["weapon_hl2cr_crowsaw"] = true,
 	["weapon_hl2cr_autopistol"] = true,
 	["weapon_hl2cr_rampagesmg"] = true,
 	["weapon_hl2cr_crossbow"] = true,
-	--Class based weapons
 	["weapon_hl2cr_medkit"] = true,
 	["weapon_hl2cr_ammobox"] = true,
 }
 
+
 DISALLOW_PICKUP = {
-	["weapon_stunstick"] = true
+	["weapon_stunstick"] = true,
+	["weapon_medkit"] = true
 }
 
 local ammo_filter = {
@@ -143,6 +146,40 @@ function GM:PlayerShouldTakeDamage( ply, attacker )
 	return true
 end
 
+function hl2cr_player:SetActiveItem(itemToActivate)
+	
+	if itemToActivate.Type == "Weapon" then
+		for _, i in ipairs(self.hl2cr.Inventory.Weapons) do
+			if i.Class == itemToActivate.Class then
+				if i.Active then
+					i.Active = false
+					self:BroadcastSound("buttons/button16.wav")
+				else
+					i.Active = true
+					self:BroadcastSound("buttons/button15.wav")
+				end
+
+				break
+			end
+		end
+	end
+
+
+	self:UpdateInvNetwork()
+end
+
+function hl2cr_player:StoreItemInv(newItem)
+
+	if newItem.Type == "Weapon" then
+
+		if table.HasValue(self.hl2cr.Inventory.Weapons, newItem) then return end
+
+		table.insert(self.hl2cr.Inventory.Weapons, newItem)
+	end
+
+	self:UpdateInvNetwork()
+end
+
 function hl2cr_player:DisplayResults()
 	if NO_RESULT_MAPS[game.GetMap()] then return end
 	
@@ -157,45 +194,16 @@ function hl2cr_player:UpdateModelNetwork(newMdl)
 end
 
 function hl2cr_player:ChangeModel(newModel)
-	if !self.loaded then 
-		self:SetModel("models/player/kleiner.mdl")
-		return 
-	end
+	//if !self.loaded then 
+	//	self:SetModel("models/player/kleiner.mdl")
+	//	return 
+	//end
 
 	self:SetModel(newModel)
-
-	//self:SetModel(ServerModels[self.hl2cr.ModelType.Type][self.hl2cr.ModelType.Gender]
-	//[math.random(1, #ServerModels[self.hl2cr.ModelType.Type][self.hl2cr.ModelType.Gender])])
 end
 
--- function hl2cr_player:SetClass(className)
-	
--- 	if self.hl2cr.Class.Name == className then
--- 		self:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Class_AlreadyAssigned"))
--- 		return
--- 	end
-	
--- 	local assignClass = nil
-
--- 	for _, class in ipairs(HL2CR_Classes) do
--- 		if class.Name == className then
--- 			assignClass = class
--- 			break
--- 		end
--- 	end
-
--- 	if self.hl2cr.Level < assignClass.LevelReq then
--- 		self:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Class_LowLevel"))
--- 		return
--- 	end
-
--- 	self.NewClass = assignClass
-
--- 	self:BroadcastMessage(HL2CR_GreenColour, translate.Get("Class_Assigned"))
--- end
-
 function hl2cr_player:SetUpPlayer()	
-	if !self.loaded then return end
+	//if !self.loaded then return end
 	self:SetTeam(TEAM_ALIVE)
 
 	self:SetCustomCollisionCheck(true)
@@ -364,7 +372,7 @@ function hl2cr_player:SetUpRespawn()
 end
 
 function hl2cr_player:LoadSkills()
-	if !self.loaded then return end
+	//if !self.loaded then return end
 	for _, gS in ipairs(HL2CR_Skills) do
 		for i, s in ipairs(self.hl2cr.Skills) do
 			if gS.Class == s then
@@ -397,12 +405,23 @@ function hl2cr_player:GiveEquipment()
 	self:CheckAllAmmo()
 end
 
+function hl2cr_player:SpawnWithActiveWeapons()
+	if MAPS_NO_SUIT[game.GetMap()] or (game.GetMap() == "d1_trainstation_05" and GetGlobalBool("HL2CR_GLOBAL_SUIT") == false) then return end
+
+	for _, i in ipairs(self.hl2cr.Inventory.Weapons) do
+		if i.Active then
+			self:Give(i.Class)
+		end
+	end
+end
+
 function hl2cr_player:GiveWeaponsSpawn()
 	for _, weapon in ipairs(SPAWNING_WEAPONS) do
 		self:Give(weapon)
 	end
 
-	if !self.loaded then return end
+	self:SpawnWithActiveWeapons()
+
 end
 
 --Force the spawnpoint to be suitable making players not spawn into eachother
@@ -718,11 +737,33 @@ function GM:GravGunPunt( ply, ent )
     return true
 end
 
+function hl2cr_player:UpdateInvNetwork()
+
+	local curItems = {}
+
+	for i, w in ipairs(self.hl2cr.Inventory.Weapons) do
+		table.insert(curItems, w.Class)
+	end
+
+	self:SetNWString("hl2cr_inv_items", table.concat(curItems, " "))
+	self:SetNWInt("hl2cr_inv_weight", self.hl2cr.Inventory.Weight)
+	self:SetNWInt("hl2cr_inv_curweight", self.hl2cr.Inventory.CurWeight)
+end
+
 function hl2cr_player:UpdateNetworks()
 	self:SetNWInt("hl2cr_stat_level", self.hl2cr.Level)
 	self:SetNWInt("hl2cr_stat_exp", self.hl2cr.Exp)
 	self:SetNWInt("hl2cr_stat_expreq", self.hl2cr.ReqExp)
 	self:SetNWInt("hl2cr_stat_skillpoints", self.hl2cr.SkillPoints)
+
+	local curItems = {}
+
+	for i, w in ipairs(self.hl2cr.Inventory.Weapons) do
+		table.insert(curItems, w.Class)
+	end
+
+	self:SetNWString("hl2cr_inv_items", table.concat(curItems, " ") )
+
 	self:SetNWString("hl2cr_stat_skills", table.concat(self.hl2cr.Skills, " ") )
 	self:SetNWString("hl2cr_achievements", table.concat(self.hl2cr.Achievements, " ") )
 	self:SetNWInt("hl2cr_inv_weight", self.hl2cr.Inventory.Weight)
@@ -830,6 +871,7 @@ function hl2cr_player:AdmireSuitHands()
 	timer.Create(self:Nick() .. "_admiring", 4, 1, function()
 		self:StripWeapons()
 		self:GiveEquipment()
+		self:SpawnWithActiveWeapons()
 	end)
 end
 
@@ -879,4 +921,37 @@ net.Receive("HL2CR_Cosmetic", function(len, ply)
 	if not ply then return end
 
 	ply:ApplyCosmeticServer(net.ReadString())
+end)
+
+net.Receive("HL2CR_Item_Purchase", function(len, ply)
+	if not ply then return end
+
+	local bought = net.ReadString()
+	local item = nil
+
+	for _, i in ipairs(GAMEMODE.ShopItems) do
+		if i.Class == bought then
+			item = i
+			break 
+		end
+	end
+	
+	if item == nil then return end
+	ply:StoreItemInv(item)
+end)
+
+net.Receive("HL2CR_Item_Use", function(len, ply)
+	if not ply then return end
+
+	local useItem = net.ReadString()
+	local item = nil
+
+	for _, i in ipairs(GAMEMODE.ShopItems) do
+		if i.Class == useItem then
+			item = i
+			break 
+		end
+	end
+
+	ply:SetActiveItem(item)
 end)

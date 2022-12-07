@@ -136,6 +136,15 @@ LANGUAGE.QMenu_Item_LevelReq = "Level Required: "
 LANGUAGE.Shop_Item_Medkit_Name = "Medical Kit with defibrillator"
 LANGUAGE.Shop_Item_Medkit_Desc = "A medical kit with a defibrillator to revive downed friendlies"
 
+LANGUAGE.Shop_Item_AutoPistol_Name = "9MM Automatic Pistol"
+LANGUAGE.Shop_Item_AutoPistol_Desc = "An auto pistol unlike the standard overwatch issue pistol"
+
+LANGUAGE.Shop_Item_RampageSMG_Name = "Rampage Sub-Machine Gun"
+LANGUAGE.Shop_Item_RampageSMG_Desc = "A sort of SMG that ramps up fire-rate with each shot"
+
+LANGUAGE.Shop_Item_Crossbow_Name = "Rebellion Crossbow MK2"
+LANGUAGE.Shop_Item_Crossbow_Desc = "An upgraded crossbow that comes with a mag for each shot"
+
 LANGUAGE.QMenu_InvTitle = "Inventory: " 
 
 LANGUAGE.QMenu_Ach_Name = "Achievement:\n"

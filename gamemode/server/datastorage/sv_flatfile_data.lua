@@ -36,7 +36,7 @@ local function InitData(ply)
 	--Pets
 	ply.hl2cr.Pets = ply.hl2cr.Pets or {}
 
-	ply.loaded = true --data is always init on load
+	//ply.loaded = true --data is always init on load
 
 	net.Start("HL2CR_Loaded")
 	net.Send(ply)
@@ -75,7 +75,7 @@ local function LoadData(ply)
 end
 
 function SavePlayerData(ply)
-	if !ply.loaded then return end
+	//if !ply.loaded then return end
 	local PlayerID = string.Replace(ply:SteamID(), ":", "!")
 
 	-- Store all persistent data as JSON

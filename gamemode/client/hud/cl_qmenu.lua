@@ -115,6 +115,38 @@ local function CreateMainPanel()
 	invLbl:SetText(translate.Get("QMenu_InvTitle") .. string.format("%g/%g", LocalPlayer():GetNWInt("hl2cr_inv_curweight", -1), LocalPlayer():GetNWInt("hl2cr_inv_weight", -1)))
 	invLbl:SizeToContents()
 
+	local listLayout = vgui.Create("DIconLayout", invPnl)
+	listLayout:SetSpaceX(5)
+	listLayout:SetSpaceY(5)
+	listLayout:Dock(FILL)
+
+	local items = string.Explode(" ", LocalPlayer():GetNWString("hl2cr_inv_items"))
+
+	for _, p in ipairs(items) do
+		if p == "" then continue end
+		local itemInfo = nil
+		--Grab info about the item using the classname
+		for _, i in ipairs(GAMEMODE.ShopItems) do
+			if p == i.Class then
+				itemInfo = i
+				break
+			end
+		end
+
+		--If we didn't find the item info, stop the loop here
+		if itemInfo == nil then return end
+
+		local invBtn = listLayout:Add("DImageButton")
+		invBtn:SetSize(64, 64)
+		invBtn:SetImage(itemInfo.Icon)
+		invBtn:SetToolTip(itemInfo.Name .. "\n" .. itemInfo.Desc)
+		invBtn.DoClick = function(self)
+			net.Start("HL2CR_Item_Use")
+				net.WriteString(itemInfo.Class)
+			net.SendToServer()
+		end
+	end
+
 	return mainPnl
 end
 
@@ -330,8 +362,22 @@ local function CreateShopPanel()
 		draw.RoundedBox(8, 0, 0, w, h, HL2CR.Theme.classPanel)
 	end
 
+	local listLayout = vgui.Create("DIconLayout", listPnl)
+	listLayout:SetSpaceX(5)
+	listLayout:SetSpaceY(5)
+	listLayout:Dock(FILL)
+
 	for i, itm in ipairs(GAMEMODE.ShopItems) do
-		print(itm.Name)
+		local btnIcon = listLayout:Add("DImageButton")
+		btnIcon:SetSize(64, 64)
+		btnIcon:SetImage(itm.Icon)
+		btnIcon:SetToolTip(itm.Name .. "\n" .. itm.Desc)
+
+		btnIcon.DoClick = function(self)
+			net.Start("HL2CR_Item_Purchase")
+				net.WriteString(itm.Class)
+			net.SendToServer()
+		end
 	end
 
 	return mainShopPnl

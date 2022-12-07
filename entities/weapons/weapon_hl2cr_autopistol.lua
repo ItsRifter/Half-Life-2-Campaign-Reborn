@@ -83,7 +83,7 @@ function SWEP:PrimaryAttack()
     self:TakePrimaryAmmo(1)
     self:SetNextPrimaryFire(self.Primary.Rate + CurTime())
 
-	self.Owner:ViewPunch(Angle(math.random(-1, -2), math.random(-1, 1), -0.5))
+	self.Owner:ViewPunch(Angle(math.random(-1, -2), math.random(-1, 1), -0.25))
 
     pl:LagCompensation(false)
 end

@@ -133,7 +133,7 @@ local chat_cmds = {
 
     ["!lambda"] = function(ply, text)	--Command to help players keep track of lambda_locator
         if not ply:IsValid() then return end
-		if not ply.loaded then return end
+		//if not ply.loaded then return end
 		 
 		local mapname = game.GetMap()
 		 

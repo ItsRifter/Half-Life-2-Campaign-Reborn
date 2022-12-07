@@ -38,7 +38,7 @@ SWEP.Spawnable = false
 SWEP.AdminSpawnable = false
 
 SWEP.HoldType = "smg"
-SWEP.Primary.Rate = 0.65
+SWEP.Primary.Rate = 0.45
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Spread = 0.05
 SWEP.Primary.Ammo = "smg1"
@@ -50,7 +50,7 @@ SWEP.Primary.Automatic = true
 SWEP.Primary.RateAccumulate = -0.05
 SWEP.Primary.CurRate = SWEP.Primary.Rate
 SWEP.Primary.MaxRate = 0.05
-SWEP.Primary.MinRate = 0.65
+SWEP.Primary.MinRate = SWEP.Primary.Rate
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
