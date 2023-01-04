@@ -52,8 +52,8 @@ function ENT:Touch(ent)
 			self.Func(ent)
 		end
 
-		ent:SetTeam(TEAM_COMPLETED_MAP)
 		ent:Flashlight(false)
+		ent:SetTeam(TEAM_COMPLETED_MAP)
 
 		BroadcastMessageToAll(HL2CR_PlayerColour, ent:Nick(), HL2CR_StandardColour, translate.Get("Player_CompletedMap"), string.FormattedTime(CurTime(), "%02i:%02i"))
 

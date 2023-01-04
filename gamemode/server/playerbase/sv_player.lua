@@ -821,11 +821,28 @@ hook.Add("PlayerSwitchFlashlight", "HL2CR_CanUseFlashlight", function(ply, enabl
     end
 
 	ply:SetCanZoom(true)
+	
 	return true
 end)
 
+
+concommand.Add( "HL2CR_Lights", function( ply )
+	if IsValid(ply.vehicle) and ply:InVehicle() then
+		if ply:GetVehicle()!= ply.vehicle then return end
+		if IsValid(ply.vehicle.light)then
+			if ply.jeeplights then
+				ply.vehicle.light:Input( "TurnOff", NULL, NULL, "" )
+			else
+				ply.vehicle.light:Input( "TurnOn", NULL, NULL, "" )
+			end
+			ply.jeeplights = !ply.jeeplights
+		end
+	end
+end )
+
 hook.Add( "PlayerUse", "HL2CR_PlayerUse", function( ply, ent )
-	if ent:GetClass() == "prop_vehicle_prisoner_pod" and ent.IsPassenger and ply.vehicle then
+	--if ent:GetClass() == "prop_vehicle_prisoner_pod" and ent.IsPassenger and ply.vehicle then
+	if ent.IsPassenger and ent:GetParent() == ply.vehicle then	--Dont climb into own cars side seats
 		return false
 	end
 

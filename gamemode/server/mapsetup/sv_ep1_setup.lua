@@ -65,6 +65,12 @@ local ep1_triggers = {
 			[3] = Vector(4680, 4230, -6348)
         },
         
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 21, 0),
+            [2] = Angle(0, 0, 0),
+            [3] = Angle(0, 270, 0)
+        },
+		
         ["changelevels"] = {
             [1] = Vector(5374, 2784, -6197),
             [2] = Vector(5508, 2652, -6345)
@@ -104,7 +110,13 @@ local ep1_triggers = {
             [1] = Vector(-4711, 7650, 2531),
             [2] = Vector(-4865, 5240, 2605),
 			[3] = Vector(-4864, 1536, 2471)
-        }
+        },
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 90, 0),
+            [2] = Angle(0, 270, 0),
+            [3] = Angle(0, 0, 0)
+        },
     },
 
     ["ep1_citadel_02"] = {
@@ -129,10 +141,21 @@ local ep1_triggers = {
             [1] = Vector(1712, 42, 959),
             [2] = Vector(1840, 134, 833)
         },
-
+		
         ["checkpoint_spot"] = {
             [1] = Vector(1302, 686, 840)
+        },
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 270, 0)
+        },
+		
+		["checkpoint_functions"] = {
+            [1] = function()
+                ents.FindByClass("npc_alyx")[1]:SetPos(Vector(1211,673,832))
+            end
         }
+		
     },
 
     ["ep1_citadel_02b"] = {
@@ -174,6 +197,11 @@ local ep1_triggers = {
         ["checkpoint_spot"] = {
             [1] = Vector(3279, 4644, 2534),
             [2] = Vector(3995, 4634, -6703)
+        },
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 180, 0),
+            [2] = Angle(0, 0, 0)
         }
     },
 
@@ -185,40 +213,71 @@ local ep1_triggers = {
 
         ["checkpoints"] = {
             [1] = {
+                [1] = Vector(-131,11989,5478),
+                [2] = Vector(79,12337,5293)
+            },
+			
+            [2] = {
                 [1] = Vector(1884, 11595, 4419),
                 [2] = Vector(1999, 11902, 4226)
             },
 
-            [2] = {
+            [3] = {
                 [1] = Vector(1927, 10407, 5794),
                 [2] = Vector(1786, 10607, 5630)
             },
 
-            [3] = {
+            [4] = {
                 [1] = Vector(1040, 12607, 5465),
                 [2] = Vector(1199, 12432, 5314)
             },
 
-            [4] = {
-                [1] = Vector(1056, 13505, 3713),
-                [2] = Vector(1213, 13545, 3934)
+            [5] = {
+                [1] = Vector(1240,13582,5522),
+                [2] = Vector(1046,13732,5243)
             }
         },
 
         ["checkpoint_spot"] = {
-            [1] = Vector(1955, 11735, 4242),
-            [2] = Vector(1918, 10679, 5637),
-            [3] = Vector(1112, 12528, 5323),
-            [4] = Vector(1116, 13469, 3723)
+			[1] = Vector(58,12177,5312),
+            [2] = Vector(1955, 11735, 4242),
+            [3] = Vector(1918, 10679, 5637),
+            [4] = Vector(1112, 12528, 5323),
+            [5] = Vector(1159,13663,5333)
+        },
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 0, 0),
+            [2] = Angle(0, 310, 0),
+			[3] = Angle(0, 80, 0),
+            [4] = Angle(0, 270, 0),
+			[5] = Angle(0, -90, 0)
+        },
+		
+        ["checkpoint_functions"] = {
+            [1] = function()
+                ents.FindByClass("npc_alyx")[1]:SetPos(Vector(-164,12286,5312))
+            end,
+
+            [5] = function()
+				timer.Simple(0.1, function()
+                    local lift = ents.FindByName("Train_lift_coreexit")[1]
+                    for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+                        spawn:SetPos(lift:GetPos() + Vector(0, 0, 75))
+                        spawn:SetParent(lift)
+                    end
+                end)
+            end,
         },
 
-		CHECKPOINT_FUNC_3 = function()
-			if not pacifistAchGlobal then return end
-			
-			for _, v in ipairs(player.GetAll()) do	
-				v:GrantAchievement("Pacifist")
-			end
-		end
+
+		--CHECKPOINT_FUNC_3 = function()
+		--	if not pacifistAchGlobal then return end
+		--	
+		--	for _, v in ipairs(player.GetAll()) do	
+		--		v:GrantAchievement("Pacifist")
+		--	end
+		--end
     },
 
     ["ep1_citadel_04"] = {
@@ -255,6 +314,12 @@ local ep1_triggers = {
             [2] = Vector(3530, -172, 3449),
             [3] = Vector(3772, 7959, 3602)
         },
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 270, 0),
+            [2] = Angle(0, 0, 0),
+			[3] = Angle(0, 0, 0)
+        },
     },
 
     ["ep1_c17_00"] = {
@@ -273,6 +338,10 @@ local ep1_triggers = {
         ["checkpoint_spot"] = {
             [1] = Vector(4213, -2862, -111)
         },
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 120, 0)
+       },
     },
     		
     ["ep1_c17_00a"] = {
@@ -297,7 +366,13 @@ local ep1_triggers = {
             [1] = Vector(4326, 3589, 420),
             [2] = Vector(4586, 3580, 712)
         },
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 150, 0),
+            [2] = Angle(0, 180, 0)
+        },
     },
+	
     ["ep1_c17_01"] = {
         ["changelevels"] = {
             [1] = Vector(-3615, 207, 122),
@@ -326,7 +401,14 @@ local ep1_triggers = {
             [2] = Vector(1825, 2231, 115),
 			[3] = Vector(-604, 813, 13)
         },
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 150, 0),
+            [2] = Angle(0, 180, 0),
+			[3] = Angle(0, 90, 0)
+        },
     },
+	
     ["ep1_c17_02"] = {
         ["changelevels"] = {
             [1] = Vector(-2480, 2208, -23),
@@ -348,6 +430,11 @@ local ep1_triggers = {
         ["checkpoint_spot"] = {
             [1] = Vector(1057, -212, 32),
             [2] = Vector(-1008, 1758, 4)
+        },
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 270, 0),
+            [2] = Angle(0, 90, 0)
         },
     },
 
@@ -372,6 +459,11 @@ local ep1_triggers = {
         ["checkpoint_spot"] = {
             [1] = Vector(1152, 1944, -244),
             [2] = Vector(1214, 1893, 142)
+        },
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 130, 0),
+            [2] = Angle(0, 160, 0)
         },
     },
 
@@ -404,6 +496,11 @@ local ep1_triggers = {
         ["checkpoint_spot"] = {
             [1] = Vector(1115, 8892, -2544),
             [2] = Vector(-690, 9561, -2688)
+        },
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 180, 0),
+            [2] = Angle(0, 70, 0)
         },
     },
 
@@ -517,6 +614,11 @@ local function SetUpMisc()
 	end
 
     if game.GetMap() == "ep1_citadel_00" then
+		--ss_DogIntro
+		ents.FindByName("lcs_ep1_intro_01")[1]:Fire("AddOutput", "OnTrigger1 hl2crlua:RunPassedCode:FixGordenStart()" )
+	
+		ents.FindByName("lcs_ep1_intro_04b")[1]:Fire("AddOutput", "OnTrigger1 pclip_gunship_2 Disable",7 )
+	
 		ents.FindByName("relay_givegravgun_1")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:GiveGravgunEP1()" )
 		ents.FindByName("ss_dog_climb")[1]:Fire("AddOutput", "OnEndSequence hl2crlua:RunPassedCode:FixDog00part1()")
 		ents.FindByName("ss_alyx_climb")[1]:Fire("AddOutput", "OnEndSequence hl2crlua:RunPassedCode:FixAlyx00()")
@@ -525,6 +627,8 @@ local function SetUpMisc()
 		for _, fall in ipairs(ents.FindByName("trigger_falldeath")) do
 			fall:Remove()
 		end
+		
+			--if veh:GetName() ==  "vehicle_blackout" then return true end --ep1 fix
 	end
 
     if game.GetMap() == "ep1_citadel_01" then
@@ -547,7 +651,7 @@ local function SetUpMisc()
 
     if game.GetMap() == "ep1_citadel_03" then
 		
-        ents.FindByName("trigger_closedoors")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FixAlyxCitadel")
+        --ents.FindByName("trigger_closedoors")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FixAlyxCitadel()")
 
         for k, spawn in ipairs(ents.FindByClass("info_player_start")) do 
 			if k ~= 1 then
@@ -574,7 +678,7 @@ local function SetUpMisc()
 	
 	if game.GetMap() == "ep1_c17_02a" then
         timer.Simple(2, function()
-            ents.FindByName("gunship_showdown")[1]:Fire("AddOutput", "OnDeath hl2crlua:RunPassedCode:AchAll('Attica')")
+            ents.FindByName("gunship_showdown")[1]:Fire("AddOutput", "OnDeath hl2crlua:RunPassedCode:AchAll('Attica')")		--Need tp readd achievement
         end)
 	end
 	
@@ -614,6 +718,12 @@ function FixBrushWall()
 	ents.FindByName("clip_combineshieldwall6")[1]:Fire("Disable")
 end
 
+function FixGordenStart()
+	timer.Simple(24, function()
+		ents.FindByName("vehicle_blackout")[1]:Remove()
+	end)
+end
+
 function FixDog00part1()
 	ents.FindByClass("npc_dog")[1]:SetPos(Vector(-8646, 5986, -61))
 end
@@ -626,10 +736,6 @@ end
 
 function FixAlyx00()
 	ents.FindByClass("npc_alyx")[1]:SetPos(Vector(-8646, 5986, -61))
-end
-
-function FixAlyxCitadel()
-    ents.FindByClass("npc_alyx")[1]:SetPos(Vector(1415, 12131, 5328))
 end
 
 function GiveGravgunEP1()

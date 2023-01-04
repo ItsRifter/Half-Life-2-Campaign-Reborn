@@ -204,13 +204,19 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 		local damagedone = dmgInfo:GetDamage()
 
 		if damagedone > target:Health() then damagedone = target:Health()end
+		--print(target:GetClass() )
+		--print(target:Health() )
 		
 		local colour = 1
-		if target:GetClass() == "npc_antlion" and not ALLOWED_ANTLIONS_XP[game.GetMap()] then colour = 2 end
-		
+		if target:GetClass() == "npc_antlion" and game.GetGlobalState("antlion_allied") == GLOBAL_ON then colour = 2 end	--hits turn green if hitting friendly ants
+		--antlion_allied
 		damagedone = math.Round(damagedone,1)
 		
 		if damagedone > 0 then	--prevents erronious negatives
+			if colour == 1 then 
+				local sucess = attacker:AddDamageExp(tonumber(damagedone),target) 
+				if !sucess then colour = 8 end	--If damage is block hit turns dark grey
+			end
 			net.Start( "HL2CR_Indicator" )
 				--net.WriteString(string.format("%1.1d",damagedone))	--Todo format better
 				net.WriteString(damagedone)	--Todo format better
@@ -218,7 +224,7 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 					net.WriteUInt(colour,7)	--1=Red Text default
             net.Send(attacker)
 			
-			attacker:AddDamageExp(tonumber(damagedone),target:GetClass())
+			
 		end
     end
 end)

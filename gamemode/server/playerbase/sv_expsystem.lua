@@ -12,9 +12,9 @@ local NPC_XPMul = {
 	["npc_poisonzombie"] = 2,
 	["npc_zombine"] = 5,
 	["npc_cscanner"] = 1,
-	["npc_metropolice"] = 5,
+	["npc_metropolice"] = 2.5,
 	["npc_manhack"] = 3,
-	["npc_combine_s"] = 5,
+	["npc_combine_s"] = 3,
 	["npc_antlionguardian"] = 2.5,
 	["npc_barnacle"] = 1.5,
 	["npc_turret_ground"] = 2,
@@ -23,14 +23,58 @@ local NPC_XPMul = {
 	["npc_antlion_worker"] = 4,
 	["npc_hunter"] = 5,
 	
-	["prop_vehicle_apc"]=0.75,
+	--["prop_vehicle_apc"]=0.75,
 	
-	["npc_combinegunship"] = 1.5,
-    ["npc_strider"] = 0.5,
+	--["npc_combinegunship"] = 1.5,
+    --["npc_strider"] = 0.5,
     ["npc_antlionguard"] = 2.5,
     ["npc_helicopter"] = 0.3
 }
 
+--better weapons gives better multiplier
+local NPC_WeaponXP ={
+	["weapon_stunstick"] = 1.2,
+	["weapon_pistol"] = 1.4,
+	["weapon_smg1"] = 1.5,
+	["weapon_shotgun"] = 1.7,
+	["weapon_ar2"] = 1.8
+
+}
+
+local function NPCWeapon_Mul(amount, npc)	--gives bonus exp depending on npcs weapon
+	if npc:GetActiveWeapon():IsValid() then
+		local weapon = npc:GetActiveWeapon():GetClass()
+		--print (npc:GetClass() .. "  "..weapon)
+		if NPC_WeaponXP[weapon] then return amount * NPC_WeaponXP[weapon] end
+	end
+	return amount
+end
+
+--Special functions for certain npc's
+local NPC_XPFunc={
+	["npc_strider"] = function(amount,npc)
+		return 180		--180=27/36/45/54/63
+	end,
+	["npc_combinegunship"] = function(amount,npc)
+		return 220		--220=33/44/55/66/77
+	end,
+	["prop_vehicle_apc"] = function(amount,npc)
+		if npc:GetDriver():IsValid() then
+			return amount * 0.75
+		end
+		return 0
+	end,
+	
+	
+	["npc_metropolice"] = function(amount,npc)
+		return NPCWeapon_Mul(amount,npc)		
+	end,
+	["npc_combine_s"] = function(amount,npc)
+		return NPCWeapon_Mul(amount,npc)
+	end,
+}
+
+--Difficulty multiplier
 local Diff_Mul = {
 	[1] = 1.5,
 	[2] = 2.0,
@@ -41,6 +85,7 @@ local Diff_Mul = {
 
 function CanPlayerTarget(class)
 	if NPC_XPMul[class] then return true end
+	if NPC_XPFunc[class] then return true end
 	return false
 end
 
@@ -48,15 +93,22 @@ end
 local exp_division = 10
 if XPFARM_MAPS[game.GetMap()] then exp_division = 25 end	--Make farming maps require more damage to be done
 
-function hl2cr_player:AddDamageExp(damage,class)
+function hl2cr_player:AddDamageExp(damage,npc)
 	local amount = damage
-	if NPC_XPMul[class] then amount = amount * NPC_XPMul[class] end
+	local class = npc:GetClass()
+	if NPC_XPMul[class] then amount = amount * NPC_XPMul[class] end			--Does exp mul based on enemy class
+	if NPC_XPFunc[class] then amount = NPC_XPFunc[class](amount,npc) end	--Does extra function for special enemies
 	
-	amount = amount * Diff_Mul[GetConVar("hl2cr_difficulty"):GetInt()]
-	self.damagexp = self.damagexp + amount
+	amount = amount * Diff_Mul[GetConVar("hl2cr_difficulty"):GetInt()]		--Increased exp based on difficulty
+	if amount > 0 then
+		self.damagexp = self.damagexp + amount
+		return true
+	end
+	return false
 end
 
-if timer.Exists( "Exp_Tick" ) then timer.Remove( "Exp_Tick" ) end
+--Constant timer every 5 seconds, calculates exp players earned from damage and gives exp periodically instead of on every damage hit which would spam them.
+if timer.Exists( "Exp_Tick" ) then timer.Remove( "Exp_Tick" ) end	
 timer.Create( "Exp_Tick", 5, 0, function() 
 	for _, p in pairs(player.GetAll()) do
 		if p.damagexp >= exp_division then

@@ -121,6 +121,31 @@ function hl2cr_player:SpawnJeep()
             
     jeep:SetCustomCollisionCheck( true )
     
+	jeep.light = ents.Create( "env_projectedtexture" )
+	
+	jeep.light:SetParent( jeep )
+		
+	-- The local positions are the offsets from parent..
+	jeep.light:SetLocalPos( Vector( 0, 20, 40 ) )
+	
+		
+	-- Looks like only one flashlight can have shadows enabled!
+	jeep.light:SetKeyValue( "enableshadows", 0 )
+	jeep.light:SetKeyValue( "farz", 1800 )
+	jeep.light:SetKeyValue( "nearz", 12 )
+	jeep.light:SetKeyValue( "lightfov", 105 )
+		
+	local c = Color(255,255,255,255)
+	local b = 2
+	jeep.light:SetKeyValue( "lightcolor", Format( "%i %i %i 255", c.r * b, c.g * b, c.b * b ) )
+		
+	jeep.light:Spawn() 
+	jeep.light:SetLocalAngles( Angle(10,90,0))
+	jeep.light:Input( "SpotlightTexture", NULL, NULL, "effects/flashlight001" )
+
+	jeep.light:Input( "TurnOff", NULL, NULL, "" )
+	self.jeeplights = false
+	
     self.vehicle = jeep
 end
 
@@ -227,7 +252,8 @@ end
 function GM:CanExitVehicle(veh, ply)
 	if ply.antiExploit and ply.antiExploit > CurTime() then return false end
 
-	if veh:GetParent() then return true end
+	if veh.IsPassenger then return true end		--Better fix for allowed player out of !seat
+	--if veh:GetParent() then return true end
 
 	--if veh:GetClass() == "prop_vehicle_prisoner_pod" and not veh:GetOwner() then return false end
 	if veh:GetClass() == "prop_vehicle_prisoner_pod" then return false end	--Is owner even relevant/needed?
