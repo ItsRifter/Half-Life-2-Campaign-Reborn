@@ -133,18 +133,28 @@ local function CreateMainPanel()
 			end
 		end
 
-		--If we didn't find the item info, stop the loop here
-		if itemInfo == nil then return end
+		--If we didn't find the item info, stop the loop here and restart
+		if itemInfo == nil then continue end
 
+		
 		local invBtn = listLayout:Add("DImageButton")
 		invBtn:SetSize(64, 64)
 		invBtn:SetImage(itemInfo.Icon)
 		invBtn:SetToolTip(itemInfo.Name .. "\n" .. itemInfo.Desc)
 		invBtn.DoClick = function(self)
 			net.Start("HL2CR_Item_Use")
-				net.WriteString(itemInfo.Class)
+			net.WriteString(itemInfo.Class)
 			net.SendToServer()
 		end
+		
+		local isActiveImg = invBtn:Add("DImage")
+		if LocalPlayer():HasWeapon(itemInfo.Class) then
+			isActiveImg:SetImage("icon16/tick.png")
+		else
+			isActiveImg:SetImage("icon16/cross.png")
+		end
+		isActiveImg:SetSize(20, 20)
+		isActiveImg:SetPos(42, 42)
 	end
 
 	return mainPnl

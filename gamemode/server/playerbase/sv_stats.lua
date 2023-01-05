@@ -86,7 +86,7 @@ function hl2cr_player:AddXP(XP)
 		self.hl2cr.Level = self.hl2cr.Level + 1
 		self.hl2cr.SkillPoints = self.hl2cr.SkillPoints + 1
 		--self.hl2cr.ReqExp = self.hl2cr.ReqExp + math.Round(4 * math.pow( self.hl2cr.Level + 5, 3 ) / 3);
-		self.hl2cr.ReqExp = 319 + math.floor(math.pow( self.hl2cr.Level + 8, 2.5+(self.hl2cr.Level * 0.025 )))
+		self.hl2cr.ReqExp = 319 + math.floor(math.pow( self.hl2cr.Level + 8, 2.5 + (self.hl2cr.Level * 0.025 )))
 		//self.hl2cr.ReqExp = self.hl2cr.ReqExp + (375 * self.hl2cr.Level)
 		if LEVEL_REWARDS[self.hl2cr.Level] then
 			LEVEL_REWARDS[self.hl2cr.Level](self)
@@ -143,11 +143,4 @@ hook.Add( "OnNPCKilled", "HL2CR_GiveXP", function( npc, attacker, inflictor )
 		if XPFARM_MAPS[game.GetMap()] then attacker:AddXP(math.Round(math.Clamp(gainXP / 4, 1, 9999)))
 		else attacker:AddXP(gainXP) end
 	end
-end)
-
-concommand.Add("hl2cr_admin_givexp", function(ply, cmd, args)
-	if not ply:IsAdmin() then return end
-	if not args[1] then return end
-	
-	ply:AddXP(args[1])
 end)

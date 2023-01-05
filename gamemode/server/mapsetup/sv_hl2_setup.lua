@@ -2794,12 +2794,3 @@ function ResetLaserTrap()
 	
 	ents.FindByName("s_room_panelswitch")[1]:Fire("UnLock")
 end
-
-concommand.Add("hl2cr_entinfo", function(ply)
-	local Ent = ply:GetEyeTrace().Entity
-	if Ent then
-		print(Ent)
-		print("Name  "..Ent:GetName())
-		print("Model "..Ent:GetModel())
-	end
-end)

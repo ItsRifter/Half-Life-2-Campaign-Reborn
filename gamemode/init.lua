@@ -15,6 +15,7 @@ include("server/playerbase/sv_vehicle_system.lua")
 include("server/playerbase/sv_spectate_mode.lua")
 include("server/playerbase/sv_achievements.lua")
 include("server/playerbase/commands/sv_chat_cmds.lua")
+include("server/playerbase/commands/sv_admin_cmds.lua")
 
 //Maps
 include("server/mapsetup/sv_map_manager.lua")

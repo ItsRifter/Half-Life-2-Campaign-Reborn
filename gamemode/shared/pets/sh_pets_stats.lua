@@ -37,6 +37,9 @@ if SERVER then
     function hl2cr_pet:UpdateStats(statTbl)
         for _, p in ipairs(self:GetOwner().hl2cr.Pets) do
             if p.Active then
+                self:SetMaxHealth(statTbl.Stats.HP)
+                self:SetHealth(self:GetMaxHealth())
+
                 table.Merge(p, statTbl)
                 break
             end
@@ -46,8 +49,6 @@ if SERVER then
     function hl2cr_pet:CheckLevel()
         local stats = self:GetStats()
         
-        print(stats.Level)
-        print(stats.LevelCap)
         if stats.Level >= stats.LevelCap then
             return false
         end
@@ -82,12 +83,4 @@ if SERVER then
         self:GetOwner():SetNWInt("hl2cr_petstat_xp", updStats.XP)
         self:UpdateStats(updStats)
     end
-
-    concommand.Add("hl2cr_admin_givexp_pet", function(ply, cmd, args)
-        local pet = ply.activePet or nil
-
-        if pet == nil then return end
-
-        pet:AddXP(args[1])
-    end)
 end

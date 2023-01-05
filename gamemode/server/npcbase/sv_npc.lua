@@ -125,9 +125,9 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
 
     --NPC taking damage
     elseif target:IsNPC() then
-
+        
         --If its a player pet taking damage, do no harm to it
-        if target:IsPet() then
+        if target:IsPet() and attacker:IsPlayer() then
             return true
         end
         
