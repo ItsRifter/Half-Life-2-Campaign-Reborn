@@ -146,15 +146,6 @@ local function CreateMainPanel()
 			net.WriteString(itemInfo.Class)
 			net.SendToServer()
 		end
-		
-		local isActiveImg = invBtn:Add("DImage")
-		if LocalPlayer():HasWeapon(itemInfo.Class) then
-			isActiveImg:SetImage("icon16/tick.png")
-		else
-			isActiveImg:SetImage("icon16/cross.png")
-		end
-		isActiveImg:SetSize(20, 20)
-		isActiveImg:SetPos(42, 42)
 	end
 
 	return mainPnl
