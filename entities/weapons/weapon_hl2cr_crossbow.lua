@@ -54,6 +54,8 @@ SWEP.Primary.ShootSound = Sound("Weapon_Crossbow.Single")
 SWEP.Primary.ReloadSound = Sound("Weapon_Crossbow.Reload")
 
 SWEP.IsReloading = false
+SWEP.IsZoomedIn = false
+SWEP.ZoomFOV = 25
 
 function SWEP:Initialize()
 end
@@ -116,7 +118,15 @@ function SWEP:Reload()
 end
 
 function SWEP:SecondaryAttack()
-	return
+	local pl = self:GetOwner()
+
+	if self.IsZoomedIn then
+		pl:SetFOV(0)
+		self.IsZoomedIn = false
+	else
+		pl:SetFOV(self.ZoomFOV)
+		self.IsZoomedIn = true
+	end
 end
 
 function SWEP:Deploy()
