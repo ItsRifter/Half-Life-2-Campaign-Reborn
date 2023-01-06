@@ -186,9 +186,9 @@ local chat_cmds = {
 		end
     end,
 
-    //["!discord"] = function(ply, text)
-    //    ply:SendLua([[gui.OpenURL("https://discord.gg/zvvZ2ugHQY")]])
-    //end,
+    ["!discord"] = function(ply, text)
+        ply:SendLua([[gui.OpenURL("https://discord.gg/wUFg5UAgx3")]])
+    end,
 }
 
 hook.Add("PlayerSay", "HL2CR_PlayerSayCMDs", function(ply, text)
