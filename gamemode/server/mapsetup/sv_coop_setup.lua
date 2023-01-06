@@ -74,13 +74,14 @@ local COOP_TRIGGERS = {
 }
 
 local function SetUpCoop()
-    COOP_FUNCTIONS[game.GetMap()]()
+    if COOP_FUNCTIONS[game.GetMap()] then COOP_FUNCTIONS[game.GetMap()]() end
 
     table.insert(SPAWNING_WEAPONS, "weapon_crowbar")
     table.insert(SPAWNING_WEAPONS, "weapon_physcannon")
 end
 
 local function SetUpCheckpoints()
+	if !COOP_TRIGGERS[game.GetMap()] then return end
     if COOP_TRIGGERS[game.GetMap()]["changelevels"] then
         local changelevel = ents.Create("trigger_changemap")
         changelevel.Min = Vector(COOP_TRIGGERS[game.GetMap()]["changelevels"][1])

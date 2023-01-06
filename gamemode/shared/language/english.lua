@@ -221,6 +221,8 @@ LANGUAGE.Achievement_EP1_Containment_Name = "Containment"
 LANGUAGE.Achievement_EP1_Containment_Desc = "Contain the Citadel core"
 LANGUAGE.Achievement_EP1_Pacifist_Name = "Pacifist"
 LANGUAGE.Achievement_EP1_Pacifist_Desc = "Contain the Citadel core without killing any stalkers"
+LANGUAGE.Achievement_EP1_Train_Saved = " rescued"
+LANGUAGE.Achievement_EP1_Train_Lost = "Citizen has died"
 
 LANGUAGE.Achievement_EP2_Gnome_Name = "Rocket Gnome"
 LANGUAGE.Achievement_EP2_Gnome_Desc = "Be there when Gnomechompshi lifts off into space"

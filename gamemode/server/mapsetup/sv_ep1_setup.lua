@@ -512,11 +512,15 @@ local ep1_triggers = {
 
         ["checkpoints"] = {
             [1] = {
-                [1] = Vector(10152, 8421, -758),
-                [2] = Vector(10223, 8319, -650)
+                [1] = Vector(12213,9391,-622),
+                [2] = Vector(12374,9683,-778)
+            },
+            [2] = {
+                [1] = Vector(10028,8289,-736),
+                [2] = Vector(10612,8059,-646)
             },
 
-            [2] = {
+            [3] = {
                 [1] = Vector(11839, 8328, -658),
                 [2] = Vector(11894, 8428, -758)
             }
@@ -531,9 +535,16 @@ local ep1_triggers = {
         },
 
         ["checkpoint_spot"] = {
-            [1] = Vector(10362, 8272, -733),
-            [2] = Vector(11460, 8355, -613)
+			[1] = Vector(12318,9549,-700),
+            [2] = Vector(9963,8285,-736),
+            [3] = Vector(11460, 8355, -613)
         },		
+		
+		["checkpoint_angle"] = {
+            [1] = Angle(0, 90, 0),
+			[2] = Angle(0, 320, 0),
+            [3] = Angle(0, 0, 0)
+        }
     }
     
 }
@@ -556,6 +567,7 @@ local function SetEP1Checkpoints()
             checkpoint.Max = Vector(t[2])
             checkpoint.Pos = Vector(t[2]) - ( Vector(t[1]) - Vector(t[1])) / 2
             checkpoint.TPPoint = Vector(ep1_triggers[game.GetMap()]["checkpoint_spot"][i])
+			if ep1_triggers[game.GetMap()]["checkpoint_angle"] then checkpoint.TPAngles = Angle(ep1_triggers[game.GetMap()]["checkpoint_angle"][i]) or checkpoint.TPAngles end	--default to 0,0,0
             checkpoint.PointIndex = i
             checkpoint:SetPos(checkpoint.Pos)
             checkpoint:Spawn()
@@ -615,14 +627,14 @@ local function SetUpMisc()
 
     if game.GetMap() == "ep1_citadel_00" then
 		--ss_DogIntro
-		ents.FindByName("lcs_ep1_intro_01")[1]:Fire("AddOutput", "OnTrigger1 hl2crlua:RunPassedCode:FixGordenStart()" )
+		ents.FindByName("lcs_ep1_intro_01")[1]:Fire("AddOutput", "OnTrigger1 hl2crlua:RunPassedCode:EP1_FixGordenStart()" )
 	
 		ents.FindByName("lcs_ep1_intro_04b")[1]:Fire("AddOutput", "OnTrigger1 pclip_gunship_2 Disable",7 )
 	
-		ents.FindByName("relay_givegravgun_1")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:GiveGravgunEP1()" )
-		ents.FindByName("ss_dog_climb")[1]:Fire("AddOutput", "OnEndSequence hl2crlua:RunPassedCode:FixDog00part1()")
-		ents.FindByName("ss_alyx_climb")[1]:Fire("AddOutput", "OnEndSequence hl2crlua:RunPassedCode:FixAlyx00()")
-		ents.FindByName("relay_Van_crash_gate_1")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FixDog00part2()")
+		ents.FindByName("relay_givegravgun_1")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP1_GiveGravgunEP1()" )
+		ents.FindByName("ss_dog_climb")[1]:Fire("AddOutput", "OnEndSequence hl2crlua:RunPassedCode:EP1_FixDog00part1()")
+		ents.FindByName("ss_alyx_climb")[1]:Fire("AddOutput", "OnEndSequence hl2crlua:RunPassedCode:EP1_FixAlyx00()")
+		ents.FindByName("relay_Van_crash_gate_1")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP1_FixDog00part2()")
 		
 		for _, fall in ipairs(ents.FindByName("trigger_falldeath")) do
 			fall:Remove()
@@ -632,7 +644,7 @@ local function SetUpMisc()
 	end
 
     if game.GetMap() == "ep1_citadel_01" then
-		ents.FindByName("logic_alyx_EMP_5")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FixBrushWall()")
+		ents.FindByName("logic_alyx_EMP_5")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP1_FixBrushWall()")
 	end
 
     if game.GetMap() == "ep1_citadel_02" then
@@ -669,7 +681,7 @@ local function SetUpMisc()
 	end
 
     if game.GetMap() == "ep1_c17_00" then
-		ents.FindByName("train_2_door_trigger")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FixZombineTrain()")
+		ents.FindByName("train_2_door_trigger")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP1_FixZombineTrain()")
 	end
 	
 	if game.GetMap() == "ep1_c17_02" then
@@ -683,8 +695,15 @@ local function SetUpMisc()
 	end
 	
 	if game.GetMap() == "ep1_c17_05" then
-		ents.FindByName("trigger_citizen_boardtrain")[1]:Fire("Enable")
-		ents.FindByName("lcs_rearsoldierslock")[1]:Fire("AddOutput", "OnCompletion hl2crlua:RunPassedCode:FinishMap05()")
+		ents.FindByName("trigger_citizen_boardtrain")[1]:Fire("Enable")	--this is a brush that makes citizens who make it to the door safe/adds damage filter
+		
+		--counter_citizens_boardtrain_dryrun -- Counter for first train part
+		--counter_citizens_boardtrain-- Counter used for all train parts?
+		--ents.FindByName("counter_citizens_boardtrain_dryrun")[1]:Fire("AddOutput", "OnHitMax hl2crlua:RunPassedCode:EP1_FinishMap05()")
+		
+		--ents.FindByName("lcs_rearsoldierslock")[1]:Fire("AddOutput", "OnCompletion hl2crlua:RunPassedCode:EP1_FinishMap05()")
+		
+		EP1_SetupMap05()
 	end
 end
 
@@ -703,48 +722,48 @@ hook.Add("OnNPCKilled", "HL2CR_PacifistAch", function(npc, attacker, inflictor)
 	end
 end)
 
-function FinishMap05()
+function EP1_FinishMap05()
 	for _, v in ipairs(player.GetAll()) do
 		v:SetTeam(TEAM_COMPLETED_MAP)
 		v:DisplayResults()
 	end
 	
 	StartMapCountdown()
-	net.Start("HL2CR_MapCountdown")
-	net.Broadcast()
+	--net.Start("HL2CR_MapCountdown")
+	--net.Broadcast()
 end
 
-function FixBrushWall()
+function EP1_FixBrushWall()
 	ents.FindByName("clip_combineshieldwall6")[1]:Fire("Disable")
 end
 
-function FixGordenStart()
+function EP1_FixGordenStart()
 	timer.Simple(24, function()
 		ents.FindByName("vehicle_blackout")[1]:Remove()
 	end)
 end
 
-function FixDog00part1()
+function EP1_FixDog00part1()
 	ents.FindByClass("npc_dog")[1]:SetPos(Vector(-8646, 5986, -61))
 end
 
-function FixDog00part2()
+function EP1_FixDog00part2()
 	timer.Simple(9, function()
 		ents.FindByClass("npc_dog")[1]:SetPos(Vector(-6464, 6196, -89))
 	end)
 end
 
-function FixAlyx00()
+function EP1_FixAlyx00()
 	ents.FindByClass("npc_alyx")[1]:SetPos(Vector(-8646, 5986, -61))
 end
 
-function GiveGravgunEP1()
+function EP1_GiveGravgunEP1()
 	for k, v in ipairs(player.GetAll()) do
 		v:Give("weapon_physcannon")
 	end
 end
 
-function FixZombineTrain()
+function EP1_FixZombineTrain()
 	timer.Simple(3, function()
 		ents.FindByName("train_2_ambush_zombine")[1]:Remove()
 		ents.FindByName("brush_combine_train_door")[1]:Remove()
@@ -757,24 +776,94 @@ function AchAll(achName)
 	end
 end
 
-hook.Add( "AcceptInput", "HL2CR_EP1_ReachedEnd05", function( ent, name, activator, caller, data )
-	if ent:GetName() == "trigger_citizen_boardtrain_dryrun" or ent:GetName() == "trigger_citizen_boardtrain" then
-		if activator:GetClass() ~= "npc_citizen" then return end
-		activator.ReachedEnd = true
-	end
-end )
+function EP1_SetupMap05()
 
-hook.Add("Tick", "HL2CR_CitizenFollow05", function()
-	if game.GetMap() == "ep1_c17_05" then
-		for _, cit in ipairs(ents.FindByClass("npc_citizen")) do
-			if not cit or not string.find(cit:GetName(), "citizen_refugees_") then continue end
-			
-            if cit.ReachedEnd then continue end
+	ents.FindByName("assaultpoint_barney_lasttrain")[1]:Fire("AddOutput", "OnArrival hl2crlua:RunPassedCode:EP1_FinishMap05()")
+	ents.FindByName("assaultpoint_standoff_barney")[1]:Fire("AddOutput", "OnArrival hl2crlua:RunPassedCode:EP1_BarneyStandoff()")
 
-			if cit:IsValid() and (cit:GetPos():Distance(player.GetAll()[1]:GetPos()) > 50 and cit:GetPos():Distance(player.GetAll()[1]:GetPos()) <= 500) and not cit:IsCurrentSchedule(SCHED_FORCED_GO_RUN) then
-				cit:SetLastPosition( player.GetAll()[1]:GetPos() )
-				cit:SetSchedule(SCHED_FORCED_GO_RUN)
+	if timer.Exists( "HL2CR_CitizenFollow05" ) then timer.Remove( "HL2CR_CitizenFollow05" ) end	
+	timer.Create( "HL2CR_CitizenFollow05", 0.5, 0, function() 
+		local positions = {}	--creating list of alive player positions
+		for i, v in ipairs( player.GetAll() ) do	
+			if v:Alive() then
+				table.insert( positions, v:GetPos() )
 			end
 		end
+	
+		for _, cit in ipairs(ents.FindByClass("npc_citizen")) do
+			if !IsValid(cit) or not string.find(cit:GetName(), "citizen_refugees_") then continue end
+
+			if cit.ReachedEnd then continue end
+			
+			if cit:GetSquad() == "player_squad" then 
+				cit.squaded = true
+			else
+				if cit.squaded then 
+					if cit:Health() > 0 then
+						EP1_TrainCitSucess()
+						BroadcastMessageToAll(HL2CR_GreenColour, train_sucess.. translate.Get("Achievement_EP1_Train_Saved"))
+					else
+						BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Achievement_EP1_Train_Lost"))
+					end
+					
+					cit.ReachedEnd = true
+					continue 
+				end
+				
+			end
+
+			if not cit:IsCurrentSchedule(SCHED_FORCED_GO_RUN) then
+				local target = nil
+				local distance = 500
+				local citpos = cit:GetPos()
+				
+				
+				for i, v in ipairs( positions ) do	
+					local toplayer = citpos:Distance(v)
+					if toplayer > 50 and toplayer < distance then
+						target = veh
+						distance = toplayer
+					end
+				end
+				
+				if IsValid(target) then
+					cit:SetLastPosition( target )
+					cit:SetSchedule(SCHED_FORCED_GO_RUN)
+				end
+			end
+
+			--if (cit:GetPos():Distance(player.GetAll()[1]:GetPos()) > 50 and cit:GetPos():Distance(player.GetAll()[1]:GetPos()) <= 500) and not cit:IsCurrentSchedule(SCHED_FORCED_GO_RUN) then
+			--	cit:SetLastPosition( player.GetAll()[1]:GetPos() )
+			--	cit:SetSchedule(SCHED_FORCED_GO_RUN)
+			--end
+		end
+
+	end)
+	
+	local AddAmmoCrate = ents.Create("item_ammo_crate")
+	AddAmmoCrate:SetPos(Vector(8907, 9578, -752))
+	AddAmmoCrate:SetAngles(Angle(0, 180, 0))
+	AddAmmoCrate:SetKeyValue( "ammotype", 1 )
+	AddAmmoCrate:Spawn()
+	
+	train_sucess = 0
+end
+
+function EP1_TrainCitSucess()
+	train_sucess = train_sucess + 1
+	
+	if train_sucess == 14 then
+		ents.FindByName("relay_barney_head_for_train")[1]:Fire("trigger")
 	end
-end)
+	
+end
+
+function EP1_BarneyStandoff()
+	timer.Simple(25, function()
+		local trigger = ents.FindByName("relay_al_ba_retreat")
+		if IsValid(trigger[1]) then
+			trigger[1]:Fire("enable")
+			trigger[1]:Fire("trigger")
+		end
+	end)
+end
