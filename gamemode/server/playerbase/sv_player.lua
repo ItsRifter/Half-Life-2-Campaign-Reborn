@@ -202,7 +202,8 @@ function hl2cr_player:ChangeModel(newModel)
 	self:SetModel(newModel)
 end
 
-function hl2cr_player:SetUpPlayer()	
+function hl2cr_player:SetUpPlayer()
+
 	//if !self.loaded then return end
 	self:SetTeam(TEAM_ALIVE)
 
@@ -292,9 +293,19 @@ function hl2cr_player:ApplyCosmeticServer(cosmeticToApply)
 	net.Broadcast()
 end
 
+function hl2cr_player:DisplayAnyWarnings()
+	if GetConVar("hl2cr_nosaving"):GetInt() == 1 then
+		self:BroadcastMessage(HL2CR_WarningColour, translate.Get("Player_Warning_NoSave"))
+	end
+
+	if GetConVar("hl2cr_save_disconnectwipe"):GetInt() == 1 then
+		self:BroadcastMessage(HL2CR_WarningColour, translate.Get("Player_Warning_SaveClearDisconnect"))
+	end
+end
+
 function hl2cr_player:SetUpInitialSpawn()
     if self:IsBot() then return end
-	
+
 	self:LoadSkills()
 	self:SetUpPlayer()
 
@@ -319,6 +330,8 @@ function hl2cr_player:SetUpInitialSpawn()
 	if VortexBall and VortexBall:IsValid() then
 		self:BroadcastMessage(HL2CR_PlayerColour, translate.Get("Server_Announce_Vortex_Spawn"))
 	end
+
+	self:DisplayAnyWarnings()
 end
 
 function hl2cr_player:SetUpRespawnRevive()
@@ -332,7 +345,6 @@ function hl2cr_player:SetUpRespawnRevive()
 	end
 	
 	self:UnSpectate()
-	//self:SetObserverMode(OBS_MODE_NONE)
 	
 	self:GiveEquipment()
 	self:GiveWeaponsSpawn()

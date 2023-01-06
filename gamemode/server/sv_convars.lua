@@ -16,7 +16,11 @@ CreateConVar("hl2cr_difficulty", 1, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Change D
 CreateConVar("hl2cr_survival", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Enable/Disable survival", 0, 1)
 CreateConVar("hl2cr_specials", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Enable/Disable special NPC spawns", 0, 1)
 
-//Suit Convars
+--Dev/Alpha ConVars
+CreateConVar("hl2cr_nosaving", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Enable/Disable player saving", 0, 1)
+CreateConVar("hl2cr_save_disconnectwipe", 0, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "Enable/Disable player save wiping after disconnect", 0, 1)
+
+//Suit ConVars
 //Flashlight
 CreateConVar("hl2cr_suit_default_rate", 0.05, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 100)
 CreateConVar("hl2cr_suit_default_delay", 0.01, {FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How fast does the suit drain power", 0, 100)

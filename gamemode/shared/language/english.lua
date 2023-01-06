@@ -155,6 +155,9 @@ LANGUAGE.Server_Warning_Returned = "You have returned from being AFK"
 LANGUAGE.Server_Announce_Achievement_Normal = " has earned the achievement "
 LANGUAGE.Server_Announce_Achievement_Rare = " has earned a rare achievement "
 
+LANGUAGE.Player_Warning_NoSave = "WARNING: Your progress will not be saved"
+LANGUAGE.Player_Warning_SaveClearDisconnect = "WARNING: Your progress will be wiped after you disconnect"
+
 LANGUAGE.Server_Announce_Vortex_Found = " has found the vortex"
 LANGUAGE.Server_Announce_Vortex_Spawn = "A vortex has spawned somewhere on the map"
 

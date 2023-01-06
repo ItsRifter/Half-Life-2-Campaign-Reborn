@@ -75,12 +75,20 @@ local function LoadData(ply)
 end
 
 function SavePlayerData(ply)
+	if GetConVar("hl2cr_nosaving"):GetInt() == 1 then return end
+	
 	//if !ply.loaded then return end
 	local PlayerID = string.Replace(ply:SteamID(), ":", "!")
 
 	-- Store all persistent data as JSON
 	file.Write("hl2cr_data/" .. PlayerID .. ".txt", util.TableToJSON(ply.hl2cr, true))
 	
+end
+
+function WipePlayerData(ply)
+	local PlayerID = string.Replace(ply:SteamID(), ":", "!")
+
+	file.Delete("hl2cr_data/" .. PlayerID .. ".txt")
 end
 
 --If there isn't a HL2CR data folder, create one
@@ -95,7 +103,11 @@ end)
 hook.Add("PlayerDisconnected", "HL2CR_SavePlayerDataDisconnect", function(ply) 
 	if ply:IsBot() then return end
 
-	SavePlayerData(ply)
+	if GetConVar("hl2cr_save_disconnectwipe"):GetInt() == 1 then
+		WipePlayerData(ply)
+	else
+		SavePlayerData(ply)
+	end
 
 	if ply.activePet then
 		ply.activePet:RemovePet()
@@ -135,9 +147,13 @@ hook.Add("PlayerInitialSpawn", "HL2CR_NewPlayerCheck", function(ply)
 	InitPlayer(ply)
 end)
 
-local function InitialisePlayers() 
-	for k, v in pairs(player.GetAll()) do 
-		InitPlayer(v) 
-	end
-end
-timer.Simple(1, InitialisePlayers);
+-- Why do we have this? this just wipes data when we didn't intend it to
+-- -ItsRifter
+
+-- local function InitialisePlayers() 
+-- 	for k, v in pairs(player.GetAll()) do 
+-- 		InitPlayer(v) 
+-- 	end
+-- end
+
+-- timer.Simple(1, InitialisePlayers);

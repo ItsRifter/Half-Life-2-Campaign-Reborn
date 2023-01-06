@@ -57,7 +57,7 @@ hook.Add( "HUDPaint", "HL2CR_XPBar", function()
 	if newXP == nil then return end
 	
 	if lastUpdate < CurTime() then 
-		if fadeOut > 75 then
+		if fadeOut > 25 then
 			fadeOut = fadeOut - 1
 		end
 	end
