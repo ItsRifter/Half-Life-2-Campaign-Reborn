@@ -796,11 +796,7 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_functions"] = {
             [1] = function()
-                --disableAirboatGlobal = true
 				GAMEMODE:DisableVehicles(true)
-                --for _, v in ipairs(player.GetAll()) do
-				--	GAMEMODE:RemoveVehicle(v)
-                --end
 
                 local tempAirboat = ents.Create(Airboat.Class)
                 tempAirboat:SetModel(Airboat.Model)
@@ -2518,6 +2514,11 @@ local function SetUpMisc()
 	
 	if game.GetMap() == "d1_canals_10" then
 		ents.FindByClass("info_player_start")[1]:SetPos(Vector(11911, -12159, -499))
+	end
+	
+	if game.GetMap() == "d1_canals_11" then
+		--Force npc to open gate sequence without players needing to get back into boat
+		ents.FindByName("lcs_gc_briefing1_post")[1]:Fire("AddOutput", "OnCompletion lcs_guncave_goodbye1:start:1:-1")
 	end
 
     if game.GetMap() == "d1_eli_02" then
