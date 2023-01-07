@@ -85,6 +85,13 @@ local weapon_melees = {
 	["weapon_crowbar"] = true
 }
 
+function GM:PlayerTick( player, mv )	--Test fix preventing self inflicted physics boosts
+	if player.fixvelocity then
+		mv:SetVelocity(player.fixvelocity)
+		player.fixvelocity = nil
+	end
+end
+
 hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo )
     local attacker = dmgInfo:GetAttacker()
     
@@ -99,6 +106,10 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
                 end
             end
         end
+
+		if attacker == target then	--Test fix preventing self inflicted physics boosts
+			target.fixvelocity = target:GetVelocity()
+		end
 
         if dmgInfo:GetDamageType() == 17 or dmgInfo:GetDamageType() == 1 then 
 			dmgInfo:SetDamage(0) 

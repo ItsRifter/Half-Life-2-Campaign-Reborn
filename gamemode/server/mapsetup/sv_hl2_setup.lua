@@ -693,6 +693,17 @@ local HL2_TRIGGERS = {
                 [2] = Vector(7100, 1450, -140)
             },
         },
+		
+		["pushers"] = {
+            [1] = {
+                [1] = Vector(7584,1400,-159),
+                [2] = Vector(7705,635,-579)
+            }
+        },
+
+        ["pusher_spot"] = {
+            [1] = Vector(9644,1367,-464)
+        },
 
         ["checkpoint_spot"] = {
             [1] = Vector(7611, 1745, -245),
@@ -1268,7 +1279,18 @@ local HL2_TRIGGERS = {
                     --end
 				--end
 			end
-        }
+        },
+		
+		["pushers"] = {
+            [1] = {
+                [1] = Vector(8471,1780,880),
+                [2] = Vector(3088,4778,226)
+            }
+        },
+
+        ["pusher_spot"] = {
+            [1] = Vector(4803,-2078,902)
+        },
     },
 
     ["d2_coast_11"] = {
@@ -2476,17 +2498,21 @@ local function SetUpMisc()
     if game.GetMap() == "d1_canals_07" then
 		local blocker_1 = ents.Create("prop_dynamic")
 		blocker_1:SetModel("models/props_lab/blastdoor001b.mdl")
-		blocker_1:SetPos(Vector(7672, 1374, -265))
+		blocker_1:SetPos(Vector(7000, 1384, -260))
+		
         blocker_1:SetName("blocker_1")
+		blocker_1:PhysicsInit(SOLID_VPHYSICS)
 		blocker_1:Spawn()
 
         local blocker_2 = ents.Create("prop_dynamic")
 		blocker_2:SetModel("models/props_lab/blastdoor001b.mdl")
-		blocker_2:SetPos(Vector(6882, 1300, -260))
+		blocker_2:SetPos(Vector(7000, 1300, -260))
         blocker_2:SetName("blocker_2")
+		blocker_2:PhysicsInit(SOLID_VPHYSICS)
 		blocker_2:Spawn()
 
         ents.FindByName("gatehouse_door2")[1]:Fire("AddOutput", "OnOpen hl2crlua:RunPassedCode:RemoveBlockers()")
+		ents.FindByName("gatehouse_door2")[1]:Fire("AddOutput", "OnOpen hl2crlua:RunPassedCode:RemovePushTrigger()")
         ents.FindByModel("models/props_c17/oildrum001_explosive.mdl")[5]:Remove()
 	end
 	
@@ -2542,6 +2568,15 @@ local function SetUpMisc()
 	end
 	
 	if game.GetMap() == "d2_coast_03" then
+		--blocks shortcut more naturally
+		local cliff = ents.Create("prop_dynamic")	
+		cliff:SetPos(Vector(3580,10120,620))
+		cliff:SetAngles(Angle(0,345,0))
+		cliff:SetModel("models/props_wasteland/rockcliff_cluster01b.mdl")
+		cliff:PhysicsInit(SOLID_VPHYSICS)
+		cliff:DrawShadow( false)
+		cliff:Spawn()
+	
 		ents.FindByName("gunship_spawner_2")[1]:Fire("AddOutput", "OnAllSpawnedDead hl2crlua:RunPassedCode:OpenGateCoast():0:-1" )
 		--ents.FindByName("gunship_spawner_2")[1]:Fire("AddOutput", "OnAllSpawnedDead hl2crlua:RunPassedCode:RemovePushTrigger():0:-1" )
 	end
@@ -2594,6 +2629,10 @@ local function SetUpMisc()
 	
 	if game.GetMap() == "d2_coast_09" then	--Corrects spawn angle being sideways
 		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, -90, 0))
+	end
+	
+	if game.GetMap() == "d2_coast_10" then	
+		ents.FindByName("lighthouse_secret_door")[1]:Fire("AddOutput", "OnOpen hl2crlua:RunPassedCode:RemovePushTrigger()")
 	end
 	
 	if game.GetMap() == "d2_coast_11" then
