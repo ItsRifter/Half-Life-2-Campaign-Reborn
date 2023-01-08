@@ -2125,7 +2125,18 @@ local HL2_TRIGGERS = {
 			[1] = Angle(0, 0, 0),
 			[2] = Angle(0, 270, 0),
 			[3] = Angle(0, 60, 0)
-		}
+		},
+
+        ["pushers"] = {
+            [1] = {
+                [1] = Vector(-782, 883, 1219),
+                [2] = Vector(1036, -1081, 1079)
+            }
+        },
+
+        ["pusher_spot"] = {
+            [1] = Vector(-748, -7, 1344)
+        }
     },
 
     ["d2_lostcoast"] = {
@@ -2684,7 +2695,7 @@ local function SetUpMisc()
         for k, spawn in ipairs(ents.FindByClass("info_player_start")) do
 			spawn:SetPos(setPos)
 		end
-
+        
 		ents.FindByClass("item_suit")[1]:SetPos(setPos)
 		
 		ents.FindByClass("player_loadsaved")[1]:Remove()
@@ -2692,14 +2703,17 @@ local function SetUpMisc()
 		ents.FindByName("logic_swap")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FinishHL2():10:-1" )
 
         ents.FindByName("relay_breenwins")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FailedMap():0:-1")
+        
+        ents.FindByClass("trigger_pushback")[1]:Fire("Disable")
+        ents.FindByName("logic_portal_final_end")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EnablePushTrigger():0:-1" )
 	end
 end
 
 function StartHL2()
-	SetUpMisc()
 	SetHL2Checkpoints()
-	//SetUpLambdas()
     SetUpVortex()
+	SetUpMisc()
+	//SetUpLambdas()
 end
 
 function FinishHL2()
@@ -2777,6 +2791,11 @@ end
 function RemovePushTrigger()
 	local pusher = ents.FindByClass("trigger_pushback")
 	if pusher then ents.FindByClass("trigger_pushback")[1]:Remove() end
+end
+
+function EnablePushTrigger()
+    local pusher = ents.FindByClass("trigger_pushback")
+	if pusher then ents.FindByClass("trigger_pushback")[1]:Fire("Enable") end
 end
 
 hook.Add("GravGunOnPickedUp", "HL2CR_Achievement_BlastPast", function(ply, ent)

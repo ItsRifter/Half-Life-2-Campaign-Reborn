@@ -65,8 +65,8 @@ if SERVER then
         pet:Spawn()
         pet:SetOwner(spawner)
         pet:SetPos(spawner:GetPos())
-        pet:SetHealth(petToSpawn.Stats.HP)
-        
+        pet:SetMaxHealth(petToSpawn.Stats.HP)
+        pet:SetHealth(pet:GetMaxHealth())
         return pet
     end
 

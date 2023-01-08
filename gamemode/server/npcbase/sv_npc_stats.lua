@@ -13,11 +13,11 @@ local npc_base_damage = {
 }
 
 function hl2cr_npc:SetStatsTraits()	
-
 	timer.Simple(0.15, function()
 		if not self:IsValid() then return end
+		if self:IsPet() then return end
 
-		local newHealth = self:Health() *  math.abs(1 + ( (GetConVar("hl2cr_difficulty"):GetInt() - 1) * 0.25) ) 
+		local newHealth = self:Health() * math.abs(1 + ( (GetConVar("hl2cr_difficulty"):GetInt() - 1) * 0.25) ) 
 		self:SetMaxHealth(newHealth)
 		self:SetHealth(newHealth)
 
