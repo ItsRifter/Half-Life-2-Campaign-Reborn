@@ -940,7 +940,8 @@ function ChatAutoMessage()
 			//[2] = translate.Get("Chat_Announce_Survival"),
 			[2]	= translate.Get("Chat_Announce_NotGordon"),
 			[3] = translate.Get("Chat_Announce_ReturnLobby"),
-			//[4] = translate.Get("Chat_Announce_Discord")
+			[4] = translate.Get("Chat_Announce_Discord"),
+			[5] = translate.Get("Chat_Announce_StuckMap")
 		}
 	end
 
