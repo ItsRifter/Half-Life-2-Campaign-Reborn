@@ -9,7 +9,7 @@ votingTypes["Lobby"] = {
 		if positive > negative then
 			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Success_Lobby"))
 			timer.Simple(5, function()
-				RunConsoleCommand("ChangeLevel", "hl2cr_lobby_v2")
+				RunConsoleCommand("ChangeLevel", Lobby_map)
 			end)
 		else
 			BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Vote_Fail_Default"))

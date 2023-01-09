@@ -35,17 +35,17 @@ function ENT:Touch(ent)
 
 		BroadcastMessageToAll(HL2CR_PlayerColour, ent:Nick(), HL2CR_StandardColour, translate.Get("Player_Checkpoint"))
 
-		if ents.FindByClass("info_player_start")[1]:IsValid() then	
+		--if ents.FindByClass("info_player_start")[1]:IsValid() then	
 			for l, spawn in pairs(ents.FindByClass("info_player_start")) do
 				spawn:SetPos(self.TPPoint)
 				spawn:SetAngles( self.TPAngles )
 			end
-		elseif ents.FindByClass("info_player_deathmatch")[1]:IsValid() then
+		--elseif ents.FindByClass("info_player_deathmatch")[1]:IsValid() then
 			for l, spawn in pairs(ents.FindByClass("info_player_deathmatch")) do
 				spawn:SetPos(self.TPPoint)
 				spawn:SetAngles( self.TPAngles )
 			end
-		end
+		--end
 
 		for _, p in pairs(player.GetAll()) do
 			

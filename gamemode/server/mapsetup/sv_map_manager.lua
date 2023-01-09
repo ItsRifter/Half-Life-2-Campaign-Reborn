@@ -6,6 +6,9 @@ MAPS_LOBBY = {
 	["hl2cr_lobby_v3"] = true
 }
 
+--global reference to which map is lobby
+Lobby_map = "hl2cr_lobby_v2"
+
 MAPS_HL2 = {
 	"d1_trainstation_01",
 	"d1_trainstation_02",
@@ -165,7 +168,7 @@ function StartMapCountdown()
 				
 		--Lost Coast
 		if game.GetMap() == "d2_lostcoast" then
-			RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+			RunConsoleCommand("changelevel", Lobby_map)
 			return
 		end
 		
@@ -219,7 +222,7 @@ function StartMapCountdown()
 		for k = 1, #MAPS_HL2 do
 			if game.GetMap() == MAPS_HL2[k] then
 				if not MAPS_HL2[k+1] then
-					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+					RunConsoleCommand("changelevel", Lobby_map)
 					return
 				end
 				RunConsoleCommand("changelevel", MAPS_HL2[k+1])
@@ -230,7 +233,7 @@ function StartMapCountdown()
 		for k = 1, #MAPS_EP1 do
 			if game.GetMap() == MAPS_EP1[k] then
 				if not MAPS_EP1[k+1] then
-					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+					RunConsoleCommand("changelevel", Lobby_map)
 					return
 				end
 				RunConsoleCommand("changelevel", MAPS_EP1[k+1])
@@ -241,7 +244,7 @@ function StartMapCountdown()
 		for k = 1, #MAPS_EP2 do
 			if game.GetMap() == MAPS_EP2[k] then
 				if not MAPS_EP2[k+1] then
-					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+					RunConsoleCommand("changelevel", Lobby_map)
 					return
 				end
 				RunConsoleCommand("changelevel", MAPS_EP2[k+1])
@@ -252,7 +255,7 @@ function StartMapCountdown()
 		for k = 1, #MAPS_COOP_SYNB2 do
 			if game.GetMap() == MAPS_COOP_SYNB2[k] then
 				if not MAPS_COOP_SYNB2[k+1] then
-					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+					RunConsoleCommand("changelevel", Lobby_map)
 					return
 				end
 				RunConsoleCommand("changelevel", MAPS_COOP_SYNB2[k+1])
@@ -263,7 +266,7 @@ function StartMapCountdown()
 		for k = 1, #MAPS_COOP_RND do
 			if game.GetMap() == MAPS_COOP_RND[k] then
 				if not MAPS_COOP_RND[k+1] then
-					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+					RunConsoleCommand("changelevel", Lobby_map)
 					return
 				end
 				RunConsoleCommand("changelevel", MAPS_COOP_RND[k+1])
@@ -274,19 +277,26 @@ function StartMapCountdown()
 		for k = 1, #MAPS_COOP_IMPROBABLE do
 			if game.GetMap() == MAPS_COOP_IMPROBABLE[k] then
 				if not MAPS_COOP_IMPROBABLE[k+1] then
-					RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+					RunConsoleCommand("changelevel", Lobby_map)
 					return
 				end
 				RunConsoleCommand("changelevel", MAPS_COOP_IMPROBABLE[k+1])
 				return
 			end
 		end
+		
+		if Custom_NextMap then
+			RunConsoleCommand("changelevel", Custom_NextMap)
+			return
+		end
+		
+		RunConsoleCommand("changelevel", Lobby_map)
 	end)
 end
 
 function StartFinalMapCountdown()
 	timer.Create("HL2CR_Countdown", 60, 1, function()
-		RunConsoleCommand("changelevel", "hl2cr_lobby_v2")
+		RunConsoleCommand("changelevel", Lobby_map)
 	end)
 end
 
@@ -317,7 +327,7 @@ end
 
 local function StartCountdownToLobby()
 	timer.Create("HL2CR_LobbyTimer", 9000, 1, function()
-		RunConsoleCommand("ChangeLevel", "hl2cr_lobby_v2")
+		RunConsoleCommand("ChangeLevel", Lobby_map)
 	end)
 end
 
@@ -333,7 +343,11 @@ function InitMap()
 	elseif string.find(game.GetMap(), "ep2_") then
 		StartEP2()
 	else
-		StartCoop()
+		if customloaded then
+			StartCustom()
+		else
+			StartCoop()
+		end
 	end
 	
 	StartCountdownToLobby()
@@ -364,14 +378,15 @@ function CheckPlayerCompleted()
 	end
 end
 
+--New global checkpoint creator
 function CreateCheckpoint(Min,Max,TPos,TAngle,func)
 	local checkpoint = ents.Create("trigger_checkpoint")
 	checkpoint.Min = Min
 	checkpoint.Max = Max
 	checkpoint.Pos = (Max + Min)/2
 	checkpoint.TPPoint = TPos
-	checkpoint.TPAngles = TAngle
-	checkpoint.PointIndex = 99
+	checkpoint.TPAngles = TAngle or checkpoint.TPAngles
+	--checkpoint.PointIndex = 99
 	checkpoint:SetPos(checkpoint.Pos)
 	checkpoint:Spawn()
 	
@@ -385,6 +400,85 @@ function CreateCheckpoint(Min,Max,TPos,TAngle,func)
 	checkpoint.lambdaModel:Spawn()
 	checkpoint.lambdaModel:ResetSequence("idle")
 	checkpoint.lambdaModel:SetMaterial(checkpoint.Mat)
+end
+
+--New global level change creator
+function CreateLevelChange(Min,Max,func)
+	local changelevel = ents.Create("trigger_changemap")
+	changelevel.Min = Min
+	changelevel.Max = Max
+	changelevel.Pos = (Max + Min)/2
+	
+	changelevel:SetPos(changelevel.Pos)
+	changelevel:Spawn()
+
+	if func then
+		changelevel.Func = func
+	end
+
+	changelevel.lambdaModel = ents.Create("prop_dynamic")
+	changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
+	changelevel.lambdaModel:SetPos(changelevel.Pos)
+	changelevel.lambdaModel:Spawn()
+	changelevel.lambdaModel:ResetSequence("idle")
+	changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
+end
+
+--New global pusher creator
+function CreatePusher(Min,Max,Position)
+	local pusher = ents.Create("trigger_pushback")
+	pusher.Min = Min
+	pusher.Max = Max
+	pusher.Pos = (Max + Min)/2
+	pusher:SetPos(pusher.Pos)
+	pusher:Spawn()
+	pusher.TPSpot = Position
+end
+
+--New Global function for spawning enemy and if they target closest player
+function CreateEnemy(class,pos,angle,weapon, search)
+	local enemy = ents.Create(class)
+	enemy:SetPos(pos)
+	enemy:SetAngles(angle)
+	if weapon then enemy:Give( weapon ) end
+	enemy:Spawn()
+	
+	if !search then return end
+	
+	local target = nil
+	local distance = 1000
+	local enemypos = enemy:GetPos()
+	
+	local positions = {}	--creating list of alive player positions
+	for i, v in ipairs( player.GetAll() ) do	
+		if v:Alive() then
+			table.insert( positions, v )
+		end
+	end
+	
+	for i, v in ipairs( positions ) do	
+		local toplayer = enemypos:Distance(v:GetPos())
+		if toplayer > 50 and toplayer < distance then
+			target = v
+			distance = toplayer
+		end
+	end
+	
+	if IsValid(target) then
+		enemy:SetEnemy( target , true)
+		enemy:UpdateEnemyMemory( target, target:GetPos())
+		enemy:SetActivity(11)
+		enemy:SetArrivalDistance(128)
+	end
+	
+end
+
+function CreateAmmoCrate(pos,angle,ammo)
+	local AddAmmoCrate = ents.Create("item_ammo_crate")
+	AddAmmoCrate:SetPos(pos)
+	AddAmmoCrate:SetAngles(angle)
+	AddAmmoCrate:SetKeyValue( "ammotype", ammo )
+	AddAmmoCrate:Spawn()
 end
 
 function RemoveNamedBrushes(toremove)	--Remove func_brushes whos names end with anything in the table listed

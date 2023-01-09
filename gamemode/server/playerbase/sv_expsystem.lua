@@ -92,6 +92,7 @@ end
 --give 1 exp for every amount of exp_division, IE 117 turns to 11 xp if exp_division is 10
 local exp_division = 10
 if XPFARM_MAPS[game.GetMap()] then exp_division = 25 end	--Make farming maps require more damage to be done
+if Custom_ExpMul then exp_division = exp_division * Custom_ExpMul end	--Allows custom map exp setting
 
 function hl2cr_player:AddDamageExp(damage,npc)
 	local amount = damage

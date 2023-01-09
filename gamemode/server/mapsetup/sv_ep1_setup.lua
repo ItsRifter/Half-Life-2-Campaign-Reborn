@@ -562,50 +562,61 @@ local function SetEP1Checkpoints()
 
     if ep1_triggers[game.GetMap()]["checkpoints"] then
         for i, t in ipairs(ep1_triggers[game.GetMap()]["checkpoints"]) do
-            local checkpoint = ents.Create("trigger_checkpoint")
-            checkpoint.Min = Vector(t[1])
-            checkpoint.Max = Vector(t[2])
-            checkpoint.Pos = Vector(t[2]) - ( Vector(t[1]) - Vector(t[1])) / 2
-            checkpoint.TPPoint = Vector(ep1_triggers[game.GetMap()]["checkpoint_spot"][i])
-			if ep1_triggers[game.GetMap()]["checkpoint_angle"] then checkpoint.TPAngles = Angle(ep1_triggers[game.GetMap()]["checkpoint_angle"][i]) or checkpoint.TPAngles end	--default to 0,0,0
-            checkpoint.PointIndex = i
-            checkpoint:SetPos(checkpoint.Pos)
-            checkpoint:Spawn()
+		
+			local Tspot = Vector(ep1_triggers[game.GetMap()]["checkpoint_spot"][i])
+			local Tangle = Angle(ep1_triggers[game.GetMap()]["checkpoint_angle"][i]) or nil
+			local Tfunc = nil
+			if ep1_triggers[game.GetMap()]["checkpoint_functions"] then Tfunc = ep1_triggers[game.GetMap()]["checkpoint_functions"][i] end
+			CreateCheckpoint(Vector(t[1]),Vector(t[2]),Tspot,Tangle,Tfunc)	
+	
+            --local checkpoint = ents.Create("trigger_checkpoint")
+            --checkpoint.Min = Vector(t[1])
+            --checkpoint.Max = Vector(t[2])
+            --checkpoint.Pos = Vector(t[2]) - ( Vector(t[1]) - Vector(t[1])) / 2
+            --checkpoint.TPPoint = Vector(ep1_triggers[game.GetMap()]["checkpoint_spot"][i])
+			--if ep1_triggers[game.GetMap()]["checkpoint_angle"] then checkpoint.TPAngles = Angle(ep1_triggers[game.GetMap()]["checkpoint_angle"][i]) or checkpoint.TPAngles end	--default to 0,0,0
+            --checkpoint.PointIndex = i
+            --checkpoint:SetPos(checkpoint.Pos)
+            --checkpoint:Spawn()
             
-            checkpoint.lambdaModel = ents.Create("prop_dynamic")
-            checkpoint.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
-            checkpoint.lambdaModel:SetPos( checkpoint.TPPoint + Vector(0, 0, 75))
-            checkpoint.lambdaModel:Spawn()
-            checkpoint.lambdaModel:ResetSequence("idle")
-            checkpoint.lambdaModel:SetMaterial(checkpoint.Mat)
+            --checkpoint.lambdaModel = ents.Create("prop_dynamic")
+            --checkpoint.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
+            --checkpoint.lambdaModel:SetPos( checkpoint.TPPoint + Vector(0, 0, 75))
+            --checkpoint.lambdaModel:Spawn()
+            --checkpoint.lambdaModel:ResetSequence("idle")
+            --checkpoint.lambdaModel:SetMaterial(checkpoint.Mat)
 
-            if ep1_triggers[game.GetMap()]["checkpoint_functions"] then
-                checkpoint.Func = ep1_triggers[game.GetMap()]["checkpoint_functions"][i]
-            end
+            --if ep1_triggers[game.GetMap()]["checkpoint_functions"] then
+            --    checkpoint.Func = ep1_triggers[game.GetMap()]["checkpoint_functions"][i]
+            --end
         end
     end
 
     if ep1_triggers[game.GetMap()]["changelevels"] and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
-        local changelevel = ents.Create("trigger_changemap")
-        changelevel.Min = Vector(ep1_triggers[game.GetMap()]["changelevels"][1])
-        changelevel.Max = Vector(ep1_triggers[game.GetMap()]["changelevels"][2])
-        changelevel.Pos = Vector(ep1_triggers[game.GetMap()]["changelevels"][2]) - 
-        ( ( Vector(ep1_triggers[game.GetMap()]["changelevels"][2]) - Vector(ep1_triggers[game.GetMap()]["changelevels"][1])) 
-        / 2 )
+	
+		local Tfunc = ep1_triggers[game.GetMap()]["changelevel_func"] or nil
+		local TVecs = ep1_triggers[game.GetMap()]["changelevels"]
+		CreateLevelChange(Vector(TVecs[1]),Vector(TVecs[2]),Tfunc)	
+	
+        --local changelevel = ents.Create("trigger_changemap")
+        --changelevel.Min = Vector(ep1_triggers[game.GetMap()]["changelevels"][1])
+        --changelevel.Max = Vector(ep1_triggers[game.GetMap()]["changelevels"][2])
+        --changelevel.Pos = Vector(ep1_triggers[game.GetMap()]["changelevels"][2]) - 
+        --( ( Vector(ep1_triggers[game.GetMap()]["changelevels"][2]) - Vector(ep1_triggers[game.GetMap()]["changelevels"][1])) / 2 )
         
-        changelevel:SetPos(changelevel.Pos)
-        changelevel:Spawn()
+        --changelevel:SetPos(changelevel.Pos)
+        --changelevel:Spawn()
 
-        changelevel.lambdaModel = ents.Create("prop_dynamic")
-        changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
-        changelevel.lambdaModel:SetPos(changelevel.Pos)
-        changelevel.lambdaModel:Spawn()
-        changelevel.lambdaModel:ResetSequence("idle")
-        changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
+        --changelevel.lambdaModel = ents.Create("prop_dynamic")
+        --changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
+        --changelevel.lambdaModel:SetPos(changelevel.Pos)
+        --changelevel.lambdaModel:Spawn()
+        --changelevel.lambdaModel:ResetSequence("idle")
+        --changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
 
-        if ep1_triggers[game.GetMap()]["changelevel_func"] then
-            changelevel.Func = ep1_triggers[game.GetMap()]["changelevel_func"][1]
-        end
+        --if ep1_triggers[game.GetMap()]["changelevel_func"] then
+        --    changelevel.Func = ep1_triggers[game.GetMap()]["changelevel_func"][1]
+        --end
     end
 end
 
@@ -821,7 +832,7 @@ function EP1_SetupMap05()
 				for i, v in ipairs( positions ) do	
 					local toplayer = citpos:Distance(v)
 					if toplayer > 50 and toplayer < distance then
-						target = veh
+						target = v
 						distance = toplayer
 					end
 				end

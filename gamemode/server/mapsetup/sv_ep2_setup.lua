@@ -520,81 +520,95 @@ local function SetEP2Checkpoints()
 
     if ep2_triggers[game.GetMap()]["checkpoints"] then
         for i, t in ipairs(ep2_triggers[game.GetMap()]["checkpoints"]) do
-            local checkpoint = ents.Create("trigger_checkpoint")
-            checkpoint.Min = Vector(t[1])
-            checkpoint.Max = Vector(t[2])
-            checkpoint.Pos = Vector(t[2]) - ( Vector(t[1]) - Vector(t[1])) / 2
-            checkpoint.TPPoint = Vector(ep2_triggers[game.GetMap()]["checkpoint_spot"][i])
-			if ep2_triggers[game.GetMap()]["checkpoint_angle"] then checkpoint.TPAngles = Angle(ep2_triggers[game.GetMap()]["checkpoint_angle"][i]) or checkpoint.TPAngles end	--default to 0,0,0
-            checkpoint.PointIndex = i
-            checkpoint:SetPos(checkpoint.Pos)
-            checkpoint:Spawn()
+		
+			local Tspot = Vector(ep2_triggers[game.GetMap()]["checkpoint_spot"][i])
+			local Tangle = Angle(ep2_triggers[game.GetMap()]["checkpoint_angle"][i]) or nil
+			local Tfunc = nil
+			if ep2_triggers[game.GetMap()]["checkpoint_functions"] then Tfunc = ep2_triggers[game.GetMap()]["checkpoint_functions"][i] end
+			CreateCheckpoint(Vector(t[1]),Vector(t[2]),Tspot,Tangle,Tfunc)	
+		
+            --local checkpoint = ents.Create("trigger_checkpoint")
+            --checkpoint.Min = Vector(t[1])
+            --checkpoint.Max = Vector(t[2])
+            --checkpoint.Pos = Vector(t[2]) - ( Vector(t[1]) - Vector(t[1])) / 2
+            --checkpoint.TPPoint = Vector(ep2_triggers[game.GetMap()]["checkpoint_spot"][i])
+			--if ep2_triggers[game.GetMap()]["checkpoint_angle"] then checkpoint.TPAngles = Angle(ep2_triggers[game.GetMap()]["checkpoint_angle"][i]) or checkpoint.TPAngles end	--default to 0,0,0
+            --checkpoint.PointIndex = i
+            --checkpoint:SetPos(checkpoint.Pos)
+            --checkpoint:Spawn()
             
-            checkpoint.lambdaModel = ents.Create("prop_dynamic")
-            checkpoint.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
-            checkpoint.lambdaModel:SetPos( checkpoint.TPPoint + Vector(0, 0, 75))
-            checkpoint.lambdaModel:Spawn()
-            checkpoint.lambdaModel:ResetSequence("idle")
-            checkpoint.lambdaModel:SetMaterial(checkpoint.Mat)
+            --checkpoint.lambdaModel = ents.Create("prop_dynamic")
+            --checkpoint.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
+            --checkpoint.lambdaModel:SetPos( checkpoint.TPPoint + Vector(0, 0, 75))
+            --checkpoint.lambdaModel:Spawn()
+            --checkpoint.lambdaModel:ResetSequence("idle")
+            --checkpoint.lambdaModel:SetMaterial(checkpoint.Mat)
 
-            if ep2_triggers[game.GetMap()]["checkpoint_functions"] then
-                checkpoint.Func = ep2_triggers[game.GetMap()]["checkpoint_functions"][i]
-            end
+            --if ep2_triggers[game.GetMap()]["checkpoint_functions"] then
+            --    checkpoint.Func = ep2_triggers[game.GetMap()]["checkpoint_functions"][i]
+            --end
         end
     end
 
     if ep2_triggers[game.GetMap()]["changelevels"] and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
-        local changelevel = ents.Create("trigger_changemap")
-        changelevel.Min = Vector(ep2_triggers[game.GetMap()]["changelevels"][1])
-        changelevel.Max = Vector(ep2_triggers[game.GetMap()]["changelevels"][2])
-        changelevel.Pos = Vector(ep2_triggers[game.GetMap()]["changelevels"][2]) - 
-        ( ( Vector(ep2_triggers[game.GetMap()]["changelevels"][2]) - Vector(ep2_triggers[game.GetMap()]["changelevels"][1])) 
-        / 2 )
+		local Tfunc = ep2_triggers[game.GetMap()]["changelevel_func"] or nil
+		local TVecs = ep2_triggers[game.GetMap()]["changelevels"]
+		CreateLevelChange(Vector(TVecs[1]),Vector(TVecs[2]),Tfunc)	
+	
+        --local changelevel = ents.Create("trigger_changemap")
+        --changelevel.Min = Vector(ep2_triggers[game.GetMap()]["changelevels"][1])
+        --changelevel.Max = Vector(ep2_triggers[game.GetMap()]["changelevels"][2])
+        --changelevel.Pos = Vector(ep2_triggers[game.GetMap()]["changelevels"][2]) - 
+        --( ( Vector(ep2_triggers[game.GetMap()]["changelevels"][2]) - Vector(ep2_triggers[game.GetMap()]["changelevels"][1])) / 2 )
         
-        changelevel:SetPos(changelevel.Pos)
-        changelevel:Spawn()
+        --changelevel:SetPos(changelevel.Pos)
+        --changelevel:Spawn()
 
-        changelevel.lambdaModel = ents.Create("prop_dynamic")
-        changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
-        changelevel.lambdaModel:SetPos(changelevel.Pos)
-        changelevel.lambdaModel:Spawn()
-        changelevel.lambdaModel:ResetSequence("idle")
-        changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
+        --changelevel.lambdaModel = ents.Create("prop_dynamic")
+        --changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
+        --changelevel.lambdaModel:SetPos(changelevel.Pos)
+        --changelevel.lambdaModel:Spawn()
+        --changelevel.lambdaModel:ResetSequence("idle")
+        --changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
 
-        if ep2_triggers[game.GetMap()]["changelevel_func"] then
-            changelevel.Func = ep2_triggers[game.GetMap()]["changelevel_func"][1]
-        end
+        --if ep2_triggers[game.GetMap()]["changelevel_func"] then
+        --    changelevel.Func = ep2_triggers[game.GetMap()]["changelevel_func"][1]
+        --end
     end
 	
 	 if ep2_triggers[game.GetMap()]["changelevels_special"] and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
-        local special_changelevel = ents.Create("trigger_changemap")
-        special_changelevel.Min = Vector(ep2_triggers[game.GetMap()]["changelevels_special"][1])
-        special_changelevel.Max = Vector(ep2_triggers[game.GetMap()]["changelevels_special"][2])
-        special_changelevel.Pos = Vector(ep2_triggers[game.GetMap()]["changelevels_special"][2]) - 
-        ( ( Vector(ep2_triggers[game.GetMap()]["changelevels_special"][2]) - Vector(ep2_triggers[game.GetMap()]["changelevels_special"][1])) 
-        / 2 )
+		local Tfunc = ep2_triggers[game.GetMap()]["changelevels_special_func"] or nil
+		local TVecs = ep2_triggers[game.GetMap()]["changelevels_special"]
+		CreateLevelChange(Vector(TVecs[1]),Vector(TVecs[2]),Tfunc)	
+	 
+        --local special_changelevel = ents.Create("trigger_changemap")
+        --special_changelevel.Min = Vector(ep2_triggers[game.GetMap()]["changelevels_special"][1])
+        --special_changelevel.Max = Vector(ep2_triggers[game.GetMap()]["changelevels_special"][2])
+        --special_changelevel.Pos = Vector(ep2_triggers[game.GetMap()]["changelevels_special"][2]) - 
+        --( ( Vector(ep2_triggers[game.GetMap()]["changelevels_special"][2]) - Vector(ep2_triggers[game.GetMap()]["changelevels_special"][1])) / 2 )
         
-        special_changelevel:SetPos(special_changelevel.Pos)
-        special_changelevel:Spawn()
+        --special_changelevel:SetPos(special_changelevel.Pos)
+        --special_changelevel:Spawn()
 
-        special_changelevel.lambdaModel = ents.Create("prop_dynamic")
-        special_changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
-        special_changelevel.lambdaModel:SetPos(special_changelevel.Pos)
-        special_changelevel.lambdaModel:Spawn()
-        special_changelevel.lambdaModel:ResetSequence("idle")
-        special_changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
+        --special_changelevel.lambdaModel = ents.Create("prop_dynamic")
+        --special_changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
+        --special_changelevel.lambdaModel:SetPos(special_changelevel.Pos)
+        --special_changelevel.lambdaModel:Spawn()
+        --special_changelevel.lambdaModel:ResetSequence("idle")
+        --special_changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
     end
 	
 	--Added pusher functionality
 	if ep2_triggers[game.GetMap()]["pushers"] then
         for i, p in ipairs(ep2_triggers[game.GetMap()]["pushers"]) do
-            local pusher = ents.Create("trigger_pushback")
-            pusher.Min = Vector(p[1])
-            pusher.Max = Vector(p[2])
-            pusher.Pos = Vector(p[2]) - ( ( Vector(p[2]) - Vector(p[1])) / 2 )
-            pusher:SetPos(pusher.Pos)
-            pusher:Spawn()
-            pusher.TPSpot = ep2_triggers[game.GetMap()]["pusher_spot"][i]
+			CreatePusher(Vector(p[1]),Vector(p[2]),ep2_triggers[game.GetMap()]["pusher_spot"][i])
+            --local pusher = ents.Create("trigger_pushback")
+            --pusher.Min = Vector(p[1])
+            --pusher.Max = Vector(p[2])
+            --pusher.Pos = Vector(p[2]) - ( ( Vector(p[2]) - Vector(p[1])) / 2 )
+            --pusher:SetPos(pusher.Pos)
+            --pusher:Spawn()
+            --pusher.TPSpot = ep2_triggers[game.GetMap()]["pusher_spot"][i]
         end
     end
 end

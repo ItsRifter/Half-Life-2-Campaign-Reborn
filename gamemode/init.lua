@@ -26,6 +26,7 @@ include("server/mapsetup/sv_ep2_setup.lua")
 include("server/mapsetup/sv_coop_setup.lua")
 include("server/mapsetup/sv_map_equipment.lua")
 include("server/mapsetup/sv_vortex_setup.lua")
+include("server/mapsetup/sv_custom_setup.lua")
 
 include("server/playerbase/sv_expsystem.lua")
 
