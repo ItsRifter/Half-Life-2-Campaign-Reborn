@@ -27,6 +27,12 @@ local function SetUpCustom()
         end
     end
 	
+	if Custom_triggers["changelevels"] then
+		local Tfunc = Custom_triggers["changelevel_func"] or nil
+		local TVecs = Custom_triggers["changelevels"]
+		CreateLevelChange(Vector(TVecs[1]),Vector(TVecs[2]),Tfunc)	
+    end
+	
     if Custom_triggers["pushers"] then
         for i, p in ipairs(Custom_triggers["pushers"]) do
 			CreatePusher(Vector(p[1]),Vector(p[2]),Custom_triggers["pusher_spot"][i])

@@ -792,6 +792,16 @@ function EP1_SetupMap05()
 	ents.FindByName("assaultpoint_barney_lasttrain")[1]:Fire("AddOutput", "OnArrival hl2crlua:RunPassedCode:EP1_FinishMap05()")
 	ents.FindByName("assaultpoint_standoff_barney")[1]:Fire("AddOutput", "OnArrival hl2crlua:RunPassedCode:EP1_BarneyStandoff()")
 
+	CreateCustomTrigger(Vector(8699,9599,-696),Vector(8945,9393,-792), function(ent)
+		if ent.squaded  and not ent.ReachedEnd then
+			ent.ReachedEnd = true
+			EP1_TrainCitSucess()
+			BroadcastMessageToAll(HL2CR_GreenColour, train_sucess.. translate.Get("Achievement_EP1_Train_Saved"))
+			return true	--Custom trigger needs to be true on valid so it knows if trigger was valid
+		end
+		return false	--Custome trigger returns false if trigger wasnt valid
+	end,0.2,false)
+
 	if timer.Exists( "HL2CR_CitizenFollow05" ) then timer.Remove( "HL2CR_CitizenFollow05" ) end	
 	timer.Create( "HL2CR_CitizenFollow05", 0.5, 0, function() 
 		local positions = {}	--creating list of alive player positions
@@ -810,14 +820,14 @@ function EP1_SetupMap05()
 				cit.squaded = true
 			else
 				if cit.squaded then 
-					if cit:Health() > 0 then
-						EP1_TrainCitSucess()
-						BroadcastMessageToAll(HL2CR_GreenColour, train_sucess.. translate.Get("Achievement_EP1_Train_Saved"))
-					else
+					if cit:Health() <= 0 then
+						--EP1_TrainCitSucess()
+						--BroadcastMessageToAll(HL2CR_GreenColour, train_sucess.. translate.Get("Achievement_EP1_Train_Saved"))
+					--else
 						BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Achievement_EP1_Train_Lost"))
 					end
 					
-					cit.ReachedEnd = true
+					--cit.ReachedEnd = true
 					continue 
 				end
 				

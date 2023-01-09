@@ -354,7 +354,7 @@ function InitMap()
 end
 
 function FailedMap()
-	BroadcastSound("music/hl2_song23_suitsong3.mp3")
+	BroadcastSoundToAll("music/hl2_song23_suitsong3.mp3")
 	timer.Simple(10, function()
 		RunConsoleCommand("ChangeLevel", game.GetMap())
 	end)
@@ -473,6 +473,20 @@ function CreateEnemy(class,pos,angle,weapon, search)
 	
 end
 
+--New global custom trigger creator
+function CreateCustomTrigger(Min,Max,func, delay,once)
+	local trigger = ents.Create("trigger_custom")
+	trigger.Min = Min
+	trigger.Max = Max
+	trigger.Pos = (Max + Min)/2
+	trigger:SetPos(trigger.Pos)
+	trigger:Spawn()
+	trigger.Func = func
+	trigger.Delay = delay or 0
+	trigger.Once = once or false
+end
+
+--Global Ammo Create making function
 function CreateAmmoCrate(pos,angle,ammo)
 	local AddAmmoCrate = ents.Create("item_ammo_crate")
 	AddAmmoCrate:SetPos(pos)

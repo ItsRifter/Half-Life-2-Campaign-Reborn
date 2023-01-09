@@ -70,6 +70,15 @@ function Custom_Startup()
 	timer.Remove( "custom_endevent" )
 	
 	CreateAmmoCrate(Vector(981,-4285,1424),Angle(0,0,0),0)
+	
+	CreateCustomTrigger(Vector(531,608,143),Vector(758,306,207), function(ent)
+		if ent:IsPlayer() then
+			CreateEnemy("npc_fastzombie",Vector(718,-33,0),Angle(0,92,0),nil, true)
+			ents.FindByName("Trap_J_Brush")[1]:Fire("Break")
+			return true	--Custom trigger needs to be true on valid so it knows if trigger was valid
+		end
+		return false	--Custome trigger returns false if trigger wasnt valid
+	end,0,true)
 end
 
 function Custom_Equipment()
