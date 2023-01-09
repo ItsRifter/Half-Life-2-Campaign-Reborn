@@ -17,9 +17,11 @@ LANGUAGE.Scoreboard_Player_Status_SuperAdmin = "Супер Администра�
 LANGUAGE.Chat_Announce_Difficulty = "Вы можете узнать или сменить сложность коммандой: !diff [1-5]"
 LANGUAGE.Chat_Announce_NotGordon = "Запомните, ВЫ не Гордон Фриман, ВЫ не выживете столько же попаданий, как он."
 LANGUAGE.Chat_Announce_ReturnLobby = "Чтобы вернуться в лобби, воспользуйся !lobby"
-//LANGUAGE.Chat_Announce_Discord = "Заходи в дискорд канал через !discord"
+LANGUAGE.Chat_Announce_StuckMap = "Напишите !vrm для перезапуска карты или !vnm для пропуска."
+LANGUAGE.Chat_Announce_Discord = "Заходи в дискорд канал через !discord"
 LANGUAGE.Announce_Vehicle_Disabled = "Транспорт временно отключен"
 LANGUAGE.Announce_Vehicle_Enabled = "Транспорт снова доступен"
+
 
 --финальные результаты
 LANGUAGE.Player_Checkpoint = " активировал контрольную точку"
@@ -60,10 +62,13 @@ LANGUAGE.Vote_Success_Map_HL2 = "Голосование прошло успеш�
 LANGUAGE.Vote_Success_Map_HL2_LostCoast = "Голосование прошло успешно, запускаем ''Half-Life 2 - Затерянное побережье''"
 LANGUAGE.Vote_Success_Map_EP1 = "Голосование прошло успешно, запускаем ''Half-Life 2 - Эпизод 1''"
 LANGUAGE.Vote_Success_Map_EP2 = "Голосование прошло успешно, запускаем ''Half-Life 2 - Эпизод 2''"
+LANGUAGE.Vote_Success_Map_ResearchDev = "Голосование прошло успешно, запускаем ''Research & Development''"
 LANGUAGE.Vote_Success_Map_Custom = "Голосование прошло успешно, запускаем самодельные карты."
 LANGUAGE.Vote_Success_Map_Restart = "Голосование прошло успешно, перезапускаем карту."
 LANGUAGE.Vote_Success_Lobby = "Голосование прошло успешно, возвращаем всех в лобби."
 LANGUAGE.Vote_Success_Difficulty = "Голосование прошло успешно, меняем сложность."
+LANGUAGE.Vote_Success_Skip_Restart = "Голосование прошло успешно, пропускаем текущую карту."
+
 
 LANGUAGE.Vote_Type_Lobby = "Возвращаемся в лобби?"
 LANGUAGE.Vote_Type_Diff_Normal = "Меняем сложность на Среднюю?"
@@ -71,13 +76,17 @@ LANGUAGE.Vote_Type_Diff_Hard =  "Меняем сложность на Сложн
 LANGUAGE.Vote_Type_Diff_VHard = "Меняем сложность на Очень Сложную?"
 LANGUAGE.Vote_Type_Diff_Insane = "Меняем сложность на Безумную?"
 LANGUAGE.Vote_Type_Diff_GF = "Меняем сложность на ''Гордон Фримен''?"
-LANGUAGE.Vote_Type_MapSeries_HL2 = "Начинаем Half-Life 2?"
+LANGUAGE.Vote_Type_MapSeries_HL2 = "Начинаем ''Half-Life 2?''"
 LANGUAGE.Vote_Type_MapSeries_HL2_LostCoast = "Начинаем ''Half-Life 2 - Затерянное побережье?''"
 LANGUAGE.Vote_Type_MapSeries_HL2_EP1 = "Начинаем ''Half-Life 2 Эпизод 1''?"
 LANGUAGE.Vote_Type_MapSeries_HL2_EP2 = "Начинаем ''Half-Life 2 Эпизод 2''?"
 LANGUAGE.Vote_Type_MapSeries_Custom_Pursoup = "Начинаем ''Кампанию Пурсоупа''?"
 LANGUAGE.Vote_Tyle_Survival_Enable = "Включаем режим Выживания?"
 LANGUAGE.Vote_Tyle_Survival_Disable = "Выключаем режим Выживания?"
+
+LANGUAGE.Vote_Type_MapSeries_ResearchDev = "Начинаем ''Research & Development?''"
+LANGUAGE.Vote_Type_RestartMap = "Перезапускаем карту?"
+LANGUAGE.Vote_Type_SkipMap = "Пропускаем текущую карту?"
 
 LANGUAGE.Chat_Player_Connect = " заходит на сервер"
 LANGUAGE.Chat_Player_Disconnect = " вышел с сервера. Причина: "
@@ -153,8 +162,8 @@ LANGUAGE.Server_Warning_Returned = "Вы вышли из АФК"
 LANGUAGE.Server_Announce_Achievement_Normal = " получил достижение "
 LANGUAGE.Server_Announce_Achievement_Rare = " получил редкое достижение "
 
-LANGUAGE.Player_Warning_NoSave = "ВНИМАНИЕ: Your progress will not be saved"
-LANGUAGE.Player_Warning_SaveClearDisconnect = "ВНИМАНИЕ: Your progress will be wiped after you disconnect"
+LANGUAGE.Player_Warning_NoSave = "ВНИМАНИЕ: Ваш прогресс не будет сохранён."
+LANGUAGE.Player_Warning_SaveClearDisconnect = "ВНИМАНИЕ: Ваш прогресс очищается после перезахода."
 
 LANGUAGE.Server_Announce_Vortex_Found = " нашёл Вихрь"
 LANGUAGE.Server_Announce_Vortex_Spawn = "Где-то на карте появился Вихрь."
@@ -237,7 +246,8 @@ LANGUAGE.Failed_EP1_Pacifist = " убил Сталкера"
 LANGUAGE.Respawn_Remain = "Респавн через: "
 LANGUAGE.Respawn_Ready = "'ЛКМ' для респавна"
 
-LANGUAGE.Campaign_Finished_HL2 = "Поздравляем с прохождением 'Half-Life 2', Возвращаемся в лобби через 40 секунд."
+LANGUAGE.Campaign_Finished_HL2 = "Поздравляем с прохождением 'Half-Life 2', Возвращаемся в лобби через 60 секунд."
+LANGUAGE.Campaign_Finished_RnD = "Поздравляем с прохождением 'Research & Development', Возвращаемся в лобби через 60 секунд."
 
 LANGUAGE.Achievement_Notify_Progress = " перейдёт на следующую карту."
 LANGUAGE.Achievement_Notify_Begin = " теперь активен"

@@ -246,6 +246,7 @@ LANGUAGE.Respawn_Remain = "You can respawn in "
 LANGUAGE.Respawn_Ready = "'Primary Fire' to respawn"
 
 LANGUAGE.Campaign_Finished_HL2 = "Congratulations on finishing Half-Life 2, returning to lobby in 60 seconds"
+LANGUAGE.Campaign_Finished_RnD = "Congratulations on finishing Research & Development, returning to lobby in 60 seconds"
 
 LANGUAGE.Achievement_Notify_Progress = " will progress to the next map"
 LANGUAGE.Achievement_Notify_Begin = " is now active"
