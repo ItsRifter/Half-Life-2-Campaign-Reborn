@@ -184,7 +184,7 @@ local ep2_triggers = {
 		},
 		
 		["checkpoint_functions"] = {
-            [5] = function()	--Removed anti skip trigger
+            [2] = function()	--Removed anti skip trigger
                 timer.Simple(0.1, function()
                     RemovePushTrigger()
                 end)
@@ -210,7 +210,7 @@ local ep2_triggers = {
 		["changelevel_func"] = {	--For those who miss the lift back up
             [1] = function(ply)
                 for k, v in ipairs(player.GetAll()) do
-                    v:SetPos(Vector(5000, -1600, 1150))
+                    v:SetPos(Vector(5000, -1600, 1750))
                 end
             end
         }
