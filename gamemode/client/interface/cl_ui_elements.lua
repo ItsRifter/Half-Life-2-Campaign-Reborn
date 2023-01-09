@@ -16,6 +16,7 @@ HL2CR.Theme = {
 	qMenuFrame = Color(180, 110, 0),
 	qMenuTab =  Color(252, 165, 3, 255),
 	qMenuPlayer = Color(255, 176, 80),
+	qMenuInvSlots = Color(255, 176, 80, 0),
 	qMenuSkills = Color(0, 0, 0, 255),
 	results = Color(180, 80, 0),
 	classPanel = Color(255, 135, 35),
