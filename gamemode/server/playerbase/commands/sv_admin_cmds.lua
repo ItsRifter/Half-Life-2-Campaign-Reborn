@@ -59,3 +59,19 @@ concommand.Add("hl2cr_entinfo", function(ply)
 		print("Model "..Ent:GetModel())
 	end
 end)
+
+concommand.Add("hl2cr_admin_bring_alyx", function(ply, cmd, args)
+	if not ply:IsAdmin() then return end
+
+	if ents.FindByClass("npc_alyx")[1] == nil then return end
+
+	ents.FindByClass("npc_alyx")[1]:SetPos(ply:GetPos())
+end)
+
+concommand.Add("hl2cr_admin_bring_barney", function(ply, cmd, args)
+	if not ply:IsAdmin() then return end
+
+	if ents.FindByClass("npc_barney")[1] == nil then return end
+
+	ents.FindByClass("npc_barney")[1]:SetPos(ply:GetPos())
+end)
