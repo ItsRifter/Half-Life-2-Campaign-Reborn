@@ -45,6 +45,8 @@ HOSTILE_NPCS = {
     ["npc_antlion"] = true,
     ["npc_antlion_worker"] = true,
 	["npc_hunter"] = true,
+    ["npc_turret_floor"] = true,
+    ["combine_mine"] = true,
 }
 
 local poison_npcs = {

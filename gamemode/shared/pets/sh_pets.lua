@@ -10,7 +10,24 @@ function hl2cr_pet:IsPet()
     end
 end
 
+
 if SERVER then
+
+    local force_friendly_maps = {
+        ["d2_prison_07"] = {
+            [1] = "npc_turret_floor"
+        },
+    
+        ["d2_prison_08"] = {            
+            [1] = "npc_turret_floor",
+        },
+
+        ["ep2_outland_02"] = {
+            [1] = "combine_mine",
+            [2] = "npc_turret_floor",
+        }
+    }
+
     local pet_hostiles = {
         [1] = "npc_headcrab D_HT 99",
         [2] = "npc_headcrab_fast D_HT 99",
@@ -85,12 +102,12 @@ if SERVER then
         end
 
         for i, h in ipairs(pet_hostiles) do
-            self:AddRelationship(pet_hostiles[i], D_HT, 99)
+            self:AddRelationship(pet_hostiles[i])
         end
 
         for i, f in ipairs(pet_friendly) do
-            self:AddRelationship(pet_friendly[i], D_LI, 99)
-        end
+            self:AddRelationship(pet_friendly[i])
+        end        
     end
 
     function hl2cr_pet:UpdatePlayerRelation(pl)
@@ -98,7 +115,7 @@ if SERVER then
     end
 
     function hl2cr_pet:RemovePet()
-        if self:GetOwner().activePet then
+        if self:GetOwner().activePet ~= nil then
             self:GetOwner().activePet = nil
             self:Remove()
         end
@@ -121,7 +138,7 @@ if SERVER then
     local timeSinceTele = 0
 
     function BringPetToPlayer(ply)
-        if not ply.activePet then return end
+        if not IsValid(ply.activePet) then return end
 
         if timeSinceTele > CurTime() then return end
 
@@ -134,13 +151,20 @@ if SERVER then
     function hl2cr_pet:DoRelationChecks()
         for _, npc in ipairs(ents.FindByClass("npc_*")) do
             
-            
             if npc:IsNPC() then
-               if npc:IsFriendly() then self:MakeFriendlyNotFear(npc) end
+                if npc:IsFriendly() then self:MakeFriendlyNotFear(npc) end
 
-               if npc:IsHostile() then self:MakeHostileTarget(npc) end
+                if npc:IsHostile() then self:MakeHostileTarget(npc) end
 
-               if npc:IsPet() then self:MakeFriendlyTowardsPet(npc) end
+                if npc:IsPet() then self:MakeFriendlyTowardsPet(npc) end
+
+                if force_friendly_maps[game.GetMap()] then
+                    for _, force in ipairs(force_friendly_maps[game.GetMap()]) do
+                        if force == npc:GetClass() then
+                            self:MakeFriendlyTowardsPet(npc)
+                        end
+                    end
+                end
             end
         end
     end

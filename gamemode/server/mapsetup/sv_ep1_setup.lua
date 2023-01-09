@@ -636,8 +636,8 @@ local function SetUpMisc()
 		table.insert(SPAWNING_ITEMS, EP1_EQUIPMENT[game.GetMap()])
 	end
 
-    if game.GetMap() == "ep1_citadel_00" then
-		--ss_DogIntro
+    if game.GetMap() == "ep1_citadel_00" then        
+        --ss_DogIntro
 		ents.FindByName("lcs_ep1_intro_01")[1]:Fire("AddOutput", "OnTrigger1 hl2crlua:RunPassedCode:EP1_FixGordenStart()" )
 	
 		ents.FindByName("lcs_ep1_intro_04b")[1]:Fire("AddOutput", "OnTrigger1 pclip_gunship_2 Disable",7 )
@@ -647,10 +647,11 @@ local function SetUpMisc()
 		ents.FindByName("ss_alyx_climb")[1]:Fire("AddOutput", "OnEndSequence hl2crlua:RunPassedCode:EP1_FixAlyx00()")
 		ents.FindByName("relay_Van_crash_gate_1")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP1_FixDog00part2()")
 		
-		for _, fall in ipairs(ents.FindByName("trigger_falldeath")) do
-			fall:Remove()
-		end
-		
+        timer.Simple(1, function()
+            for _, fall in ipairs(ents.FindByName("trigger_falldeath")) do
+                fall:Remove()
+            end
+		end)
 			--if veh:GetName() ==  "vehicle_blackout" then return true end --ep1 fix
 	end
 
@@ -692,7 +693,7 @@ local function SetUpMisc()
 	end
 
     if game.GetMap() == "ep1_c17_00" then
-		ents.FindByName("train_2_door_trigger")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP1_FixZombineTrain()")
+		ents.FindByName("lrelay_ZombineIntro_01")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP1_FixZombineTrain():")
 	end
 	
 	if game.GetMap() == "ep1_c17_02" then
@@ -776,7 +777,7 @@ end
 
 function EP1_FixZombineTrain()
 	timer.Simple(3, function()
-		ents.FindByName("train_2_ambush_zombine")[1]:Remove()
+        ents.FindByName("train_2_ambush_zombine")[1]:Fire("Kill")
 		ents.FindByName("brush_combine_train_door")[1]:Remove()
 	end)
 end
