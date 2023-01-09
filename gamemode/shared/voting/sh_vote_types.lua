@@ -35,6 +35,24 @@ votingTypes["Restart"] = {
 	end
 }
 
+votingTypes["NextMap"] = {
+	Description = translate.Get("Vote_Type_SkipMap"),
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		
+		if positive > negative then
+			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Success_Skip_Restart"))
+			
+			BroadcastSoundToAll("music/hl2_song23_suitsong3.mp3")
+			timer.Simple(5, function()
+				RunConsoleCommand("ChangeLevel", game.GetMap())
+			end)
+		else
+			BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Vote_Fail_Default"))
+		end
+	end
+}
+
 votingTypes["DiffNormal"] = {
 	Description = translate.Get("Vote_Type_Diff_Normal"),
 	Callback = function(state)
@@ -221,6 +239,23 @@ votingTypes["BeginLostCoast"] = {
 			BroadcastSoundToAll("hl2cr/begin_game.wav")
 			timer.Simple(10, function()
 				RunConsoleCommand("changelevel", "d2_lostcoast")
+			end)
+		else
+			BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Vote_Fail_Default"))
+		end
+	end
+}
+
+votingTypes["BeginRND"] = {
+	Description = translate.Get("Vote_Type_MapSeries_ResearchDev"),
+	Callback = function(state)
+		local positive, negative = countVotes(state)
+		
+		if positive > negative then
+			BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Vote_Success_Map_RsearchDev"))
+			BroadcastSoundToAll("hl2cr/begin_game.wav")
+			timer.Simple(10, function()
+				RunConsoleCommand("changelevel", "level_1a")
 			end)
 		else
 			BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Vote_Fail_Default"))

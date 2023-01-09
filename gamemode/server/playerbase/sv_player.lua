@@ -633,6 +633,7 @@ end
 function GM:DoPlayerDeath(ply, att, dmgInfo)
 	ply:CreateRagdollBody(dmgInfo)
 	ply:Spectate( OBS_MODE_CHASE )
+	ply:Flashlight(false)
 	ply:SpectateEntity(ply.Ragdoll)
 
 	local notifyTbl = {

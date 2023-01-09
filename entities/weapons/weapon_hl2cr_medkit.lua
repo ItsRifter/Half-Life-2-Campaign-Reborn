@@ -119,7 +119,7 @@ function SWEP:SecondaryAttack()
 	local ent = tr.Entity
 
 	local need = 50
-	if self:CheckEntity(ent) and self:Clip1() >= need then
+	if self:CheckEntity(ent) and ent:GetClass() == "prop_ragdoll" and self:Clip1() >= need then
 		self.Owner:EmitSound("items/suitchargeok1.wav")
 		self:SendWeaponAnim( ACT_VM_PRIMARYATTACK )
 		timer.Create("revive_" .. self:EntIndex(), 3, 1, function()
@@ -143,10 +143,16 @@ function SWEP:SecondaryAttack()
 			revived:Spawn()
 			revived:SetUpRespawnRevive()
 			revived:SetHealth(revived:GetMaxHealth() / 2)
-			revived:SetPos(tr2.Entity:GetPos())
+			revived:SetPos(tr2.Entity:GetPos() + Vector(0, 0, 6))
 			revived:SetModel(lastMdl)
 
 			revived:SetEyeAngles(-( revived:GetShootPos() + self.Owner:GetShootPos() ):Angle())
+
+			timer.Simple(0.25, function()
+				if not revived:IsInWorld() then
+					revived:SetPos(self.Owner:GetPos())
+				end
+			end)
 
 			self.Owner:AddXP(need * self.Owner.hl2cr.Level * 2)
 		end)
@@ -157,6 +163,9 @@ function SWEP:SecondaryAttack()
 
 		-- Even though the viewmodel has looping IDLE anim at all times, we need this to make fire animation work in multiplayer
 		timer.Create( "weapon_idle" .. self:EntIndex(), self:SequenceDuration(), 1, function() if ( IsValid( self ) ) then self:SendWeaponAnim( ACT_VM_IDLE ) end end )
+	else
+		self.Owner:EmitSound( DenySound )
+		self:SetNextPrimaryFire( CurTime() + 0.2 )
 	end
 end
 

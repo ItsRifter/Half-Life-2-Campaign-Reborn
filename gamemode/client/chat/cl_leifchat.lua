@@ -39,6 +39,7 @@ Administrator.ClientCommands = {
 	["!surv"] = { "Vote to enable/disable survival mode" },
 	["!survival"] = { "Vote to enable/disable survival mode" },
 	["!vrm"] = { "Vote to restart map" },
+	["!vnm"] = { "Vote to next map" },
 	["!diff"] = { "See current difficuly or vote to change","1 = Normal", "2 = Hard", "3 = Very Hard", "4 = Insane", "5 = True Freeman" },
 	["!pet"] = { "Pet menu" },
 	["!petsummon"] = { "Spawn pet" },

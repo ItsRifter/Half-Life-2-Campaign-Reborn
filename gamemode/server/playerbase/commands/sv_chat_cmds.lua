@@ -1,5 +1,7 @@
 local CMD_TimeWaitVote = 45 + CurTime()
 
+local skipMapVoteWait = 450 + CurTime()
+
 local chat_cmds = {
     ["!vrm"] = function(ply, text)
         if not ply:IsValid() then return end
@@ -13,6 +15,20 @@ local chat_cmds = {
 
         HL2CR_Voting:StartVote(ply, "Restart")
         CMD_TimeWaitVote = 210 + CurTime()
+    end,
+
+    ["!vnm"] = function(ply, text)
+        if not ply:IsValid() then return end
+
+        if MAPS_LOBBY[game.GetMap()] then return end
+        
+        if skipMapVoteWait > CurTime() then 
+            ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Vote_TooEarly"), tostring(math.Round(skipMapVoteWait - CurTime()) ) )
+            return
+        end
+
+        HL2CR_Voting:StartVote(ply, "NextMap")
+        skipMapVoteWait = 180 + CurTime()
     end,
 
     ["!lobby"] = function(ply, text)
