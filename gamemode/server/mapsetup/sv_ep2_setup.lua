@@ -154,10 +154,27 @@ local ep2_triggers = {
 			[3] = Angle(0, 45, 0)
 		},
         
+		["checkpoint_functions"] = {
+            [2] = function()
+				ents.FindByClass("npc_vortigaunt")[1]:SetPos(Vector(1251,-7358,-1664))
+			end,
+        },
+		
         ["changelevels"] = {
 			[1] = Vector(4950, -7520, -520),
             [2] = Vector(5250, -7240, -200)
-        }
+        },
+		
+		["pushers"] = {
+            [1] = {	--Prevent skipping
+                [1] = Vector(1528,-5794,-1877),
+                [2] = Vector(2141,-5997,-902)
+            }
+        },
+
+        ["pusher_spot"] = {
+            [1] = Vector(1603,-5114,-960)
+        },
     }, 
 	
 	--Hunting the antlion--A lot of no return clips
@@ -461,8 +478,8 @@ local ep2_triggers = {
 	["ep2_outland_10"] = {	--Ambush
         ["checkpoints"] = {	
             [1] = {
-                [1] = Vector(3120, -900, -160), 		
-                [2] = Vector(3650, -860, 0)
+                [1] = Vector(3310, -500, -160), 		
+                [2] = Vector(3650, -290, 0)
             },
 			[2] = {
                 [1] = Vector(630, -2650, 134), 		
@@ -475,13 +492,13 @@ local ep2_triggers = {
         },
         
         ["checkpoint_spot"] = {
-			[1] = Vector(3610, -975, -130),
+			[1] = Vector(3243,-313,-120),
             [2] = Vector(790, -2440, 170),
 			[3] = Vector(-2930, 1990, 75)
         },
 		
 		["checkpoint_angle"] = {
-			[1] = Angle(0, 130, 0),
+			[1] = Angle(0, 220, 0),
 			[2] = Angle(0, 130, 0),
 			[3] = Angle(0, 180, 0)
 		},
@@ -489,6 +506,7 @@ local ep2_triggers = {
 		["checkpoint_functions"] = {
             [1] = function()
 				GAMEMODE:DisableVehicles(true)
+				--ents.FindByClass("npc_alyx")[1]:SetPos(Vector(3162,-891,-100))
 			end,
 			[2] = function()
 				CreateCheckpoint(Vector(1184,-2665,314),Vector(1217,-2132,76),Vector(1091,-2507,150),Angle(0,50,0),
@@ -503,6 +521,152 @@ local ep2_triggers = {
 			[1] = Vector(6195,8192,-1260),
             [2] = Vector(6031,7764,-1515)
         }
+    }, 
+	
+	["ep2_outland_10a"] = {	--White Forest
+	    ["checkpoints"] = {	
+            [1] = {
+                [1] = Vector(2670,-1502,-1715), 		
+                [2] = Vector(1756,-1401,-2027)
+            },
+			[2] = {
+                [1] = Vector(3692,10601,429), 		
+                [2] = Vector(3800,8205,12)
+            }
+        },
+        
+        ["checkpoint_spot"] = {
+			[1] = Vector(1955,-1641,-1910),
+            [2] = Vector(3503,10037,200)
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0,50,0),
+			[2] = Angle(0,-60,0)
+		},
+	
+        ["changelevels"] = {
+            [1] = Vector(5032,10910,360),
+            [2] = Vector(4860,10986,180)
+        },
+    }, 
+	
+	["ep2_outland_11"] = {	--White Forest Inside
+	    ["checkpoints"] = {	
+            [1] = {
+                [1] = Vector(-117,-10561,145), 		
+                [2] = Vector(14,-10158,64)
+            },
+			[2] = {
+                [1] = Vector(1471,-10022,-244), 		
+                [2] = Vector(1584,-9787,-356)
+            },
+			[3] = {
+                [1] = Vector(1522,-10075,-1408), 		
+                [2] = Vector(1256,-9824,-1302)
+            }
+        },
+        
+        ["checkpoint_spot"] = {
+			[1] = Vector(-10,-10601,64),
+            [2] = Vector(1573,-10019,-318),
+			[3] = Vector(1332,-9936,-1233)
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0,90,0),
+			[2] = Angle(0,-50,0),
+			[3] = Angle(0,-15,0)
+		},
+	
+        ["changelevels"] = {
+            [1] = Vector(1702,-9200,-1300),
+            [2] = Vector(1626,-9000,-1400)
+        },
+    }, 
+	
+	["ep2_outland_11a"] = {	--White Forest Silo
+	    ["checkpoints"] = {	
+            [1] = {
+                [1] = Vector(1024,-9220,-1536), 		
+                [2] = Vector(941,-9402,-1457)
+            },
+			[2] = {
+                [1] = Vector(2061,-10746,-1074), 		
+                [2] = Vector(2176,-10349,-1126)
+            },
+			[3] = {
+                [1] = Vector(1522,-10075,-1408), 		
+                [2] = Vector(1256,-9824,-1302)
+            }
+        },
+        
+        ["checkpoint_spot"] = {
+			[1] = Vector(988,-9332,-1536),
+            [2] = Vector(2093,-10605,-1088),
+			[3] = Vector(1332,-9936,-1233)
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0,-90,0),
+			[2] = Angle(0,-70,0),
+			[3] = Angle(0,-15,0)
+		},
+	
+        ["changelevels"] = {
+            [1] = Vector(283,-11318,184),
+            [2] = Vector(86,-11170,51)
+        },
+    }, 
+	
+	["ep2_outland_11b"] = {	--White Forest Back inside
+	    ["checkpoints"] = {	
+            [1] = {
+                [1] = Vector(513,-8789,-256), 		
+                [2] = Vector(262,-8682,-347)
+            },
+			[2] = {
+                [1] = Vector(-123,-8948,-243), 		
+                [2] = Vector(-382,-9238,-338)
+            }
+        },
+        
+        ["checkpoint_spot"] = {
+			[1] = Vector(299,-8703,-319),
+            [2] = Vector(-153,-9039,-339)
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0,30,0),
+			[2] = Angle(0,-150,0)
+		},
+	
+        ["changelevels"] = {
+            [1] = Vector(-572,-8907,-159),
+            [2] = Vector(-635,-8321,-320)
+        },
+    }, 
+
+	["ep2_outland_12"] = {	--Strider Assault
+	    ["checkpoints"] = {	
+            [1] = {
+                [1] = Vector(-423,-7115,-148), 		
+                [2] = Vector(-969,-6960,-336)
+            },
+        },
+        
+        ["checkpoint_spot"] = {
+			[1] = Vector(-453,-6779,-288),
+        },
+		
+		["checkpoint_angle"] = {
+			[1] = Angle(0,120,0),
+		},
+	
+        ["changelevels"] = {
+            [1] = Vector(-572,-8907,-159),
+            [2] = Vector(-635,-8321,-320)
+        },
     }, 
 
 }
@@ -527,26 +691,6 @@ local function SetEP2Checkpoints()
 			if ep2_triggers[game.GetMap()]["checkpoint_functions"] then Tfunc = ep2_triggers[game.GetMap()]["checkpoint_functions"][i] end
 			CreateCheckpoint(Vector(t[1]),Vector(t[2]),Tspot,Tangle,Tfunc)	
 		
-            --local checkpoint = ents.Create("trigger_checkpoint")
-            --checkpoint.Min = Vector(t[1])
-            --checkpoint.Max = Vector(t[2])
-            --checkpoint.Pos = Vector(t[2]) - ( Vector(t[1]) - Vector(t[1])) / 2
-            --checkpoint.TPPoint = Vector(ep2_triggers[game.GetMap()]["checkpoint_spot"][i])
-			--if ep2_triggers[game.GetMap()]["checkpoint_angle"] then checkpoint.TPAngles = Angle(ep2_triggers[game.GetMap()]["checkpoint_angle"][i]) or checkpoint.TPAngles end	--default to 0,0,0
-            --checkpoint.PointIndex = i
-            --checkpoint:SetPos(checkpoint.Pos)
-            --checkpoint:Spawn()
-            
-            --checkpoint.lambdaModel = ents.Create("prop_dynamic")
-            --checkpoint.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
-            --checkpoint.lambdaModel:SetPos( checkpoint.TPPoint + Vector(0, 0, 75))
-            --checkpoint.lambdaModel:Spawn()
-            --checkpoint.lambdaModel:ResetSequence("idle")
-            --checkpoint.lambdaModel:SetMaterial(checkpoint.Mat)
-
-            --if ep2_triggers[game.GetMap()]["checkpoint_functions"] then
-            --    checkpoint.Func = ep2_triggers[game.GetMap()]["checkpoint_functions"][i]
-            --end
         end
     end
 
@@ -555,25 +699,6 @@ local function SetEP2Checkpoints()
 		local TVecs = ep2_triggers[game.GetMap()]["changelevels"]
 		CreateLevelChange(Vector(TVecs[1]),Vector(TVecs[2]),Tfunc)	
 	
-        --local changelevel = ents.Create("trigger_changemap")
-        --changelevel.Min = Vector(ep2_triggers[game.GetMap()]["changelevels"][1])
-        --changelevel.Max = Vector(ep2_triggers[game.GetMap()]["changelevels"][2])
-        --changelevel.Pos = Vector(ep2_triggers[game.GetMap()]["changelevels"][2]) - 
-        --( ( Vector(ep2_triggers[game.GetMap()]["changelevels"][2]) - Vector(ep2_triggers[game.GetMap()]["changelevels"][1])) / 2 )
-        
-        --changelevel:SetPos(changelevel.Pos)
-        --changelevel:Spawn()
-
-        --changelevel.lambdaModel = ents.Create("prop_dynamic")
-        --changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
-        --changelevel.lambdaModel:SetPos(changelevel.Pos)
-        --changelevel.lambdaModel:Spawn()
-        --changelevel.lambdaModel:ResetSequence("idle")
-        --changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
-
-        --if ep2_triggers[game.GetMap()]["changelevel_func"] then
-        --    changelevel.Func = ep2_triggers[game.GetMap()]["changelevel_func"][1]
-        --end
     end
 	
 	 if ep2_triggers[game.GetMap()]["changelevels_special"] and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
@@ -581,34 +706,12 @@ local function SetEP2Checkpoints()
 		local TVecs = ep2_triggers[game.GetMap()]["changelevels_special"]
 		CreateLevelChange(Vector(TVecs[1]),Vector(TVecs[2]),Tfunc)	
 	 
-        --local special_changelevel = ents.Create("trigger_changemap")
-        --special_changelevel.Min = Vector(ep2_triggers[game.GetMap()]["changelevels_special"][1])
-        --special_changelevel.Max = Vector(ep2_triggers[game.GetMap()]["changelevels_special"][2])
-        --special_changelevel.Pos = Vector(ep2_triggers[game.GetMap()]["changelevels_special"][2]) - 
-        --( ( Vector(ep2_triggers[game.GetMap()]["changelevels_special"][2]) - Vector(ep2_triggers[game.GetMap()]["changelevels_special"][1])) / 2 )
-        
-        --special_changelevel:SetPos(special_changelevel.Pos)
-        --special_changelevel:Spawn()
-
-        --special_changelevel.lambdaModel = ents.Create("prop_dynamic")
-        --special_changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
-        --special_changelevel.lambdaModel:SetPos(special_changelevel.Pos)
-        --special_changelevel.lambdaModel:Spawn()
-        --special_changelevel.lambdaModel:ResetSequence("idle")
-        --special_changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
     end
 	
 	--Added pusher functionality
 	if ep2_triggers[game.GetMap()]["pushers"] then
         for i, p in ipairs(ep2_triggers[game.GetMap()]["pushers"]) do
 			CreatePusher(Vector(p[1]),Vector(p[2]),ep2_triggers[game.GetMap()]["pusher_spot"][i])
-            --local pusher = ents.Create("trigger_pushback")
-            --pusher.Min = Vector(p[1])
-            --pusher.Max = Vector(p[2])
-            --pusher.Pos = Vector(p[2]) - ( ( Vector(p[2]) - Vector(p[1])) / 2 )
-            --pusher:SetPos(pusher.Pos)
-            --pusher:Spawn()
-            --pusher.TPSpot = ep2_triggers[game.GetMap()]["pusher_spot"][i]
         end
     end
 end
@@ -625,7 +728,8 @@ local gnome_pos = {
 	["ep2_outland_08"] = Vector(-12580, -11050, 439),
 	["ep2_outland_09"] = Vector(729, -9233, 72),
 	["ep2_outland_10"] = Vector(4648, -10616, -1024),
-	["ep2_outland_10a"] = Vector(4793,-5961,-1542)
+	["ep2_outland_10a"] = Vector(4793,-5961,-1542),
+	["ep2_outland_11"] = Vector(-964,-11132,59)
 }
 
 local function SetUpMisc()
@@ -679,11 +783,14 @@ local function SetUpMisc()
 		end
 	end
 
+	if game.GetMap() == "ep2_outland_03" then
+		RemoveNamedBrushes({"bridge_cave_entry_clip","bucket_tunnel_clip","player_death_trigger"})
+	end
+
     if game.GetMap() == "ep2_outland_04" then
 		RemoveNamedBrushes({"_block_player","_clip","_playerblock"})
 		
 		ents.FindByName("elevator_exit_trigger")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_ElevatorSpawn()")
-		--elevator_call_bottom  --elevator --EP2_ElevatorSpawn
 	end
 
 	if game.GetMap() == "ep2_outland_06" then
@@ -725,15 +832,26 @@ local function SetUpMisc()
 		ents.FindByName("relay.power.off")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_TurretsDefeated()")
 	end
 	
-    if game.GetMap() == "ep2_outland_10a" then
-		local NewDog = ents.Create("npc_dog")	--Needs to be spawned in
-		NewDog:SetName("dog")
-		--NewDog:SetPos(Vector(903,-871,-1114))
-		NewDog:SetPos(Vector(2015,-776,-1904))
-
-		NewDog:Spawn()
-
+    if game.GetMap() == "ep2_outland_10" then	--ambush
+		CreateAmmoCrate(Vector(2838,-650,-112),Angle(0,0,0),4) --Add shotgun ammo to house for convinience
 	end
+
+    if game.GetMap() == "ep2_outland_11" then	--white forest inside
+		ents.FindByName("door_silo_lab_4")[1]:Remove()
+		ents.FindByName("brush_pclip_door_silo_lab_4")[1]:Remove()
+		
+		
+		ents.FindByName("door_garage_fence_1")[1]:Remove()
+		ents.FindByName("pclip_fence")[1]:Remove()
+	end
+	
+    if game.GetMap() == "ep2_outland_11b" then	--back inside
+		ents.FindByName("magnusson_courtyard_exitdoor")[1]:Remove()
+		ents.FindByName("magnusson_courtyard_exitdoor_brush")[1]:Remove()
+	end
+
+--door_garage_fence_1/func_brush
+
 
     if game.GetGlobalState("hl2cr_bringitem_gnome") == GLOBAL_ON and gnome_pos[game.GetMap()] then
         game.SetGlobalState("hl2cr_bringitem_gnome", GLOBAL_DEAD)

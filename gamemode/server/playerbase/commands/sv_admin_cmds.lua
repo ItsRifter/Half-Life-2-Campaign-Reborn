@@ -13,6 +13,27 @@ concommand.Add("hl2cr_admin_givexp_pet", function(ply, cmd, args)
     pet:AddXP(args[1])
 end)
 
+local cmd_globalcheck = {
+	["superphysgun"] = true,
+	["antlionfriendly"] = true,
+	["precriminal"] = true,
+	["extend"] = true,
+	["gnome"] = true,
+	["whatbaby"] = true,
+	["rollermine"] = true,
+	["gnome"] = true,
+}
+
+local cmd_globalconvert = {
+	["superphysgun"] = "super_phys_gun",
+	["antlionfriendly"] = "antlion_allied",
+	["precriminal"] = "gordon_precriminal",
+	["extend"] = "hl2cr_extendedmap",
+	["whatbaby"] = "hl2cr_bringitem_whatbaby",
+	["rollermine"] = "hl2cr_bringitem_rollermine",
+	["gnome"] = "hl2cr_bringitem_gnome",
+}
+
 local cmd_globals = {
 	[1] = "superphysgun",
 	[2] = "antlionfriendly",
@@ -57,6 +78,7 @@ concommand.Add("hl2cr_entinfo", function(ply)
 		print(Ent)
 		print("Name  "..Ent:GetName())
 		print("Model "..Ent:GetModel())
+		if Ent:GetParent() then print("Parent "..Ent:GetParent():GetName()) end
 	end
 end)
 

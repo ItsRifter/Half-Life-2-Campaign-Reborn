@@ -48,6 +48,7 @@ AddCSLuaFile("client/interface/cl_ach_notify.lua")
 AddCSLuaFile("client/interface/panels/cl_ui_dragpanel.lua")
 AddCSLuaFile("client/chat/cl_leifchat.lua")
 AddCSLuaFile("client/hud/cl_autoicons.lua")
+AddCSLuaFile("client/hud/cl_crosshair.lua")
 
 AddCSLuaFile("client/cl_network.lua")
 AddCSLuaFile("client/cl_indicators.lua")

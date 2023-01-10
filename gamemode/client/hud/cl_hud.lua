@@ -166,6 +166,10 @@ hook.Add( "HUDShouldDraw", "HL2CR_HideHUD", function( name )
 		return false
 	end
 	
+	if ( name == "CHudCrosshair" and Crosshair.Enabled ) then
+		return false
+	end
+	
     return true 
 end)
 

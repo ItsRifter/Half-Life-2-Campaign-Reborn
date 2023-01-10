@@ -3353,6 +3353,51 @@ EP2_WEAPONS = {
 		[7] = "weapon_ar2",
 		[8] = "weapon_frag",
 		[9] = "weapon_crossbow"
+	},
+	
+	["ep2_outland_11"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357",
+		[6] = "weapon_smg1",
+		[7] = "weapon_ar2",
+		[8] = "weapon_crossbow"
+	},
+	
+	["ep2_outland_11a"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357",
+		[6] = "weapon_smg1",
+		[7] = "weapon_ar2",
+		[8] = "weapon_crossbow"
+	},
+	
+	["ep2_outland_11b"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357",
+		[6] = "weapon_smg1",
+		[7] = "weapon_ar2",
+		[8] = "weapon_crossbow"
+	},
+	
+	["ep2_outland_12"] = {
+		[1] = "weapon_physcannon",
+		[2] = "weapon_crowbar",
+		[3] = "weapon_pistol",
+		[4] = "weapon_shotgun",
+		[5] = "weapon_357",
+		[6] = "weapon_smg1",
+		[7] = "weapon_ar2",
+		[8] = "weapon_crossbow",
+		[9] = "weapon_rpg"
 	}
 }
 
@@ -3744,6 +3789,146 @@ EP2_EQUIPMENT = {
 			["Type"] = "XBowBolt",
 			["Amount"] = 3,
 		}
+	},
+	
+	["ep2_outland_11"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 6
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[6] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[7] = {
+			["Type"] = "XBowBolt",
+			["Amount"] = 3,
+		}
+	},
+	
+	["ep2_outland_11a"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 6
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[6] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[7] = {
+			["Type"] = "XBowBolt",
+			["Amount"] = 3,
+		}
+	},
+	
+	["ep2_outland_11b"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 6
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[6] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[7] = {
+			["Type"] = "XBowBolt",
+			["Amount"] = 3,
+		}
+	},
+	
+	["ep2_outland_12"] = {		
+		[1] = {
+			["Type"] = "Armor",
+			["Amount"] = 25
+		},
+		[2] = {
+			["Type"] = "Pistol",
+			["Amount"] = 54
+		},
+		[3] = {
+			["Type"] = "Buckshot",
+			["Amount"] = 12
+		},
+		[4] = {
+			["Type"] = "357",
+			["Amount"] = 6
+		},
+		
+		[5] = {
+			["Type"] = "SMG1",
+			["Amount"] = 45,
+		},
+		
+		[6] = {
+			["Type"] = "AR2",
+			["Amount"] = 30,
+		},
+		
+		[7] = {
+			["Type"] = "XBowBolt",
+			["Amount"] = 3,
+		},
+		[8] = {
+			["Type"] = "RPG",
+			["Amount"] = 1
+		},
 	},
 }
 

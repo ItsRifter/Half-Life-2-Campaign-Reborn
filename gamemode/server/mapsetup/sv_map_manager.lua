@@ -486,7 +486,9 @@ function CreateCustomTrigger(Min,Max,func, delay,once)
 	trigger.Once = once or false
 end
 
---Global Ammo Create making function
+
+--Global Ammo Create making function, numbers marked X have wrong look but give that ammo
+--0/Pistol 1/smg 2/Ar2Pulse 3/rpg 4/shotgun 5/grenades X-6/357magnum X-7/crossbow X-8/Ar2Balls 9/SmgNades
 function CreateAmmoCrate(pos,angle,ammo)
 	local AddAmmoCrate = ents.Create("item_ammo_crate")
 	AddAmmoCrate:SetPos(pos)
@@ -507,23 +509,4 @@ function RemoveNamedBrushes(toremove)	--Remove func_brushes whos names end with 
 	end
 end
 
-local cmd_globalcheck = {
-	["superphysgun"] = true,
-	["antlionfriendly"] = true,
-	["precriminal"] = true,
-	["extend"] = true,
-	["gnome"] = true,
-	["whatbaby"] = true,
-	["rollermine"] = true,
-	["gnome"] = true,
-}
 
-local cmd_globalconvert = {
-	["superphysgun"] = "super_phys_gun",
-	["antlionfriendly"] = "antlion_allied",
-	["precriminal"] = "gordon_precriminal",
-	["extend"] = "hl2cr_extendedmap",
-	["whatbaby"] = "hl2cr_bringitem_whatbaby",
-	["rollermine"] = "hl2cr_bringitem_rollermine",
-	["gnome"] = "hl2cr_bringitem_gnome",
-}

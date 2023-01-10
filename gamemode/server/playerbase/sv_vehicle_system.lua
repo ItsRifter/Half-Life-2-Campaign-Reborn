@@ -276,7 +276,7 @@ hook.Add("PlayerEnteredVehicle", "HL2CR_ToggleVehicleSpawning", function(ply, ve
 		BroadcastMessageToAll(HL2CR_StandardColour, translate.Get("Map_Enabled_Vehicles_Tip"))
 	end
 	
-	if (game.GetMap() == "ep2_outland_06" or game.GetMap() == "ep2_outland_09") and not canSpawnJalopyGlobal then
+	if (game.GetMap() == "ep2_outland_06" or game.GetMap() == "ep2_outland_09" or game.GetMap() == "ep2_outland_12") and not canSpawnJalopyGlobal then
 		canSpawnJalopyGlobal = true
 		
 		BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Map_Enabled_Vehicles_Jalopy"))
