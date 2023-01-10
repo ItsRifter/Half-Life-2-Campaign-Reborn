@@ -28,7 +28,7 @@ LANGUAGE.Error_Player_Suicide_BadMap = "Suiciding is disabled on this map"
 LANGUAGE.Error_Vote_TooEarly = "You can start this vote in "
 
 LANGUAGE.Error_CMD_No_Jeep = "You need to be in your jeep first"
-LANGUAGE.Error_CMD_Invalid_Owner = "This jeep doesn't belong to you"
+LANGUAGE.Error_CMD_Invalid_Owner = "This vehicle doesn't belong to you"
 LANGUAGE.Error_CMD_Invalid_Vehicle = "This command only works on Jeeps"
 LANGUAGE.Error_CMD_Seat_Exists = "You already have a passenger seat"
 LANGUAGE.Error_CMD_DiffSetOn = "This difficulty is already set to that level!"

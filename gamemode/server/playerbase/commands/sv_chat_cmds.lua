@@ -51,7 +51,7 @@ local chat_cmds = {
         if not ply:InVehicle() then
             ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_CMD_No_Jeep"))
             return
-        elseif ply:GetVehicle():GetOwner() != ply then
+        elseif not ply:GetVehicle():GetOwner() or ply:GetVehicle():GetOwner() != ply then
             ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_CMD_Invalid_Owner"))
             return
         elseif ply:GetVehicle():GetClass() != "prop_vehicle_jeep" then 
