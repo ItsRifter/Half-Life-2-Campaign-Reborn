@@ -78,9 +78,9 @@ if SERVER then
         if notify then
             self:GetOwner():SetNWInt("hl2cr_petstat_level", updStats.Level)
             self:GetOwner():SetNWInt("hl2cr_petstat_reqxp", updStats.ReqXP)
+            self:UpdateStats(updStats)
         end
 
         self:GetOwner():SetNWInt("hl2cr_petstat_xp", updStats.XP)
-        self:UpdateStats(updStats)
     end
 end

@@ -102,11 +102,11 @@ if SERVER then
         end
 
         for i, h in ipairs(pet_hostiles) do
-            self:AddRelationship(pet_hostiles[i])
+            self:AddRelationship(h)
         end
 
         for i, f in ipairs(pet_friendly) do
-            self:AddRelationship(pet_friendly[i])
+            self:AddRelationship(f)
         end
 
         if MAPS_VORT_HOSTILE[game.GetMap()] then
@@ -195,7 +195,7 @@ if SERVER then
         
         if MAPS_NO_PETS[game.GetMap()] then return end
         if not CanDoPetActions(ply) then return end
-        
+
         ply:UpdateNetworks()
 
         ply.activePet = SpawnPet(ply)
