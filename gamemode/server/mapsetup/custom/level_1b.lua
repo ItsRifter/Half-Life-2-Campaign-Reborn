@@ -47,6 +47,11 @@ Custom_triggers = {
 		[6] = Angle(0,-90,0)
 	},
 
+	/*["changelevels"] = {
+		[1] = Vector(3372, 2213, -69),
+		[2] = Vector(3410, 2337, 20)
+	},*/
+
 	["checkpoint_functions"] = {
 		[6] = function()
 			CreateLevelChange(Vector(3372, 2213, -69),Vector(3410, 2337, 20),nil)
@@ -59,12 +64,7 @@ function Custom_Startup()
 		v:Remove()
 	end
 
-	for _, c in ipairs(ents.FindByName("ConveyorArm*")) do
-		c:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FailedMap()")
-	end
-	for _, t in ipairs(ents.FindByName("SteamJetPush*")) do
-		t:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:FailedMap()")
-	end
+	ents.FindByName("conveyor_gas_hurt")[1]:Fire("AddOutput", "OnHurtPlayer hl2crlua:RunPassedCode:FailedMap()")
 
 	for _, j in ipairs(ents.FindByName("kit_junk")) do -- the part, which fixes the crash, done by Rifter before.
 		j:Remove()
