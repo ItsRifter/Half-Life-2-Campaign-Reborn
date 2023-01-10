@@ -1059,14 +1059,16 @@ local HL2_TRIGGERS = {
             [2] = Vector(-2679, 1278, -4862)
         },
 
-        ["changelevel_func"] = {
-            [1] = function(ply) 
+        ["changelevel_func"] = --{
+            --[1] = function(ply) 
+			function(ply)
                 if not table.HasValue(ply.hl2cr.AchProgress, "ZombieChopperActive") then return end
                 ply:GrantAchievement("Zombie Chopper")
                 table.RemoveByValue(ply.hl2cr.AchProgress, "ZombieChopperActive")
                 SavePlayerData(ply)
             end
-        },
+        --}
+		,
     },
 
     ["d1_town_05"] = {
@@ -1653,13 +1655,14 @@ local HL2_TRIGGERS = {
             [1] = Vector(-1084, -3490, 251),
             [2] = Vector(-960, -3583, 128)
         },
-        ["changelevel_func"] = {
-            [1] = function(ply)
+        ["changelevel_func"] = --{
+            --[1] = function(ply)
+			function(ply)
                 for _, v in ipairs(player.GetAll()) do
 				v:GrantAchievement("Follow Freeman")
                 end
             end
-        }
+        --}
     },
 
     ["d3_c17_04"] = {
@@ -1698,13 +1701,15 @@ local HL2_TRIGGERS = {
             [2] = Vector(2172, 2975, -126)
         },
 
-        ["changelevel_func"] = {
-            [1] = function(ply)
+        ["changelevel_func"] = --{
+            --[1] = function(ply)
+			function(ply)
                 for _, v in ipairs(player.GetAll()) do
                     v:GrantAchievement("Radiation Levels Detected")
                 end
             end
-        },
+        --}
+		,
 
         ["checkpoints"] = {
             [1] = {
@@ -1915,13 +1920,15 @@ local HL2_TRIGGERS = {
             [2] = Vector(-4518, 1057, -30)
         },
 
-        ["changelevel_func"] = {
-            [1] = function(ply)
+        ["changelevel_func"] = --{
+            --[1] = function(ply)
+			function(ply)
                 for _, v in ipairs(player.GetAll()) do
                     v:GrantAchievement("Giant Killer")
                 end
             end
-        },
+        --}
+		,
         
         ["checkpoints"] = {
             [1] = {
@@ -1981,14 +1988,15 @@ local HL2_TRIGGERS = {
             [2] = Vector(11623, 5792, -1530)
         },
 
-        ["changelevel_func"] = {
-            [1] = function(ply)
+        ["changelevel_func"] = --{
+            --[1] = function(ply)
+			function(ply)
                 for k, v in ipairs(player.GetAll()) do
                     if v:InVehicle() then v:ExitVehicle() end
                     v:SetPos(Vector(11539, 5926, -1643))
                 end
             end
-        }
+        --}
     },
 
     ["d3_citadel_03"] = {
@@ -2087,14 +2095,15 @@ local HL2_TRIGGERS = {
             [2] = Vector(14466, -10106, 8753)
         },
 
-        ["changelevel_func"] = {
-            [1] = function(ply)
+        ["changelevel_func"] = --{
+            --[1] = function(ply)
+			function(ply)
                 for k, v in ipairs(player.GetAll()) do 
                     if v:InVehicle() then v:ExitVehicle() end
                     v:SetPos(Vector(14347, -9935, 8741))
                 end
             end
-        }
+        --}
     },
 
     ["d3_breen_01"] = {

@@ -526,13 +526,15 @@ local ep1_triggers = {
             }
         },
 
-        ["changelevel_func"] = {
-            [1] = function()
+        ["changelevel_func"] = --{
+            --[1] = function()
+			function(ply)
                 for _, v in ipairs(player.GetAll()) do
                     v:SetPos(Vector(1115, 8892, -2544))
                 end
             end
-        },
+        --}
+		,
 
         ["checkpoint_spot"] = {
 			[1] = Vector(12318,9549,-700),

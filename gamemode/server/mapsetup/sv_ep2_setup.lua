@@ -224,13 +224,14 @@ local ep2_triggers = {
             [2] = Vector(5100, -1400, 3200)
         },
 		
-		["changelevel_func"] = {	--For those who miss the lift back up
-            [1] = function(ply)
+		["changelevel_func"] = --{	--For those who miss the lift back up
+            --[1] = function(ply)
+			function(ply)
                 for k, v in ipairs(player.GetAll()) do
                     v:SetPos(Vector(5000, -1600, 1750))
                 end
             end
-        }
+        --}
     }, 
 
 	["ep2_outland_05"] = {	--Antlions fight quick map
