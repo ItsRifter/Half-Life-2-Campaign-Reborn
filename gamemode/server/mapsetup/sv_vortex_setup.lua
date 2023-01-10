@@ -1,4 +1,9 @@
 local vortex_map_pos = {
+    ["d1_trainstation_04"] = {
+        [1] = Vector(-3728, -3856, 534),
+        [2] = Vector(-3918, -3290, 629)
+    }
+    
     ["d1_eli_01"] = {
         [1] = Vector(227, 3600, -1343),
         [2] = Vector(547, 2087, -2436)

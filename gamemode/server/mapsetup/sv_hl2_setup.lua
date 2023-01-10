@@ -2376,7 +2376,7 @@ local function SetHL2Checkpoints()
     end
 end
 
-local maps_trainstation = {
+maps_trainstation = {
     ["d1_trainstation_01"] = true,
     ["d1_trainstation_02"] = true,
     ["d1_trainstation_03"] = true,

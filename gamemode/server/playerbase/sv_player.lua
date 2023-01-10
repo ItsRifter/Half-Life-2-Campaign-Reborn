@@ -225,17 +225,21 @@ function hl2cr_player:SetUpPlayer()
 
 	self:SetNWString("hl2cr_items_cosmetics", table.concat(cosmetics, "  "))
 
-	if self.statHP then
-		self:SetMaxHealth(self:Health() + self.statHP)
-		self:SetHealth(self:GetMaxHealth())
+	if not maps_trainstation[game.GetMap()] then 
+		if self.statHP then
+			self:SetMaxHealth(self:Health() + self.statHP)
+			self:SetHealth(self:GetMaxHealth())
+		end
+	
+		if self.statArmor then
+			self:SetMaxArmor(100 + self.statArmor)
+		end
+	
 	end
-
-	if self.statArmor then
-		self:SetMaxArmor(100 + self.statArmor)
-	end
-
+	
 	HL2CR_AUX:SetupAuxPower(self)
 	hook.Run("HL2CR_AuxPowerInitialize", self)
+
 end
 
 function hl2cr_player:AdjustSpeed()

@@ -143,8 +143,17 @@ if SERVER then
 
     local timeSinceTele = 0
 
+    local function CanDoPetActions(ply)
+        if ply:Team() ~= TEAM_ALIVE then return false end
+
+        if ply:InVehicle() then return false end
+
+        return true
+    end
+
     function BringPetToPlayer(ply)
         if not IsValid(ply.activePet) then return end
+        if not CanDoPetActions(ply) then return end
 
         if timeSinceTele > CurTime() then return end
 
@@ -185,6 +194,8 @@ if SERVER then
         if ply.activePet then return end
         
         if MAPS_NO_PETS[game.GetMap()] then return end
+        if not CanDoPetActions(ply) then return end
+        
         ply:UpdateNetworks()
 
         ply.activePet = SpawnPet(ply)
