@@ -11,7 +11,8 @@ function DisplayResults(mapStats)
     resultFrame:ShowCloseButton(false)
     resultFrame:SetDraggable(false)
     resultFrame:SetTitle("")
-    resultFrame:SetSize(ScrW() * 0.2857, ScrH() * 0.545)
+    resultFrame:SetSize(300, 300)
+    --ScrW() * 0.2857, ScrH() * 0.545
     resultFrame:SetPos(-resultFrame:GetWide(), 0)
     resultFrame.Paint = function(self, w, h)
         surface.SetDrawColor(HL2CR.Theme.standard)
@@ -27,7 +28,7 @@ function DisplayResults(mapStats)
 
     local resultTitle = vgui.Create("DLabel", resultFG)
     resultTitle:SetText(translate.Get("MapResults_Title"))
-    resultTitle:SetPos(resultFG:GetWide() / 6.5, 25)
+    resultTitle:SetPos(resultFG:GetWide() / 12.5, 25)
     resultTitle:SetFont("hl2cr_endresults_title")
     resultTitle:SetTextColor(Color(255, 255, 255))
     resultTitle:SizeToContents()
@@ -64,8 +65,8 @@ function DisplayResults(mapStats)
 
     resultFrame:MoveTo(resultFrame:GetWide() / 5.5, 0, 1.5, 0, 0.5, function()
         resultFrame:MoveTo(-resultFrame:GetWide(), 0, 1.5, 5, 0.5, function()
-            resultFrame:Remove()
-            resultFrame = nil
+            --resultFrame:Remove()
+            --resultFrame = nil
         end)
     end)
 
