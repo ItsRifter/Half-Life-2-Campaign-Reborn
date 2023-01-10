@@ -45,7 +45,7 @@ votingTypes["NextMap"] = {
 			
 			BroadcastSoundToAll("music/hl2_song23_suitsong3.mp3")
 			timer.Simple(5, function()
-				RunConsoleCommand("ChangeLevel", game.GetMap())
+				SkipToNextMap()
 			end)
 		else
 			BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Vote_Fail_Default"))
