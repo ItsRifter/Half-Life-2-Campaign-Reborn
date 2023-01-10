@@ -107,7 +107,13 @@ if SERVER then
 
         for i, f in ipairs(pet_friendly) do
             self:AddRelationship(pet_friendly[i])
-        end        
+        end
+
+        if MAPS_VORT_HOSTILE[game.GetMap()] then
+            self:AddRelationship("npc_vortigaunt D_HT 99")
+        else
+            self:AddRelationship("npc_vortigaunt D_LI 99")
+        end
     end
 
     function hl2cr_pet:UpdatePlayerRelation(pl)
@@ -157,6 +163,12 @@ if SERVER then
                 if npc:IsHostile() then self:MakeHostileTarget(npc) end
 
                 if npc:IsPet() then self:MakeFriendlyTowardsPet(npc) end
+
+                if MAPS_VORT_HOSTILE[game.GetMap()] then
+                    self:MakeHostileTarget(npc)
+                else
+                    self:MakeFriendlyTowardsPet(npc)
+                end
 
                 if force_friendly_maps[game.GetMap()] then
                     for _, force in ipairs(force_friendly_maps[game.GetMap()]) do

@@ -101,16 +101,25 @@ end)
 
 --When the player disconnects, save their data
 hook.Add("PlayerDisconnected", "HL2CR_SavePlayerDataDisconnect", function(ply) 
-	if ply:IsBot() then return end
-
-	if GetConVar("hl2cr_save_disconnectwipe"):GetInt() == 1 then
-		WipePlayerData(ply)
-	else
-		SavePlayerData(ply)
+	
+	if not ply:IsBot() then
+		if GetConVar("hl2cr_save_disconnectwipe"):GetInt() == 1 then
+			WipePlayerData(ply)
+		else
+			SavePlayerData(ply)
+		end
 	end
-
+	
 	if ply.activePet then
 		ply.activePet:RemovePet()
+	end
+
+	if ply.vehicle then 
+		GAMEMODE:RemoveVehicle(ply)
+	end
+
+	if ply.Ragdoll ~= nil then
+		ply.Ragdoll:Remove()
 	end
 
 	table.RemoveByValue(ply.hl2cr.AchProgress, "ZombieChopperActive")

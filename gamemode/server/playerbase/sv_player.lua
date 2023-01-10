@@ -666,6 +666,7 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 end
 
 function GM:PlayerDeathThink( ply )
+	if ply:IsBot() then return false end
 
 	ply:SetNWInt("hl2cr_respawntimer", math.Round(ply.TimeDied - CurTime()))
 
