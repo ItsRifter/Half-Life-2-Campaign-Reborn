@@ -242,7 +242,8 @@ local function CreateSkillsPanel()
 			local hasSkill = vgui.Create("DImage", panel)
 			hasSkill:SetImage("icon16/tick.png")
 			hasSkill:SetSize(24, 24)
-			hasSkill:SetPos(panel:GetWide() - hasSkill:GetWide(), panel:GetTall() - hasSkill:GetTall())
+			--hasSkill:SetPos(panel:GetWide() - hasSkill:GetWide(), panel:GetTall() - hasSkill:GetTall())
+			hasSkill:SetPos(hasSkill:GetWide()+54,hasSkill:GetTall()+64) -- position is based from icon, we don't need an actual panel calc.
 
 			surface.PlaySound("items/suitchargeok1.wav")
 		end
@@ -251,7 +252,7 @@ local function CreateSkillsPanel()
 			local hasSkill = vgui.Create("DImage", panel)
 			hasSkill:SetImage("icon16/tick.png")
 			hasSkill:SetSize(24, 24)
-			hasSkill:SetPos(panel:GetWide() - hasSkill:GetWide(), panel:GetTall() - hasSkill:GetTall())
+			hasSkill:SetPos(hasSkill:GetWide()+54,hasSkill:GetTall()+64)
 		end
 	end
 
