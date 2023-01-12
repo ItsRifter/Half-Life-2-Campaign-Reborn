@@ -810,7 +810,7 @@ function EP1_SetupMap05()
 		local positions = {}	--creating list of alive player positions
 		for i, v in ipairs( player.GetAll() ) do	
 			if v:Alive() then
-				table.insert( positions, v:GetPos() )
+				table.insert( positions, v )
 			end
 		end
 	
@@ -824,26 +824,24 @@ function EP1_SetupMap05()
 			else
 				if cit.squaded then 
 					if cit:Health() <= 0 then
-						--EP1_TrainCitSucess()
-						--BroadcastMessageToAll(HL2CR_GreenColour, train_sucess.. translate.Get("Achievement_EP1_Train_Saved"))
-					--else
 						BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Achievement_EP1_Train_Lost"))
+						cit.squaded = false
+					else
+						cit:SetSquad( "player_squad")
+						--print(cit:UseFollowBehavior())
 					end
-					
-					--cit.ReachedEnd = true
-					continue 
 				end
-				
 			end
 
-			if not cit:IsCurrentSchedule(SCHED_FORCED_GO_RUN) then
+			if not cit:IsCurrentSchedule(SCHED_FORCED_GO_RUN) then	
+				--print(cit:GetName() .. " was doing "..cit:GetCurrentSchedule())
 				local target = nil
-				local distance = 500
+				local distance = 800
 				local citpos = cit:GetPos()
-				
+				local current = cit:GetTarget()
 				
 				for i, v in ipairs( positions ) do	
-					local toplayer = citpos:Distance(v)
+					local toplayer = citpos:Distance(v:GetPos())
 					if toplayer > 50 and toplayer < distance then
 						target = v
 						distance = toplayer
@@ -851,15 +849,18 @@ function EP1_SetupMap05()
 				end
 				
 				if IsValid(target) then
-					cit:SetLastPosition( target )
+					--print(cit:GetTarget())
+					
+					if !IsValid(current) or current:IsPlayer() and current != target then
+						NotificationAll("Following ".. target:GetName(), citpos + Vector(0,0,90), 0, 1)
+						cit:SetTarget( target )
+					end
+					cit:SetLastPosition( target:GetPos())
 					cit:SetSchedule(SCHED_FORCED_GO_RUN)
+					--cit:MoveOrder(target)
 				end
 			end
 
-			--if (cit:GetPos():Distance(player.GetAll()[1]:GetPos()) > 50 and cit:GetPos():Distance(player.GetAll()[1]:GetPos()) <= 500) and not cit:IsCurrentSchedule(SCHED_FORCED_GO_RUN) then
-			--	cit:SetLastPosition( player.GetAll()[1]:GetPos() )
-			--	cit:SetSchedule(SCHED_FORCED_GO_RUN)
-			--end
 		end
 
 	end)

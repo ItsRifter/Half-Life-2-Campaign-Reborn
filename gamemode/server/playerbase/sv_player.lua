@@ -476,7 +476,7 @@ end
 
 --Stores the weapons for player joining or respawning
 local function StoreWeapons(newWeapon)
-	//If this is a restricted weapon, do not store it
+	--If this is a restricted weapon, do not store it
 	if RESTRICTED_WEAPONS[newWeapon] then return end
 	
 	--If the item is already in the table or is a restricted weapon, do nothing
@@ -532,6 +532,15 @@ function hl2cr_player:BroadcastMessage(...)
 	net.Start("HL2CR_ChatMessage")
 		net.WriteTable({...})
 	net.Send(self)
+end
+
+function NotificationAll(text,vector,colour,IType)
+	net.Start( "HL2CR_Indicator" )
+		net.WriteString(text)	
+		net.WriteVector(vector)
+		net.WriteUInt(colour,7)	
+		net.WriteUInt(IType,5)		
+	net.Broadcast()
 end
 
 function hl2cr_player:BroadcastSound(soundPath)

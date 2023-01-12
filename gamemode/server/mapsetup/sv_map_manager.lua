@@ -162,6 +162,7 @@ function SkipToNextMap()
 			RunConsoleCommand("changelevel", "d1_town_03")
 			return 
 		elseif game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
+			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
 			RunConsoleCommand("changelevel", "d1_town_02a")
 			return 
 		end

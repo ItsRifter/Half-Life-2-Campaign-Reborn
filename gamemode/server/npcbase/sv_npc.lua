@@ -235,6 +235,7 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 				net.WriteString(damagedone)	--Todo format better
 				net.WriteVector(dmgInfo:GetDamagePosition())
 					net.WriteUInt(colour,7)	--1=Red Text default
+					net.WriteUInt(0,5)		--Indicator Type
             net.Send(attacker)
 			
 			
