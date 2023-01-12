@@ -149,7 +149,8 @@ MAPS_COOP_IMPROBABLE = {
 }
 
 
-function SkipToNextMap()
+--Lets not have duplicate code if we can help it, this function now just handles all changes to next map calls
+function ChangeToNextMap()
 	--Lost Coast
 	if game.GetMap() == "d2_lostcoast" then
 		RunConsoleCommand("changelevel", Lobby_map)
@@ -174,16 +175,28 @@ function SkipToNextMap()
 		return
 	end
 			
+	if game.GetMap() == "d2_coast_07" then 
+		if game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
+			RunConsoleCommand("changelevel", "d2_coast_08")
+			return 
+		elseif game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
+			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
+			RunConsoleCommand("changelevel", "d2_coast_09")
+			return 
+		end
+	end
+			
 	if game.GetMap() == "d2_coast_08" then
 		game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
 		RunConsoleCommand("changelevel", "d2_coast_07")
 		return 
 	end
 
-	if game.GetMap() == "d2_coast_07" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
-		RunConsoleCommand("changelevel", "d2_coast_09")
-		return
-	end
+	--if game.GetMap() == "d2_coast_07" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
+	--	RunConsoleCommand("changelevel", "d2_coast_09")
+	--	return
+	--end
+
 	
 	--Episode 2
 	
@@ -204,6 +217,8 @@ function SkipToNextMap()
 		return 
 	end
 	
+	--Todo - Think of way to not cycle though entire list looking for value - Though might not be that important since unoticable
+	--Plus any new maps can use the custom method and dont need a table then
 	for k = 1, #MAPS_HL2 do
 		if game.GetMap() == MAPS_HL2[k] then
 			if not MAPS_HL2[k+1] then
@@ -294,132 +309,7 @@ function StartMapCountdown()
 	end)
 
 	timer.Create("HL2CR_Countdown", 20, 1, function()
-				
-		--Lost Coast
-		if game.GetMap() == "d2_lostcoast" then
-			RunConsoleCommand("changelevel", Lobby_map)
-			return
-		end
-		
-		--Half Life 2
-		if game.GetMap() == "d1_town_02" then 
-			if game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
-				RunConsoleCommand("changelevel", "d1_town_03")
-				return 
-			elseif game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
-				RunConsoleCommand("changelevel", "d1_town_02a")
-				return 
-			end
-		end
-		
-		if game.GetMap() == "d1_town_03" then
-			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
-			RunConsoleCommand("changelevel", "d1_town_02")
-			return
-		end
-				
-		if game.GetMap() == "d2_coast_08" then
-			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
-			RunConsoleCommand("changelevel", "d2_coast_07")
-			return 
-		end
-
-		if game.GetMap() == "d2_coast_07" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
-			RunConsoleCommand("changelevel", "d2_coast_09")
-			return
-		end
-		
-		--Episode 2
-		
-		if game.GetMap() == "ep2_outland_02" then 
-			if game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_DEAD then
-				RunConsoleCommand("changelevel", "ep2_outland_03")
-				return 
-			elseif game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
-				game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
-				RunConsoleCommand("changelevel", "ep2_outland_05")
-				return 
-			end
-		end
-		
-		if game.GetMap() == "ep2_outland_04" then
-			game.SetGlobalState("hl2cr_extendedmap", GLOBAL_ON)
-			RunConsoleCommand("changelevel", "ep2_outland_02")
-			return 
-		end
-		
-		for k = 1, #MAPS_HL2 do
-			if game.GetMap() == MAPS_HL2[k] then
-				if not MAPS_HL2[k+1] then
-					RunConsoleCommand("changelevel", Lobby_map)
-					return
-				end
-				RunConsoleCommand("changelevel", MAPS_HL2[k+1])
-				return
-			end
-		end
-		
-		for k = 1, #MAPS_EP1 do
-			if game.GetMap() == MAPS_EP1[k] then
-				if not MAPS_EP1[k+1] then
-					RunConsoleCommand("changelevel", Lobby_map)
-					return
-				end
-				RunConsoleCommand("changelevel", MAPS_EP1[k+1])
-				return
-			end
-		end
-		
-		for k = 1, #MAPS_EP2 do
-			if game.GetMap() == MAPS_EP2[k] then
-				if not MAPS_EP2[k+1] then
-					RunConsoleCommand("changelevel", Lobby_map)
-					return
-				end
-				RunConsoleCommand("changelevel", MAPS_EP2[k+1])
-				return
-			end
-		end
-
-		for k = 1, #MAPS_COOP_SYNB2 do
-			if game.GetMap() == MAPS_COOP_SYNB2[k] then
-				if not MAPS_COOP_SYNB2[k+1] then
-					RunConsoleCommand("changelevel", Lobby_map)
-					return
-				end
-				RunConsoleCommand("changelevel", MAPS_COOP_SYNB2[k+1])
-				return
-			end
-		end
-		
-		for k = 1, #MAPS_COOP_RND do
-			if game.GetMap() == MAPS_COOP_RND[k] then
-				if not MAPS_COOP_RND[k+1] then
-					RunConsoleCommand("changelevel", Lobby_map)
-					return
-				end
-				RunConsoleCommand("changelevel", MAPS_COOP_RND[k+1])
-				return
-			end
-		end
-
-		for k = 1, #MAPS_COOP_IMPROBABLE do
-			if game.GetMap() == MAPS_COOP_IMPROBABLE[k] then
-				if not MAPS_COOP_IMPROBABLE[k+1] then
-					RunConsoleCommand("changelevel", Lobby_map)
-					return
-				end
-				RunConsoleCommand("changelevel", MAPS_COOP_IMPROBABLE[k+1])
-				return
-			end
-		end
-		
-		if Custom_NextMap then
-			RunConsoleCommand("changelevel", Custom_NextMap)
-			return
-		end
-		
-		RunConsoleCommand("changelevel", Lobby_map)
+		ChangeToNextMap()
 	end)
 end
 

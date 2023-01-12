@@ -47,17 +47,23 @@ if SERVER then
     ]]
     function HL2CR_AUX:AddFlashlightPower(player, amount)
         -- Add power
-        HL2CR_AUX:SetFlashlightPower(player, math.Clamp(HL2CR_AUX:GetFlashlightPower(player) + amount, 0, 1 + (player.statFlashBatt or 0)))
+		local old = HL2CR_AUX:GetFlashlightPower(player)
+		local new = math.Clamp(old + amount, 0, 1 )
+		
+		if old == new then return end	--Saves wasted data/network if no change
+		
+        --HL2CR_AUX:SetFlashlightPower(player, math.Clamp(HL2CR_AUX:GetFlashlightPower(player) + amount, 0, 1 + (player.statFlashBatt or 0)))
+		HL2CR_AUX:SetFlashlightPower(player, new)
         
         -- Check if it ran out of battery
         if (not HL2CR_AUX:HasFlashlightPower(player) or player:Team() ~= TEAM_ALIVE) and player:FlashlightIsOn() then
             player:Flashlight(false)
         end
         
-        //print(math.Round(HL2CR_AUX:GetFlashlightPower(player), 2))
+        --print(math.Round(HL2CR_AUX:GetFlashlightPower(player), 2))
         -- Send it to the player
         net.Start("hl2cr_auxpow_flashlight")
-            net.WriteFloat(HL2CR_AUX:GetFlashlightPower(player))
+            net.WriteFloat(new)
         net.Send(player)
     end
 
@@ -71,7 +77,7 @@ if SERVER then
         
         if pl.HL2CR_AUX.flashlight.tick < CurTime() then
             if pl:FlashlightIsOn() then
-                HL2CR_AUX:AddFlashlightPower(pl, -GetConVar("hl2cr_suit_default_flashlight_rate"):GetFloat())
+                HL2CR_AUX:AddFlashlightPower(pl, -GetConVar("hl2cr_suit_default_flashlight_rate"):GetFloat() * (player.statFlashBatt or 1))
                 pl.HL2CR_AUX.flashlight.tick = CurTime() + DEFAULT_RATE / GetConVar("hl2cr_suit_default_flashlight_delay"):GetFloat()
             else
                 HL2CR_AUX:AddFlashlightPower(pl, GetConVar("hl2cr_suit_default_recharge_rate"):GetFloat())

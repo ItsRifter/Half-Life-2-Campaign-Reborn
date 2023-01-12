@@ -939,6 +939,10 @@ hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
 			ply:CheckAmmo(lastItem)
 		end)
 	end
+	
+	if item:GetClass() == "item_battery" then	--Fun battery finding adds flashlight power
+		HL2CR_AUX:AddFlashlightPower(ply, 0.4)
+	end
 
 	return true
 end)

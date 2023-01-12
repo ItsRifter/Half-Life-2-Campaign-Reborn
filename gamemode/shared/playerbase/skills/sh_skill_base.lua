@@ -126,7 +126,7 @@ local flashbatt_1 = {
         ["YPos"] = 225
     },
     ["Func"] = function(ply)
-        ply.statFlashBatt = 0.5 
+        ply.statFlashBatt = 0.5		--Drain Rate Multiplier instead 
     end
 }
 
