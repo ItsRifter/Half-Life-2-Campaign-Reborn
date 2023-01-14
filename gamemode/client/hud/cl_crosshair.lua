@@ -1,6 +1,6 @@
 
 Crosshair = {}
-Crosshair.Enabled = false
+--Crosshair.Enabled = Crosshair.Enabled or false
 Crosshair.Size = 16
 
 
@@ -8,7 +8,7 @@ function Crosshair.Draw()
 	local midx = ScrW() * 0.5
 	local midy = ScrH() * 0.5
 	local size = Crosshair.Size
-	if Crosshair.Enabled then
+	if Client_Config.NewCross then
 	    surface.SetDrawColor( 220, 220, 220, 255 ) 
 		surface.DrawLine( midx - size, midy, midx- size * 0.2, midy)
 		surface.DrawLine( midx + size, midy, midx+ size * 0.2, midy)

@@ -5,6 +5,13 @@ net.Receive("HL2CR_Loaded", function()
 	DataLoaded = true
 end)
 
+--Refresh/Open HelpMenu
+net.Receive("HL2CR_HelpMenu", function()
+	if ( GAMEMODE.HelpMenu ) then GAMEMODE.HelpMenu:Remove()end
+	GAMEMODE.HelpMenu = vgui.Create( "HelpMenu" )
+	gui.EnableScreenClicker( true ) 
+end)
+
 function GM:PlayerBindPress ( Player, Bind, Pressed )
 	if Bind == "impulse 100" then
 		if LocalPlayer():InVehicle() then RunConsoleCommand("HL2CR_Lights", ""); end

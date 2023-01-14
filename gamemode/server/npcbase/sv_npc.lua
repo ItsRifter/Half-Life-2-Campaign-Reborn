@@ -197,6 +197,10 @@ local Valid_NPC_Targets = {
 	["npc_hunter"] = true
 }
 
+hook.Add( "ScaleNPCDamage", "ScaleNPCDamageExample", function( npc, hitgroup, dmginfo )
+	npc.LastHitGroup = hitgroup
+end )
+
 hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo )
 	local attacker = dmgInfo:GetAttacker()
 
@@ -228,6 +232,7 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 		if damagedone > 0 then	--prevents erronious negatives
 			if colour == 1 then 
 				local sucess = attacker:AddDamageExp(tonumber(damagedone),target) 
+				if target.LastHitGroup and target.LastHitGroup == HITGROUP_HEAD then colour = 9 end
 				if !sucess then colour = 8 end	--If damage is block hit turns dark grey
 			end
 			net.Start( "HL2CR_Indicator" )

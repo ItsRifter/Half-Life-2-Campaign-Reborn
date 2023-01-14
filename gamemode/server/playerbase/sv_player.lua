@@ -867,6 +867,39 @@ concommand.Add( "HL2CR_Lights", function( ply )
 	end
 end )
 
+
+--Only one can exist so moving them here
+function GM:ShowHelp(ply)
+	if HL2CR_Voting.State then 
+		HL2CR_Voting:PlayerVote(ply, true)
+	else
+		net.Start("HL2CR_HelpMenu")
+		net.Send(ply)
+	end
+end
+function GM:ShowTeam(ply)
+	HL2CR_Voting:PlayerVote(ply, false)
+end
+
+function hl2cr_player:FindSurface()
+	local tr = util.TraceLine( {
+		start = self:GetPos(),
+		endpos = self:GetPos() + Vector(0,0,512),
+		collisiongroup = COLLISION_GROUP_DEBRIS,
+		mask = MASK_SOLID
+	} )
+
+	tr = util.TraceLine( {
+		start = tr.HitPos,
+		endpos = tr.HitPos - Vector(0,0,512),
+		collisiongroup = COLLISION_GROUP_DEBRIS,
+		mask = MASK_WATER
+	} )
+
+	return tr.HitPos
+end
+
+
 hook.Add( "PlayerUse", "HL2CR_PlayerUse", function( ply, ent )
 	--if ent:GetClass() == "prop_vehicle_prisoner_pod" and ent.IsPassenger and ply.vehicle then
 	if ent.IsPassenger and ent:GetParent() == ply.vehicle then	--Dont climb into own cars side seats

@@ -29,13 +29,13 @@ if SERVER then
 	HL2CR_Voting.KickUser = nil
 	HL2CR_Voting.ShouldKick = false
 	
-	function GM:ShowHelp(ply)
-		HL2CR_Voting:PlayerVote(ply, true)
-	end
+	--function GM:ShowHelp(ply)
+	--	HL2CR_Voting:PlayerVote(ply, true)
+	--end
 	
-	function GM:ShowTeam(ply)
-		HL2CR_Voting:PlayerVote(ply, false)
-	end
+	--function GM:ShowTeam(ply)
+	--	HL2CR_Voting:PlayerVote(ply, false)
+	--end
 
 	function HL2CR_Voting:StartVote(ply, voteTypeKey)
 		-- If there is already a state, there is a vote in progress.

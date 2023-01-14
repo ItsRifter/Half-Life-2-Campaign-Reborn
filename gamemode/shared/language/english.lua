@@ -259,3 +259,37 @@ LANGUAGE.Hat_Unlocked = "You unlocked the "
 LANGUAGE.Admin_Notify_Cleanup = "An admin has done a map cleanup, EXPECT ISSUES"
 
 LANGUAGE.Map_Warning_XPFarm = "Due to the nature of this map, EXP Kills will be reduced"
+
+LANGUAGE.Basic_Close = "Close"
+LANGUAGE.Basic_Help = "Help"
+LANGUAGE.Basic_Cmd = "Commands"
+LANGUAGE.Basic_Pets = "Pets"
+LANGUAGE.Basic_Options = "Options"
+
+LANGUAGE.HelpMenu_Title = "Half-Life 2 Campaign Co-Op"
+LANGUAGE.HelpMenu_Map = "Current map : "
+LANGUAGE.HelpMenu_Info = 
+{"Welcome to Half-Life 2 Campaign Co-Op",
+"Fight your way though the HL2 universe and damage", 
+"enemies to gain exp, you can level up and unlock",
+"skills to help you survive longer","",
+"If vehicles are unlocked you can spawn one with ",
+"F3 and remove it with F4"}
+
+LANGUAGE.HelpMenu_Commands = 
+{"Useful commands you can type into chat","",
+"!diff - Check current or vote difficulty level",
+"!vrm - Vote to restart the current map",
+"!vnm - Vote to change to next map",
+"!lobby - Vote to return to the lobby","",
+"!seat - Add a seat to your vehicle if possible",
+"!lambda - Check you Lambda Locator progress","",
+"!discord - Open a link to the server discord"}
+
+LANGUAGE.HelpMenu_Pets = 
+{"You can make your own pet, they will attac",
+"enemies and earn their own exp","",
+"!petspawn - Spawn your pet",
+"!petremove - Remove your pet",
+"!petbring - Bring your pet to you",
+"!petname - Change your pets name"}

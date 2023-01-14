@@ -9,7 +9,8 @@ local colours = {
 	[5] = Color(255, 20, 255),		--Magenta
 	[6] = Color(20, 255, 255),		--Cyan
 	[7] = Color(160, 20, 160),		--Purple
-	[8] = Color(50, 50, 50)		--DarkGrey
+	[8] = Color(50, 50, 50),		--DarkGrey
+	[9] = Color(255, 140, 20)		--Orange
 }
 
 function GetColour(number, blend)

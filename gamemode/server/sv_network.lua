@@ -32,3 +32,4 @@ util.AddNetworkString("HL2CR_Item_Sell")
 
 util.AddNetworkString("HL2CR_Loaded")
 util.AddNetworkString("HL2CR_Indicator")
+util.AddNetworkString("HL2CR_HelpMenu")

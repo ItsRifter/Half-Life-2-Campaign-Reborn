@@ -38,6 +38,8 @@ include("server/npcbase/sv_npc.lua")
 include("server/npcbase/sv_npc_stats.lua")
 
 //Clients
+AddCSLuaFile("client/cl_config.lua")
+
 AddCSLuaFile("client/hud/cl_hud.lua")
 AddCSLuaFile("client/hud/cl_scoreboard_menu.lua")
 AddCSLuaFile("client/hud/cl_qmenu.lua")
@@ -49,6 +51,8 @@ AddCSLuaFile("client/interface/panels/cl_ui_dragpanel.lua")
 AddCSLuaFile("client/chat/cl_leifchat.lua")
 AddCSLuaFile("client/hud/cl_autoicons.lua")
 AddCSLuaFile("client/hud/cl_crosshair.lua")
+AddCSLuaFile("client/hud/cl_helpmenu.lua")
+AddCSLuaFile("client/hud/cl_theme.lua")
 
 AddCSLuaFile("client/cl_network.lua")
 AddCSLuaFile("client/cl_indicators.lua")

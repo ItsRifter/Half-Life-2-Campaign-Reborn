@@ -52,7 +52,10 @@ list.Set( "Vehicles", "Jalopy", jalopy )
 function hl2cr_player:SpawnAirboat()
     local boat = ents.Create(Airboat.Class)
     boat:SetModel(Airboat.Model)
-    boat:SetPos(self:GetPos() + Vector(0, 0, 25) )
+	
+	boat:SetPos(self:FindSurface() + Vector(0, 0, 25) )
+    --boat:SetPos(self:GetPos() + Vector(0, 0, 25) )
+    boat:SetAngles(self:EyeAngles() - Angle(0, 90, 0))
     
     for i, key in pairs(Airboat.KeyValues) do
         boat:SetKeyValue(i, key)
@@ -62,7 +65,6 @@ function hl2cr_player:SpawnAirboat()
     boat:Fire( "addoutput", "targetname airboat" );
     boat:Spawn()
             
-    boat:SetAngles(self:EyeAngles() - Angle(0, 90, 0))
 	
     boat:SetCustomCollisionCheck( true )
     
@@ -72,7 +74,10 @@ end
 function hl2cr_player:SpawnAirboatWithGun()
     local gunboat = ents.Create(AirboatGun.Class)
     gunboat:SetModel(Airboat.Model)
-    gunboat:SetPos(self:GetPos() + Vector(0, 0, 25) )
+	
+	gunboat:SetPos(self:FindSurface() + Vector(0, 0, 25) )
+    --gunboat:SetPos(self:GetPos() + Vector(0, 0, 25) )
+	gunboat:SetAngles(self:EyeAngles() - Angle(0, 90, 0))
     
     for i, key in pairs(AirboatGun.KeyValues) do
         gunboat:SetKeyValue(i, key)
@@ -81,7 +86,7 @@ function hl2cr_player:SpawnAirboatWithGun()
     gunboat:Fire( "addoutput", "targetname airboat" );
     gunboat:Spawn()
             
-    gunboat:SetAngles(self:EyeAngles() - Angle(0, 90, 0))
+    
     gunboat:SetCustomCollisionCheck( true )
 
     self.vehicle = gunboat
@@ -90,7 +95,8 @@ end
 function hl2cr_player:SpawnJalopy()
     local jalopy = ents.Create(Jalopy.Class)
     jalopy:SetModel(Jalopy.Model)
-    jalopy:SetPos(self:GetPos() + Vector(0, 0, 55) )
+    jalopy:SetPos(self:GetPos() + Vector(0, 0, 25) )
+	jalopy:SetAngles(self:EyeAngles() - Angle(0, 90, 0))
     
     for i, key in pairs(Jalopy.KeyValues) do
         jalopy:SetKeyValue(i, key)
@@ -99,8 +105,8 @@ function hl2cr_player:SpawnJalopy()
     jalopy:Fire( "addoutput", "targetname jalopy" );
     jalopy:Spawn()
             
-    jalopy:SetAngles(self:EyeAngles() - Angle(0, 90, 0))
     jalopy:SetCustomCollisionCheck( true )
+	jalopy:GetPhysicsObject():SetAngleVelocity( Vector(0,0,0) )
     
     self.vehicle = jalopy
 end

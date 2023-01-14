@@ -166,7 +166,7 @@ hook.Add( "HUDShouldDraw", "HL2CR_HideHUD", function( name )
 		return false
 	end
 	
-	if ( name == "CHudCrosshair" and Crosshair.Enabled ) then
+	if ( name == "CHudCrosshair" and Client_Config.NewCross ) then
 		return false
 	end
 	
@@ -238,14 +238,19 @@ hook.Add("PostDrawHUD", "HL2CR_TankNPCStatus", function()
 		
 		local healthwidth = ScrW() * 0.24
 		local healthpercent = (healthwidth / t:GetMaxHealth()) * t:Health()
+		local missingpercent = healthwidth-healthpercent
 		
-		//base bar
-		surface.SetDrawColor(Color(0, 0, 0))
+		--outline part
+		surface.SetDrawColor(Color(0, 0, 0, 250))
+		surface.DrawOutlinedRect(ScrW() * xPos -1, ScrH() * 0.4 + yPos * i -1, healthwidth+2, 27)
+		
+		--missing part
+		surface.SetDrawColor(Color(10, 10, 10, 100))
 		--surface.DrawRect(ScrW() * xPos, ScrH() * 0.4 + yPos * i, t:GetMaxHealth() / 2, 25)
-		surface.DrawRect(ScrW() * xPos, ScrH() * 0.4 + yPos * i, healthwidth, 25)
-
-		//health bar
-		surface.SetDrawColor(Color(100, 255, 100))
+		surface.DrawRect(ScrW() * xPos + healthwidth, ScrH() * 0.4 + yPos * i, -missingpercent, 25)
+		
+		--health bar
+		surface.SetDrawColor(Color(100, 255, 100,100))
 		--surface.DrawRect(ScrW() * xPos, ScrH() * 0.4 + yPos * i, t:Health() / 2, 25)
 		surface.DrawRect(ScrW() * xPos, ScrH() * 0.4 + yPos * i, healthpercent, 25)
 	end

@@ -856,7 +856,26 @@ local HL2_TRIGGERS = {
 		
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 240, 0)
-		}
+		},
+		
+		["checkpoint_functions"] = {
+            [1] = function()	--Removed anti skip trigger
+                timer.Simple(0.1, function()
+                    RemovePushTrigger()
+                end)
+			end,
+        },
+
+		["pushers"] = {
+            [1] = {
+                [1] = Vector(1213,-3229,77),
+                [2] = Vector(-502,-3883,-236)
+            }
+        },
+
+        ["pusher_spot"] = {
+            [1] = Vector(579,-2953,-431)
+        },
     },
 
     ["d1_eli_01"] = {
@@ -1267,15 +1286,16 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_functions"] = {
             [1] = function()
-                --disableJeepGlobal = true
 				GAMEMODE:DisableVehicles(true)
-			    --for _, v in ipairs(player.GetAll()) do
-				--	GAMEMODE:RemoveVehicle(v)
-					--if v.vehicle and v.vehicle:IsValid() then
-                    --    v.vehicle:Remove()
-                    --    v.vehicle = nil
-                    --end
-				--end
+
+				timer.Simple(0.1, function()
+                    local jeep = ents.FindByClass("prop_vehicle_jeep")[1]
+					jeep:SetCollisionGroup(COLLISION_GROUP_DEBRIS_TRIGGER)
+					jeep:SetAngles(Angle(0, 90, 0))
+					jeep:SetPos(Vector(4823,-210,910))
+					jeep:GetPhysicsObject():EnableMotion(false)
+                end)
+
 			end
         },
 		

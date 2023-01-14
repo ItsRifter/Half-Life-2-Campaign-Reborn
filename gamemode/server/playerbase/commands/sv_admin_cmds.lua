@@ -78,7 +78,7 @@ concommand.Add("hl2cr_entinfo", function(ply)
 		print(Ent)
 		print("Name  "..Ent:GetName())
 		print("Model "..Ent:GetModel())
-		if Ent:GetParent() then print("Parent "..Ent:GetParent():GetName()) end
+		if IsValid(Ent:GetParent()) then print("Parent "..Ent:GetParent():GetName()) end
 	end
 end)
 
