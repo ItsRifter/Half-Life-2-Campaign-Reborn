@@ -10,7 +10,7 @@ Custom_triggers = {
 	},
 
 	["checkpoint_spot"] = {
-		[1] = Vector(1274, -3036 -104)
+		[1] = Vector(1274, -3036, -104)
 	},
 
 	["checkpoint_angle"] = {
@@ -22,6 +22,15 @@ function Custom_Startup()
 		v:Remove()
 	end
 	ents.FindByName("strider_hit_count")[1]:Fire("AddOutput", "OnHitMax hl2crlua:RunPassedCode:FinishRnD():5:-1")
+	RemoveShopWeapons()
+
+	for _, ply in ipairs( player.GetAll() ) do
+		timer.Simple(1, function()
+			if ply:Alive() then
+				ply:GodEnable()
+			end
+		end)
+	end
 end
 
 function FinishRnD()

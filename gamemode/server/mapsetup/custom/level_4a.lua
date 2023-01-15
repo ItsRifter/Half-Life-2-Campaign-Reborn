@@ -42,6 +42,7 @@ function Custom_Startup()
 	for k, v in ipairs(ents.FindByClass("trigger_changelevel")) do
 		v:Remove()
 	end
+	RemoveShopWeapons()
 end
 
 function Custom_Equipment()

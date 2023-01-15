@@ -33,31 +33,17 @@ Custom_triggers = {
 		[1] = function()
 			timer.Simple(0.1, function()
 				local cart = ents.FindByName("Tracktrain_1")[1]
-				--for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-				--	spawn:SetPos(cart:GetPos() + Vector(0, 0, 68))
-				--	spawn:SetParent(cart)
-				--end
 				MoveSpawns(Vector(0, 0, 68),Angle(0,180,0),cart)
 			end)
 		end,
 		[2] = function()
-			--for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-			--	spawn:SetParent(nil)
-			--end
 			timer.Simple(0.1, function()
 				local cart = ents.FindByName("Tracktrain_2")[1]
-				--for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-				--	spawn:SetPos(cart2:GetPos() + Vector(0, 0, 68))
-				--	spawn:SetParent(cart2)
-				--end
 				MoveSpawns(Vector(0, 0, 68),Angle(0,0,0),cart)
-				MovePlayers(Vector(0, 0, 68) + cart:GetPos(),Angle(0,00,0), true)
+				MovePlayers(Vector(0, 0, 68) + cart:GetPos(),Angle(0,90,0), true)
 			end)
 		end,
 		[3] = function()
-			--for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-			--	spawn:SetParent(nil)
-			--end
 			CreateLevelChange(Vector(5524, -10794, -90),Vector(5680, -10794, -120),nil)
 		end
 	},
@@ -71,8 +57,6 @@ function Custom_Startup()
 			spawn:Remove()
 		end
 	end
-	
-	--Instead of failing train is now teleported and after 20 seconds will begin to move again
 	
 	ents.FindByName("RailTrack_Br_1")[1]:Fire("AddOutput", "OnPass Tracktrain_1:teleporttopathtrack:RailTrack_1")
 	ents.FindByName("RailTrack_Br_1")[1]:Fire("AddOutput", "OnPass Tracktrain_1:startforward::20")
@@ -88,12 +72,8 @@ function Custom_Startup()
 	
 	ents.FindByName("CombineTrack_Br_147")[1]:Fire("AddOutput", "OnPass Tracktrain_2:teleporttopathtrack:CombineTrack_80")
 	ents.FindByName("CombineTrack_Br_147")[1]:Fire("AddOutput", "OnPass Tracktrain_2:startforward::20")
-	
-	--ents.FindByName("RailTrack_Br_1")[1]:Fire("AddOutput", "OnPass hl2crlua:RunPassedCode:FailedMap()")
-	--ents.FindByName("RailTrack_Br_3")[1]:Fire("AddOutput", "OnPass hl2crlua:RunPassedCode:FailedMap()")
-	--ents.FindByName("CombineTrack_Br_2")[1]:Fire("AddOutput", "OnPass hl2crlua:RunPassedCode:FailedMap()")
-	--ents.FindByName("CombineTrack_Br_56")[1]:Fire("AddOutput", "OnPass hl2crlua:RunPassedCode:FailedMap()")
-	--ents.FindByName("CombineTrack_Br_147")[1]:Fire("AddOutput", "OnPass hl2crlua:RunPassedCode:FailedMap()")
+
+	RemoveShopWeapons()
 end
 
 function Custom_Equipment()

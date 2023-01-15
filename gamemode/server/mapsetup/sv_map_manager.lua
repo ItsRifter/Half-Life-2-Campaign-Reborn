@@ -319,6 +319,23 @@ function StartFinalMapCountdown()
 	end)
 end
 
+function RemoveShopWeapons()	--Remove weapons from the shop table, still can be done better.
+	local SHOP_WEAPONS = {
+		["weapon_hl2cr_medkit"] = true,
+		["weapon_hl2cr_autopistol"] = true,
+		["weapon_hl2cr_rampagesmg"] = true,
+		["weapon_hl2cr_crossbow"] = true
+	}
+	
+	timer.Simple(0.1, function()
+		for _, ShopWeapon in ipairs(ents.FindByClass("weapon_*")) do
+			if SHOP_WEAPONS[ShopWeapon:GetClass()] then
+				ShopWeapon:Remove()
+			end	
+		end
+	end)
+end
+
 //In case the map is reset or cleaned up and hl2cr ents are leftever
 //then they should be removed
 local function ClearHL2CREntities()

@@ -82,4 +82,6 @@ function Custom_Startup()
 	ents.FindByName("MicrowaveKitTable")[1]:Remove()
 	ents.FindByName("KitchenDoorBreak1")[1]:Remove()
 	ents.FindByName("KitchenDoorBreak2")[1]:Remove()
+
+	RemoveShopWeapons()
 end
