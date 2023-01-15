@@ -175,17 +175,8 @@ local ep1_triggers = {
             [1] = function()
                 timer.Simple(0.1, function()
                     local lift = ents.FindByName("citadel_train_lift01_1")[1]
-                    for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-                        spawn:SetPos(lift:GetPos() + Vector(0, 0, 75))
-                        spawn:SetParent(lift)
-                    end
+					MoveSpawns(Vector(0, 0, 75),Angle(0, 180, 0),lift)
                 end)
-            end,
-
-            [2] = function()
-                for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-                    spawn:SetParent(nil)
-                end
             end
         },
 
@@ -262,10 +253,11 @@ local ep1_triggers = {
             [5] = function()
 				timer.Simple(0.1, function()
                     local lift = ents.FindByName("Train_lift_coreexit")[1]
-                    for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-                        spawn:SetPos(lift:GetPos() + Vector(0, 0, 75))
-                        spawn:SetParent(lift)
-                    end
+					MoveSpawns(Vector(0, 0, 75),Angle(0, -90, 0),lift)
+                    --for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+                    --    spawn:SetPos(lift:GetPos() + Vector(0, 0, 75))
+                    --    spawn:SetParent(lift)
+                    --end
                 end)
             end,
         },

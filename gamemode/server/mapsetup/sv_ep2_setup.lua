@@ -757,19 +757,14 @@ local function SetUpMisc()
 		if game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then	--Return from antlions
 			--Find elevator so we can parent spawn to it and for placing vort
 			local elevator = ents.FindByName("elevator")[1]
-			for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-				spawn:SetPos(elevator:GetPos() + Vector(0, 20, -50))
-				spawn:SetParent(elevator)
-				spawn:SetAngles(Angle(0, 0, 0))
-			end
+			--for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+			--	spawn:SetPos(elevator:GetPos() + Vector(0, 20, -50))
+			--	spawn:SetParent(elevator)
+			--	spawn:SetAngles(Angle(0, 0, 0))
+			--end
+			MoveSpawns(Vector(0, 20, -50),Angle(0, 0, 0),elevator)
 			
-			CreateCheckpoint(Vector(-3410, -9550, 80),Vector(-3250, -9300, 220),Vector(-3420, -9450, 120),Angle(0, 160, 0),
-				function()
-					for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-						spawn:SetParent(nil)
-					end
-				end
-			)
+			CreateCheckpoint(Vector(-3410, -9550, 80),Vector(-3250, -9300, 220),Vector(-3420, -9450, 120),Angle(0, 160, 0))
 			
 			local NewVort = ents.Create("npc_vortigaunt")	--Needs to be spawned in
 			NewVort:SetName("Vort")
@@ -806,28 +801,32 @@ local function SetUpMisc()
 	
     if game.GetMap() == "ep2_outland_07" then
 		ents.FindByName("alyx_check_end_trigger")[1]:Remove()	--Prevents resets when alyx left behind
-		for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-			spawn:SetPos(Vector(-3020, -12280, 540))
-			spawn:SetAngles(Angle(0, 180, 0))
-		end
+		--for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+		--	spawn:SetPos(Vector(-3020, -12280, 540))
+		--	spawn:SetAngles(Angle(0, 180, 0))
+		--end
+		
+		MoveSpawns(Vector(-3020, -12280, 540),Angle(0, 180, 0))
 		
 		ents.FindByName("logic_ballgenerator1_disabled")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_AdvisorAttack()")
 	end
 	
     if game.GetMap() == "ep2_outland_08" then
-		for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-			spawn:SetPos(Vector(-12824, -12848, 450))
-			spawn:SetAngles(Angle(0, 80, 0))
-		end
+		--for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+		--	spawn:SetPos(Vector(-12824, -12848, 450))
+		--	spawn:SetAngles(Angle(0, 80, 0))
+		--end
+		MoveSpawns(Vector(-12824, -12848, 450),Angle(0, 80, 0))
 		ents.FindByName("alyx_check_end_trigger")[1]:Remove()	--Prevents resets when alyx left behind
 		ents.FindByName("alyx_check_end_trigger1")[1]:Remove()	--Prevents resets when alyx left behind
 	end
 	
     if game.GetMap() == "ep2_outland_09" then
-		for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-			spawn:SetPos(Vector(1050, -9190, 75))
-			spawn:SetAngles(Angle(0, 180, 0))
-		end
+		--for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+		--	spawn:SetPos(Vector(1050, -9190, 75))
+		--	spawn:SetAngles(Angle(0, 180, 0))
+		--end
+		MoveSpawns(Vector(1050, -9190, 75),ngle(0, 180, 0))
 		ents.FindByName("alyx_check_end_trigger_0")[1]:Remove()	--Prevents resets when alyx left behind
 		
 		ents.FindByName("relay.power.off")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_TurretsDefeated()")
@@ -919,11 +918,12 @@ end
 
 function EP2_ElevatorSpawn()
 	local elevator = ents.FindByName("elevator")[1]
-	for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-		spawn:SetPos(elevator:GetPos() + Vector(0, 20, -52))
-		spawn:SetParent(elevator)
-		spawn:SetAngles(Angle(0, 0, 0))
-	end
+	MoveSpawns(Vector(0, 20, -52),Angle(0, 0, 0),elevator)
+	--for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+	--	spawn:SetPos(elevator:GetPos() + Vector(0, 20, -52))
+	--	spawn:SetParent(elevator)
+	--	spawn:SetAngles(Angle(0, 0, 0))
+	--end
 end
 
 function EP2_AlyxRadioTalk()

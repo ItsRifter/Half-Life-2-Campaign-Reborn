@@ -2083,18 +2083,13 @@ local HL2_TRIGGERS = {
             [1] = function()
                 timer.Simple(0.1, function()
                     local lift = ents.FindByName("citadel_train_lift01_1")[1]
-                    for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-                        spawn:SetPos(lift:GetPos() + Vector(0, 0, 75))
-                        spawn:SetParent(lift)
-                    end
+					MoveSpawns(Vector(0, 0, 75),Angle(0, 320, 0),lift)
+                    --for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+                    --    spawn:SetPos(lift:GetPos() + Vector(0, 0, 75))
+                    --    spawn:SetParent(lift)
+                    --end
                 end)
-			end,
-
-            [2] = function()
-                for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-                    spawn:SetParent(nil)
-                end
-            end
+			end
         },
 
 
@@ -2592,10 +2587,12 @@ local function SetUpMisc()
 	end
 
     if game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON and game.GetMap() == "d1_town_02" then
-		for i, s in ipairs(ents.FindByClass("info_player_start")) do
-			s:SetPos(Vector(-3763, -36, -3439))
-			s:SetAngles(Angle(0, 90, 0))
-		end
+		--for i, s in ipairs(ents.FindByClass("info_player_start")) do
+		--	s:SetPos(Vector(-3763, -36, -3439))
+		--	s:SetAngles(Angle(0, 90, 0))
+		--end
+		
+		MoveSpawns(Vector(-3763, -36, -3439),Angle(0, 90, 0))
 		timer.Simple(3, function()RemovePushTrigger() end)	--Removes lift skip Pusher trigger
     end
 
@@ -2706,12 +2703,13 @@ local function SetUpMisc()
 	end
 
 	if game.GetMap() == "d3_c17_10a" then	--Has multiple spawns strangly?
-		if ents.FindByClass("info_player_start")[1]:IsValid() then	
-			for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-				spawn:SetPos(Vector(-3930, 6780, 5))
-				spawn:SetAngles(Angle(0, 0, 0))
-			end
-		end
+		--if ents.FindByClass("info_player_start")[1]:IsValid() then	
+		--	for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+		--		spawn:SetPos(Vector(-3930, 6780, 5))
+		--		spawn:SetAngles(Angle(0, 0, 0))
+		--	end
+		--end
+		MoveSpawns(Vector(-3930, 6780, 5),Angle(0, 0, 0))
 	end
 
     if game.GetMap() == "d3_c17_10b" then
@@ -2733,9 +2731,11 @@ local function SetUpMisc()
     if game.GetMap() == "d3_breen_01" then
 		local setPos = Vector(-2183, 836, 587)
         
-        for k, spawn in ipairs(ents.FindByClass("info_player_start")) do
-			spawn:SetPos(setPos)
-		end
+        --for k, spawn in ipairs(ents.FindByClass("info_player_start")) do
+		--	spawn:SetPos(setPos)
+		--end
+		
+		MoveSpawns(setPos,Angle(0,0,0))
         
 		ents.FindByClass("item_suit")[1]:SetPos(setPos)
 		

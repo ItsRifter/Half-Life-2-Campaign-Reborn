@@ -397,6 +397,9 @@ function CheckPlayerCompleted()
 	end
 end
 
+--------------------------------------------------------------------------------------------------------
+------------------------------------Creation Functions--------------------------------------------------
+
 --New global checkpoint creator
 function CreateCheckpoint(Min,Max,TPos,TAngle,func)
 	local checkpoint = ents.Create("trigger_checkpoint")
@@ -453,6 +456,8 @@ function CreatePusher(Min,Max,Position)
 	pusher:Spawn()
 	pusher.TPSpot = Position
 end
+
+
 
 --New Global function for spawning enemy and if they target closest player
 function CreateEnemy(class,pos,angle,weapon, search)
@@ -515,6 +520,50 @@ function CreateAmmoCrate(pos,angle,ammo)
 	AddAmmoCrate:SetKeyValue( "ammotype", ammo )
 	AddAmmoCrate:Spawn()
 end
+
+--------------------------------------------------------------------------------------------------------
+-------------------------------------Utility Functions--------------------------------------------------
+--Handles moving of spawns and allows parenting
+function MoveSpawns(TPPoint,TPAngles, parent)
+	local NewPos = TPPoint
+	if parent then 
+		NewPos = parent:GetPos() +NewPos 
+	else
+		parent = nil
+	end
+	for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+		spawn:SetPos(NewPos)
+		spawn:SetAngles(TPAngles )
+		spawn:SetParent(parent)
+	end
+	for l, spawn in pairs(ents.FindByClass("info_player_deathmatch")) do
+		spawn:SetPos(NewPos)
+		spawn:SetAngles(TPAngles )
+		spawn:SetParent(parent)
+	end
+end
+
+--Handles teleporting players, can be set to not revive players, skip determins the player to not move
+function MovePlayers(TPPoint,TPAngles, revive, skip)
+	for _, p in pairs(player.GetAll()) do
+		
+		if p == skip then continue end
+
+		if p:Team() == TEAM_COMPLETED_MAP then continue end
+		
+		if p:Team() == TEAM_DEAD and revive then
+			p:Spawn()
+		end
+		
+		GAMEMODE:RemoveVehicle(p)
+		
+		if p:Team() == TEAM_ALIVE then
+			p:SetPos(TPPoint)
+			p:SetEyeAngles(TPAngles)
+		end
+	end
+end
+
 
 function RemoveNamedBrushes(toremove)	--Remove func_brushes whos names end with anything in the table listed
 	for _, i in ipairs(ents.FindByClass("func_brush")) do

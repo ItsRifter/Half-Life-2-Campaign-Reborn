@@ -35,33 +35,37 @@ function ENT:Touch(ent)
 
 		BroadcastMessageToAll(HL2CR_PlayerColour, ent:Nick(), HL2CR_StandardColour, translate.Get("Player_Checkpoint"))
 
+		MoveSpawns(self.TPPoint,self.TPAngles)
+
 		--if ents.FindByClass("info_player_start")[1]:IsValid() then	
-			for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-				spawn:SetPos(self.TPPoint)
-				spawn:SetAngles( self.TPAngles )
-			end
+			--for l, spawn in pairs(ents.FindByClass("info_player_start")) do
+			--	spawn:SetPos(self.TPPoint)
+			--	spawn:SetAngles( self.TPAngles )
+			--end
 		--elseif ents.FindByClass("info_player_deathmatch")[1]:IsValid() then
-			for l, spawn in pairs(ents.FindByClass("info_player_deathmatch")) do
-				spawn:SetPos(self.TPPoint)
-				spawn:SetAngles( self.TPAngles )
-			end
+			--for l, spawn in pairs(ents.FindByClass("info_player_deathmatch")) do
+			--	spawn:SetPos(self.TPPoint)
+			--	spawn:SetAngles( self.TPAngles )
+			--end
 		--end
 
-		for _, p in pairs(player.GetAll()) do
+		--for _, p in pairs(player.GetAll()) do
 			
-			if p == ent then continue end
+		--	if p == ent then continue end
 
-			if p:Team() == TEAM_COMPLETED_MAP then continue end
+		--	if p:Team() == TEAM_COMPLETED_MAP then continue end
 			
-			if p:Team() == TEAM_DEAD then
-				p:Spawn()
-			end
+		--	if p:Team() == TEAM_DEAD then
+		--		p:Spawn()
+		--	end
 			
-			GAMEMODE:RemoveVehicle(p)
+		--	GAMEMODE:RemoveVehicle(p)
 			
-			p:SetPos(self.TPPoint)
-			p:SetEyeAngles(self.TPAngles)
-		end
+		--	p:SetPos(self.TPPoint)
+		--	p:SetEyeAngles(self.TPAngles)
+		--end
+		
+		MovePlayers(self.TPPoint,self.TPAngles, true, ent)
 		
 		if false then --debug for checkpoint verifying in solo
 			GAMEMODE:RemoveVehicle(ent)
