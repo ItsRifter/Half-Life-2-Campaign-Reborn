@@ -507,9 +507,18 @@ local ep2_triggers = {
 		["checkpoint_functions"] = {
             [1] = function()
 				GAMEMODE:DisableVehicles(true)
-				--ents.FindByClass("npc_alyx")[1]:SetPos(Vector(3162,-891,-100))
+				local alyx = ents.FindByClass("npc_alyx")[1]
+				alyx:SetPos(Vector(3162,-891,-100))
+				
+				PrintTable(alyx:GetSequenceList())
+				alyx:SetSequence( "cower" )
+				
+				--local jeep = ents.FindByClass("prop_vehicle_jeep")[1]
+				--jeep:SetPos(Vector(3461,-878,-80))
+				--jeep:SetAngles(Angle(0, 0, 0))
 			end,
 			[2] = function()
+				ents.FindByName("garage_shield1_clipbrush")[1]:Fire("enable")
 				CreateCheckpoint(Vector(1184,-2665,314),Vector(1217,-2132,76),Vector(1091,-2507,150),Angle(0,50,0),
 						function()
 							GAMEMODE:DisableVehicles(false)
@@ -664,10 +673,10 @@ local ep2_triggers = {
 			[1] = Angle(0,120,0),
 		},
 	
-        ["changelevels"] = {
-            [1] = Vector(-572,-8907,-159),
-            [2] = Vector(-635,-8321,-320)
-        },
+        --["changelevels"] = {
+        --    [1] = Vector(-572,-8907,-159),
+        --    [2] = Vector(-635,-8321,-320)
+        --},
     }, 
 
 }
@@ -826,7 +835,7 @@ local function SetUpMisc()
 		--	spawn:SetPos(Vector(1050, -9190, 75))
 		--	spawn:SetAngles(Angle(0, 180, 0))
 		--end
-		MoveSpawns(Vector(1050, -9190, 75),ngle(0, 180, 0))
+		MoveSpawns(Vector(1050, -9190, 75),Angle(0, 180, 0))
 		ents.FindByName("alyx_check_end_trigger_0")[1]:Remove()	--Prevents resets when alyx left behind
 		
 		ents.FindByName("relay.power.off")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:EP2_TurretsDefeated()")
@@ -834,6 +843,25 @@ local function SetUpMisc()
 	
     if game.GetMap() == "ep2_outland_10" then	--ambush
 		CreateAmmoCrate(Vector(2838,-650,-112),Angle(0,0,0),4) --Add shotgun ammo to house for convinience
+		
+		local prop = ents.Create("prop_dynamic")	
+		prop:SetPos(Vector(2400,-1280,-50))
+		prop:SetAngles(Angle(0,0,87))
+		prop:SetModel("models/props_debris/wood_board01a.mdl")
+		prop:PhysicsInit(SOLID_VPHYSICS)
+		prop:DrawShadow( false)
+		prop:SetKeyValue("minhealthdmg",9999)
+		prop:Spawn()
+		
+		prop = ents.Create("prop_dynamic")	
+		prop:SetPos(Vector(2335,-915,-56))
+		prop:SetAngles(Angle(0,0,-75))
+		prop:SetModel("models/props_debris/wood_board01a.mdl")
+		prop:PhysicsInit(SOLID_VPHYSICS)
+		prop:DrawShadow( false)
+		prop:SetKeyValue("minhealthdmg",9999)
+		prop:Spawn()
+		
 	end
 
     if game.GetMap() == "ep2_outland_11" then	--white forest inside

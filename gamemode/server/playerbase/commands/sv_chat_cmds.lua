@@ -125,7 +125,7 @@ local chat_cmds = {
     end,
 
     ["!petremove"] = function(ply, text)
-        if ply.activePet then
+        if IsValid(ply.activePet) then
             ply.activePet:RemovePet()
         end
     end,

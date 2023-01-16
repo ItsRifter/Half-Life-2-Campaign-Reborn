@@ -27,10 +27,37 @@ HL2CR_Specials = {
 		
 		end,
 	
+	},
+
+	
+	[10] = {
+		Name = "Camo",
+		OnSpawn = function (npc)
+			npc:SetMaterial( "models/effects/vol_light001" )
+			local weap = npc:GetWeapons()[1]
+			if IsValid(weap) then weap:SetMaterial( "models/effects/vol_light001" ) end
+		end,
+		OnHitPlayer = function (npc,ply)
+
+		end,
+		OnHit = function (npc,ply)
+			npc:SetMaterial("")
+			local weap = npc:GetWeapons()[1]
+			if IsValid(weap) then weap:SetMaterial( "" ) end
+			if timer.Exists( npc:EntIndex().."_ghosttime" ) then timer.Remove( npc:EntIndex().."_ghosttime"  ) end	
+			timer.Create( npc:EntIndex().."_ghosttime" , 1.5, 1, function() 
+				if IsValid(npc) then
+					npc:SetMaterial( "models/effects/vol_light001" )
+					if IsValid(weap) then weap:SetMaterial( "models/effects/vol_light001" ) end
+				end
+				
+			end )
+		end,
+		OnDeath = function (npc)
+		
+		end,
+	
 	}
-
-
-
 }
 
 function hl2cr_npc:OnSpawn()
@@ -41,17 +68,30 @@ function hl2cr_npc:OnHitPlayer(ply)
 	if self.Special then self.Special.OnHitPlayer(self,ply) end
 end
 
+function hl2cr_npc:OnHit(ply)
+	if self.Special then self.Special.OnHit(self,ply) end
+end
+
+local function RollType()	--To do, make a better roll weight system but for now its just for experimenting
+	local value = math.random() * 100
+	if value > 80 then return 10 end
+
+	return 1
+end
+
 hook.Add("OnEntityCreated", "HL2CR_OnNPCCreation2", function(ent)
 	if ent:IsNPC() then
-        if ent:IsHostile() then
+		timer.Simple(0.2, function()
+        if ent:IsHostile() and !ent:IsPet() then
 			--print("rolling for special")
-			if math.random() + HL2CR_GetDiff() * 0.04 >= 1 then
-				ent.Special = HL2CR_Specials[1]
+			if math.random() + (HL2CR_GetDiff()+1) * 0.035 >= 1 then
+				ent.Special = HL2CR_Specials[RollType()]
 				
-				timer.Simple(0.2, function()
+				--timer.Simple(0.2, function()
 					ent:OnSpawn()
-				end)
+				--end)
 			end
         end
+		end)
     end
 end)

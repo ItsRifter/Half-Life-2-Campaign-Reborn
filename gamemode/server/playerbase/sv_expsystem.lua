@@ -52,8 +52,13 @@ end
 
 --Special functions for certain npc's
 local NPC_XPFunc={
-	["npc_strider"] = function(amount,npc)
+	["npc_strider"] = function(amount,npc,dmgtype)
+		if dmgtype !=64 and  dmgtype !=2112 then return 0 end	--only give exp for blast/ball damage dealt
 		return 180		--180=27/36/45/54/63
+	end,
+	["npc_combinedropship"] = function(amount,npc,dmgtype)
+		if dmgtype !=64 then return 0 end	--only give exp for blast damage dealt
+		return 80		--180=27/36/45/54/63
 	end,
 	["npc_combinegunship"] = function(amount,npc)
 		return 220		--220=33/44/55/66/77
@@ -94,11 +99,11 @@ local exp_division = 10
 if XPFARM_MAPS[game.GetMap()] then exp_division = 25 end	--Make farming maps require more damage to be done
 if Custom_ExpMul then exp_division = exp_division * Custom_ExpMul end	--Allows custom map exp setting
 
-function hl2cr_player:AddDamageExp(damage,npc)
+function hl2cr_player:AddDamageExp(damage,npc,dmgtype)
 	local amount = damage
 	local class = npc:GetClass()
 	if NPC_XPMul[class] then amount = amount * NPC_XPMul[class] end			--Does exp mul based on enemy class
-	if NPC_XPFunc[class] then amount = NPC_XPFunc[class](amount,npc) end	--Does extra function for special enemies
+	if NPC_XPFunc[class] then amount = NPC_XPFunc[class](amount,npc,dmgtype) end	--Does extra function for special enemies
 	
 	amount = amount * Diff_Mul[HL2CR_GetDiff()]		--Increased exp based on difficulty
 	if amount > 0 then

@@ -76,8 +76,12 @@ function hl2cr_npc:IsFriendly()
 end
 
 function hl2cr_npc:IsHostile()
-	if self:IsValid() and self:IsNPC() and HOSTILE_NPCS[self:GetClass()] then
-		return true
+	if self:IsValid() and self:IsNPC() then
+		if HOSTILE_NPCS[self:GetClass()] then
+			return true
+		elseif self:GetClass() == "npc_vortigaunt" and MAPS_VORT_HOSTILE[game.GetMap()] then
+            return true 
+        end
     end
 
     return false
@@ -221,6 +225,8 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
     if attacker:IsPlayer() and attacker:IsConnected() then		
 		--if not Valid_NPC_Targets[target:GetClass()] then return end
 		local damagedone = dmgInfo:GetDamage()
+		local dmgtype = dmgInfo:GetDamageType()
+		--print(dmgtype)
 
 		if damagedone > target:Health() then damagedone = target:Health()end
 		--print(target:GetClass() )
@@ -232,11 +238,12 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 		damagedone = math.Round(damagedone,1)
 		
 		if damagedone > 0 then	--prevents erronious negatives
-			if colour == 1 then 
-				local sucess = attacker:AddDamageExp(tonumber(damagedone),target) 
+			if colour == 1 then
+				local sucess = attacker:AddDamageExp(tonumber(damagedone),target,dmgtype) 
 				if target.LastHitGroup and target.LastHitGroup == HITGROUP_HEAD then colour = 9 end
 				if !sucess then colour = 8 end	--If damage is block hit turns dark grey
 			end
+			target:OnHit()
 			net.Start( "HL2CR_Indicator" )
 				--net.WriteString(string.format("%1.1d",damagedone))	--Todo format better
 				net.WriteString(damagedone)	--Todo format better

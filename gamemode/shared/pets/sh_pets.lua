@@ -173,11 +173,11 @@ if SERVER then
 
                 if npc:IsPet() then self:MakeFriendlyTowardsPet(npc) end
 
-                if MAPS_VORT_HOSTILE[game.GetMap()] then
-                    self:MakeHostileTarget(npc)
-                else
-                    self:MakeFriendlyTowardsPet(npc)
-                end
+                --if MAPS_VORT_HOSTILE[game.GetMap()] then
+                --    self:MakeHostileTarget(npc)
+                --else
+                --    self:MakeFriendlyTowardsPet(npc)
+                --end
 
                 if force_friendly_maps[game.GetMap()] then
                     for _, force in ipairs(force_friendly_maps[game.GetMap()]) do
@@ -191,7 +191,7 @@ if SERVER then
     end
 
     function CreatePet(ply)
-        if ply.activePet then return end
+        if IsValid(ply.activePet) then return end
         
         if MAPS_NO_PETS[game.GetMap()] then return end
         if not CanDoPetActions(ply) then return end
@@ -215,7 +215,7 @@ if SERVER then
     end)
 
     concommand.Add("hl2cr_pet_remove", function(ply)
-        if ply.activePet then
+        if IsValid(ply.activePet) then
             ply.activePet:RemovePet()
         end
     end)
