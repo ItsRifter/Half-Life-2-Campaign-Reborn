@@ -1886,7 +1886,8 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_functions"] = {
             [1] = function()
-                ents.FindByClass("npc_barney")[1]:SetPos(Vector(-3015, 6936, 140))
+                --ents.FindByClass("npc_barney")[1]:SetPos(Vector(-3015, 6936, 140))
+				ents.FindByName("barney_vista01_seq")[1]:Fire("beginsequence")
 			end
         }
     },
@@ -2150,6 +2151,12 @@ local HL2_TRIGGERS = {
 			[2] = Angle(0, 270, 0),
 			[3] = Angle(0, 60, 0)
 		},
+
+        ["checkpoint_functions"] = {
+            [1] = function()
+                ents.FindByName("w_physgun")[1]:Fire("AddOutput", "OnPlayerPickup w_physgun:use::0:1" )
+			end
+        },
 
         ["pushers"] = {
             [1] = {
@@ -2647,10 +2654,23 @@ local function SetUpMisc()
 		fixLeap2:Spawn()
 	end
 
+	if game.GetMap() == "d2_coast_07"  then
+		--custom player kill trigger
+		CreateCustomTrigger(Vector(5406,1790,745),Vector(-4650,9551,592), function(ent)
+		if ent:IsPlayer() and ent:Alive() then
+			ent:Kill()
+			return true
+		end
+	end,
+	0,false)
+	
+	end
+
     if game.GetMap() == "d2_coast_07" and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
 		ents.FindByClass("npc_combinedropship")[1]:Remove()
-		ents.FindByClass("info_player_start")[1]:SetPos(Vector(3148, 5263, 1540))
-		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, 180, 0))
+		--ents.FindByClass("info_player_start")[1]:SetPos(Vector(3148, 5263, 1540))
+		--ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, 180, 0))
+		MoveSpawns(Vector(3148, 5263, 1540),Angle(0, 180, 0))
 		timer.Simple(10, function()
 			for _, forcefield in ipairs(ents.FindByName("bridge_field_02")) do
 				forcefield:Remove()
@@ -2666,8 +2686,10 @@ local function SetUpMisc()
 		blocker:PhysicsInit(SOLID_VPHYSICS)
 		blocker:Spawn()
         
-		ents.FindByClass("info_player_start")[1]:SetPos(Vector(3330, 1471, 1600))
-		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, -90, 0))
+		MoveSpawns(Vector(3330, 1471, 1600),Angle(0, -90, 0))
+		--ents.FindByClass("info_player_start")[1]:SetPos(Vector(3330, 1471, 1600))
+		--ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, -90, 0))
+		
 		
 		--for k, fog in ipairs(ents.FindByClass("env_fog_controller")) do
 			--fog:Remove()
