@@ -14,7 +14,7 @@ HL2CR_Specials = {
 			ply:SetRunSpeed(100)
 			if timer.Exists( ply:EntIndex().."_icetime" ) then timer.Remove( ply:EntIndex().."_icetime" ) end	
 			timer.Create( ply:EntIndex().."_icetime", 3, 1, function() 
-				if !MAPS_NO_SUIT[game.GetMap()] and IsValid(ply) and ply:Team() == TEAM_ALIVE then
+				if IsValid(ply) and ply:Team() == TEAM_ALIVE then
 					ply:SetWalkSpeed(200)
 					ply:SetRunSpeed(350)
 				end
@@ -29,6 +29,28 @@ HL2CR_Specials = {
 	
 	},
 
+	[2] = {
+		Name = "Fire",
+		OnSpawn = function (npc)
+			npc:SetColor( Color(255, 160, 130, 255) )
+		end,
+		OnHitPlayer = function (npc,ply)
+			ply:Ignite( 2,  0 )
+			if timer.Exists( ply:EntIndex().."_firetime" ) then timer.Remove( ply:EntIndex().."_firetime" ) end	
+			timer.Create( ply:EntIndex().."_firetime", 2, 1, function() 
+				if IsValid(ply) and ply:Team() == TEAM_ALIVE then
+					ply:Extinguish()
+				end
+			end )
+		end,
+		OnHit = function (npc,ply)
+		
+		end,
+		OnDeath = function (npc)
+		
+		end,
+	
+	},
 	
 	[10] = {
 		Name = "Camo",
@@ -65,6 +87,7 @@ function hl2cr_npc:OnSpawn()
 end
 
 function hl2cr_npc:OnHitPlayer(ply)
+	if MAPS_NO_SUIT[game.GetMap()] or (game.GetMap() == "d1_trainstation_05" and GetGlobalBool("HL2CR_GLOBAL_SUIT") == false) then return end 
 	if self.Special then self.Special.OnHitPlayer(self,ply) end
 end
 
@@ -75,7 +98,7 @@ end
 local function RollType()	--To do, make a better roll weight system but for now its just for experimenting
 	local value = math.random() * 100
 	if value > 80 then return 10 end
-
+	if value > 50 then return 2 end
 	return 1
 end
 
