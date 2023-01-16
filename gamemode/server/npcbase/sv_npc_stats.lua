@@ -17,12 +17,12 @@ function hl2cr_npc:SetStatsTraits()
 		if not self:IsValid() then return end
 		if self:IsPet() then return end
 
-		local newHealth = self:Health() * math.abs(1 + ( (GetConVar("hl2cr_difficulty"):GetInt() - 1) * 0.25) ) 
+		local newHealth = self:Health() * math.abs(1 + ( (HL2CR_GetDiff() - 1) * 0.25) ) 
 		self:SetMaxHealth(newHealth)
 		self:SetHealth(newHealth)
 
 		if npc_base_damage[self:GetClass()] then
-			self.Damage = math.random(npc_base_damage[self:GetClass()].minDMG, npc_base_damage[self:GetClass()].maxDMG) * GetConVar("hl2cr_difficulty"):GetInt()
+			self.Damage = math.random(npc_base_damage[self:GetClass()].minDMG, npc_base_damage[self:GetClass()].maxDMG) * HL2CR_GetDiff()
 		end
 	end)
 end

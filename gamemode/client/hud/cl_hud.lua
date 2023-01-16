@@ -57,8 +57,12 @@ hook.Add( "HUDPaint", "HL2CR_XPBar", function()
 	if newXP == nil then return end
 	
 	if lastUpdate < CurTime() then 
-		if fadeOut > 25 then
-			fadeOut = fadeOut - 1
+		if fadeOut > 0 then
+			fadeOut = fadeOut - FrameTime() * 255
+		end
+		
+		if !Client_Config.HideXP and fadeOut < 30 then
+			fadeOut = 30
 		end
 	end
 
@@ -76,6 +80,7 @@ hook.Add( "HUDPaint", "HL2CR_XPBar", function()
 		newXP = xp
 	end
 
+	if fadeOut <= 0 then return end
 	//Empty
 	draw.RoundedBox( 4, (ScrW()-barW) * 0.5, ScrH() / 1.075, barW, 45, Color(0, 0, 0, fadeOut) )
 
@@ -88,10 +93,10 @@ hook.Add( "HUDPaint", "HL2CR_XPBar", function()
 	//Text
 	--draw.SimpleText(translate.Get("HUD_Stat_XP") .. " " .. percentage, "hl2cr_hud_xp", ScrW() / 2.10, ScrH() / 1.05, Color(255, 200, 100, fadeOut), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	
-	draw.SimpleTextOutlined(translate.Get("HUD_Stat_XP") .. " " .. percentage, "hl2cr_hud_xp", ScrW() * 0.5, ScrH() / 1.05, Color(255, 200, 100, fadeOut), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, fadeOut * 2 ) )
+	draw.SimpleTextOutlined(translate.Get("HUD_Stat_XP") .. " " .. percentage, "hl2cr_hud_xp", ScrW() * 0.5, ScrH() / 1.05, Color(255, 200, 100, fadeOut*1.5), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, fadeOut * 2 ) )
 
 	if LocalPlayer():GetNWInt("hl2cr_stat_skillpoints", -1 ) > 0 then
-		draw.SimpleTextOutlined(LocalPlayer():GetNWInt("hl2cr_stat_skillpoints", -1 ) .. translate.Get("HUD_Notice_UnspentSkills") , "hl2cr_hud_xp", ScrW() * 0.5, ScrH() / 1.105, Color(255, 0, 0, fadeOut), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1 , Color( 0, 0, 0, fadeOut * 2 ) )
+		draw.SimpleTextOutlined(LocalPlayer():GetNWInt("hl2cr_stat_skillpoints", -1 ) .. translate.Get("HUD_Notice_UnspentSkills") , "hl2cr_hud_xp", ScrW() * 0.5, ScrH() / 1.105, Color(255, 0, 0, fadeOut*1.5), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1 , Color( 0, 0, 0, fadeOut * 2 ) )
 	end
 end )
 

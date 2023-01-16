@@ -266,6 +266,9 @@ LANGUAGE.Basic_Cmd = "Commands"
 LANGUAGE.Basic_Pets = "Pets"
 LANGUAGE.Basic_Options = "Options"
 
+LANGUAGE.Options_Cross = "New Crosshair"
+LANGUAGE.Options_HideXp = "Hide XP bar"
+
 LANGUAGE.HelpMenu_Title = "Half-Life 2 Campaign Co-Op"
 LANGUAGE.HelpMenu_Map = "Current map : "
 LANGUAGE.HelpMenu_Info = 
@@ -287,7 +290,7 @@ LANGUAGE.HelpMenu_Commands =
 "!discord - Open a link to the server discord"}
 
 LANGUAGE.HelpMenu_Pets = 
-{"You can make your own pet, they will attac",
+{"You can make your own pet, they will attack",
 "enemies and earn their own exp","",
 "!petspawn - Spawn your pet",
 "!petremove - Remove your pet",

@@ -4,6 +4,7 @@ Config_Changed = Config_Changed or false
 function Config_Update()	--Ensures config is fully populated with vars
 	Client_Config = Client_Config or {}
 	Client_Config.NewCross = Client_Config.NewCross or false
+	Client_Config.HideXP = Client_Config.HideXP or false
 end
 
 function Config_Load()

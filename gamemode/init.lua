@@ -36,6 +36,7 @@ include("server/datastorage/sv_flatfile_data.lua")
 //NPCs
 include("server/npcbase/sv_npc.lua")
 include("server/npcbase/sv_npc_stats.lua")
+include("server/npcbase/sv_specials.lua")
 
 //Clients
 AddCSLuaFile("client/cl_config.lua")

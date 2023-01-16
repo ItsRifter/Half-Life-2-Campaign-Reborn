@@ -673,7 +673,7 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 	end
 
 	victim.CanRespawn = false
-	victim.TimeDied = (10 * GetConVar("hl2cr_difficulty"):GetInt()) + CurTime()
+	victim.TimeDied = (10 * HL2CR_GetDiff()) + CurTime()
 
 	CheckPlayerCompleted()
 end

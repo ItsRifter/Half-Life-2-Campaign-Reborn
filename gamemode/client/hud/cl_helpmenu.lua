@@ -95,12 +95,25 @@ function PANEL:Init()
 	local Check = vgui.Create( "ThemeCheckBox" , OpPanel)
 	Check:SetSize( self:GetTall() * 0.05, self:GetTall() * 0.05)
 	Check:SetPos( OpPanel:GetWide() * 0.4, OpPanel:GetTall() * 0.1)
-	Check:SetText("New Crosshair","Font_Small")
+	Check:SetText(translate.Get("Options_Cross"),"Font_Small")
 	Check:SetToggle(Client_Config.NewCross)
 	Check:SetFunc(
 		function()
 			--Crosshair.Enabled = Check:Toggle()
 			Client_Config.NewCross = Check:Toggle()
+			Config_Changed = true
+		end
+	)
+	
+	local Check = vgui.Create( "ThemeCheckBox" , OpPanel)
+	Check:SetSize( self:GetTall() * 0.05, self:GetTall() * 0.05)
+	Check:SetPos( OpPanel:GetWide() * 0.4, OpPanel:GetTall() * 0.2)
+	Check:SetText(translate.Get("Options_HideXp"),"Font_Small")
+	Check:SetToggle(Client_Config.HideXP)
+	Check:SetFunc(
+		function()
+			--Crosshair.Enabled = Check:Toggle()
+			Client_Config.HideXP = Check:Toggle()
 			Config_Changed = true
 		end
 	)

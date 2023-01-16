@@ -94,7 +94,7 @@ local chat_cmds = {
         }
 
         if string.len(text) == 5 then
-            ply:BroadcastMessage(HL2CR_GreenColour, translate.Get("CMD_Diff_Check"), HL2CR_StandardColour, diff_check[GetConVar("hl2cr_difficulty"):GetInt()])
+            ply:BroadcastMessage(HL2CR_GreenColour, translate.Get("CMD_Diff_Check"), HL2CR_StandardColour, diff_check[HL2CR_GetDiff()])
         elseif string.len(text) > 5 and string.len(text) <= 7 then
             if CMD_TimeWaitVote > CurTime() then 
                 ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_Vote_TooEarly"), tostring(math.Round(CMD_TimeWaitVote - CurTime()) ) )
@@ -104,7 +104,7 @@ local chat_cmds = {
             local num = string.sub(text, #text)
             num = tonumber(num)
 
-            if num == GetConVar("hl2cr_difficulty"):GetInt() then
+            if num == HL2CR_GetDiff() then
                 ply:BroadcastMessage(HL2CR_RedColour, translate.Get("Error_CMD_DiffSetOn"))
                 return
             end

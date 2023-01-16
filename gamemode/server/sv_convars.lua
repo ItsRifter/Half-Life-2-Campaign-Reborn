@@ -39,3 +39,8 @@ CreateConVar("hl2cr_rndnpc_maxdist", 7500, {FCVAR_NOTIFY, FCVAR_REPLICATED, FCVA
 
 --Miscellanous
 CreateConVar("hl2cr_coop_respawnrate", 10, {FCVAR_NOTIFY, FCVAR_REPLICATED, FCVAR_ARCHIVE}, "How quickly do items/weapons in co-op respawn", 1, 60)
+
+
+function HL2CR_GetDiff()
+	return GetConVar("hl2cr_difficulty"):GetInt()
+end

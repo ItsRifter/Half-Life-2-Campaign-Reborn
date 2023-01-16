@@ -126,12 +126,14 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
             return false
         end
 
+		attacker:OnHitPlayer(target)
+
         if attacker:GetCustomDamage() then
             dmgInfo:SetDamage(attacker:GetCustomDamage()) 
         else
             if poison_npcs[attacker:GetClass()] then return false end
 
-            dmgInfo:SetDamage(dmgInfo:GetDamage() * GetConVar("hl2cr_difficulty"):GetInt())
+            dmgInfo:SetDamage(dmgInfo:GetDamage() * HL2CR_GetDiff())
         end
 
         return false

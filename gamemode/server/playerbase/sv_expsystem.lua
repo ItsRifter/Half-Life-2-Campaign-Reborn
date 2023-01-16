@@ -100,7 +100,7 @@ function hl2cr_player:AddDamageExp(damage,npc)
 	if NPC_XPMul[class] then amount = amount * NPC_XPMul[class] end			--Does exp mul based on enemy class
 	if NPC_XPFunc[class] then amount = NPC_XPFunc[class](amount,npc) end	--Does extra function for special enemies
 	
-	amount = amount * Diff_Mul[GetConVar("hl2cr_difficulty"):GetInt()]		--Increased exp based on difficulty
+	amount = amount * Diff_Mul[HL2CR_GetDiff()]		--Increased exp based on difficulty
 	if amount > 0 then
 		self.damagexp = self.damagexp + amount
 		return true
