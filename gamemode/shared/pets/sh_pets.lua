@@ -167,7 +167,8 @@ if SERVER then
         for _, npc in ipairs(ents.FindByClass("npc_*")) do
             
             if npc:IsNPC() then
-                if npc:IsFriendly() then self:MakeFriendlyNotFear(npc) end
+                --if npc:IsFriendly() then self:MakeFriendlyNotFear(npc) end
+				if npc:IsFriendly() then self:MakeFriendlyTowardsPet(npc) end
 
                 if npc:IsHostile() then self:MakeHostileTarget(npc) end
 
@@ -179,13 +180,13 @@ if SERVER then
                 --    self:MakeFriendlyTowardsPet(npc)
                 --end
 
-                if force_friendly_maps[game.GetMap()] then
-                    for _, force in ipairs(force_friendly_maps[game.GetMap()]) do
-                        if force == npc:GetClass() then
-                            self:MakeFriendlyTowardsPet(npc)
-                        end
-                    end
-                end
+                --if FORCE_FRIENDLY_MAPS[game.GetMap()] then	--Tells map friendly hostiles to play nice to pets
+                --    for _, force in ipairs(FORCE_FRIENDLY_MAPS[game.GetMap()]) do
+                --        if force == npc:GetClass() then
+                            --self:MakeFriendlyTowardsPet(npc)
+                --        end
+                --    end
+                --end
             end
         end
     end

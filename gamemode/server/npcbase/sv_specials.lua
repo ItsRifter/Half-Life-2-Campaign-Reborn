@@ -102,6 +102,8 @@ local function RollType()	--To do, make a better roll weight system but for now 
 	return 1
 end
 
+
+
 hook.Add("OnEntityCreated", "HL2CR_OnNPCCreation2", function(ent)
 	if ent:IsNPC() then
 		timer.Simple(0.2, function()

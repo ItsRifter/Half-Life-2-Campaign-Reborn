@@ -24,6 +24,21 @@ MAPS_VORT_HOSTILE = {
     
 }
 
+FORCE_FRIENDLY_MAPS = {
+        ["d2_prison_07"] = {
+            [1] = "npc_turret_floor"
+        },
+    
+        ["d2_prison_08"] = {            
+            [1] = "npc_turret_floor",
+        },
+
+        ["ep2_outland_02"] = {
+            [1] = "combine_mine",
+            [2] = "npc_turret_floor",
+        }
+    }
+
 HOSTILE_NPCS = {
     ["npc_headcrab"] = true,
     ["npc_headcrab_fast"] = true,
@@ -70,6 +85,16 @@ function hl2cr_npc:IsFriendly()
         if self:GetClass() == "npc_vortigaunt" and !MAPS_VORT_HOSTILE[game.GetMap()] then
             return true 
         end
+		
+		if self:GetClass() == "npc_antlion" and game.GetGlobalState("antlion_allied") == GLOBAL_ON then return true end
+		
+		if FORCE_FRIENDLY_MAPS[game.GetMap()] then
+			for _, force in ipairs(FORCE_FRIENDLY_MAPS[game.GetMap()]) do
+				if force == self:GetClass() then
+					return true
+				end
+			end
+		end
     end
 
     return false
@@ -77,6 +102,14 @@ end
 
 function hl2cr_npc:IsHostile()
 	if self:IsValid() and self:IsNPC() then
+		if FORCE_FRIENDLY_MAPS[game.GetMap()] then
+			for _, force in ipairs(FORCE_FRIENDLY_MAPS[game.GetMap()]) do
+				if force == self:GetClass() then
+					return false
+				end
+			end
+		end
+		if self:GetClass() == "npc_antlion" and game.GetGlobalState("antlion_allied") == GLOBAL_ON then return false end
 		if HOSTILE_NPCS[self:GetClass()] then
 			return true
 		elseif self:GetClass() == "npc_vortigaunt" and MAPS_VORT_HOSTILE[game.GetMap()] then
