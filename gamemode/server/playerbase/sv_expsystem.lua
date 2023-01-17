@@ -17,7 +17,7 @@ local NPC_XPMul = {
 	["npc_combine_s"] = 3,
 	["npc_antlionguardian"] = 2.5,
 	["npc_barnacle"] = 1.5,
-	["npc_turret_ground"] = 2,
+	--["npc_turret_ground"] = 2,
 	["npc_vortigaunt"] = 5,
 	["npc_antlion"] = 3,
 	["npc_antlion_worker"] = 4,
@@ -76,6 +76,13 @@ local NPC_XPFunc={
 	end,
 	["npc_combine_s"] = function(amount,npc)
 		return NPCWeapon_Mul(amount,npc)
+	end,
+	["npc_turret_floor"] = function(amount,npc)	--Normal turrets -- I dont want to give exp but do want to allow it to be hit
+		return 0
+	end,
+	["npc_turret_ground"] = function(amount,npc,dmgtype)  --Floor turrets in c17 assault
+		if dmgtype !=64 then return 0 end
+		return 120
 	end,
 }
 

@@ -269,7 +269,6 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 		if target:GetClass() == "npc_antlion" and game.GetGlobalState("antlion_allied") == GLOBAL_ON then colour = 2 end	--hits turn green if hitting friendly ants
 		--antlion_allied
 		damagedone = math.Round(damagedone,1)
-		
 		if damagedone > 0 then	--prevents erronious negatives
 			if colour == 1 then
 				local sucess = attacker:AddDamageExp(tonumber(damagedone),target,dmgtype) 

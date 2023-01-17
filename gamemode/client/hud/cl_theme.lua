@@ -39,7 +39,7 @@ Theme = {
 local tex_tick = Material( "icon16/tick.png", "noclamp smooth" )
 local tex_cross = Material( "icon16/cross.png", "noclamp smooth" )
 
---Basic Theme Button
+--Basic Theme Button---------------------------------------------------------------------------------------
 local PANEL = {}
 
 function PANEL:Init(sizeX)
@@ -81,7 +81,7 @@ function PANEL:Paint()
 end
 vgui.Register( "ThemeButton", PANEL, "Panel" )
 
---Basic Theme CheckBox
+--Basic Theme CheckBox---------------------------------------------------------------------------------------
 local PANEL = {}
 
 function PANEL:Init(sizeX)
@@ -129,7 +129,7 @@ function PANEL:Paint()
 end
 vgui.Register( "ThemeCheckBox", PANEL, "Panel" )
 
---Basic Theme Text
+--Basic Theme Text---------------------------------------------------------------------------------------
 local PANEL = {}
 
 function PANEL:Init(sizeX)
@@ -165,8 +165,8 @@ function PANEL:Paint()
 end
 vgui.Register( "ThemeText", PANEL, "Panel" )
 
---Basic Theme TextMultiLine
---Currently only has middle aligned text currently
+--Basic Theme TextMultiLine ---------------------------------------------------------------------------------------
+--Currently only has middle aligned text currently ----------------------------------------------------------------
 local PANEL = {}
 
 function PANEL:Init(sizeX)
@@ -217,3 +217,5 @@ function PANEL:Paint()
 	return true
 end
 vgui.Register( "ThemeTextMulti", PANEL, "Panel" )
+
+---------------------------------------------------------------------------------------

@@ -8,12 +8,10 @@ HL2CR_Specials = {
 			npc:SetColor( Color(130, 160, 255, 255) )
 		end,
 		OnHitPlayer = function (npc,ply)
-			--print(ply)
-			--ply:SetWalkSpeed(100)
-			ply:SetWalkSpeed(100)
-			ply:SetRunSpeed(100)
+			ply:SetWalkSpeed(140 - HL2CR_GetDiff()*10)
+			ply:SetRunSpeed(140 - HL2CR_GetDiff()*10)
 			if timer.Exists( ply:EntIndex().."_icetime" ) then timer.Remove( ply:EntIndex().."_icetime" ) end	
-			timer.Create( ply:EntIndex().."_icetime", 3, 1, function() 
+			timer.Create( ply:EntIndex().."_icetime", 1 + HL2CR_GetDiff() * 0.5, 1, function() 
 				if IsValid(ply) and ply:Team() == TEAM_ALIVE then
 					ply:SetWalkSpeed(200)
 					ply:SetRunSpeed(350)
@@ -35,9 +33,9 @@ HL2CR_Specials = {
 			npc:SetColor( Color(255, 160, 130, 255) )
 		end,
 		OnHitPlayer = function (npc,ply)
-			ply:Ignite( 2,  0 )
+			ply:Ignite( 0.7 + HL2CR_GetDiff() * 0.3,  0 )
 			if timer.Exists( ply:EntIndex().."_firetime" ) then timer.Remove( ply:EntIndex().."_firetime" ) end	
-			timer.Create( ply:EntIndex().."_firetime", 2, 1, function() 
+			timer.Create( ply:EntIndex().."_firetime", 0.7 + HL2CR_GetDiff() * 0.3, 1, function() 
 				if IsValid(ply) and ply:Team() == TEAM_ALIVE then
 					ply:Extinguish()
 				end
@@ -67,7 +65,7 @@ HL2CR_Specials = {
 			local weap = npc:GetWeapons()[1]
 			if IsValid(weap) then weap:SetMaterial( "" ) end
 			if timer.Exists( npc:EntIndex().."_ghosttime" ) then timer.Remove( npc:EntIndex().."_ghosttime"  ) end	
-			timer.Create( npc:EntIndex().."_ghosttime" , 1.5, 1, function() 
+			timer.Create( npc:EntIndex().."_ghosttime" , 1.7 - (HL2CR_GetDiff()*0.2), 1, function() 
 				if IsValid(npc) then
 					npc:SetMaterial( "models/effects/vol_light001" )
 					if IsValid(weap) then weap:SetMaterial( "models/effects/vol_light001" ) end
@@ -97,11 +95,10 @@ end
 
 local function RollType()	--To do, make a better roll weight system but for now its just for experimenting
 	local value = math.random() * 100
-	if value > 80 then return 10 end
-	if value > 50 then return 2 end
+	if value > 70 then return 10 end
+	if value > 35 then return 2 end
 	return 1
 end
-
 
 
 hook.Add("OnEntityCreated", "HL2CR_OnNPCCreation2", function(ent)
