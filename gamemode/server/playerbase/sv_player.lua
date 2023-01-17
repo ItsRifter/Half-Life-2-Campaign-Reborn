@@ -246,12 +246,15 @@ function hl2cr_player:AdjustSpeed()
 	
 	if MAPS_NO_SUIT[game.GetMap()] then
 		self:SetMaxSpeed(35)
+		self:SetWalkSpeed(200)
 		self:SetRunSpeed(200)
     elseif game.GetMap() == "d1_trainstation_05" and not GetGlobalBool("HL2CR_GLOBAL_SUIT") then
 		self:SetMaxSpeed(35)
+		self:SetWalkSpeed(200)
 		self:SetRunSpeed(200)
 	else
 		self:SetMaxSpeed(200)
+		self:SetWalkSpeed(200)
 		self:SetRunSpeed(350)
 	end
 end
@@ -883,7 +886,7 @@ end
 
 function hl2cr_player:FindSurface()
 	local tr = util.TraceLine( {
-		start = self:GetPos(),
+		start = self:GetPos()+ Vector(0,0,32),
 		endpos = self:GetPos() + Vector(0,0,512),
 		collisiongroup = COLLISION_GROUP_DEBRIS,
 		mask = MASK_SOLID
@@ -893,7 +896,7 @@ function hl2cr_player:FindSurface()
 		start = tr.HitPos,
 		endpos = tr.HitPos - Vector(0,0,512),
 		collisiongroup = COLLISION_GROUP_DEBRIS,
-		mask = MASK_WATER
+		mask = MASK_WATER && MASK_SOLID
 	} )
 
 	return tr.HitPos

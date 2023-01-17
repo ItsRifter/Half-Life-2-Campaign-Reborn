@@ -2711,10 +2711,18 @@ local function SetUpMisc()
 		StayedOffSand = false
 		keepOffSand = true
 	end
+	
+	if game.GetMap() == "d2_coast_12" then
+		game.SetGlobalState("antlion_allied", GLOBAL_ON)
+	end
 
     if game.GetMap() == "d2_coast_11" then
         ents.FindByName("scene_tutorial_exit")[1]:Fire("AddOutput", "OnCompletion hl2crlua:RunPassedCode:RemovePushTrigger()")
     end
+
+	if game.GetMap() == "d2_prison_06" then	--Corrects spawn angle being sideways
+		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, -70, 0))
+	end
 
 	if game.GetMap() == "d2_prison_06" then	--Corrects spawn angle being sideways
 		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, -70, 0))

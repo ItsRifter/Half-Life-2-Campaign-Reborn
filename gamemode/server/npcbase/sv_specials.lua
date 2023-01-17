@@ -109,7 +109,7 @@ hook.Add("OnEntityCreated", "HL2CR_OnNPCCreation2", function(ent)
 		timer.Simple(0.2, function()
         if ent:IsHostile() and !ent:IsPet() then
 			--print("rolling for special")
-			if math.random() + (HL2CR_GetDiff()+1) * 0.035 >= 1 then
+			if math.random() + (HL2CR_GetDiff()+1) * 0.04 >= 1 then
 				ent.Special = HL2CR_Specials[RollType()]
 				
 				--timer.Simple(0.2, function()

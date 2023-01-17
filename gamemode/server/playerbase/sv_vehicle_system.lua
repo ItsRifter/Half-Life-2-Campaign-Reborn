@@ -53,7 +53,7 @@ function hl2cr_player:SpawnAirboat()
     local boat = ents.Create(Airboat.Class)
     boat:SetModel(Airboat.Model)
 	
-	boat:SetPos(self:FindSurface() + Vector(0, 0, 25) )
+	boat:SetPos(self:FindSurface() + Vector(0, 0, 32) )
     --boat:SetPos(self:GetPos() + Vector(0, 0, 25) )
     boat:SetAngles(self:EyeAngles() - Angle(0, 90, 0))
     
@@ -75,7 +75,7 @@ function hl2cr_player:SpawnAirboatWithGun()
     local gunboat = ents.Create(AirboatGun.Class)
     gunboat:SetModel(Airboat.Model)
 	
-	gunboat:SetPos(self:FindSurface() + Vector(0, 0, 25) )
+	gunboat:SetPos(self:FindSurface() + Vector(0, 0, 32) )
     --gunboat:SetPos(self:GetPos() + Vector(0, 0, 25) )
 	gunboat:SetAngles(self:EyeAngles() - Angle(0, 90, 0))
     
