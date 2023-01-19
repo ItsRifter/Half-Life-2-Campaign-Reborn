@@ -49,9 +49,9 @@ Custom_triggers = {
 	},
 }
 function Custom_Startup()
-	for k, v in ipairs(ents.FindByClass("trigger_changelevel")) do
-		v:Remove()
-	end
+	--for k, v in ipairs(ents.FindByClass("trigger_changelevel")) do
+	--	v:Remove()
+	--end
 	for k, spawn in ipairs(ents.FindByClass("info_player_start")) do 
 		if k ~= 1 then
 			spawn:Remove()

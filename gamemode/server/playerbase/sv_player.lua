@@ -546,6 +546,23 @@ function NotificationAll(text,vector,colour,IType)
 	net.Broadcast()
 end
 
+function NotificationRadius(text,vector,colour,IType,radius)
+	local plist = {}
+	local sqrad = radius * radius
+	for _, p in pairs(player.GetAll()) do
+		if p:GetPos():DistToSqr( vector) < sqrad then
+			table.insert( plist, p )
+		end
+	end
+
+	net.Start( "HL2CR_Indicator" )
+		net.WriteString(text)	
+		net.WriteVector(vector)
+		net.WriteUInt(colour,7)	
+		net.WriteUInt(IType,5)		
+	net.Send(plist)
+end
+
 function hl2cr_player:BroadcastSound(soundPath)
 	net.Start("HL2CR_MsgSound")
 		net.WriteString(soundPath)

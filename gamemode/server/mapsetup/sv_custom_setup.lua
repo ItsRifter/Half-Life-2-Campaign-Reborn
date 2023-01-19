@@ -9,6 +9,9 @@ local function SetUpCustom()
 	local MapLua = ents.Create("lua_run")
 	MapLua:SetName("hl2crlua")
 	MapLua:Spawn()
+	
+	RemoveChangeLevel()	--remove all level changes from custom lua loaded maps
+	
     if Custom_Startup then Custom_Startup() end
 	if Custom_Equipment then Custom_Equipment() end
 

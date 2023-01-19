@@ -544,6 +544,9 @@ end
 function MoveSpawns(TPPoint,TPAngles, parent)
 	local NewPos = TPPoint
 	if parent then 
+		if isstring( parent) then
+			parent = ents.FindByName(parent)[1]
+		end
 		NewPos = parent:GetPos() +NewPos 
 	else
 		parent = nil
@@ -594,4 +597,8 @@ function RemoveNamedBrushes(toremove)	--Remove func_brushes whos names end with 
 	end
 end
 
-
+function RemoveChangeLevel()
+    for _, c in pairs(ents.FindByClass("trigger_changelevel")) do
+        c:Remove()
+    end
+end

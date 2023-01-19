@@ -18,9 +18,9 @@ Custom_triggers = {
 	}
 }
 function Custom_Startup()
-	for k, v in ipairs(ents.FindByClass("trigger_changelevel")) do
-		v:Remove()
-	end
+	--for k, v in ipairs(ents.FindByClass("trigger_changelevel")) do
+	--	v:Remove()
+	--end
 	ents.FindByName("strider_hit_count")[1]:Fire("AddOutput", "OnHitMax hl2crlua:RunPassedCode:FinishRnD():5:-1")
 	RemoveShopWeapons()
 

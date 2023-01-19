@@ -682,9 +682,10 @@ local ep2_triggers = {
 }
 
 local function SetEP2Checkpoints()
-    for _, c in pairs(ents.FindByClass("trigger_changelevel")) do
-        c:Remove()
-    end
+    --for _, c in pairs(ents.FindByClass("trigger_changelevel")) do
+    --    c:Remove()
+    --end
+	RemoveChangeLevel()
 
     //If this map doesn't have support, throw a message and stop here
     if not ep2_triggers[game.GetMap()] then

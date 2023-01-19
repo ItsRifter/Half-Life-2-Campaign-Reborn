@@ -60,9 +60,9 @@ Custom_triggers = {
 }
 
 function Custom_Startup()
-	for k, v in ipairs(ents.FindByClass("trigger_changelevel")) do
-		v:Remove()
-	end
+	--for k, v in ipairs(ents.FindByClass("trigger_changelevel")) do
+	--	v:Remove()
+	--end
 
 	ents.FindByName("conveyor_gas_hurt")[1]:Fire("AddOutput", "OnHurtPlayer hl2crlua:RunPassedCode:FailedMap()")
 

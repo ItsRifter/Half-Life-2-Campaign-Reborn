@@ -2284,9 +2284,10 @@ local function SetHL2Checkpoints()
 
     //Remove map changelevels, we'll make up our own
     //in case something unexpected happens
-    for _, c in pairs(ents.FindByClass("trigger_changelevel")) do
-        c:Remove()
-    end
+    --for _, c in pairs(ents.FindByClass("trigger_changelevel")) do
+    --    c:Remove()
+    --end
+	RemoveChangeLevel()
 
     //If this map doesn't have support, throw a message and stop here
     if not HL2_TRIGGERS[game.GetMap()] then

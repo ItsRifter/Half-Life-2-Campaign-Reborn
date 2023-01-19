@@ -544,9 +544,10 @@ local ep1_triggers = {
 }
 
 local function SetEP1Checkpoints()
-    for _, c in pairs(ents.FindByClass("trigger_changelevel")) do
-        c:Remove()
-    end
+    --for _, c in pairs(ents.FindByClass("trigger_changelevel")) do
+    --    c:Remove()
+    --end
+	RemoveChangeLevel()
 
     //If this map doesn't have support, throw a message and stop here
     if not ep1_triggers[game.GetMap()] then

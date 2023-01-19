@@ -42,9 +42,9 @@ Custom_triggers = {
 	}
 }
 function Custom_Startup()
-	for k, v in ipairs(ents.FindByClass("trigger_changelevel")) do
-		v:Remove()
-	end
+	--for k, v in ipairs(ents.FindByClass("trigger_changelevel")) do
+	--	v:Remove()
+	--end
 	ents.FindByName("fusebox_fix_rl")[1]:Fire("AddOutput", "OnTrigger roller_exit_doors:Open")
 	ents.FindByName("gunship_path_4")[1]:Remove()
 	ents.FindByName("gunship_health_case")[1]:Fire("AddOutput", "OnCase04 hl2crlua:RunPassedCode:Custom_Ambush():10:1")

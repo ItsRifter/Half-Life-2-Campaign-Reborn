@@ -50,6 +50,40 @@ HL2CR_Specials = {
 	
 	},
 	
+	
+	[9] = {
+		Name = "Medic",
+		OnSpawn = function (npc)
+			npc:SetColor( Color(160, 255, 160, 255) )
+			timer.Create( npc:EntIndex().."_healtime", 2, -1, function() 
+				if IsValid(npc) and npc:Health() > 0 then
+					local search = ents.FindInSphere( npc:GetPos()+Vector(0,0,16), 256)
+					local heal = 3 + HL2CR_GetDiff()
+					for _, s in ipairs(search) do
+						if !s:IsHostile() or s:Health() <=0 then continue end
+						if s:Health() < s:GetMaxHealth() then
+							xx, yy, zz = s:OBBMaxs():Unpack()
+							
+							s:SetHealth(math.min(s:Health() + heal,s:GetMaxHealth()))
+							NotificationRadius("+"..heal,s:GetPos()+Vector(0,0,zz),2,1,512)
+						end
+					end
+				else
+					timer.Remove( npc:EntIndex().."_healtime" ) 
+				end
+			end )
+		end,
+		OnHitPlayer = function (npc,ply)
+		
+		end,
+		OnHit = function (npc,ply)
+		
+		end,
+		OnDeath = function (npc)
+		
+		end,
+	
+	},
 	[10] = {
 		Name = "Camo",
 		OnSpawn = function (npc)
@@ -95,6 +129,7 @@ end
 
 local function RollType()	--To do, make a better roll weight system but for now its just for experimenting
 	local value = math.random() * 100
+	if value > 90 then return 9 end
 	if value > 70 then return 10 end
 	if value > 35 then return 2 end
 	return 1
