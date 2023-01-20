@@ -402,13 +402,17 @@ function CheckPlayerCompleted()
 	if mapChange then return end
 	
 	if team.NumPlayers(TEAM_COMPLETED_MAP) <= 0 then return end
+	local ptotal 	= #player.GetAll() - team.NumPlayers(TEAM_AFK)
+	local pcomp 	= team.NumPlayers(TEAM_COMPLETED_MAP)
+	local palive 	= team.NumPlayers(TEAM_ALIVE)
+	local pdead 	= team.NumPlayers(TEAM_DEAD)
 
 	--If the player count is over 4, check if completers is greater than total players divided
-	if #player.GetAll() >= 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > (math.ceil((team.NumPlayers(TEAM_ALIVE) / 2)) - team.NumPlayers(TEAM_DEAD)) then		
+	if ptotal >= 4 and pcomp > (math.ceil(palive / 2) - pdead) then		
 		mapChange = true
 		StartMapCountdown()
 	--else just check if completers is greater than alive players
-	elseif #player.GetAll() < 4 and team.NumPlayers(TEAM_COMPLETED_MAP) > (team.NumPlayers(TEAM_ALIVE) - team.NumPlayers(TEAM_DEAD))  then		
+	elseif ptotal < 4 and pcomp > (palive - pdead)  then		
 		mapChange = true
 		StartMapCountdown()
 	end
@@ -492,7 +496,7 @@ function CreateEnemy(class,pos,angle,weapon, search)
 	
 	local positions = {}	--creating list of alive player positions
 	for i, v in ipairs( player.GetAll() ) do	
-		if v:Alive() then
+		if v:Team() == TEAM_ALIVE then
 			table.insert( positions, v )
 		end
 	end
@@ -568,10 +572,10 @@ function MovePlayers(TPPoint,TPAngles, revive, skip)
 	for _, p in pairs(player.GetAll()) do
 		
 		if p == skip then continue end
-
-		if p:Team() == TEAM_COMPLETED_MAP then continue end
+		local  team =  p:Team()
+		if team == TEAM_COMPLETED_MAP  or team == TEAM_AFK then continue end
 		
-		if p:Team() == TEAM_DEAD and revive then
+		if team == TEAM_DEAD and revive then
 			p:Spawn()
 		end
 		

@@ -977,6 +977,7 @@ hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
 		SetGlobalBool( "HL2CR_GLOBAL_SUIT", true )
 
 		for _, v in ipairs(player.GetAll()) do
+			 if v:Team() == TEAM_AFK then continue end
 			v:AdjustSpeed()
 			v:AdmireSuitHands()
 		end

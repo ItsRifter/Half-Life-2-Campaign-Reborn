@@ -29,6 +29,7 @@ include("shared/achievements/sh_ach_base.lua")
 
 include("shared/sh_colour.lua")
 
+include("shared/playerbase/sh_teams.lua")
 include("shared/playerbase/sh_player_models.lua")
 include("shared/playerbase/skills/sh_skill_base.lua")
 
@@ -36,6 +37,7 @@ include("shared/playerbase/suit/sh_power.lua")
 include("shared/playerbase/suit/modules/sh_flashlight.lua")
 include("shared/playerbase/suit/modules/sh_oxygen.lua")
 include("shared/playerbase/suit/modules/sh_sprinting.lua")
+
 
 include("shared/pets/sh_pets_setup.lua")
 include("shared/pets/sh_pets.lua")

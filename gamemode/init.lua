@@ -9,7 +9,7 @@ include("server/sv_afkhandler.lua")
 
 //Players
 include("server/playerbase/sv_player.lua")
-include("server/playerbase/sv_teams.lua")
+--include("server/playerbase/sv_teams.lua")
 include("server/playerbase/sv_stats.lua")
 include("server/playerbase/sv_vehicle_system.lua")
 include("server/playerbase/sv_spectate_mode.lua")
@@ -63,6 +63,7 @@ include("shared/sh_language_support.lua")
 include("shared/voting/sh_voting.lua")
 include("shared/voting/sh_vote_types.lua")
 include("shared/sh_colour.lua")
+include("shared/playerbase/sh_teams.lua")
 
 //Cosmetics
 include("shared/items/cosmetics/sh_cosmetic_base.lua")

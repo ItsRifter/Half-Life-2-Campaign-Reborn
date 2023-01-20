@@ -479,9 +479,10 @@ local ep1_triggers = {
 
         ["checkpoint_functions"] = {
             [1] = function()
-                for _, v in ipairs(player.GetAll()) do
-                    v:SetPos(Vector(1115, 8892, -2544))
-                end
+                --for _, v in ipairs(player.GetAll()) do
+                --    v:SetPos(Vector(1115, 8892, -2544))
+                --end
+				MovePlayers(Vector(1115, 8892, -2544),Angle(0, 180, 0), true)
             end
         },
 
@@ -520,10 +521,11 @@ local ep1_triggers = {
 
         ["changelevel_func"] = --{
             --[1] = function()
-			function(ply)
-                for _, v in ipairs(player.GetAll()) do
-                    v:SetPos(Vector(1115, 8892, -2544))
-                end
+			function()
+                --for _, v in ipairs(player.GetAll()) do
+                --    v:SetPos(Vector(1115, 8892, -2544))
+                --end
+				MovePlayers(Vector(-13000, -5700, -700,Angle(0, 180, 0), true))
             end
         --}
 		,
@@ -731,6 +733,7 @@ end)
 
 function EP1_FinishMap05()
 	for _, v in ipairs(player.GetAll()) do
+		if v:Team() == TEAM_AFK then continue end
 		v:SetTeam(TEAM_COMPLETED_MAP)
 		v:DisplayResults()
 	end
@@ -766,6 +769,7 @@ end
 
 function EP1_GiveGravgunEP1()
 	for k, v in ipairs(player.GetAll()) do
+		if v:Team() == TEAM_AFK then continue end
 		v:Give("weapon_physcannon")
 	end
 end
@@ -779,6 +783,7 @@ end
 
 function AchAll(achName)
 	for _, v in ipairs(player.GetAll()) do	
+		if v:Team() == TEAM_AFK then continue end
 		v:GrantAchievement("EP1", achName)
 	end
 end
@@ -802,7 +807,7 @@ function EP1_SetupMap05()
 	timer.Create( "HL2CR_CitizenFollow05", 0.5, 0, function() 
 		local positions = {}	--creating list of alive player positions
 		for i, v in ipairs( player.GetAll() ) do	
-			if v:Alive() then
+			if v:Team() == TEAM_ALIVE then
 				table.insert( positions, v )
 			end
 		end

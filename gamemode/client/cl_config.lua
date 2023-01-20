@@ -5,6 +5,7 @@ function Config_Update()	--Ensures config is fully populated with vars
 	Client_Config = Client_Config or {}
 	Client_Config.NewCross = Client_Config.NewCross or false
 	Client_Config.HideXP = Client_Config.HideXP or false
+	Client_Config.CrossType = Client_Config.CrossType or 1
 end
 
 function Config_Load()

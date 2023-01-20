@@ -230,6 +230,8 @@ local ep2_triggers = {
                 for k, v in ipairs(player.GetAll()) do
                     v:SetPos(Vector(5000, -1600, 1750))
                 end
+				
+				MovePlayers(Vector(5000, -1600, 1750),Angle(0, 180, 0), true)
             end
         --}
     }, 
@@ -924,15 +926,18 @@ end
 
 function EP2_GiveGravgunEP2()
 	for k, v in ipairs(player.GetAll()) do
+		if v:Team() != TEAM_ALIVE then continue end
 		v:Give("weapon_physcannon")
 	end
 end
 
 function EP2_SetupAntevent()
     timer.Simple(40, function()	--Delay for talking and give time to connect
-		BroadcastMessageToAll(HL2CR_AchNotifyColour, translate.Get("Achievement_EP2_Antlions"), HL2CR_StandardColour, translate.Get("Achievement_EP2_Antlions_Event"))
+		--BroadcastMessageToAll(HL2CR_AchNotifyColour, translate.Get("Achievement_EP2_Antlions"), HL2CR_StandardColour, translate.Get("Achievement_EP2_Antlions_Event"))
 		for k, v in ipairs(player.GetAll()) do
+			if v:Team() != TEAM_ALIVE then continue end
 			v.NoDeaths = true
+			v:BroadcastMessage(HL2CR_AchNotifyColour, translate.Get("Achievement_EP2_Antlions"), HL2CR_StandardColour, translate.Get("Achievement_EP2_Antlions_Event"))
 		end
 	end)
 end

@@ -2,19 +2,19 @@
 local scoreboard = scoreboard or nil
 
 local function GetPlayerTeamColours(player)
-	if player:Team() == 1 then
+	if player:Team() == TEAM_ALIVE then
 		--Alive
 		return Color(90, 255, 105) 
-	elseif player:Team() == 2 then
+	elseif player:Team() == TEAM_COMPLETED_MAP then
 		--Completed Map
 		return Color(250, 220, 0) 
-	elseif player:Team() == 3 then
+	elseif player:Team() == TEAM_DEAD then
 		--Dead
 		return Color(185, 0, 0) 
-	elseif player:Team() == 4 then
+	elseif player:Team() == TEAM_LOYAL then
 		--Loyal
 		return Color(0, 255, 245) 
-	elseif player:Team() == 5 then
+	elseif player:Team() == TEAM_AFK then
 		--AFK
 		return Color(120, 120, 120) 
 	else

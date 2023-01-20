@@ -1,3 +1,4 @@
+AddCSLuaFile()
 --Teams
 TEAM_ALIVE = 1
 team.SetUp(TEAM_ALIVE, "Alive", Color(81, 124, 199, 255))

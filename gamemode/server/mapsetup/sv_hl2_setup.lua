@@ -459,7 +459,8 @@ local HL2_TRIGGERS = {
         
         ["checkpoint_functions"] = {
             [3] = function()
-                for _, v in ipairs(player.GetAll()) do	
+                for _, v in ipairs(player.GetAll()) do
+					if v:Team() == TEAM_AFK then continue end
                     v:GrantAchievement("Malcontent")
                 end
             end
@@ -1066,6 +1067,7 @@ local HL2_TRIGGERS = {
         ["checkpoint_functions"] = {
             [1] = function()
                 for _, v in ipairs(player.GetAll()) do	
+					if v:Team() == TEAM_AFK then continue end
                     v:GrantAchievement("Hallowed Ground")
                 end
             end
@@ -1365,6 +1367,7 @@ local HL2_TRIGGERS = {
                     end
                     
                     for _, v in ipairs(player.GetAll()) do
+						if v:Team() == TEAM_AFK then continue end
                         v:GrantAchievement("Keep Off the Sand!")
                     end
                     
@@ -1679,7 +1682,8 @@ local HL2_TRIGGERS = {
             --[1] = function(ply)
 			function(ply)
                 for _, v in ipairs(player.GetAll()) do
-				v:GrantAchievement("Follow Freeman")
+					if v:Team() == TEAM_AFK then continue end
+					v:GrantAchievement("Follow Freeman")
                 end
             end
         --}
@@ -1725,6 +1729,7 @@ local HL2_TRIGGERS = {
             --[1] = function(ply)
 			function(ply)
                 for _, v in ipairs(player.GetAll()) do
+					if v:Team() == TEAM_AFK then continue end
                     v:GrantAchievement("Radiation Levels Detected")
                 end
             end
@@ -1945,6 +1950,7 @@ local HL2_TRIGGERS = {
             --[1] = function(ply)
 			function(ply)
                 for _, v in ipairs(player.GetAll()) do
+					if v:Team() == TEAM_AFK then continue end
                     v:GrantAchievement("Giant Killer")
                 end
             end
@@ -2045,6 +2051,7 @@ local HL2_TRIGGERS = {
                 
                  for _, v in ipairs(player.GetAll()) do
                      v:StripWeapons()
+					 if v:Team() == TEAM_AFK then continue end
                      v:Give("weapon_physcannon")
                  end
 				 game.ConsoleCommand( "physcannon_mega_enabled 1" )
@@ -2791,6 +2798,7 @@ end
 function FinishHL2()
 	for k, v in ipairs(player.GetAll()) do
 		v:SetTeam(TEAM_COMPLETED_MAP)
+		if v:Team() == TEAM_AFK then continue end
 		v:GrantAchievement("Singularity Collapse")
 	end
 	
@@ -2816,6 +2824,7 @@ end
 
 function CanCopAch(isDefiant)
     for _, v in ipairs(player.GetAll()) do
+		if v:Team() == TEAM_AFK then continue end
         if isDefiant then
             v:GrantAchievement("Defiant")
         else
@@ -2834,6 +2843,7 @@ function BabyCheck(ACTIVATOR)
 
     if ACTIVATOR:GetClass() == "prop_physics" and ACTIVATOR:GetModel() == "models/props_c17/doll01.mdl" then
         for _, v in ipairs(player.GetAll()) do
+			if v:Team() == TEAM_AFK then continue end
             v:GrantAchievement("What Baby?")
         end
 
@@ -2880,6 +2890,7 @@ end)
 
 function GiveGravGun()
 	for _, v in ipairs(player.GetAll()) do
+		if v:Team() == TEAM_AFK then continue end
 		v:Give("weapon_physcannon")
 		v:GrantAchievement("Zero-Point Energy")
 	end
@@ -2887,12 +2898,14 @@ end
 
 function GiveBallAch()
 	for _, v in ipairs(player.GetAll()) do
+		if v:Team() == TEAM_AFK then continue end
 		v:GrantAchievement("Two Points")
 	end
 end
 
 function GiveWhatCat()
 	for _, v in ipairs(player.GetAll()) do
+		if v:Team() == TEAM_AFK then continue end
 		v:GrantAchievement("What Cat?")
 	end
 end
@@ -2906,6 +2919,7 @@ function OpenGateCoast()
 	--disableJeepGlobal = false
 	GAMEMODE:DisableVehicles(false)
 	for _, v in ipairs(player.GetAll()) do
+		if v:Team() == TEAM_AFK then continue end
 		v:GrantAchievement("Where Cubbage Fears to Tread")
 	end
 end
