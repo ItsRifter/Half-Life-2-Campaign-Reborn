@@ -774,6 +774,11 @@ end)
 
 function GM:GravGunPunt( ply, ent )
     if ply:InVehicle() then return false end
+	local class = ent:GetClass() 
+	if class == "prop_static" or class == "prop_dynamic" then return false end
+	if class == "prop_physics" then 
+		if !ent:GetPhysicsObject():IsMotionEnabled()then return false end
+	end
 
 	for _, v in ipairs(player.GetAll()) do
 		if v == ply then continue end

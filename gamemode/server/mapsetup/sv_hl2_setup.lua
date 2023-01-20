@@ -676,6 +676,18 @@ local HL2_TRIGGERS = {
             [1] = Vector(-1658, -3585, -468), 	
             [2] = Vector(-1046, -2491, -197)
         },
+		
+		["pushers"] = {
+            [1] = {
+                [1] = Vector(-392,5326,80),
+                [2] = Vector(-527,5600,-242)
+
+            }
+        },
+
+        ["pusher_spot"] = {
+            [1] = Vector(-467,5036,-250)
+        },
     },
 
     ["d1_canals_07"] = {
@@ -2552,6 +2564,30 @@ local function SetUpMisc()
     if game.GetMap() == "d1_canals_02" then
 		ents.FindByName("underground_door_basinexit2")[1]:Fire("AddOutput", "OnOpen hl2crlua:RunPassedCode:RemovePushTrigger()")
 	end
+	
+    if game.GetMap() == "d1_canals_03" then
+		CreateCustomTrigger(Vector(-2871,80,-1070),Vector(-2436,70,-1166), function(ent)	--Tired of people not able to climb out here at the end
+			if ent:GetClass() == "func_physbox" then
+				if ent:GetPhysicsObject():IsMotionEnabled()then 
+					ent:GetPhysicsObject():EnableMotion( false )
+					return true 
+				end
+
+			end
+			return false
+		end,
+		0.5,false)
+	end
+
+    if game.GetMap() == "d1_canals_06" then
+		local blocker_1 = ents.Create("prop_dynamic")
+		blocker_1:SetModel("models/props_wasteland/cargo_container01.mdl")
+		blocker_1:SetPos(Vector(-450,5507,-197))
+		
+        blocker_1:SetName("blocker_1")
+		blocker_1:PhysicsInit(SOLID_VPHYSICS)
+		blocker_1:Spawn()
+	end
 
     if game.GetMap() == "d1_canals_07" then
 		local blocker_1 = ents.Create("prop_dynamic")
@@ -2740,18 +2776,34 @@ local function SetUpMisc()
 		ents.FindByName("logic_finished_betrayal")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:RemovePushTrigger()")
 	end
 
+	if game.GetMap() == "d3_c17_02" then	--gawd damn dog fix due to ep2/1 animation fixes breaking dog
+		CreateCustomTrigger(Vector(-10170,-5732,43),Vector(-10050,-5488,-64), function(ent)
+			if ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
+				ents.FindByClass("npc_dog")[1]:SetPos(Vector(-10308,-4918,-64))
+				return true
+			end
+		end,0,true)
+	end
+
 	if game.GetMap() == "d3_c17_10a" then	--Has multiple spawns strangly?
-		--if ents.FindByClass("info_player_start")[1]:IsValid() then	
-		--	for l, spawn in pairs(ents.FindByClass("info_player_start")) do
-		--		spawn:SetPos(Vector(-3930, 6780, 5))
-		--		spawn:SetAngles(Angle(0, 0, 0))
-		--	end
-		--end
 		MoveSpawns(Vector(-3930, 6780, 5),Angle(0, 0, 0))
 	end
 
     if game.GetMap() == "d3_c17_10b" then
 		ents.FindByName("s_room_detected_relay")[1]:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:ResetLaserTrap():15:-1" )
+	end
+
+	if game.GetMap() == "d3_c17_13" then	--gawd damn dog fix due to ep2/1 animation fixes breaking dog
+		CreateCustomTrigger(Vector(8145,909,144),Vector(8422,1117,-34), function(ent)
+			if ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
+				ents.FindByClass("npc_barney")[1]:SetPos(Vector(8113,788,4))
+				ents.FindByName("ss_dog_liftwall")[1]:Fire("beginsequence",nil,15)
+				ents.FindByName("ss_dog_liftwall")[2]:Fire("beginsequence",nil,15)
+				ents.FindByName("funcbreak_holecover")[1]:Fire("break",nil,19)
+				return true
+			end
+			return false
+		end,0,true)
 	end
 
 	if game.GetMap() == "d3_citadel_03" then
