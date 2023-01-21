@@ -14,24 +14,32 @@ Custom_triggers = {
 		[3] = {
 			[1] = Vector(-707,-230,-723), 		
 			[2] = Vector(-608,-340,-533)
+		},
+		[4] = {
+			[1] = Vector(-764,-1732,-3498), 		
+			[2] = Vector(-979,-1433,-3664)
 		}
 	},
 	
 	["checkpoint_spot"] = {
-		[1] = Vector(938,-838,-293),
+		[1] = Vector(877,-784,-290),
 		[2] = Vector(-2945,-1057,310),
-		[3] = Vector(-674,-278,-520)
+		[3] = Vector(-674,-278,-520),
+		[4] = Vector(-895,-1583,-3630)
 	},
 	
 	["checkpoint_angle"] = {
-		[1] = Angle(0,160,0),
+		[1] = Angle(0,180,0),
 		[2] = Angle(0,50,0),
-		[3] = Angle(0,180,0)
+		[3] = Angle(0,180,0),
+		[4] = Angle(0,90,0)
 	},
 	
 	["checkpoint_functions"] = {
 		[3] = function()
-			MoveSpawns(Vector(0,0,-40),Angle(0,180,0),"deeperlift-lift")
+			timer.Simple(0.5, function()
+				MoveSpawns(Vector(0,0,-40),Angle(0,180,0),"deeperlift-lift")
+			end)
 		end,
 	},
 	

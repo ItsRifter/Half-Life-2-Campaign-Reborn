@@ -53,14 +53,16 @@ Custom_triggers = {
 				end
 			end)
 		end,
-		[4] = 	CreateCustomTrigger(Vector(6210,-985,1303),Vector(6078,-1103,1462), function(ent)
-		if ent:IsPlayer() then
-			MoveSpawns(Vector(0,0,-40),Angle(0,90,0),"shaft-lift")
-			MovePlayers(Vector(6138,-1071,1345),Angle(0,90,0), false, ent)
-			return true	
+		[4] = function()	
+			CreateCustomTrigger(Vector(6210,-985,1303),Vector(6078,-1103,1462), function(ent)
+				if ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
+					MoveSpawns(Vector(0,0,-40),Angle(0,90,0),"shaft-lift")
+					MovePlayers(Vector(6138,-1071,1345),Angle(0,90,0), false, ent)
+					return true	
+				end
+				return false
+			end,0,true)
 		end
-		return false
-	end,0,true)
 	},
 	
 	["changelevels"] = {
@@ -79,8 +81,17 @@ function Custom_Startup()
 	--MoveSpawns(Vector(-397,-1301,-100),Angle(0,270,0))
 	
 	CreateCustomTrigger(Vector(6206,-976,7453),Vector(6048,-1079,7289), function(ent)
-		if ent:IsPlayer() then
+		if ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
 			MoveSpawns(Vector(0,0,-40),Angle(0,270,0),"shaft-lift")
+			return true	
+		end
+		return false
+	end,0,true)
+	
+	CreateCustomTrigger(Vector(-741,-259,527),Vector(-622,-38,352), function(ent)
+		if ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
+			MoveSpawns(Vector(-516,-133,408),Angle(0,180,0))
+			MovePlayers(Vector(-516,-133,408),Angle(0,180,0), false, ent)
 			return true	
 		end
 		return false

@@ -48,6 +48,14 @@ Custom_triggers = {
 }
 
 function Custom_Startup()
+	table.Merge(FRIENDLY_NPCS,{["npc_helicopter"]=true})
+	
+	hook.Add( "OnEntityCreated", "FriendlySet", function( ent )
+		if ( ent:GetClass() == "npc_helicopter" ) then
+			ent:AddRelationship( "player D_LI 99" )
+		end
+	end )
+	
 
 end
 

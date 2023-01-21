@@ -21,10 +21,26 @@ Custom_triggers = {
 }
 
 function Custom_Startup()
+
+	table.Merge(FRIENDLY_NPCS,{["npc_helicopter"]=true})
+	hook.Add( "OnEntityCreated", "FriendlySet", function( ent )
+		if ( ent:GetClass() == "npc_helicopter" ) then
+			ent:AddRelationship( "player D_LI 99" )
+		end
+	end )
+
 	MoveSpawns(Vector(0,0,40),Angle(0,90,0),"deeplift-lift")
 	
+	CreateCustomTrigger(Vector(1269,-59,-525),Vector(1084,195,-622), function(ent)	--move start spawn silently to avoid inf spawner
+		if ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
+			MoveSpawns(Vector(936,-212,-584),Angle(0,320,0))
+			return true	
+		end
+		return false
+	end,0,true)
+	
 	CreateCustomTrigger(Vector(-1363,2199,-7129),Vector(-1024,2586,-7384), function(ent)
-		if ent:IsPlayer() then
+		if ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
 			for _, v in ipairs(player.GetAll()) do
 				v:SetTeam(TEAM_COMPLETED_MAP)
 				v:DisplayResults()

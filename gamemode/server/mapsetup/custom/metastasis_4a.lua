@@ -51,6 +51,7 @@ function Custom_Startup()
 	CreateCustomTrigger(Vector(-1110,-2020,-10426),Vector(-949,-1912,-10504), function(ent)
 		if ent:IsPlayer() then
 			MoveSpawns(Vector(0,0,-40),Angle(0,270,0),"shaft-lift")
+			MovePlayers(Vector(-1023,-1968,-10393),Angle(0,140,0), false,ent)
 			return true	
 		end
 		return false

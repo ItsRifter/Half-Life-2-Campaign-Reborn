@@ -192,7 +192,7 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
         
         --Attacker is a player
         if attacker:IsPlayer() then
-            if tank_npcs[target:GetClass()] then
+            if tank_npcs[target:GetClass()] and !target:IsFriendly() then
                 net.Start("HL2CR_TankNPC_Display")
                     net.WriteEntity(target)
                 net.Send(attacker)
