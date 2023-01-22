@@ -136,15 +136,17 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
     
     --Player taking damage
     if target:IsPlayer() then
-        if target.hl2cr.CurCosmetic ~= "" and !attacker:IsPlayer() then
-            for _, c in ipairs(HL2CR_Cosmetics) do
-                if c.Class == target.hl2cr.CurCosmetic then
-                    if not c.TakeDamageFunc then break end
-                    c.TakeDamageFunc(target, attacker, dmgInfo:GetDamageType())
-                    break
-                end
-            end
-        end
+		if !target:IsBot() then
+			if target.hl2cr.CurCosmetic ~= "" and !attacker:IsPlayer() then
+				for _, c in ipairs(HL2CR_Cosmetics) do
+					if c.Class == target.hl2cr.CurCosmetic then
+						if not c.TakeDamageFunc then break end
+						c.TakeDamageFunc(target, attacker, dmgInfo:GetDamageType())
+						break
+					end
+				end
+			end
+		end
 
 		if attacker == target then	--Test fix preventing self inflicted physics boosts
 			target.fixvelocity = target:GetVelocity()
@@ -198,17 +200,17 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
                 net.Send(attacker)
             end
         end
-    else
-        if target:GetClass() == "item_ammo_crate" then
-            local playerAtt = dmgInfo:GetAttacker()
+    --else
+    --    if target:GetClass() == "item_ammo_crate" then
+    --        local playerAtt = dmgInfo:GetAttacker()
             
-            if not playerAtt:IsPlayer() then return end
+    --        if not playerAtt:IsPlayer() then return end
 
-            //Loop this twice in case the player switches between weapons
-            timer.Create("hl2cr_itemcrate_wait_" .. playerAtt:EntIndex(), 0.85, 2, function()
-                playerAtt:CheckAllAmmo()
-            end)
-        end
+    --        //Loop this twice in case the player switches between weapons
+    --        timer.Create("hl2cr_itemcrate_wait_" .. playerAtt:EntIndex(), 0.85, 2, function()
+    --            playerAtt:CheckAllAmmo()
+    --        end)
+    --    end
     end
 end)
 

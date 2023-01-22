@@ -124,6 +124,7 @@ end
 if timer.Exists( "Exp_Tick" ) then timer.Remove( "Exp_Tick" ) end	
 timer.Create( "Exp_Tick", 5, 0, function() 
 	for _, p in pairs(player.GetAll()) do
+		if p:IsBot() then continue end
 		if p.damagexp >= exp_division then
 			local exptogive  = math.floor(p.damagexp/exp_division)
 			--p.damagexptotal = p.damagexptotal + exptogive

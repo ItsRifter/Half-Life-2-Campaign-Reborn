@@ -793,8 +793,15 @@ function EP1_SetupMap05()
 	ents.FindByName("assaultpoint_barney_lasttrain")[1]:Fire("AddOutput", "OnArrival hl2crlua:RunPassedCode:EP1_FinishMap05()")
 	ents.FindByName("assaultpoint_standoff_barney")[1]:Fire("AddOutput", "OnArrival hl2crlua:RunPassedCode:EP1_BarneyStandoff()")
 
+	ents.FindByName("lockers_1_door_left")[1]:Remove()
+	ents.FindByName("lockers_1_door_middle")[1]:Remove()
+	ents.FindByName("lockers_1_door_right")[1]:Remove()
+
+
+
 	CreateCustomTrigger(Vector(8699,9599,-696),Vector(8945,9393,-792), function(ent)
-		if ent.squaded  and not ent.ReachedEnd then
+		if not string.find(ent:GetName(), "citizen_refugees_") then return false end
+		if not ent.ReachedEnd then
 			ent.ReachedEnd = true
 			EP1_TrainCitSucess()
 			BroadcastMessageToAll(HL2CR_GreenColour, train_sucess.. translate.Get("Achievement_EP1_Train_Saved"))
@@ -802,6 +809,12 @@ function EP1_SetupMap05()
 		end
 		return false	--Custome trigger returns false if trigger wasnt valid
 	end,0.2,false)
+
+	hook.Add( "OnNPCKilled", "EP1_TrainEscape", function( npc, attacker, inflictor )
+		if string.find(npc:GetName(), "citizen_refugees_") then
+			BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Achievement_EP1_Train_Lost"))
+		end
+	end)
 
 	if timer.Exists( "HL2CR_CitizenFollow05" ) then timer.Remove( "HL2CR_CitizenFollow05" ) end	
 	timer.Create( "HL2CR_CitizenFollow05", 0.5, 0, function() 
@@ -816,20 +829,28 @@ function EP1_SetupMap05()
 			if !IsValid(cit) or not string.find(cit:GetName(), "citizen_refugees_") then continue end
 
 			if cit.ReachedEnd then continue end
+			if cit:GetTarget() and cit:GetTarget():GetClass("scripted_sequence") then continue end
 			
-			if cit:GetSquad() == "player_squad" then 
-				cit.squaded = true
-			else
-				if cit.squaded then 
-					if cit:Health() <= 0 then
-						BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Achievement_EP1_Train_Lost"))
-						cit.squaded = false
-					else
-						cit:SetSquad( "player_squad")
-						--print(cit:UseFollowBehavior())
-					end
-				end
-			end
+			--if cit:GetSquad() == "player_squad" then 
+			--	cit.squaded = true
+			--else
+			--	if cit.squaded then 
+			--		if cit:Health() <= 0 then
+			--			--BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Achievement_EP1_Train_Lost"))
+			--			cit.squaded = false
+			--		else
+			--			print("re squading")
+			--			cit:SetSquad( "player_squad")
+			--			--print(cit:UseFollowBehavior())
+			--		end
+			--	end
+			--end
+			
+			--if cit:Health() <= 0 then
+			--	print(cit:Health())
+			--	BroadcastMessageToAll(HL2CR_RedColour, translate.Get("Achievement_EP1_Train_Lost"))
+			--	continue
+			--end
 
 			if not cit:IsCurrentSchedule(SCHED_FORCED_GO_RUN) then	
 				--print(cit:GetName() .. " was doing "..cit:GetCurrentSchedule())
@@ -837,6 +858,8 @@ function EP1_SetupMap05()
 				local distance = 800
 				local citpos = cit:GetPos()
 				local current = cit:GetTarget()
+				
+				--print(current)
 				
 				for i, v in ipairs( positions ) do	
 					local toplayer = citpos:Distance(v:GetPos())

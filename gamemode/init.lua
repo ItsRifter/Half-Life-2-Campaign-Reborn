@@ -9,6 +9,7 @@ include("server/sv_afkhandler.lua")
 
 //Players
 include("server/playerbase/sv_player.lua")
+include("server/playerbase/sv_weapons.lua")
 --include("server/playerbase/sv_teams.lua")
 include("server/playerbase/sv_stats.lua")
 include("server/playerbase/sv_vehicle_system.lua")

@@ -311,7 +311,7 @@ function hl2cr_player:DisplayAnyWarnings()
 end
 
 function hl2cr_player:SetUpInitialSpawn()
-    if self:IsBot() then return end
+    if self:IsBot() then self:SetTeam(TEAM_ALIVE) return end
 
 	self:LoadSkills()
 	self:SetUpPlayer()
@@ -342,7 +342,7 @@ function hl2cr_player:SetUpInitialSpawn()
 end
 
 function hl2cr_player:SetUpRespawnRevive()
-	if self:IsBot() then return end
+	if self:IsBot() then self:SetTeam(TEAM_ALIVE) return end
 	
 	self:SetTeam(TEAM_ALIVE)
 
@@ -360,7 +360,7 @@ function hl2cr_player:SetUpRespawnRevive()
 end
 
 function hl2cr_player:SetUpRespawn()
-	if self:IsBot() then return end
+	if self:IsBot() then self:SetTeam(TEAM_ALIVE) return end
 
 	if self.Ragdoll == nil then
 		self:LoadSkills()
@@ -421,7 +421,7 @@ function hl2cr_player:GiveEquipment()
 		end
 	end
 
-	self:CheckAllAmmo()
+	--self:CheckAllAmmo()
 end
 
 function hl2cr_player:SpawnWithActiveWeapons()
@@ -589,29 +589,37 @@ function hl2cr_player:CanPickupAmmo(ammoType)
 	return true
 end
 
-function hl2cr_player:CheckAmmo(ammoType)
-	if isnumber(ammoType) then
-		if self:GetAmmoCount(ammoType) > GetConVar(id_convert_to_convar[ammoType]):GetInt() then
-			self:SetAmmo( GetConVar(id_convert_to_convar[ammoType]):GetInt(), ammoType)
-			return
-		end
-	end
-	
-	if not ammo_convert_to_id[ammoType] then return end
+--function hl2cr_player:CheckAmmo(ammoType)
+--	if isnumber(ammoType) then
+--		if self:GetAmmoCount(ammoType) > GetConVar(id_convert_to_convar[ammoType]):GetInt() then
+--			self:SetAmmo( GetConVar(id_convert_to_convar[ammoType]):GetInt(), ammoType)
+--			return
+--		end
+--	end
+--	
+--	if not ammo_convert_to_id[ammoType] then return end
+--
+--	if self:GetAmmoCount(ammo_convert_to_id[ammoType]) > GetConVar(ammo_convert_to_convar[ammoType]):GetInt() then
+--		self:SetAmmo( GetConVar(ammo_convert_to_convar[ammoType]):GetInt(), ammo_convert_to_id[ammoType])
+--	end
+--end
 
-	if self:GetAmmoCount(ammo_convert_to_id[ammoType]) > GetConVar(ammo_convert_to_convar[ammoType]):GetInt() then
-		self:SetAmmo( GetConVar(ammo_convert_to_convar[ammoType]):GetInt(), ammo_convert_to_id[ammoType])
-	end
-end
+--function GM:PlayerAmmoChanged( ply, ammoID, oldCount, newCount )
+--	if ply:GetAmmoCount( ammoID ) > GetConVar(id_convert_to_convar[ammoID]):GetInt() then
+--		ply:SetAmmo(GetConVar(id_convert_to_convar[ammoID]):GetInt(), ammoID)
+		--return false
+--	end
 
-function hl2cr_player:CheckAllAmmo()
-	for i, a in pairs(self:GetAmmo()) do
-		if a > GetConVar(id_convert_to_convar[i]):GetInt() then
-			self:SetAmmo(GetConVar(id_convert_to_convar[i]):GetInt(), i)
-			return false
-		end
-	end
-end
+--end
+
+--function hl2cr_player:CheckAllAmmo()
+--	for i, a in pairs(self:GetAmmo()) do
+--		if a > GetConVar(id_convert_to_convar[i]):GetInt() then
+--			--self:SetAmmo(GetConVar(id_convert_to_convar[i]):GetInt(), i)
+--			--return false
+--		end
+--	end
+--end
 
 function hl2cr_player:UpdateSkills(skill)
 	
@@ -764,9 +772,9 @@ hook.Add("PlayerCanPickupWeapon", "HL2CR_WeaponPickup", function(ply, weapon)
 			return false
 		end
 
-		timer.Simple(0.01, function()
-			ply:CheckAmmo(lastWep)
-		end)
+		--timer.Simple(0.01, function()
+		--	ply:CheckAmmo(lastWep)
+		--end)
 	end
 
 	return true
@@ -955,13 +963,16 @@ hook.Add( "PlayerUse", "HL2CR_PlayerUse", function( ply, ent )
 			return false
 		end
 
-		timer.Simple(0.01, function()
-			ply:CheckAmmo("item_ammo_smg1")
-		end)
+		--timer.Simple(0.01, function()
+		--	ply:CheckAmmo("item_ammo_smg1")
+		--end)
+	--elseif ent:GetClass() == "item_ammo_crate" then
+	--	timer.Create("hl2cr_itemcrate_wait_" .. ply:EntIndex(), 1, 2, function()
+	--		ply:CheckAllAmmo()
+	--	end)
+	--end
 	elseif ent:GetClass() == "item_ammo_crate" then
-		timer.Create("hl2cr_itemcrate_wait_" .. ply:EntIndex(), 1, 2, function()
-			ply:CheckAllAmmo()
-		end)
+		if !ply:CanOpenAmmoCrate(ent) then return false end	--blocks people holding ammo crates open when they are full
 	end
 
 	return true
@@ -990,14 +1001,16 @@ hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
 
 	local lastItem = item:GetClass()
 
-	if ammo_filter[lastItem] then
-		if not ply:CanPickupAmmo(lastItem) then
-			return false
-		end
-		timer.Simple(0.01, function()
-			ply:CheckAmmo(lastItem)
-		end)
-	end
+	if !ply:CanPickupAmmoBox(item) then return false end
+
+	--if ammo_filter[lastItem] then
+	--	if not ply:CanPickupAmmo(lastItem) then
+	--		return false
+	--	end
+		--timer.Simple(0.01, function()
+		--	ply:CheckAmmo(lastItem)
+		--end)
+	--end
 	
 	if item:GetClass() == "item_battery" then	--Fun battery finding adds flashlight power
 		HL2CR_AUX:AddFlashlightPower(ply, 0.4)

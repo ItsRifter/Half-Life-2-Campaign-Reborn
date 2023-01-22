@@ -4,23 +4,184 @@ local scoreboard = scoreboard or nil
 local function GetPlayerTeamColours(player)
 	if player:Team() == TEAM_ALIVE then
 		--Alive
-		return Color(90, 255, 105) 
+		return Color(90, 255, 105,160) 
 	elseif player:Team() == TEAM_COMPLETED_MAP then
 		--Completed Map
-		return Color(250, 220, 0) 
+		return Color(250, 220, 0,160) 
 	elseif player:Team() == TEAM_DEAD then
 		--Dead
-		return Color(185, 0, 0) 
+		return Color(185, 0, 0,160) 
 	elseif player:Team() == TEAM_LOYAL then
 		--Loyal
-		return Color(0, 255, 245) 
+		return Color(0, 255, 245,160) 
 	elseif player:Team() == TEAM_AFK then
 		--AFK
-		return Color(120, 120, 120) 
+		return Color(120, 120, 120,160) 
 	else
-		return Color(255, 255, 255)
+		return Color(255, 255, 255,160)
 	end
 end
+
+local PANEL = {}
+
+function PANEL:Init()
+	self:SetVisible( true )
+	self.ply = nil
+end
+
+function PANEL:SetPlayer(ply)
+	self.ply = ply
+	
+	local avatar = vgui.Create( "AvatarImage", self )
+	avatar:SetSize(self:GetTall() * 0.7, self:GetTall() * 0.7)
+	avatar:SetPos(self:GetTall() * 0.05, self:GetTall() * 0.05)
+	avatar:SetPlayer(self.ply, 128)
+	self:SetMouseInputEnabled( true )
+	avatar.OnMousePressed = function( )
+		if input.IsMouseDown( MOUSE_LEFT ) then
+			if !self.ply:IsBot() then self.ply:ShowProfile() end
+
+		end
+	end
+	
+	local Text = New_ThemeText(self,self:GetTall() * 0.78, self:GetTall()  * 0.15,self.ply:Nick(),"Font2_Small",0,0.5)
+	
+	if !self.ply:IsBot() then
+	
+		local Text = New_ThemeText(self,self:GetTall() * 0.78, self:GetTall()  * 0.4,"","Font2_Tiny",0,0.5)
+		Text.Think = function()
+				local text = translate.Get("Scoreboard_Player_Level") .. self.ply:GetNWInt("hl2cr_stat_level", -1)
+				Text:SetText(text,nil,0,0.5)
+			end
+		local Text = New_ThemeText(self,self:GetTall() * 0.78, self:GetTall()  * 0.60,"","Font2_Tiny",0,0.5)
+		Text.Think = function()
+				local text = translate.Get("Scoreboard_Player_Exp") .. self.ply:GetNWInt("hl2cr_stat_exp", -1) .. "/" .. self.ply:GetNWInt("hl2cr_stat_expreq", 0)
+				Text:SetText(text,nil,0,0.5)
+			end
+		local Text = New_ThemeText(self,self:GetTall() * 0.05, self:GetTall()  * 0.96,"","Font2_Small",0,1)
+		Text.Think = function()
+				local text = translate.Get("Scoreboard_Player_Ping") .. self.ply:Ping()
+				Text:SetText(text,nil,0,1)
+			end
+		
+			if LocalPlayer() != self.ply then
+				local muteBtn = vgui.Create("DImageButton", self)
+				muteBtn:SetSize(self:GetTall() * 0.25, self:GetTall() * 0.25)
+				muteBtn:SetPos(self:GetWide() - self:GetTall() * 0.27, self:GetTall() * 0.25	)
+				
+				if self.ply:IsMuted() then
+					muteBtn:SetImage( "icon32/muted.png" )
+				else
+					muteBtn:SetImage( "icon32/unmuted.png" )
+				end
+				
+				muteBtn.DoClick = function()
+					if !self.ply:IsMuted() then
+						self.ply:SetMuted( true )
+						muteBtn:SetImage( "icon32/muted.png" )
+					else
+						self.ply:SetMuted( false )
+						muteBtn:SetImage( "icon32/unmuted.png" )
+					end
+				end
+			end	
+	
+			local Badge = vgui.Create( "DImageButton", self )
+			Badge:SetSize(self:GetTall() * 0.25, self:GetTall() * 0.25)
+			Badge:SetPos(self:GetWide() - self:GetTall() * 0.27, 0)
+			
+			if self.ply:IsSuperAdmin() then
+				Badge:SetImage( "icon16/award_star_gold_3.png" )
+				Badge:SetToolTip(translate.Get("Scoreboard_Player_Status_SuperAdmin"))
+			elseif self.ply:IsAdmin() then
+				Badge:SetImage( "icon16/award_star_gold_2.png" )
+				Badge:SetToolTip(translate.Get("Scoreboard_Player_Status_Admin"))
+			elseif self.ply:GetUserGroup() == "donator" then
+				Badge:SetImage( "icon16/medal_bronze_3.png" )
+				Badge:SetToolTip(translate.Get("Scoreboard_Player_Status_Donator"))
+			elseif self.ply:GetUserGroup() == "vip" then
+				Badge:SetImage( "icon16/medal_silver_3.png" )
+				Badge:SetToolTip(translate.Get("Scoreboard_Player_Status_VIP"))
+			elseif self.ply:GetUserGroup() == "vip+" then
+				Badge:SetImage( "icon16/medal_gold_3.png" )
+				Badge:SetToolTip(translate.Get("Scoreboard_Player_Status_VIPExtra"))
+			end
+	
+	else
+		local Text = New_ThemeText(self,self:GetTall() * 0.05, self:GetTall()  * 0.96,"Bot","Font2_Small",0,1)
+	end
+end
+
+function PANEL:Paint()
+	if self.ply then
+		draw.RoundedBoxEx(8, 0, 0, self:GetWide(), self:GetTall()*0.28, GetPlayerTeamColours(self.ply),true,true,false,false)
+		draw.RoundedBoxEx(8, 0, self:GetTall()*0.28, self:GetWide(), self:GetTall()*0.72, Color(50, 50, 50,160) ,false,false,true,true)
+	end
+	return true
+end
+vgui.Register( "HL2CR_PlayerPanel", PANEL, "Panel" )
+
+local function New_PlayerPanel(parent,xpos,ypos,wide,tall,ply)
+	local element = vgui.Create( "HL2CR_PlayerPanel" , parent)
+	element:SetSize( wide, tall)
+	element:SetPos( xpos, ypos)
+	element:SetPlayer( ply)
+	
+	return element
+end
+
+local PANEL = {}
+
+function PANEL:Init()
+	local varH = ScrH() * 0.6
+	local varW = varH * 1.8
+	self:SetPos( (ScrW()- varW)*0.5, (ScrH()- varH)*0.25)
+	self:SetSize( varW, varH )
+	
+	local wide = math.floor(self:GetWide())
+	local tall = math.floor(self:GetTall())
+	
+	local Text = New_ThemeText(self,wide * 0.02, tall * 0.01,GAMEMODE.ServerName,"Font_Normal",0,0)
+
+	local Text = New_ThemeText(self,wide * 0.02, tall * 0.08,translate.Get("Scoreboard_Version") .. GAMEMODE.Version,"Font_Small",0,0)
+
+	self.PlayerPanel = New_ThemeVertScroll(self,wide * 0.02,tall * 0.18,wide * 0.96,tall * 0.79)
+	
+	local panW = wide * 0.30
+	local panH = tall * 0.22
+	local maxy = 0 
+	for i, pl in ipairs(player.GetAll()) do
+		local panX = wide * 0.01 + ((i-1) % 3) * panW * 1.02
+		local panY = wide * 0.01 + math.floor((i-1) / 3) * panH * 1.05
+		local PlayerPane = New_PlayerPanel(self.PlayerPanel, panX,panY,panW,panH,pl)
+		if maxy < panY + panH then maxy = panY + panH end
+	end
+	self.PlayerPanel:UpdateMaxY(maxy + wide * 0.01 )
+	
+	--local Text = New_ThemeText(PlayerPanel,wide * 0.02, tall * 0.02,"hello suckas","Font_Normal",0,0)
+
+	self:SetVisible( true )
+end
+
+function PANEL:Paint()
+
+	local wide = math.floor(self:GetWide())
+	local tall = math.floor(self:GetTall())
+
+	draw.RoundedBoxEx( 8, 0, 0, self:GetWide(), self:GetTall() * 0.08, Theme.backcol,true, true,false,false)
+	
+	draw.RoundedBoxEx( 1, 0, self:GetTall() * 0.08, self:GetWide(), self:GetTall() * 0.07, Theme.backcol2,false, false,false,false)
+	draw.RoundedBoxEx( 1, 0, self:GetTall() * 0.15, self:GetWide(), self:GetTall() * 0.03, Theme.backcol,false, false,false,false)
+	draw.RoundedBoxEx( 1, 0, self.PlayerPanel:GetY(), self.PlayerPanel:GetX(), self.PlayerPanel:GetTall(), Theme.backcol,false, false,false,false)
+	draw.RoundedBoxEx( 1, self.PlayerPanel:GetX() + self.PlayerPanel:GetWide(), self.PlayerPanel:GetY(), self.PlayerPanel:GetX()+1, self.PlayerPanel:GetTall(), Theme.backcol,false, false,false,false)
+	--draw.RoundedBoxEx( 1, 0, self:GetTall() * 0.15, self:GetWide(), self:GetTall() * 0.85, Theme.backcol,false,false,false,false)
+	draw.RoundedBoxEx( 8, 0, self.PlayerPanel:GetTall() + self.PlayerPanel:GetY(), self:GetWide(), tall * 0.03, Theme.backcol,false,false,true,true)
+	
+	
+
+	return true
+end
+vgui.Register( "HL2CR_Scoreboard", PANEL, "Panel" )
 
 function ToggleBoard(toggle)
 	if toggle then
@@ -28,6 +189,15 @@ function ToggleBoard(toggle)
 			scoreboard:Remove()
 			scoreboard = nil
 		end
+		
+		if ( GAMEMODE.HelpMenu ) then GAMEMODE.HelpMenu:Remove() gui.EnableScreenClicker( false ) end
+		
+		--scoreboard  = vgui.Create("HL2CR_Scoreboard")
+		if true then 
+			scoreboard  = vgui.Create("HL2CR_Scoreboard")
+			return 
+		end
+		
 		scoreboard = vgui.Create("DFrame")
 		scoreboard:SetSize(1000, 600)
 		scoreboard:SetPos(ScrW() / 2 - 500, ScrH() / 15)

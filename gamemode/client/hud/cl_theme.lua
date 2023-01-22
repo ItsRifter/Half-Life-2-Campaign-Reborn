@@ -24,6 +24,21 @@ surface.CreateFont( "Font_Tiny",
 	antialias = true,
 	})
 	
+surface.CreateFont( "Font2_Small", 
+	{
+	font    = "DejaVu Sans",
+	size    = ScrH() * 0.028,
+	weight  = 100,
+	antialias = true,
+	})
+surface.CreateFont( "Font2_Tiny", 
+	{
+	font    = "DejaVu Sans",
+	size    = ScrH() * 0.022,
+	weight  = 100,
+	antialias = true,
+	})
+	
 Theme = {
 	col = Color( 240, 140, 50, 255 ),
 	backcol = Color( 255, 140, 20, 80 ),
@@ -34,9 +49,10 @@ Theme = {
 	button = Color( 255, 140, 0, 255 ),
 	buttonhi = Color( 255, 170, 50, 255 ),
 	buttonout = Color( 10, 10, 10, 255 ),
+	buttonouthi = Color( 240, 240, 240, 255 ),
 	box = Color( 220, 110, 0, 255 ),
 	box2 = Color( 180, 100, 0, 255 ),
-	buttonouthi = Color( 240, 240, 240, 255 ),
+	barback = Color( 120, 60, 5, 180 ),
 }
 
 
@@ -443,6 +459,98 @@ function PANEL:Paint()
 end
 vgui.Register( "ThemeTextMulti", PANEL, "Panel" )
 
+
+------------------------------------------------------------------------------------------------------------------------
+---------------------Vertical Scrollbox---------------------------------------------------------------------------------
+
+local PANEL = {}
+
+function PANEL:Init()
+	self:SetVisible( true )
+	self:SetMouseInputEnabled( true )
+	self.InternalY = 0
+	self.ExtraY = 0
+	self.MaxY = 0
+	self.BarY = 0
+	self.BarSize = 1
+	
+end
+
+function PANEL:UpdateMaxY(maxy)
+	self.MaxY = maxy
+	if self.MaxY > self:GetTall() then
+		self.BarSize = self:GetTall() * (self:GetTall()/self.MaxY)
+		self.ExtraY = maxy - self:GetTall()
+	end
+end
+
+function PANEL:OnMouseWheeled( scrollDelta )
+	self:ScrollAmount(-scrollDelta * (self:GetTall()* 0.1))
+end
+
+function PANEL:OnMousePressed( keyCode )
+	if keyCode == MOUSE_LEFT then
+		local locx, locy = self:ScreenToLocal( gui.MouseX() , gui.MouseY() )
+		--print(locy / self.spacing )
+		if locx > self:GetWide() - ScrH() * 0.03 and locx < self:GetWide() then
+			--local halfbar = self.BarSize * 0.5
+			if locy > 0 and locy < self:GetTall() then
+				local ypress = locy - self.BarSize * 0.5
+				if ypress < 0 then ypress = 0 
+				elseif ypress > self:GetTall() - self.BarSize then ypress = self:GetTall() - self.BarSize end
+				local newY = 1 / (self:GetTall() - self.BarSize) * ypress
+				newY = newY * self.ExtraY
+				self:ScrollAmount( newY - self.InternalY )
+				self.held = true
+				self:MouseCapture( true )
+			end
+		end
+	end
+end
+
+function PANEL:OnMouseReleased( keyCode )
+	if keyCode == MOUSE_LEFT then
+		if self.held then self.held = false self:MouseCapture( false ) end
+	end
+end
+
+function PANEL:Think( keyCode )
+	if self.held then
+		local locx, locy = self:ScreenToLocal( gui.MouseX() , gui.MouseY() )
+		local ypress = locy - self.BarSize * 0.5
+		if ypress < 0 then ypress = 0 
+		elseif ypress > self:GetTall() - self.BarSize then ypress = self:GetTall() - self.BarSize end
+		local newY = 1 / (self:GetTall() - self.BarSize) * ypress
+		newY = newY * self.ExtraY
+		self:ScrollAmount( newY - self.InternalY )
+	end
+end
+
+function PANEL:ScrollAmount( amount )
+	local newY = self.InternalY + math.floor(amount)
+	if newY < 0 then newY = 0 end
+	if newY > self.ExtraY then newY = self.ExtraY end
+	
+	self.BarY = (self:GetTall()-self.BarSize) / self.ExtraY * newY
+	
+	local moved = self.InternalY - newY
+	for i, cd in ipairs(self:GetChildren()) do
+		cd:SetY(cd:GetY() + moved)
+	end
+	
+	self.InternalY = newY
+end
+
+function PANEL:Paint()
+	draw.RoundedBox( 1, 0, 0, self:GetWide(), self:GetTall(), Theme.backcol2 )
+	if self.MaxY > self:GetTall() then
+		draw.RoundedBox( 6, self:GetWide() - ScrH() * 0.03, 0, ScrH() * 0.03, self:GetTall(), Theme.barback )
+		draw.RoundedBox( 6, self:GetWide() - ScrH() * 0.03, self.BarY, ScrH() * 0.03, self.BarSize, Theme.button )
+	end
+	return true
+end
+vgui.Register( "ThemeVertScoll", PANEL, "Panel" )
+
 ---------------------------------------------------------------------------------------
 -----------------------------------Creator Functions-----------------------------------
 ---------------------------------------------------------------------------------------
@@ -480,10 +588,13 @@ function New_ThemeCheck(parent,xpos,ypos,wide,tall,text,font)
 	return element
 end
 
-
-
-
-
+function New_ThemeVertScroll(parent,xpos,ypos,wide,tall)
+	local element = vgui.Create( "ThemeVertScoll" , parent)
+	element:SetSize( wide, tall)
+	element:SetPos( xpos, ypos)
+	
+	return element
+end
 
 ---------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------

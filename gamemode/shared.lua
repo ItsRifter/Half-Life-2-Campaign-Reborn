@@ -6,4 +6,4 @@ GM.Email = "d_thomas_smith30@hotmail.com"
 GM.Website = "N/A"
 
 GM.ServerName = GetHostName()
-GM.Version = "0.37.4"
+GM.Version = "0.37.5"
