@@ -646,6 +646,7 @@ function hl2cr_player:CreateRagdollBody(dmgInfo)
 	ragdoll:SetOwner(self)
 	ragdoll:Spawn()
 	ragdoll:Activate()
+	ragdoll:SetCollisionGroup(COLLISION_GROUP_PASSABLE_DOOR)
 	ragdoll:GetPhysicsObject():SetVelocity(self:GetVelocity())
 	
 	local num = ragdoll:GetPhysicsObjectCount() - 1
@@ -690,7 +691,7 @@ end
 
 function GM:PlayerDeath( victim, inflictor, attacker )
 	victim:SetTeam(TEAM_DEAD)
-	victim.MapStats.Deaths = victim.MapStats.Deaths + 1
+	if not victim:IsBot() then victim.MapStats.Deaths = victim.MapStats.Deaths + 1 end
 
 	if game.GetMap() == "ep2_outland_02" then
 		if victim.NoDeaths then

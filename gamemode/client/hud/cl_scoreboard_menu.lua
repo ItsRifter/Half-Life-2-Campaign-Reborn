@@ -1,3 +1,9 @@
+--local tex_hl2 = Material( "games/hl2.png", "noclamp smooth" )
+--local tex_ep1 = Material( "games/episodic.png", "noclamp smooth" )
+--local tex_ep2 = Material( "games/ep2.png", "noclamp smooth" )
+--local tex_coast = Material( "games/lostcoast.png", "noclamp smooth" )
+
+
 
 local scoreboard = scoreboard or nil
 
@@ -32,9 +38,10 @@ end
 function PANEL:SetPlayer(ply)
 	self.ply = ply
 	
+	local tall = self:GetTall()
 	local avatar = vgui.Create( "AvatarImage", self )
-	avatar:SetSize(self:GetTall() * 0.7, self:GetTall() * 0.7)
-	avatar:SetPos(self:GetTall() * 0.05, self:GetTall() * 0.05)
+	avatar:SetSize(tall * 0.7, tall * 0.7)
+	avatar:SetPos(tall * 0.05, tall * 0.05)
 	avatar:SetPlayer(self.ply, 128)
 	self:SetMouseInputEnabled( true )
 	avatar.OnMousePressed = function( )
@@ -44,30 +51,34 @@ function PANEL:SetPlayer(ply)
 		end
 	end
 	
-	local Text = New_ThemeText(self,self:GetTall() * 0.78, self:GetTall()  * 0.15,self.ply:Nick(),"Font2_Small",0,0.5)
+	local NameText = New_ThemeText(self,tall * 0.78, tall  * 0.15,self.ply:Nick(),"Font2_Small",0,0.5)
 	
 	if !self.ply:IsBot() then
 	
-		local Text = New_ThemeText(self,self:GetTall() * 0.78, self:GetTall()  * 0.4,"","Font2_Tiny",0,0.5)
+		local Text = New_ThemeText(self,tall * 0.78, tall  * 0.4,"","Font2_Tiny",0,0.5)
 		Text.Think = function()
 				local text = translate.Get("Scoreboard_Player_Level") .. self.ply:GetNWInt("hl2cr_stat_level", -1)
 				Text:SetText(text,nil,0,0.5)
 			end
-		local Text = New_ThemeText(self,self:GetTall() * 0.78, self:GetTall()  * 0.60,"","Font2_Tiny",0,0.5)
+		local Text = New_ThemeText(self,tall * 0.78, tall  * 0.60,"","Font2_Tiny",0,0.5)
 		Text.Think = function()
 				local text = translate.Get("Scoreboard_Player_Exp") .. self.ply:GetNWInt("hl2cr_stat_exp", -1) .. "/" .. self.ply:GetNWInt("hl2cr_stat_expreq", 0)
 				Text:SetText(text,nil,0,0.5)
 			end
-		local Text = New_ThemeText(self,self:GetTall() * 0.05, self:GetTall()  * 0.96,"","Font2_Small",0,1)
+		local Text = New_ThemeText(self,tall * 0.05, tall  * 0.96,"","Font2_Small",0,1)
 		Text.Think = function()
-				local text = translate.Get("Scoreboard_Player_Ping") .. self.ply:Ping()
+			local ping = self.ply:Ping()
+				local text = translate.Get("Scoreboard_Player_Ping") .. ping
 				Text:SetText(text,nil,0,1)
+				if ping > 300 then Text:SetColour(Color(255, 100, 100,255),Color(100, 30, 30,255) )
+				elseif ping > 100 then Text:SetColour(Color(255, 255, 100,255),Color(100, 100, 30,255) ) 
+				else Text:SetColour(Theme.fontcol,Theme.fontcolout )  end
 			end
 		
 			if LocalPlayer() != self.ply then
 				local muteBtn = vgui.Create("DImageButton", self)
-				muteBtn:SetSize(self:GetTall() * 0.25, self:GetTall() * 0.25)
-				muteBtn:SetPos(self:GetWide() - self:GetTall() * 0.27, self:GetTall() * 0.25	)
+				muteBtn:SetSize(tall * 0.25, tall * 0.25)
+				muteBtn:SetPos(self:GetWide() - tall * 0.27, tall * 0.25	)
 				
 				if self.ply:IsMuted() then
 					muteBtn:SetImage( "icon32/muted.png" )
@@ -87,15 +98,20 @@ function PANEL:SetPlayer(ply)
 			end	
 	
 			local Badge = vgui.Create( "DImageButton", self )
-			Badge:SetSize(self:GetTall() * 0.25, self:GetTall() * 0.25)
-			Badge:SetPos(self:GetWide() - self:GetTall() * 0.27, 0)
+			Badge:SetSize(tall * 0.25, tall * 0.25)
+			Badge:SetPos(self:GetWide() - tall * 0.27, 0)
 			
 			if self.ply:IsSuperAdmin() then
 				Badge:SetImage( "icon16/award_star_gold_3.png" )
 				Badge:SetToolTip(translate.Get("Scoreboard_Player_Status_SuperAdmin"))
+				--NameText:SetColour(Color(130, 20, 255,255),Color(80, 10, 160,255) )
+				NameText.Think = function()
+					NameText:SetColour(GetColour(89, 255),Color(50, 50, 50,255) )
+				end
 			elseif self.ply:IsAdmin() then
 				Badge:SetImage( "icon16/award_star_gold_2.png" )
 				Badge:SetToolTip(translate.Get("Scoreboard_Player_Status_Admin"))
+				NameText:SetColour(GetColour(9, 255),Color(100, 50, 20,255) )
 			elseif self.ply:GetUserGroup() == "donator" then
 				Badge:SetImage( "icon16/medal_bronze_3.png" )
 				Badge:SetToolTip(translate.Get("Scoreboard_Player_Status_Donator"))
@@ -106,9 +122,18 @@ function PANEL:SetPlayer(ply)
 				Badge:SetImage( "icon16/medal_gold_3.png" )
 				Badge:SetToolTip(translate.Get("Scoreboard_Player_Status_VIPExtra"))
 			end
+			
+			
+			if self.ply.games then
+				local icon = New_ThemeGameIcon(self,self:GetWide() - tall * 0.82,tall * 0.83,tall * 0.15,tall * 0.15,220,self.ply.games[220])	--HL2
+				local icon = New_ThemeGameIcon(self,self:GetWide() - tall * 0.64,tall * 0.83,tall * 0.15,tall * 0.15,380,self.ply.games[380])	--EP1
+				local icon = New_ThemeGameIcon(self,self:GetWide() - tall * 0.48,tall * 0.83,tall * 0.15,tall * 0.15,420,self.ply.games[420])	--EP2
+				local icon = New_ThemeGameIcon(self,self:GetWide() - tall * 0.32,tall * 0.83,tall * 0.15,tall * 0.15,340,self.ply.games[340])	--LostCoast
+				local icon = New_ThemeGameIcon(self,self:GetWide() - tall * 0.16,tall * 0.83,tall * 0.15,tall * 0.15,240,self.ply.games[240])	--CSS
+			end
 	
 	else
-		local Text = New_ThemeText(self,self:GetTall() * 0.05, self:GetTall()  * 0.96,"Bot","Font2_Small",0,1)
+		local Text = New_ThemeText(self,tall * 0.05, tall  * 0.96,"Bot","Font2_Small",0,1)
 	end
 end
 
@@ -143,7 +168,7 @@ function PANEL:Init()
 	
 	local Text = New_ThemeText(self,wide * 0.02, tall * 0.01,GAMEMODE.ServerName,"Font_Normal",0,0)
 
-	local Text = New_ThemeText(self,wide * 0.02, tall * 0.08,translate.Get("Scoreboard_Version") .. GAMEMODE.Version,"Font_Small",0,0)
+	local Text = New_ThemeText(self,wide * 0.02, tall * 0.09,translate.Get("Scoreboard_Version") .. GAMEMODE.Version,"Font_Small",0,0)
 
 	self.PlayerPanel = New_ThemeVertScroll(self,wide * 0.02,tall * 0.18,wide * 0.96,tall * 0.79)
 	
@@ -374,7 +399,7 @@ function ToggleBoard(toggle)
 				self:SizeToContents()
 			end
 		end
-	elseif not toggle and scoreboard:IsValid() then
+	elseif not toggle and IsValid(scoreboard) then
 		scoreboard:Remove()
 		scoreboard = nil
 	end

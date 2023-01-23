@@ -60,6 +60,39 @@ local tex_tick = Material( "icon16/tick.png", "noclamp smooth" )
 local tex_cross = Material( "icon16/cross.png", "noclamp smooth" )
 local tex_cog = Material( "icon16/cog.png", "noclamp smooth" )
 
+local tex_games = {
+	[220] = Material( "games/16/hl2.png", "noclamp smooth" ),
+	[240] = Material( "games/16/cstrike.png", "noclamp smooth" ),
+	[380] = Material( "games/16/episodic.png", "noclamp smooth" ),
+	[420] = Material( "games/16/ep2.png", "noclamp smooth" ),
+	[340] = Material( "games/16/lostcoast.png", "noclamp smooth" ),
+}
+
+local str_games = {
+	[220] = "Half-Life 2" ,
+	[240] = "Counter Strike Source",
+	[380] = "Episode 1" ,
+	[420] = "Episode 2" ,
+	[340] = "Lost Coast" ,
+}
+
+local PANEL = {}
+
+function PANEL:Init()
+	self:SetVisible( true )
+end
+
+function PANEL:SetGame(depot,value)
+	if tex_games[depot]then
+		self:SetMaterial(tex_games[depot])
+		self:SetTooltip(str_games[depot] )
+		if value >= 2 then self:SetColor(Color(255, 255, 255, 255)) 
+		elseif value == 0 then self:SetColor(Color(80, 80, 80, 255))
+		else self:SetColor(Color(0, 0, 0, 150)) end
+	end
+end
+vgui.Register( "ThemeGameIcon", PANEL, "DImageButton" )
+
 --Basic Theme Button---------------------------------------------------------------------------------------
 local PANEL = {}
 
@@ -336,6 +369,8 @@ function PANEL:Init()
 	self.width = 0
 	self.height = 0
 	self:SetMouseInputEnabled( false )
+	self.colour = Theme.fontcol
+	self.outcol = Theme.fontcolout
 end
 
 function PANEL:SetText(text,font, alignX,alignY )
@@ -355,10 +390,15 @@ function PANEL:SetText(text,font, alignX,alignY )
 	
 end
 
+function PANEL:SetColour(col, out)
+	self.colour = col or self.colour
+	self.outcol = out or self.outcol
+end
+
 function PANEL:Paint()
 
 	if self.Text then
-		draw.SimpleTextOutlined(self.Text , self.font, self:GetWide() * 0.5 , self:GetTall() * 0.5 , Theme.fontcol, 1, 1, 1, Theme.fontcolout)	
+		draw.SimpleTextOutlined(self.Text , self.font, self:GetWide() * 0.5 , self:GetTall() * 0.5 , self.colour, 1, 1, 1, self.outcol)	
 	end
 	return true
 end
@@ -592,6 +632,15 @@ function New_ThemeVertScroll(parent,xpos,ypos,wide,tall)
 	local element = vgui.Create( "ThemeVertScoll" , parent)
 	element:SetSize( wide, tall)
 	element:SetPos( xpos, ypos)
+	
+	return element
+end
+
+function New_ThemeGameIcon(parent,xpos,ypos,wide,tall,game,value)
+	local element = vgui.Create( "ThemeGameIcon" , parent)
+	element:SetSize( wide, tall)
+	element:SetPos( xpos, ypos)
+	element:SetGame(game,value)
 	
 	return element
 end

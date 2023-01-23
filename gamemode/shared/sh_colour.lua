@@ -19,7 +19,12 @@ function GetColour(number, blend)
 
 	New.a = blend
 	
-	if number == 99 then 	--Rainbow blend over time
+	if number >= 80 and number <= 89 then 	--Pulse Colours
+		local add360 = math.abs(Lerp(CurTime()%1.5,-0.5,0.5))+0.5
+		hue, sat, val = ColorToHSV( colours[number - 80] )
+		New = HSVToColor( hue, sat, add360 ) 
+		New = Color(New.r,New.g,New.b,blend) 
+	elseif number == 99 then 	--Rainbow blend over time
 		local add360 = (CurTime() * 180) % 360
 		New = HSVToColor( add360, 1, 1 ) 
 		New = Color(New.r,New.g,New.b,blend) 
