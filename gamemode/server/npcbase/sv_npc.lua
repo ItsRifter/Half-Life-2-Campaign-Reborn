@@ -138,13 +138,17 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
     if target:IsPlayer() then
 		if !target:IsBot() then
 			if target.hl2cr.CurCosmetic ~= "" and !attacker:IsPlayer() then
-				for _, c in ipairs(HL2CR_Cosmetics) do
-					if c.Class == target.hl2cr.CurCosmetic then
-						if not c.TakeDamageFunc then break end
-						c.TakeDamageFunc(target, attacker, dmgInfo:GetDamageType())
-						break
-					end
+				local hat = HL2CR_GetItem("HATS",target.hl2cr.CurCosmetic)
+				if hat and hat.OnHitFunc then
+					hat.OnHitFunc(target, attacker, dmgInfo:GetDamageType())
 				end
+				--for _, c in ipairs(HL2CR_Cosmetics) do
+				--	if c.Class == target.hl2cr.CurCosmetic then
+				--		if not c.TakeDamageFunc then break end
+				--		c.TakeDamageFunc(target, attacker, dmgInfo:GetDamageType())
+				--		break
+				--	end
+				--end
 			end
 		end
 
@@ -184,7 +188,7 @@ hook.Add( "EntityTakeDamage", "HL2CR_Hostile_Damage", function( target, dmgInfo 
         if target:IsPet() and attacker:IsPlayer() then
             return true
         end
-        
+        target:OnHit(attacker)
         --Attacker is a player pet
         if attacker:IsPet() then
             local pet = attacker:GetStats()
@@ -277,7 +281,6 @@ hook.Add( "EntityTakeDamage", "HL2CR_NPC_TakeDamage", function( target, dmgInfo 
 				if target.LastHitGroup and target.LastHitGroup == HITGROUP_HEAD then colour = 9 end
 				if !sucess then colour = 8 end	--If damage is block hit turns dark grey
 			end
-			target:OnHit()
 			net.Start( "HL2CR_Indicator" )
 				--net.WriteString(string.format("%1.1d",damagedone))	--Todo format better
 				net.WriteString(damagedone)	--Todo format better

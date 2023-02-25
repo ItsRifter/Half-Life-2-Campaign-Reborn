@@ -6,6 +6,9 @@ include("client/hud/cl_theme.lua")
 
 include("client/hud/cl_hud.lua")
 include("client/hud/cl_scoreboard_menu.lua")
+include("client/hud/cl_qmenu_inventory.lua")
+include("client/hud/cl_qmenu_skills.lua")
+include("client/hud/cl_qmenu_ach.lua")
 include("client/hud/cl_qmenu.lua")
 include("client/hud/cl_endresults.lua")
 include("client/hud/cl_autoicons.lua")
@@ -17,8 +20,6 @@ include("client/chat/cl_leifchat.lua")
 include("client/hud/cl_crosshair.lua")
 include("client/hud/cl_helpmenu.lua")
 
-
-
 include("client/cl_indicators.lua")
 include("client/cl_network.lua")
 
@@ -26,6 +27,8 @@ include("shared/sh_language_support.lua")
 include("shared/voting/sh_voting.lua")
 include("shared/voting/sh_vote_types.lua")
 include("shared/achievements/sh_ach_base.lua")
+
+include("shared/items/sh_itemdatabase.lua")
 
 include("shared/sh_colour.lua")
 

@@ -937,7 +937,7 @@ function EP2_SetupAntevent()
 		for k, v in ipairs(player.GetAll()) do
 			if v:Team() != TEAM_ALIVE then continue end
 			v.NoDeaths = true
-			v:BroadcastMessage(HL2CR_AchNotifyColour, translate.Get("Achievement_EP2_Antlions"), HL2CR_StandardColour, translate.Get("Achievement_EP2_Antlions_Event"))
+			v:BroadcastMessage(HL2CR_AchNotifyColour, translate.Get("Achievement_EP2_Antlions"), HL2CR_StandardColour, translate.Get("Achievement_NoDeath_Event"))
 		end
 	end)
 end

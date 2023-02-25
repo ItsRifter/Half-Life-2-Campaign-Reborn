@@ -1,39 +1,36 @@
-AddCSLuaFile()
-
---This weapon is janky but seems to be mostly working now?
-
-
-SWEP.WElements = {
-	["handle_rip_top"] = { type = "Model", model = "models/props_c17/lampShade001a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(4.756, 1.562, -13.086), angle = Angle(180, 0, 0), size = Vector(0.3, 0.3, 0.3), color = Color(255, 255, 255, 255), surpresslightning = false, material = "phoenix_storms/metalset_1-2", skin = 0, bodygroup = {} },
-	["sawblade"] = { type = "Model", model = "models/props_junk/sawblade001a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(6.051, 1.679, -22.168), angle = Angle(0, 0, 90), size = Vector(0.5, 0.5, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-	["handle_rim"] = { type = "Model", model = "models/props_c17/canister02a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(5.1, 1.687, -6.959), angle = Angle(0, 135, 0), size = Vector(0.5, 0.5, 0.081), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-	["handle_bar"] = { type = "Model", model = "models/props_c17/canister01a.mdl", bone = "ValveBiped.Anim_Attachment_RH", rel = "", pos = Vector(0, -3.573, 2.184), angle = Angle(90, 0, -90), size = Vector(0.395, 0.284, 0.47), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
-}
+--Crap test weapon practicing with
 
 SWEP.VElements = {
-	["handle_rip_top"] = { type = "Model", model = "models/props_c17/lampShade001a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(4.524, 1.338, -13.711), angle = Angle(180, 0, 3.838), size = Vector(0.189, 0.189, 0.189), color = Color(255, 255, 255, 255), surpresslightning = false, material = "phoenix_storms/metalset_1-2", skin = 0, bodygroup = {} },
-	["handle_bar"] = { type = "Model", model = "models/props_c17/canister01a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.937, 1.197, 0.647), angle = Angle(4.4, 0, 0), size = Vector(0.395, 0.284, 0.47), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-	["handle_rim"] = { type = "Model", model = "models/props_c17/canister02a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "handle_bar", pos = Vector(-0.717, 0.081, -8.238), angle = Angle(0, 134.164, 0), size = Vector(0.3, 0.3, 0.093), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
-	["sawblade"] = { type = "Model", model = "models/props_junk/sawblade001a.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(4.702, 1.325, -21.903), angle = Angle(0, 0, 90), size = Vector(0.5, 0.5, 0.5), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+	["scope"] = { type = "Model", model = "models/hunter/tubes/tube1x1x4.mdl", bone = "Python", rel = "", pos = Vector(0, -2.201, -1.201), angle = Angle(0, 0, 0), size = Vector(0.014, 0.014, 0.014), color = Color(255, 255, 255, 255), surpresslightning = false, material = "CMats/Base_Grey", skin = 0, bodygroup = {} },
+	["lense"] = { type = "Model", model = "models/XQM/cylinderx2.mdl", bone = "Base", rel = "scope", pos = Vector(0, 0, 2), angle = Angle(90, 0, 0), size = Vector(0.05, 0.009, 0.009), color = Color(255, 255, 255, 255), surpresslightning = false, material = "CMats/Glow_Orange", skin = 0, bodygroup = {} },
+	["cyl"] = { type = "Model", model = "models/Mechanics/gears2/gear_18t3.mdl", bone = "Cylinder", rel = "", pos = Vector(0, 0, -0.301), angle = Angle(0, 0, 0), size = Vector(0.079, 0.079, 0.109), color = Color(160, 40, 40, 255), surpresslightning = false, material = "metal2", skin = 0, bodygroup = {} }
+}
+SWEP.WElements = {
+	["scope"] = { type = "Model", model = "models/hunter/tubes/tube1x1x4.mdl", bone = "ValveBiped.Anim_Attachment_RH", rel = "", pos = Vector(-0.9, -5.5, 2.7), angle = Angle(0, 0, -3), size = Vector(0.014, 0.014, 0.014), color = Color(255, 255, 255, 255), surpresslightning = false, material = "CMats/Base_Grey", skin = 0, bodygroup = {} },
+	["cyl"] = { type = "Model", model = "models/Mechanics/gears2/gear_18t3.mdl", bone = "ValveBiped.Anim_Attachment_RH", rel = "", pos = Vector(-0.801, -3.636, 4.099), angle = Angle(0, 0, -3), size = Vector(0.079, 0.079, 0.109), color = Color(160, 40, 40, 255), surpresslightning = false, material = "metal2", skin = 0, bodygroup = {} }
 }
 
 SWEP.Author = nil
 SWEP.Base = "weapon_base"
-SWEP.PrintName = translate.Get("HUD_Weapon_Crowsaw")
+SWEP.PrintName = translate.Get("HUD_Weapon_Crossbow")
 SWEP.Instructions = nil
 
-SWEP.ShowViewModel = false
-SWEP.ShowWorldModel = false
-
+SWEP.HoldType = "revolver"
+SWEP.ViewModelFOV = 70
+SWEP.ViewModelFlip = false
 SWEP.UseHands = true
-SWEP.ViewModel = "models/weapons/c_crowbar.mdl"
-SWEP.WorldModel = "models/weapons/w_crowbar.mdl"
+SWEP.ViewModel = "models/weapons/v_357.mdl"
+SWEP.WorldModel = "models/weapons/w_357.mdl"
+SWEP.ShowViewModel = true
+SWEP.ShowWorldModel = true
 SWEP.ViewModelBoneMods = {}
+SWEP.IronSightsPos = Vector(-5.64, 0, 2.359)
+SWEP.IronSightsAng = Vector(0, 0, 0)
 
 SWEP.BounceWeaponIcon = false
 
-SWEP.Slot = 0
-SWEP.SlotPos = 1
+SWEP.Slot = 2
+SWEP.SlotPos = 2
 SWEP.DrawAmmo = true
 SWEP.DrawCrosshair = true
 
@@ -42,14 +39,13 @@ SWEP.ViewModelFlip = false
 SWEP.Spawnable = false
 SWEP.AdminSpawnable = false
 
-SWEP.HoldType = "melee"
-SWEP.Primary.Rate = 0.8
-SWEP.Primary.NumShots = -1
-SWEP.Primary.Spread = -1
-SWEP.Primary.Ammo = ""
-SWEP.Primary.Damage = 15
-SWEP.Primary.ClipSize = -1
-SWEP.Primary.DefaultClip = -1
+SWEP.Primary.Rate = 1
+SWEP.Primary.NumShots = 1
+SWEP.Primary.Spread = 0.0
+SWEP.Primary.Ammo = "357"
+SWEP.Primary.Damage = 75
+SWEP.Primary.ClipSize = 6
+SWEP.Primary.DefaultClip = 6
 SWEP.Primary.Automatic = true
 
 SWEP.Secondary.ClipSize = -1
@@ -57,124 +53,103 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-SWEP.Primary.Swing = Sound("Weapon_Crowbar.Single")
-SWEP.Primary.HitSound = Sound("NPC_Manhack.Grind")
+SWEP.Primary.ShootSound = Sound("Weapon_357.Single")
+SWEP.Primary.ReloadSound = Sound("Weapon_357.Reload")
+
+SWEP.IsReloading = false
+SWEP.IsZoomedIn = false
+SWEP.ZoomFOV = 35
+SWEP.ZoomTime = 0
+SWEP.ZoomStart = 0
 
 function SWEP:Initialize()
-    
 end
 
 function SWEP:PrimaryAttack()
 	
+	if not self:CanPrimaryAttack() then return end
+	if self.IsReloading then return end
+
     local pl = self:GetOwner()
 
     pl:LagCompensation(true)
 
-	if SERVER then
+    local bullet = {}
+	bullet.Attacker = pl
+    bullet.num = self.Primary.NumShots
+    bullet.Src = pl:GetShootPos()
+    bullet.Dir = pl:GetAimVector()
+    bullet.Spread = Vector(self.Primary.Spread, self.Primary.Spread, 0)
+    bullet.Tracer = 0
+    bullet.Damage = self.Primary.Damage
+    bullet.AmmoType = self.Primary.Ammo
+    
+    self:FireBullets(bullet)
 
-		local tr = util.TraceHull( {
-			start = pl:GetShootPos(),
-			endpos = pl:GetShootPos() + pl:GetAimVector() * 70,
-			filter = pl,
-			mask = MASK_SHOT_HULL,
-			mins = Vector(1, 1, 1) * -3,
-			maxs = Vector(1, 1, 1) * 3
+    self:EmitSound(self.Primary.ShootSound)
 
-		} )
-		
-		if not IsValid(tr.Entity) and !tr.HitWorld then
-			self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
-			pl:EmitSound(self.Primary.Swing)
-			
-			self:SetNextPrimaryFire(self.Primary.Rate + CurTime())
-		else
-			if IsValid(tr.Entity) and tr.Entity:IsNPC() then
-				self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
-				
-				
-				local dmgInfo = DamageInfo()
-				dmgInfo:SetDamageType(DMG_SLASH)
-				dmgInfo:SetDamage(self.Primary.Damage)
-				dmgInfo:SetAttacker(self:GetOwner())
-				dmgInfo:SetReportedPosition( tr.HitPos )
-				tr.Entity:TakeDamageInfo(dmgInfo)
-				
-				tr.Entity:EmitSound(self.Primary.HitSound)
-				util.Decal( "Blood", pl:GetShootPos(), pl:GetShootPos() + pl:GetAimVector() * 70,pl )
-			else
-				self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
-				local phys = tr.Entity:GetPhysicsObject()
+    self.BaseClass.ShootEffects(self)
+    self:TakePrimaryAmmo(1)
+    self:SetNextPrimaryFire(self.Primary.Rate + CurTime())
 
-				if ( IsValid( phys ) ) then 
-					phys:AddVelocity( pl:GetAimVector() * 32 )
-				end
-				
-				tr.Entity:TakeDamage( self.Primary.Damage, self:GetOwner(), self )
-				pl:EmitSound(self.Primary.HitSound)
-				util.Decal( "ManhackCut", pl:GetShootPos(), pl:GetShootPos() + pl:GetAimVector() * 70,pl )
-			end
-			
-			self:SetNextPrimaryFire(self.Primary.Rate* 0.4 + CurTime())
-		end
-		
-	end
-
-	pl:SetAnimation(PLAYER_ATTACK1)
-
-	
-   -- self:SetNextPrimaryFire(self.Primary.Rate + CurTime())
+	timer.Simple(self.Primary.Rate / 2.5, function()
+		self:SendWeaponAnim(ACT_VM_IDLE)
+	end)
 
     pl:LagCompensation(false)
 end
 
 function SWEP:Reload()
     
-    if self:Clip1() == self.Primary.ClipSize then return end
+    if self:Clip1() >= self.Primary.ClipSize then return end
 	if self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0 then return end
+	if self.IsReloading then return end
+
+	self.IsReloading = true
 
     if CLIENT then
         self:EmitSound(self.Primary.ReloadSound)
     end
-    
-    self.Weapon:DefaultReload( ACT_VM_RELOAD );
+
+	self:SendWeaponAnim( ACT_VM_RELOAD )
+
+	timer.Simple(1.95, function()
+		
+		if not self.Owner:IsValid() then return end
+		self.IsReloading = false
+		self:SetClip1(self:Clip1() + 1)
+		self.Owner:RemoveAmmo(1, self.Primary.Ammo)
+	end)
 end
 
 function SWEP:SecondaryAttack()
-	return
+	local pl = self:GetOwner()
+
+	if self.ZoomStart == 0 then self.ZoomStart = pl:GetFOV(0) end
+
+	if self.IsZoomedIn then
+		pl:SetFOV(0)
+		self.IsZoomedIn = false
+	else
+		pl:SetFOV(self.ZoomFOV)
+		self.IsZoomedIn = true
+	end
 end
 
 function SWEP:Deploy()
 	self:SetHoldType(self.HoldType)
-	
 end
 
-/********************************************************
-	SWEP Construction Kit base code
-		Created by Clavus
-	Available for public use, thread at:
-	   facepunch.com/threads/1032378
-	   
-	   
-	DESCRIPTION:
-		This script is meant for experienced scripters 
-		that KNOW WHAT THEY ARE DOING. Don't come to me 
-		with basic Lua questions.
-		
-		Just copy into your SWEP or SWEP base of choice
-		and merge with your own code.
-		
-		The SWEP.VElements, SWEP.WElements and
-		SWEP.ViewModelBoneMods tables are all optional
-		and only have to be visible to the client.
-********************************************************/
+----------------------------------
+----------------------------------
 
 function SWEP:Initialize()
 
-	// other initialize code goes here
+	-- other initialize code goes here
 
 	if CLIENT then
 	
-		// Create a new table for every weapon instance
+		-- Create a new table for every weapon instance
 		self.VElements = table.FullCopy( self.VElements )
 		self.WElements = table.FullCopy( self.WElements )
 		self.ViewModelBoneMods = table.FullCopy( self.ViewModelBoneMods )
@@ -182,7 +157,7 @@ function SWEP:Initialize()
 		self:CreateModels(self.VElements) // create viewmodels
 		self:CreateModels(self.WElements) // create worldmodels
 		
-		// init view model bone build function
+		-- init view model bone build function
 		if IsValid(self.Owner) then
 			local vm = self.Owner:GetViewModel()
 			if IsValid(vm) then
@@ -192,10 +167,10 @@ function SWEP:Initialize()
 				if (self.ShowViewModel == nil or self.ShowViewModel) then
 					vm:SetColor(Color(255,255,255,255))
 				else
-					// we set the alpha to 1 instead of 0 because else ViewModelDrawn stops being called
+					-- we set the alpha to 1 instead of 0 because else ViewModelDrawn stops being called
 					vm:SetColor(Color(255,255,255,1))
-					// ^ stopped working in GMod 13 because you have to do Entity:SetRenderMode(1) for translucency to kick in
-					// however for some reason the view model resets to render mode 0 every frame so we just apply a debug material to prevent it from drawing
+					-- ^ stopped working in GMod 13 because you have to do Entity:SetRenderMode(1) for translucency to kick in
+					-- however for some reason the view model resets to render mode 0 every frame so we just apply a debug material to prevent it from drawing
 					vm:SetMaterial("vgui/hsv")		
 				end
 			end
@@ -207,15 +182,12 @@ end
 
 function SWEP:Holster()
 	
-	--if CLIENT and IsValid(self.Owner) then
-		--print("holstered")
-		--local vm = self.Owner:GetViewModel()
-		--if IsValid(vm) then
-		--	vm:SetColor(Color(255,255,255,255))
-		--	vm:SetMaterial()	
-		--	self:ResetBonePositions(vm)
-		--end
-	--end
+	if CLIENT and IsValid(self.Owner) then
+		local vm = self.Owner:GetViewModel()
+		if IsValid(vm) then
+			self:ResetBonePositions(vm)
+		end
+	end
 	
 	return true
 end
@@ -238,7 +210,7 @@ if CLIENT then
 
 		if (!self.vRenderOrder) then
 			
-			// we build a render order because sprites need to be drawn after models
+			-- we build a render order because sprites need to be drawn after models
 			self.vRenderOrder = {}
 
 			for k, v in pairs( self.VElements ) do
@@ -360,7 +332,7 @@ if CLIENT then
 		if (IsValid(self.Owner)) then
 			bone_ent = self.Owner
 		else
-			// when the weapon is dropped
+			-- when the weapon is dropped
 			bone_ent = self
 		end
 		
@@ -391,7 +363,7 @@ if CLIENT then
 				ang:RotateAroundAxis(ang:Forward(), v.angle.r)
 
 				model:SetAngles(ang)
-				//model:SetModelScale(v.size)
+				--model:SetModelScale(v.size)
 				local matrix = Matrix()
 				matrix:Scale(v.size)
 				model:EnableMatrix( "RenderMultiply", matrix )
@@ -460,8 +432,8 @@ if CLIENT then
 			
 			if (!v) then return end
 			
-			// Technically, if there exists an element with the same name as a bone
-			// you can get in an infinite loop. Let's just hope nobody's that stupid.
+			-- Technically, if there exists an element with the same name as a bone
+			-- you can get in an infinite loop. Let's just hope nobody's that stupid.
 			pos, ang = self:GetBoneOrientation( basetab, v, ent )
 			
 			if (!pos) then return end
@@ -485,7 +457,7 @@ if CLIENT then
 			
 			if (IsValid(self.Owner) and self.Owner:IsPlayer() and 
 				ent == self.Owner:GetViewModel() and self.ViewModelFlip) then
-				ang.r = -ang.r // Fixes mirrored models
+				ang.r = -ang.r -- Fixes mirrored models
 			end
 		
 		end
@@ -497,7 +469,7 @@ if CLIENT then
 
 		if (!tab) then return end
 
-		// Create the clientside models here because Garry says we can't do it in the render hook
+		-- Create the clientside models here because Garry says we can't do it in the render hook
 		for k, v in pairs( tab ) do
 			if (v.type == "Model" and v.model and v.model != "" and (!IsValid(v.modelEnt) or v.createdModel != v.model) and 
 					string.find(v.model, ".mdl") and file.Exists (v.model, "GAME") ) then
@@ -518,7 +490,7 @@ if CLIENT then
 				
 				local name = v.sprite.."-"
 				local params = { ["$basetexture"] = v.sprite }
-				// make sure we create a unique name based on the selected options
+				-- make sure we create a unique name based on the selected options
 				local tocheck = { "nocull", "additive", "vertexalpha", "vertexcolor", "ignorez" }
 				for i, j in pairs( tocheck ) do
 					if (v[j]) then
@@ -546,8 +518,6 @@ if CLIENT then
 			
 			if (!vm:GetBoneCount()) then return end
 			
-			// !! WORKAROUND !! //
-			// We need to check all model names :/
 			local loopthrough = self.ViewModelBoneMods
 			if (!hasGarryFixedBoneScalingYet) then
 				allbones = {}
@@ -566,13 +536,11 @@ if CLIENT then
 				
 				loopthrough = allbones
 			end
-			// !! ----------- !! //
 			
 			for k, v in pairs( loopthrough ) do
 				local bone = vm:LookupBone(k)
 				if (!bone) then continue end
 				
-				// !! WORKAROUND !! //
 				local s = Vector(v.scale.x,v.scale.y,v.scale.z)
 				local p = Vector(v.pos.x,v.pos.y,v.pos.z)
 				local ms = Vector(1,1,1)
@@ -586,7 +554,6 @@ if CLIENT then
 				end
 				
 				s = s * ms
-				// !! ----------- !! //
 				
 				if vm:GetManipulateBoneScale(bone) != s then
 					vm:ManipulateBoneScale( bone, s )
@@ -612,34 +579,6 @@ if CLIENT then
 			vm:ManipulateBoneAngles( i, Angle(0, 0, 0) )
 			vm:ManipulateBonePosition( i, Vector(0, 0, 0) )
 		end
-		
-	end
-
-	/**************************
-		Global utility code
-	**************************/
-
-	// Fully copies the table, meaning all tables inside this table are copied too and so on (normal table.Copy copies only their reference).
-	// Does not copy entities of course, only copies their reference.
-	// WARNING: do not use on tables that contain themselves somewhere down the line or you'll get an infinite loop
-	function table.FullCopy( tab )
-
-		if (!tab) then return nil end
-		
-		local res = {}
-		for k, v in pairs( tab ) do
-			if (type(v) == "table") then
-				res[k] = table.FullCopy(v) // recursion ho!
-			elseif (type(v) == "Vector") then
-				res[k] = Vector(v.x, v.y, v.z)
-			elseif (type(v) == "Angle") then
-				res[k] = Angle(v.p, v.y, v.r)
-			else
-				res[k] = v
-			end
-		end
-		
-		return res
 		
 	end
 	

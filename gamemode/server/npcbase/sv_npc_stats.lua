@@ -44,5 +44,13 @@ hook.Add("OnEntityCreated", "HL2CR_OnNPCCreation", function(ent)
         elseif FRIENDLY_HARMABLE_NPCS[ent:GetClass()] or (ent:GetClass() == "npc_vortigaunt" and not MAPS_VORT_HOSTILE[game.GetMap()]) then
             ent:FixCollisions()
         end
+		
+		if FORCE_FRIENDLY_MAPS[game.GetMap()] then	--Ensure they get set on said maps
+			for _, force in ipairs(FORCE_FRIENDLY_MAPS[game.GetMap()]) do
+				if force == ent:GetClass() then
+					ent:AddRelationship( "player D_LI 99" )
+				end
+			end
+		end
     end
 end)

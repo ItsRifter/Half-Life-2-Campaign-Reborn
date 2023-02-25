@@ -44,6 +44,7 @@ DISALLOW_PICKUP = {
 	["weapon_medkit"] = true
 }
 
+--[[
 local ammo_filter = {
 	["item_ammo_pistol"] = true,
 	["item_ammo_pistol_large"] = true,
@@ -62,7 +63,7 @@ local ammo_filter = {
 	["weapon_frag"] = true,
 	["weapon_slam"] = true,
 }
-
+]]--
 local ammo_convert_to_id = {
 	["item_ammo_pistol"] = "pistol",
 	["item_ammo_pistol_large"] = "pistol",
@@ -114,6 +115,7 @@ local ammo_convert_to_convar = {
 	["weapon_slam"] = "hl2cr_base_slam",
 }
 
+--[[
 local stat_convert_to_convar = {
 	["Pistol"] = "hl2cr_base_pistol",
 	["357"] = "hl2cr_base_357",
@@ -124,14 +126,15 @@ local stat_convert_to_convar = {
 	["RPG"] = "hl2cr_base_rpg_round",
 	["Frags"] = "hl2cr_base_frags"
 }
-
+]]--
 local weapon_melees = {
-	["weapon_crowbar"] = true
+	["weapon_crowbar"] = true,
+	--["weapon_hl2cr_crowsaw"] = true,
 }
 
 local mapach_setup = {
 	["d1_town_01"] = function(ply)
-		if table.HasValue(ply.hl2cr.AchProgress, "ZombieChopperActive") or ply:HasAchievement("Zombie Chopper") then return end
+		if table.HasValue(ply.hl2cr.AchProgress, "ZombieChopperActive") or ply:HasAchievement("HL2_Chopper") then return end
 		
 		table.insert(ply.hl2cr.AchProgress, "ZombieChopperActive")
 		ply:BroadcastMessage(HL2CR_AchNotifyColour, translate.Get("Achievement_HL2_ZombieChopper_Name"), HL2CR_StandardColour, translate.Get("Achievement_Notify_Begin"))
@@ -146,39 +149,6 @@ function GM:PlayerShouldTakeDamage( ply, attacker )
 	return true
 end
 
-function hl2cr_player:SetActiveItem(itemToActivate)
-	
-	if itemToActivate.Type == "Weapon" then
-		for _, i in ipairs(self.hl2cr.Inventory.Weapons) do
-			if i.Class == itemToActivate.Class then
-				if i.Active then
-					i.Active = false
-					self:BroadcastSound("buttons/button16.wav")
-				else
-					i.Active = true
-					self:BroadcastSound("buttons/button15.wav")
-				end
-
-				break
-			end
-		end
-	end
-
-
-	self:UpdateInvNetwork()
-end
-
-function hl2cr_player:StoreItemInv(newItem)
-
-	if newItem.Type == "Weapon" then
-
-		if table.HasValue(self.hl2cr.Inventory.Weapons, newItem) then return end
-
-		table.insert(self.hl2cr.Inventory.Weapons, newItem)
-	end
-
-	self:UpdateInvNetwork()
-end
 
 function hl2cr_player:DisplayResults()
 	if NO_RESULT_MAPS[game.GetMap()] then return end
@@ -212,18 +182,22 @@ function hl2cr_player:SetUpPlayer()
 
 	self:ChangeModel(self.hl2cr.PMModel)
 	
-	timer.Simple(2, function()
+	self:UpdateEquipped()
+	table.CopyFromTo( self.hl2cr.Inv, self.CurrentInv )
+	
+	timer.Simple(0.5, function()
+		if !IsValid(self) or !self:Alive() then return end
 		self:SetupHands()
 		self:ApplyCosmeticSpawn()
 	end)
 
-	local cosmetics = {}
+	--local cosmetics = {}
 
-	for _, c in ipairs(self.hl2cr.Inventory.Cosmetics) do
-		table.insert(cosmetics, c.Name)
-	end
+	--for _, c in ipairs(self.hl2cr.Inventory.Cosmetics) do
+	--	table.insert(cosmetics, c.Name)
+	--end
 
-	self:SetNWString("hl2cr_items_cosmetics", table.concat(cosmetics, "  "))
+	--self:SetNWString("hl2cr_items_cosmetics", table.concat(cosmetics, "  "))
 
 	if not maps_trainstation[game.GetMap()] then 
 		if self.statHP then
@@ -260,42 +234,49 @@ function hl2cr_player:AdjustSpeed()
 end
 
 function hl2cr_player:ApplyCosmeticSpawn()
-	if self.hl2cr.CurCosmetic == "" then return end
-	
+	--if self.hl2cr.CurCosmetic == "" then return end
+	if self.hl2cr.Equipped["HATS"] == "" then return end
+	self.hl2cr.CurCosmetic = self.hl2cr.Equipped["HATS"]
+	local hat = HL2CR_GetItem("HATS",self.hl2cr.CurCosmetic)
 	net.Start("HL2CR_Cosmetic_Use")
-		net.WriteTable(HL2CR_Shared_Cosmetics[self.hl2cr.CurCosmetic])
+		--net.WriteTable(HL2CR_Shared_Cosmetics[self.hl2cr.CurCosmetic])
+		net.WriteTable(HL2CR_Shared_Cosmetics[hat.Ref])
 		net.WriteEntity(self)
 	net.Broadcast()
 end
 
 function hl2cr_player:ApplyCosmeticServer(cosmeticToApply)
+	if self.hl2cr.CurCosmetic == self.hl2cr.Equipped["HATS"] then return end
+	self.hl2cr.CurCosmetic = self.hl2cr.Equipped["HATS"]
 	if cosmeticToApply == "" or cosmeticToApply == nil then
-		self.hl2cr.CurCosmetic = ""
-		local emptyTbl = {}
+		--self.hl2cr.CurCosmetic = ""
+		--local emptyTbl = {}
 
 		net.Start("HL2CR_Cosmetic_Use")
-			net.WriteTable(emptyTbl)
+			net.WriteTable({})
 			net.WriteEntity(self)
 		net.Broadcast()
 		return
 	end
 	
-	local apply = nil 
-	local tempName = nil
-	for _, c in ipairs(HL2CR_Cosmetics) do
-		if c.Name == cosmeticToApply then
-			apply = c.Class
-			tempName = c.Name
-			break
-		end
-	end
+	local hat = HL2CR_GetItem("HATS",cosmeticToApply)
+	
+	--local apply = nil 
+	--local tempName = nil
+	--for _, c in ipairs(HL2CR_Cosmetics) do
+	--	if c.Name == cosmeticToApply then
+	--		apply = c.Class
+	--		tempName = c.Name
+	--		break
+	--	end
+	--end
 
-	self.hl2cr.CurCosmetic = apply
+	--self.hl2cr.CurCosmetic = apply
 
-	self:BroadcastMessage(HL2CR_GreenColour, tempName .. translate.Get("Player_CosmeticApply"))
+	self:BroadcastMessage(HL2CR_GreenColour, hat.Name .. translate.Get("Player_CosmeticApply"))
 
 	net.Start("HL2CR_Cosmetic_Use")
-		net.WriteTable(HL2CR_Shared_Cosmetics[apply])
+		net.WriteTable(HL2CR_Shared_Cosmetics[hat.Ref])
 		net.WriteEntity(self)
 	net.Broadcast()
 end
@@ -335,7 +316,7 @@ function hl2cr_player:SetUpInitialSpawn()
 	}
 
 	if VortexBall and VortexBall:IsValid() then
-		self:BroadcastMessage(HL2CR_PlayerColour, translate.Get("Server_Announce_Vortex_Spawn"))
+		--self:BroadcastMessage(HL2CR_PlayerColour, translate.Get("Server_Announce_Vortex_Spawn"))
 	end
 
 	self:DisplayAnyWarnings()
@@ -417,29 +398,30 @@ function hl2cr_player:GiveEquipment()
 				self:SetArmor(item.Amount)
 			else
 				self:SetAmmo(item.Amount, item.Type)
+				if self:HasSkill("Ammo_3") then self:GiveAmmo(HL2CR_GetClipSize(item.Type),item.Type,true) end
 			end
 		end
 	end
-
-	--self:CheckAllAmmo()
 end
 
-function hl2cr_player:SpawnWithActiveWeapons()
-	if MAPS_NO_SUIT[game.GetMap()] or (game.GetMap() == "d1_trainstation_05" and GetGlobalBool("HL2CR_GLOBAL_SUIT") == false) then return end
-
-	for _, i in ipairs(self.hl2cr.Inventory.Weapons) do
-		if i.Active then
-			self:Give(i.Class)
-		end
-	end
-end
+--function hl2cr_player:SpawnWithActiveWeapons()
+--	if MAPS_NO_SUIT[game.GetMap()] or (game.GetMap() == "d1_trainstation_05" and GetGlobalBool("HL2CR_GLOBAL_SUIT") == false) then return end
+--	for _, i in ipairs(self.hl2cr.Inventory.Weapons) do
+--		if i.Active then
+--			self:Give(i.Class)
+--		end
+--	end
+--end
 
 function hl2cr_player:GiveWeaponsSpawn()
+	table.CopyFromTo( self.hl2cr.Equipped, self.CurrentInv )
 	for _, weapon in ipairs(SPAWNING_WEAPONS) do
-		self:Give(weapon)
+		local given = self:Give(weapon)
+		if self:HasSkill("Ammo_3") and IsValid(given) then 
+			local ammotype = given:GetPrimaryAmmoType()
+			if ammotype != -1 then self:GiveAmmo(HL2CR_GetClipSize(ammotype),ammotype,true) end
+		end
 	end
-
-	self:SpawnWithActiveWeapons()
 
 end
 
@@ -477,9 +459,22 @@ function GM:PostEntityTakeDamage( ent, dmg, took )
 	end
 end
 
+local storable_weapons = {
+	["weapon_crowbar"]=true,
+	["weapon_pistol"]=true,
+	["weapon_smg1"]=true,
+	["weapon_357"]=true,
+	["weapon_physcannon"]=true,
+	["weapon_shotgun"]=true,
+	["weapon_ar2"]=true,
+	["weapon_rpg"]=true,
+	["weapon_crossbow"]=true
+}
+
 --Stores the weapons for player joining or respawning
-local function StoreWeapons(newWeapon)
+function StoreWeapons(newWeapon)
 	--If this is a restricted weapon, do not store it
+	if !storable_weapons[newWeapon] then return end
 	if RESTRICTED_WEAPONS[newWeapon] then return end
 	
 	--If the item is already in the table or is a restricted weapon, do nothing
@@ -492,13 +487,15 @@ local function StoreWeapons(newWeapon)
 
 	--Give all players the new weapon that don't have it
 	for k, p in ipairs(player.GetAll()) do
-		if p:Team() == TEAM_AFK or p:Team() == TEAM_COMPLETED_MAP or p:HasWeapon(newWeapon) then continue end
+		local newwpn = p:GetRelativeWeapon(newWeapon)
+		if p:Team() == TEAM_AFK or p:Team() == TEAM_COMPLETED_MAP or p:HasWeapon(newwpn) then continue end
 		
 		if game.GetMap() == "d1_trainstation_06" and newWeapon == "weapon_crowbar" then
-			p:GrantAchievement("Trusty Hardware")
+			--p:GrantAchievement("Trusty Hardware")
+			p:GiveAchievement("HL2","HL2_Crowbar")
 		end
 
-		p:Give(newWeapon)
+		p:Give(newwpn)
 	end
 end
 
@@ -589,53 +586,56 @@ function hl2cr_player:CanPickupAmmo(ammoType)
 	return true
 end
 
---function hl2cr_player:CheckAmmo(ammoType)
---	if isnumber(ammoType) then
---		if self:GetAmmoCount(ammoType) > GetConVar(id_convert_to_convar[ammoType]):GetInt() then
---			self:SetAmmo( GetConVar(id_convert_to_convar[ammoType]):GetInt(), ammoType)
---			return
---		end
---	end
---	
---	if not ammo_convert_to_id[ammoType] then return end
---
---	if self:GetAmmoCount(ammo_convert_to_id[ammoType]) > GetConVar(ammo_convert_to_convar[ammoType]):GetInt() then
---		self:SetAmmo( GetConVar(ammo_convert_to_convar[ammoType]):GetInt(), ammo_convert_to_id[ammoType])
---	end
---end
+function hl2cr_player:SendItems()
+	if self:IsBot() then return end
+	PrintTable(self.hl2cr.Items)
+	net.Start( "HL2CR_CL_SendItems" )
+		net.WriteTable(self.hl2cr.Items)
+	net.Send(self)
+end
 
---function GM:PlayerAmmoChanged( ply, ammoID, oldCount, newCount )
---	if ply:GetAmmoCount( ammoID ) > GetConVar(id_convert_to_convar[ammoID]):GetInt() then
---		ply:SetAmmo(GetConVar(id_convert_to_convar[ammoID]):GetInt(), ammoID)
-		--return false
---	end
-
---end
-
---function hl2cr_player:CheckAllAmmo()
---	for i, a in pairs(self:GetAmmo()) do
---		if a > GetConVar(id_convert_to_convar[i]):GetInt() then
---			--self:SetAmmo(GetConVar(id_convert_to_convar[i]):GetInt(), i)
---			--return false
---		end
---	end
---end
-
-function hl2cr_player:UpdateSkills(skill)
+function hl2cr_player:GiveItem(id)
+	if self:IsBot() then return end
+	if self:HasItem(id) then return end
 	
-	local updateNetwork = ""
+	table.insert(self.hl2cr.Items, id)
+	net.Start( "HL2CR_CL_AddItem" )
+		net.WriteString(id)
+	net.Send(self)
 
-	for _, s in ipairs(HL2CR_Skills) do
-		if s.Class == skill then
-			self.hl2cr.SkillPoints = self.hl2cr.SkillPoints - s.Cost
-			table.insert(self.hl2cr.Skills, s.Class)
-			s.Func(self)
-			break
-		end
-	end
-	
-	self:SetNWInt("hl2cr_stat_skillpoints", self.hl2cr.SkillPoints)
-	self:SetNWString("hl2cr_stat_skills", table.concat(self.hl2cr.Skills, " "))
+end
+
+function hl2cr_player:HasItem(id)
+	--if true then return true end
+	if id == "" then return true end
+	return table.HasValue(self.hl2cr.Items, id)
+end
+
+function hl2cr_player:UpdateEquipped()
+	self:ApplyCosmeticServer(self.hl2cr.Equipped["HATS"])
+	net.Start("HL2CR_SendLoadout")
+		net.WriteString(self.hl2cr.Equipped["HATS"])
+		net.WriteString(self.hl2cr.Equipped["MELEE"])
+		net.WriteString(self.hl2cr.Equipped["PISTOL"])
+		net.WriteString(self.hl2cr.Equipped["REV"])
+		net.WriteString(self.hl2cr.Equipped["SMG"])
+		net.WriteString(self.hl2cr.Equipped["SHGUN"])
+		net.WriteString(self.hl2cr.Equipped["XBOW"])
+	net.Send(self)
+end
+
+function hl2cr_player:GiveNewSkill(skill)
+	if !HL2CR_NewSkills[skill] then return end
+	local newskill = HL2CR_NewSkills[skill]
+	if self:HasSkill(skill) then return end
+	if !self:SkillUnlocked(skill) then return end
+	if self.hl2cr.SkillPoints < newskill.cost then return end
+	table.insert(self.hl2cr.Skills, skill)
+	self.hl2cr.SkillPoints = self.hl2cr.SkillPoints - newskill.cost
+	net.Start( "HL2CR_CL_AddSkill" )
+		net.WriteString(skill)
+		net.WriteUInt(self.hl2cr.SkillPoints,12)
+	net.Send(self)
 end
 
 function hl2cr_player:CreateRagdollBody(dmgInfo)
@@ -689,17 +689,23 @@ function GM:DoPlayerDeath(ply, att, dmgInfo)
 	net.Broadcast()
 end
 
+
+
 function GM:PlayerDeath( victim, inflictor, attacker )
 	victim:SetTeam(TEAM_DEAD)
 	if not victim:IsBot() then victim.MapStats.Deaths = victim.MapStats.Deaths + 1 end
 
-	if game.GetMap() == "ep2_outland_02" then
+	--if game.GetMap() == "ep2_outland_02" then
 		if victim.NoDeaths then
-			victim:BroadcastMessage(HL2CR_RedColour, translate.Get("Achievement_EP2_Antlions_Failed"), translate.Get("Achievement_EP2_Antlions"))
+			if game.GetMap() == "ep2_outland_02" then
+				victim:BroadcastMessage(HL2CR_RedColour, translate.Get("Achievement_NoDeath_Failed"), translate.Get("Achievement_EP2_Antlions"))
+			elseif game.GetMap() == "d2_prison_07" then
+				victim:BroadcastMessage(HL2CR_RedColour, translate.Get("Achievement_NoDeath_Failed"), translate.Get("Achievement_HL2_WardenFreeman_Name"))
+			end
 			victim.NoDeaths = false
 		end
-		victim.NoDeaths = false
-	end
+		--victim.NoDeaths = false
+	--end
 
 	victim.CanRespawn = false
 	victim.TimeDied = (10 * HL2CR_GetDiff()) + CurTime()
@@ -748,6 +754,30 @@ hook.Add("EntityFireBullets", "HL2CR_NoBulletPlayer", function(ent, data)
 	return true
 end)
 
+function hl2cr_player:GetRelativeWeapon(weaponclass)
+	if weaponclass=="weapon_crowbar" then
+		local weapon = HL2CR_GetItem("MELEE",self.CurrentInv["MELEE"])
+		if weapon then return weapon.Ref end
+	elseif weaponclass=="weapon_pistol" then
+		local weapon = HL2CR_GetItem("PISTOL",self.CurrentInv["PISTOL"])
+		if weapon then return weapon.Ref end
+	elseif weaponclass=="weapon_357" then
+		local weapon = HL2CR_GetItem("REV",self.CurrentInv["REV"])
+		if weapon then return weapon.Ref end
+	elseif weaponclass=="weapon_smg1" then
+		local weapon = HL2CR_GetItem("SMG",self.CurrentInv["SMG"])
+		if weapon then return weapon.Ref end
+	elseif weaponclass=="weapon_shotgun" then
+		local weapon = HL2CR_GetItem("SHGUN",self.CurrentInv["SHGUN"])
+		if weapon then return weapon.Ref end
+	elseif weaponclass=="weapon_crossbow" then
+		local weapon = HL2CR_GetItem("XBOW",self.CurrentInv["XBOW"])
+		if weapon then return weapon.Ref end
+	end
+	
+	return weaponclass
+end
+
 hook.Add("PlayerCanPickupWeapon", "HL2CR_WeaponPickup", function(ply, weapon)
 	if not ply:IsValid() then return end
 	if ply:Team() ~= TEAM_ALIVE then return end
@@ -760,17 +790,26 @@ hook.Add("PlayerCanPickupWeapon", "HL2CR_WeaponPickup", function(ply, weapon)
 		return false 
 	end
 
+	local newwpn = ply:GetRelativeWeapon(weapon:GetClass())
+
 	--Store the weapon
 	if weapon:IsValid() then
 		StoreWeapons(weapon:GetClass())
 	end
 	
-	if ply:HasWeapon(weapon:GetClass()) and not weapon_melees[weapon:GetClass()] then
+	if ply:HasWeapon(newwpn) and not weapon_melees[newwpn] then
+	--if ply:HasWeapon(weapon:GetClass()) and not weapon_melees[weapon:GetClass()] then
 		
-		local lastWep = weapon:GetPrimaryAmmoType()
+		local ammotype = weapon:GetPrimaryAmmoType()
 		
-		if not ply:CanPickupAmmo(lastWep) then
+		if not ply:CanPickupAmmo(ammotype) then
 			return false
+		else
+			if weapon:GetClass() != newwpn then
+				ply:GiveAmmo(HL2CR_GetClipSize(ammotype),ammotype)
+				weapon:Remove()
+				return false
+			end
 		end
 
 		--timer.Simple(0.01, function()
@@ -778,7 +817,16 @@ hook.Add("PlayerCanPickupWeapon", "HL2CR_WeaponPickup", function(ply, weapon)
 		--end)
 	end
 
+	--if ply:GiveRelativeWeapon(weapon:GetClass()) then weapon:Remove() return false end
+	if !ply:HasWeapon(newwpn) and weapon:GetClass() != newwpn then
+		ply:Give(newwpn)
+		weapon:Remove()
+		return false
+	end
+	
 	return true
+
+	--return true
 end)
 
 function GM:GravGunPunt( ply, ent )
@@ -798,37 +846,33 @@ function GM:GravGunPunt( ply, ent )
     return true
 end
 
-function hl2cr_player:UpdateInvNetwork()
-
-	local curItems = {}
-
-	for i, w in ipairs(self.hl2cr.Inventory.Weapons) do
-		table.insert(curItems, w.Class)
-	end
-
-	self:SetNWString("hl2cr_inv_items", table.concat(curItems, " "))
-	self:SetNWInt("hl2cr_inv_weight", self.hl2cr.Inventory.Weight)
-	self:SetNWInt("hl2cr_inv_curweight", self.hl2cr.Inventory.CurWeight)
-end
 
 function hl2cr_player:UpdateNetworks()
 	self:SetNWInt("hl2cr_stat_level", self.hl2cr.Level)
 	self:SetNWInt("hl2cr_stat_exp", self.hl2cr.Exp)
 	self:SetNWInt("hl2cr_stat_expreq", self.hl2cr.ReqExp)
-	self:SetNWInt("hl2cr_stat_skillpoints", self.hl2cr.SkillPoints)
+	--self:SetNWInt("hl2cr_stat_skillpoints", self.hl2cr.SkillPoints)
 
-	local curItems = {}
+	net.Start( "HL2CR_CL_SendSkills" )
+		net.WriteTable(self.hl2cr.Skills)
+		net.WriteUInt(self.hl2cr.SkillPoints,12)
+	net.Send(self)
 
-	for i, w in ipairs(self.hl2cr.Inventory.Weapons) do
-		table.insert(curItems, w.Class)
-	end
+	--local curItems = {}
 
-	self:SetNWString("hl2cr_inv_items", table.concat(curItems, " ") )
+	--for i, w in ipairs(self.hl2cr.Inventory.Weapons) do
+	--	table.insert(curItems, w.Class)
+	--end
 
-	self:SetNWString("hl2cr_stat_skills", table.concat(self.hl2cr.Skills, " ") )
-	self:SetNWString("hl2cr_achievements", table.concat(self.hl2cr.Achievements, " ") )
-	self:SetNWInt("hl2cr_inv_weight", self.hl2cr.Inventory.Weight)
-	self:SetNWInt("hl2cr_inv_curweight", self.hl2cr.Inventory.CurWeight)
+	--self:SetNWString("hl2cr_inv_items", table.concat(curItems, " ") )
+
+	self:SendAchievements()
+	self:SendItems()
+
+	--self:SetNWString("hl2cr_stat_skills", table.concat(self.hl2cr.Skills, " ") )
+	--self:SetNWString("hl2cr_achievements", table.concat(self.hl2cr.Achievements, " ") )
+	--self:SetNWInt("hl2cr_inv_weight", self.hl2cr.Inventory.Weight)
+	--self:SetNWInt("hl2cr_inv_curweight", self.hl2cr.Inventory.CurWeight)
 
 	if not table.IsEmpty(self.hl2cr.Pets) then
 		local activePet = nil
@@ -927,7 +971,7 @@ function hl2cr_player:FindSurface()
 		start = tr.HitPos,
 		endpos = tr.HitPos - Vector(0,0,512),
 		collisiongroup = COLLISION_GROUP_DEBRIS,
-		mask = MASK_WATER && MASK_SOLID
+		mask = MASK_WATER || MASK_SOLID
 	} )
 
 	return tr.HitPos
@@ -985,7 +1029,7 @@ function hl2cr_player:AdmireSuitHands()
 	timer.Create(self:Nick() .. "_admiring", 4, 1, function()
 		self:StripWeapons()
 		self:GiveEquipment()
-		self:SpawnWithActiveWeapons()
+		--self:SpawnWithActiveWeapons()
 	end)
 end
 
@@ -1020,59 +1064,58 @@ hook.Add("PlayerCanPickupItem", "HL2CR_ItemAmmoPickup", function(ply, item)
 	return true
 end)
 
+---------------------------------------------------------------
+
 net.Receive("HL2CR_Skills_Purchase", function(len, ply)
 	if not ply then return end
 
-	ply:UpdateSkills(net.ReadString())
+	ply:GiveNewSkill(net.ReadString())
 end)
 
 net.Receive("HL2CR_Model_Update", function(len, ply)
 	if not ply then return end
 
-	ply:UpdateModelNetwork(net.ReadString())
+	local mdl = HL2CR_GetModelFromName(net.ReadString(),net.ReadString(),HL2CR_GetLvlAccess(ply))
+	if mdl then ply:UpdateModelNetwork(mdl) end
+
+	--ply:UpdateModelNetwork(mdl)
 end)
 
-net.Receive("HL2CR_Class_Update", function(len, ply)
-	if not ply then return end
-
-	ply:SetClass(net.ReadString())
-end)
-
-net.Receive("HL2CR_Cosmetic", function(len, ply)
-	if not ply then return end
-
-	ply:ApplyCosmeticServer(net.ReadString())
-end)
 
 net.Receive("HL2CR_Item_Purchase", function(len, ply)
 	if not ply then return end
 
 	local bought = net.ReadString()
-	local item = nil
+	--local item = nil
 
-	for _, i in ipairs(GAMEMODE.ShopItems) do
-		if i.Class == bought then
-			item = i
-			break 
-		end
-	end
+	--for _, i in ipairs(GAMEMODE.ShopItems) do
+	--	if i.Class == bought then
+	--		item = i
+	--		break 
+	--	end
+	--end
 	
-	if item == nil then return end
-	ply:StoreItemInv(item)
+	--if item == nil then return end
+	--ply:StoreItemInv(item)
 end)
 
-net.Receive("HL2CR_Item_Use", function(len, ply)
+
+net.Receive("HL2CR_SendLoadout", function(len, ply)
 	if not ply then return end
-
-	local useItem = net.ReadString()
-	local item = nil
-
-	for _, i in ipairs(GAMEMODE.ShopItems) do
-		if i.Class == useItem then
-			item = i
-			break 
-		end
-	end
-
-	ply:SetActiveItem(item)
+	local id = net.ReadString()
+	if ply:HasItem(id) then ply.hl2cr.Equipped["HATS"] = id end
+	id = net.ReadString()
+	if ply:HasItem(id) then ply.hl2cr.Equipped["MELEE"] = id end
+	id = net.ReadString()
+	if ply:HasItem(id) then ply.hl2cr.Equipped["PISTOL"] = id end
+	id = net.ReadString()
+	if ply:HasItem(id) then ply.hl2cr.Equipped["REV"] = id end
+	id = net.ReadString()
+	if ply:HasItem(id) then ply.hl2cr.Equipped["SMG"] = id end
+	id = net.ReadString()
+	if ply:HasItem(id) then ply.hl2cr.Equipped["SHGUN"] = id end
+	id = net.ReadString()
+	if ply:HasItem(id) then ply.hl2cr.Equipped["XBOW"] = id end
+	
+	ply:UpdateEquipped()
 end)

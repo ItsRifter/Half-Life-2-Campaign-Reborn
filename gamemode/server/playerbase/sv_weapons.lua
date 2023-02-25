@@ -1,56 +1,66 @@
-local AmmoData = {
+local AmmoData = {		--ClipSize is used for bonus clip, bonus is for bonus carry
 	[1] = {	--AR2 Ammo
 		Max = 60,
-		ClipSize = 30
+		ClipSize = 30,
+		BonusSize = 30
 	},
 	[2] = {	--AR2 Alt Ammo
 		Max = 3,
-		ClipSize = 1
+		ClipSize = 1,
+		BonusSize = 1
 	},
 	[3] = {	--Pistol Ammo
 		Max = 150,
-		ClipSize = 18
+		ClipSize = 18,
+		BonusSize = 30
 	},
 	[4] = {	--Smg1 Ammo
 		Max = 225,
-		ClipSize = 45
+		ClipSize = 45,
+		BonusSize = 90
 	},
 	[5] = {	--357 Ammo
 		Max = 12,
-		ClipSize = 6
+		ClipSize = 6,
+		BonusSize = 6
 	},
 	[6] = {	--Crossbow Bolts
-		Max = 10,
-		ClipSize = 1
+		Max = 9,
+		ClipSize = 1,
+		BonusSize = 3
 	},
 	[7] = {	--Buckshot Shells
 		Max = 30,
-		ClipSize = 6
+		ClipSize = 6,
+		BonusSize = 12
 	},
 	[8] = {	--RPG Round
 		Max = 3,
-		ClipSize = 1
+		ClipSize = 1,
+		BonusSize = 1
 	},
 	[9] = {	--Smg1 Grenade
 		Max = 3,
-		ClipSize = 1
+		ClipSize = 1,
+		BonusSize = 1
 	},
 	[10] = {--Grenades
 		Max = 5,
-		ClipSize = 1
+		ClipSize = 1,
+		BonusSize = 1
 	},
 
 }
 
 
 function GM:PlayerAmmoChanged( ply, ammoID, oldCount, newCount )
+	if oldCount > newCount then return end
 	if AmmoData[ammoID] and ply:GetAmmoCount( ammoID ) > ply:GetAmmoMax( ammoID ) then
 		ply:SetAmmo(ply:GetAmmoMax( ammoID ), ammoID)
 		--return false
 	end
 
 end
-
 
 local AmmoBoxData = {
 	["item_ammo_pistol"] = {AmmoType = 3, AmmoAmount = 20},
@@ -84,10 +94,24 @@ local CrateToType = {
 	[9] = 9,
 }
 
+local Enum_To_Type = {
+	["Pistol"] = 3,
+	["357"] = 5,
+	["SMG1"] = 4,
+	["SMG1_Grenade"] = 9,
+	["AR2"] = 1,
+	["AR2AltFire"] = 2,
+	["Buckshot"] = 7,
+	["Grenade"] = 10,
+	["XBowBolt"] = 6,
+	["RPG"] = 8,
+}
+
 function HL2CR_AmmoTypeValid(id)
 	if AmmoData[id] then return true end
 	return false
 end
+
 
 
 function hl2cr_player:CanPickupAmmoBox(boxent)
@@ -104,7 +128,7 @@ function hl2cr_player:CanPickupAmmoBox(boxent)
 			local taken = maxammo - currentamount
 			boxent.spent = boxent.spent + taken
 			self:GiveAmmo( taken, ammo.AmmoType, false )
-			if boxent.spent >= ammo.AmmoAmount then
+			if boxent.spent >= ammo.AmmoAmount or !self:HasSkill("Ammo_1") then
 				boxent:Remove()
 			end
 		else
@@ -130,6 +154,14 @@ function hl2cr_player:CanOpenAmmoCrate(boxent)
 end
 
 function hl2cr_player:GetAmmoMax(ammotype)
+	if Enum_To_Type[ammotype] then ammotype = Enum_To_Type[ammotype] end
 	local ammo = AmmoData[ammotype]
+	if self:HasSkill("Ammo_2") then return ammo.Max + ammo.BonusSize end
 	return ammo.Max
+end
+
+function HL2CR_GetClipSize(ammotype)
+	if Enum_To_Type[ammotype] then ammotype = Enum_To_Type[ammotype] end
+	local ammo = AmmoData[ammotype]
+	return ammo.ClipSize
 end

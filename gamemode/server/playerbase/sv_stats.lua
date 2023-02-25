@@ -51,7 +51,8 @@ local MAP_ACHS = {
 		barnacleKilled = barnacleKilled + 1
 
 		if barnacleKilled >= 5 then
-			ply:GrantAchievement("Barnacle Bowling")
+			--ply:GrantAchievement("Barnacle Bowling")
+			ply:GiveAchievement("HL2","HL2_Barnacle")
 		end
 
 		timer.Create("hl2cr_ach_barnacle_" .. ply:EntIndex(), 0.25, 1, function()
@@ -86,8 +87,8 @@ function hl2cr_player:AddXP(XP)
 		self.hl2cr.Level = self.hl2cr.Level + 1
 		self.hl2cr.SkillPoints = self.hl2cr.SkillPoints + 1
 		--self.hl2cr.ReqExp = self.hl2cr.ReqExp + math.Round(4 * math.pow( self.hl2cr.Level + 5, 3 ) / 3);
-		self.hl2cr.ReqExp = 319 + math.floor(math.pow( self.hl2cr.Level + 8, 2.5 + (self.hl2cr.Level * 0.025 )))
-		//self.hl2cr.ReqExp = self.hl2cr.ReqExp + (375 * self.hl2cr.Level)
+		self.hl2cr.ReqExp = 319 + math.floor(math.pow( self.hl2cr.Level + 8, 2.5 + (self.hl2cr.Level * 0.022 )))
+		--self.hl2cr.ReqExp = self.hl2cr.ReqExp + (375 * self.hl2cr.Level)
 		if LEVEL_REWARDS[self.hl2cr.Level] then
 			LEVEL_REWARDS[self.hl2cr.Level](self)
 		end
@@ -98,7 +99,12 @@ function hl2cr_player:AddXP(XP)
 	if notifyLevelUp then	
 		self:SetNWInt("hl2cr_stat_level", self.hl2cr.Level)
 		self:SetNWInt("hl2cr_stat_expreq", self.hl2cr.ReqExp)	
-		self:SetNWInt("hl2cr_stat_skillpoints", self.hl2cr.SkillPoints)
+		
+		net.Start( "HL2CR_CL_AddSkill" )	--Sending with no skill lets skill points update
+			net.WriteString("")
+			net.WriteUInt(self.hl2cr.SkillPoints,12)
+		net.Send(self)
+		--self:SetNWInt("hl2cr_stat_skillpoints", self.hl2cr.SkillPoints)
 		
         self:BroadcastMessage(HL2CR_LevelupColour, translate.Get("Player_Levelup"), HL2CR_LevelColour, tostring(self.hl2cr.Level))
 		self:BroadcastSound("hl2cr/levelup.wav")
@@ -124,6 +130,12 @@ hook.Add( "OnNPCKilled", "HL2CR_GiveXP", function( npc, attacker, inflictor )
 		if not XP_BASE_RANDOM[npc:GetClass()] then return end
 
 		attacker.MapStats.Kills = attacker.MapStats.Kills + 1
+		
+		 if npc:IsHostile() then
+			if npc:GetClass()== "npc_metropolice" then attacker:ProgressAchievement("HL2CR","HL2CR_CIVIL",1) end
+			npc:OnDeath(attacker)
+			
+		 end
 		
 		--local gainXP = math.random(XP_BASE_RANDOM[npc:GetClass()].xpMin, XP_BASE_RANDOM[npc:GetClass()].xpMax)
 		

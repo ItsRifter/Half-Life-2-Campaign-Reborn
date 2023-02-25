@@ -44,6 +44,9 @@ AddCSLuaFile("client/cl_config.lua")
 
 AddCSLuaFile("client/hud/cl_hud.lua")
 AddCSLuaFile("client/hud/cl_scoreboard_menu.lua")
+AddCSLuaFile("client/hud/cl_qmenu_inventory.lua")
+AddCSLuaFile("client/hud/cl_qmenu_skills.lua")
+AddCSLuaFile("client/hud/cl_qmenu_ach.lua")
 AddCSLuaFile("client/hud/cl_qmenu.lua")
 AddCSLuaFile("client/hud/cl_endresults.lua")
 AddCSLuaFile("client/interface/cl_fonts.lua")
@@ -65,6 +68,9 @@ include("shared/voting/sh_voting.lua")
 include("shared/voting/sh_vote_types.lua")
 include("shared/sh_colour.lua")
 include("shared/playerbase/sh_teams.lua")
+
+--Item Database Redo
+include("shared/items/sh_itemdatabase.lua")
 
 //Cosmetics
 include("shared/items/cosmetics/sh_cosmetic_base.lua")

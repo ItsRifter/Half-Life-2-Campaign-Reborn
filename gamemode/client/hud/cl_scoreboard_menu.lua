@@ -1,11 +1,3 @@
---local tex_hl2 = Material( "games/hl2.png", "noclamp smooth" )
---local tex_ep1 = Material( "games/episodic.png", "noclamp smooth" )
---local tex_ep2 = Material( "games/ep2.png", "noclamp smooth" )
---local tex_coast = Material( "games/lostcoast.png", "noclamp smooth" )
-
-
-
-local scoreboard = scoreboard or nil
 
 local function GetPlayerTeamColours(player)
 	if player:Team() == TEAM_ALIVE then
@@ -16,7 +8,7 @@ local function GetPlayerTeamColours(player)
 		return Color(250, 220, 0,160) 
 	elseif player:Team() == TEAM_DEAD then
 		--Dead
-		return Color(185, 0, 0,160) 
+		return Color(210, 30, 30,160) 
 	elseif player:Team() == TEAM_LOYAL then
 		--Loyal
 		return Color(0, 255, 245,160) 
@@ -45,10 +37,7 @@ function PANEL:SetPlayer(ply)
 	avatar:SetPlayer(self.ply, 128)
 	self:SetMouseInputEnabled( true )
 	avatar.OnMousePressed = function( )
-		if input.IsMouseDown( MOUSE_LEFT ) then
-			if !self.ply:IsBot() then self.ply:ShowProfile() end
-
-		end
+		if input.IsMouseDown( MOUSE_LEFT ) and !self.ply:IsBot() then self.ply:ShowProfile() end
 	end
 	
 	local NameText = New_ThemeText(self,tall * 0.78, tall  * 0.15,self.ply:Nick(),"Font2_Small",0,0.5)
@@ -104,7 +93,6 @@ function PANEL:SetPlayer(ply)
 			if self.ply:IsSuperAdmin() then
 				Badge:SetImage( "icon16/award_star_gold_3.png" )
 				Badge:SetToolTip(translate.Get("Scoreboard_Player_Status_SuperAdmin"))
-				--NameText:SetColour(Color(130, 20, 255,255),Color(80, 10, 160,255) )
 				NameText.Think = function()
 					NameText:SetColour(GetColour(89, 255),Color(50, 50, 50,255) )
 				end
@@ -125,11 +113,15 @@ function PANEL:SetPlayer(ply)
 			
 			
 			if self.ply.games then
-				local icon = New_ThemeGameIcon(self,self:GetWide() - tall * 0.82,tall * 0.83,tall * 0.15,tall * 0.15,220,self.ply.games[220])	--HL2
+				local icon = New_ThemeGameIcon(self,self:GetWide() - tall * 0.80,tall * 0.83,tall * 0.15,tall * 0.15,220,self.ply.games[220])	--HL2
 				local icon = New_ThemeGameIcon(self,self:GetWide() - tall * 0.64,tall * 0.83,tall * 0.15,tall * 0.15,380,self.ply.games[380])	--EP1
 				local icon = New_ThemeGameIcon(self,self:GetWide() - tall * 0.48,tall * 0.83,tall * 0.15,tall * 0.15,420,self.ply.games[420])	--EP2
 				local icon = New_ThemeGameIcon(self,self:GetWide() - tall * 0.32,tall * 0.83,tall * 0.15,tall * 0.15,340,self.ply.games[340])	--LostCoast
 				local icon = New_ThemeGameIcon(self,self:GetWide() - tall * 0.16,tall * 0.83,tall * 0.15,tall * 0.15,240,self.ply.games[240])	--CSS
+				
+				if self.ply.games[251110] > 0 then	--Bonus to show if people own INFRA, If you can read this, buy INFRA
+					local icon = New_ThemeGameIcon(self,self:GetWide() - tall * 0.96,tall * 0.83,tall * 0.15,tall * 0.15,251110,self.ply.games[251110])
+				end
 			end
 	
 	else
@@ -202,27 +194,23 @@ function PANEL:Paint()
 	--draw.RoundedBoxEx( 1, 0, self:GetTall() * 0.15, self:GetWide(), self:GetTall() * 0.85, Theme.backcol,false,false,false,false)
 	draw.RoundedBoxEx( 8, 0, self.PlayerPanel:GetTall() + self.PlayerPanel:GetY(), self:GetWide(), tall * 0.03, Theme.backcol,false,false,true,true)
 	
-	
-
 	return true
 end
 vgui.Register( "HL2CR_Scoreboard", PANEL, "Panel" )
 
 function ToggleBoard(toggle)
 	if toggle then
-		if not toggle and scoreboard:IsValid() then
-			scoreboard:Remove()
-			scoreboard = nil
+		if not toggle and GAMEMODE.scoreboard then
+			GAMEMODE.scoreboard:Remove()
+			--scoreboard = nil
 		end
 		
 		if ( GAMEMODE.HelpMenu ) then GAMEMODE.HelpMenu:Remove() gui.EnableScreenClicker( false ) end
 		
-		--scoreboard  = vgui.Create("HL2CR_Scoreboard")
-		if true then 
-			scoreboard  = vgui.Create("HL2CR_Scoreboard")
-			return 
-		end
-		
+		--if true then 
+		GAMEMODE.scoreboard  = vgui.Create("HL2CR_Scoreboard")
+		--end
+		--[[ old scoreboard
 		scoreboard = vgui.Create("DFrame")
 		scoreboard:SetSize(1000, 600)
 		scoreboard:SetPos(ScrW() / 2 - 500, ScrH() / 15)
@@ -399,9 +387,10 @@ function ToggleBoard(toggle)
 				self:SizeToContents()
 			end
 		end
-	elseif not toggle and IsValid(scoreboard) then
-		scoreboard:Remove()
-		scoreboard = nil
+		]]--
+	elseif GAMEMODE.scoreboard then
+		GAMEMODE.scoreboard:Remove()
+		--scoreboard = nil
 	end
 end
 
@@ -415,9 +404,9 @@ hook.Add("ScoreboardHide", "HL2CR_ScoreboardHide", function()
 end)
 
 hook.Add( "PlayerButtonDown", "HL2CR_Scoreboard_Mouse", function(ply, btn)
-	if not scoreboard then return end
+	if not IsValid(GAMEMODE.scoreboard) then return end
 
 	if btn == 108 then
-		scoreboard:MakePopup()
+		GAMEMODE.scoreboard:MakePopup()
 	end
 end)

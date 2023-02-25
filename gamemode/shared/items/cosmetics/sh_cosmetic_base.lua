@@ -1,8 +1,8 @@
 AddCSLuaFile()
 
-HL2CR_Cosmetics = {}
+--HL2CR_Cosmetics = {}
 
-function CreateCosmetic(newCosmetic)
+--[[function CreateCosmetic(newCosmetic)
     table.insert(HL2CR_Cosmetics, newCosmetic)
 end
 
@@ -33,13 +33,13 @@ local ravenhead = {
 }
 
 CreateCosmetic(ravenhead)
-
+]]--
 if CLIENT then
     pastOutfit = pastOutfit or nil
 
     function ApplyCosmetic(outfit, owner)
         pac.SetupENT(owner)
-        timer.Simple(1.5, function()
+        timer.Simple(0.5, function()
             if owner == nil then return end
             
             if pastOutfit and owner ~= nil then

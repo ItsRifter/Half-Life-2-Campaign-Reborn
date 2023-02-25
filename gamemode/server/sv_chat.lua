@@ -20,3 +20,18 @@ hook.Add( "PlayerSay", "HL2CR_BringNPC", function( ply, text )
 		ents.FindByClass("npc_barney")[1]:SetPos(hit)
 	end
 end)
+
+hook.Add( "PlayerSay", "HL2CR_Extra", function( ply, text )
+	if text[1] == "!" then return end
+	
+	if game.GetMap() == "d3_breen_01" then
+		if !ply:HasAchievement("HL2_BarneyWish") then 
+			if string.find( text:lower(), "barney" ) and string.find( text:lower(), "fuck you" ) then
+				local breen = ents.FindByClass( "npc_breen" )
+				if breen and breen[1]:GetPos():Distance(ply:GetPos()) < 200 then
+					ply:GiveAchievement("HL2","HL2_BarneyWish")
+				end
+			end
+		end
+	end
+end)

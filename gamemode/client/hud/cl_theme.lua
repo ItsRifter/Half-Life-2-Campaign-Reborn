@@ -34,7 +34,14 @@ surface.CreateFont( "Font2_Small",
 surface.CreateFont( "Font2_Tiny", 
 	{
 	font    = "DejaVu Sans",
-	size    = ScrH() * 0.022,
+	size    = ScrH() * 0.024,
+	weight  = 100,
+	antialias = true,
+	})
+surface.CreateFont( "Font2_Micro", 
+	{
+	font    = "DejaVu Sans",
+	size    = ScrH() * 0.020,
 	weight  = 100,
 	antialias = true,
 	})
@@ -43,16 +50,28 @@ Theme = {
 	col = Color( 240, 140, 50, 255 ),
 	backcol = Color( 255, 140, 20, 80 ),
 	backcol2 = Color( 255, 140, 20, 35 ),
+	backcol3 = Color( 10, 10, 10, 60 ),
+	backcol4 = Color( 10, 10, 10, 160 ),
 	fontcol = Color( 200, 200, 200, 255 ),
 	fontcolhi = Color( 250, 250, 250, 255 ),
 	fontcolout = Color( 20, 20, 20, 255 ),
+	fontred = Color( 140, 20, 20, 255 ),
+	fontgreen = Color( 50, 200, 50, 255 ),
+	fontyel = Color( 200, 200, 50, 255 ),
 	button = Color( 255, 140, 0, 255 ),
 	buttonhi = Color( 255, 170, 50, 255 ),
 	buttonout = Color( 10, 10, 10, 255 ),
 	buttonouthi = Color( 240, 240, 240, 255 ),
 	box = Color( 220, 110, 0, 255 ),
 	box2 = Color( 180, 100, 0, 255 ),
+	box3 = Color( 220, 110, 0, 100 ),
+	box4 = Color( 180, 100, 0, 100 ),
+	secret1 = Color( 240, 200, 0, 255 ),
+	secret2 = Color( 200, 180, 0, 100 ),
 	barback = Color( 120, 60, 5, 180 ),
+	skill_0 = Color( 50,  50, 50, 220 ),
+	skill_1 = Color( 180, 60, 50, 220 ),
+	skill_2 = Color( 100, 250, 100, 220 ),
 }
 
 
@@ -66,6 +85,7 @@ local tex_games = {
 	[380] = Material( "games/16/episodic.png", "noclamp smooth" ),
 	[420] = Material( "games/16/ep2.png", "noclamp smooth" ),
 	[340] = Material( "games/16/lostcoast.png", "noclamp smooth" ),
+	[251110] = Material( "games/16/infra.png", "noclamp smooth" ),
 }
 
 local str_games = {
@@ -74,6 +94,7 @@ local str_games = {
 	[380] = "Episode 1" ,
 	[420] = "Episode 2" ,
 	[340] = "Lost Coast" ,
+	[251110] = "Infra" ,
 }
 
 local PANEL = {}
@@ -87,7 +108,7 @@ function PANEL:SetGame(depot,value)
 		self:SetMaterial(tex_games[depot])
 		self:SetTooltip(str_games[depot] )
 		if value >= 2 then self:SetColor(Color(255, 255, 255, 255)) 
-		elseif value == 0 then self:SetColor(Color(80, 80, 80, 255))
+		elseif value == 1 then self:SetColor(Color(80, 80, 80, 255))
 		else self:SetColor(Color(0, 0, 0, 150)) end
 	end
 end
@@ -209,45 +230,33 @@ function PANEL:SetText(text,font, btn)
 	self.Text = text
 	self.font = font
 	self.btn = btn
-	--self.spacing = spacing
+
 	surface.SetFont( font )
 	
-	--self:SetX( self:GetX() + self.width)
-	--self:SetY( self:GetY() + self.height)
-	
-	--self.width = 0
 	self.height = 0 
 	
 	for _, tx in ipairs(self.Text) do
 		local width, height = surface.GetTextSize( tx )
 		--if width > self.width then self.width = width end
-		self.height = self.height + height * 1.2
+		self.height = self.height + math.floor(height * 1.1)
 	end
 	self.spacing = self.height / #self.Text
 
-	self:SetSize( self:GetWide(), self.height+2)
-	
-	--self.width = math.floor(self.width * alignX)
-	--self.height =  math.floor(self.height * alignY)
-
-	--self:SetSize( self.width + 2, self.height + 2)
-	--self:SetX( self:GetX() - self.width)
-	--self:SetY( self:GetY() - self.height)
-	
+	self:SetSize( self:GetWide(), self.height)
 end
 
 function PANEL:Paint()
 	--if self:IsHovered() then
-	draw.RoundedBox( 6, 0, 0, self:GetWide(), self:GetTall(), Theme.buttonout )
+	draw.RoundedBox( 6, 0, 0, self:GetWide(), self:GetTall(), self.btn.colour3 )
 	--draw.RoundedBox( 6, 1, 1, self:GetWide()-2, self:GetTall()-2, Theme.button )
 	
 	local alternate = false
-	local col = Theme.box
+	local col = self.btn.colour
 	local space = math.ceil(self.spacing)
 	if self.Text then
 		for i, tx in ipairs(self.Text) do
 			if i == 1 then draw.RoundedBoxEx( 6, 1, space*(i-1)+1, self:GetWide()-2, space-2, col ,true,true,false,false) 
-			elseif i == #self.Text then draw.RoundedBoxEx( 6, 1, space*(i-1)-1, self:GetWide()-2, space-1, col ,false,false,true,true)
+			elseif i == #self.Text then draw.RoundedBoxEx( 6, 1, space*(i-1)-1, self:GetWide()-2, space, col ,false,false,true,true)
 			else draw.RoundedBoxEx( 6, 1, space*(i-1)-1, self:GetWide()-2, space, col ,false,false,false,false) end
 			if i == self.hovering then
 				draw.SimpleTextOutlined(tx , self.font, self:GetWide() * 0.5 , i * self.spacing - self.spacing * 0.5, Theme.fontcolho, 1, 1, 1, Theme.fontcolout)
@@ -257,14 +266,19 @@ function PANEL:Paint()
 			
 			alternate = !alternate
 			if alternate then
-				col = Theme.box2
+				col = self.btn.colour2
 			else
-				col = Theme.box
+				col = self.btn.colour
 			end
 		end
 	end
 	
 	return true
+end
+
+function PANEL:SetColour(col, col2)
+	self.colour = col or self.colour
+	self.colour2 = col2 or self.colour2
 end
 
 function PANEL:OnMousePressed( keyCode )
@@ -296,24 +310,28 @@ function PANEL:Init()
 	self.list = nil
 	self.value = 0
 	self.extended = nil
+	self.colour = Theme.box
+	self.colour2 = Theme.box2
+	self.colour3 = Theme.buttonout 
 end
 
-function PANEL:SetText(words,font, list, value)
+function PANEL:SetText(words,font, valuelist, value)
+	
 	if self.Text then self.Text:Remove() end
 	self.words = words
 	--self.Text = vgui.Create( "ThemeText" , self:GetParent())
 	self.Text = vgui.Create( "ThemeTextLink" , self)
-	self.list = list
+	self.list = valuelist
 	self.Text:SetSize( 0, 0)
 	self.Text:SetPos( self:GetTall() * 1.1, self:GetTall() * 0.5)
 	--self.Text:SetPos( self:GetX()+self:GetWide() * 1.1, self:GetY() +self:GetTall() * 0.5)
-	self.Text:SetText(words..list[value],font,0,0.5)
+	self.Text:SetText(words..valuelist[value],font,0,0.5)
 	--self.Text:SetMouseInputEnabled( false )
 	
 	self.extended = vgui.Create( "ThemeMultiBox2" , self:GetParent())
 	self.extended:SetSize(self:GetWide() , self:GetTall())
 	self.extended:SetPos(self:GetX(), self:GetY() +self:GetTall())
-	self.extended:SetText(list, font, self)
+	self.extended:SetText(valuelist, font, self)
 
 	--self.Text:SetPos( self:GetX()+self:GetWide() * 1.1, self:GetY() +self:GetTall() * 0.5)
 end
@@ -329,6 +347,12 @@ end
 
 function PANEL:GetValue( )
 	return self.value
+end
+
+function PANEL:SetColour(col, col2, col3)
+	self.colour = col or self.colour
+	self.colour2 = col2 or self.colour2 
+	self.colour3 = col3 or self.colour3 
 end
 
 function PANEL:OnMousePressed( keyCode )
@@ -398,6 +422,7 @@ end
 function PANEL:Paint()
 
 	if self.Text then
+	
 		draw.SimpleTextOutlined(self.Text , self.font, self:GetWide() * 0.5 , self:GetTall() * 0.5 , self.colour, 1, 1, 1, self.outcol)	
 	end
 	return true
@@ -447,6 +472,50 @@ function PANEL:Paint()
 end
 vgui.Register( "ThemeTextLink", PANEL, "Panel" )
 
+--Normal Text Display With Box---------------------------------------------------------------------------
+local PANEL = {}
+
+function PANEL:Init()
+	self:SetVisible( true )
+	self.width = 0
+	self.height = 0
+	self:SetMouseInputEnabled( false )
+	self.colour = Theme.fontcol
+	self.outcol = Theme.fontcolout
+end
+
+function PANEL:SetText(text,font, alignX,alignY )
+	self.Text = text
+	self.font = font or self.font
+	surface.SetFont( self.font )
+
+	self:SetX( self:GetX() + self.width)
+	self:SetY( self:GetY() + self.height)
+
+	local width, height = surface.GetTextSize( text )
+	self.width =  math.floor(width * alignX)
+	self.height =  math.floor(height * alignY)
+	self:SetSize( width + 12, height + 8)
+	self:SetX( self:GetX() - self.width)
+	self:SetY( self:GetY() - self.height)
+	
+end
+
+function PANEL:SetColour(col, out)
+	self.colour = col or self.colour
+	self.outcol = out or self.outcol
+end
+
+function PANEL:Paint()
+	draw.RoundedBox( 8, 0, 0, self:GetWide(), self:GetTall(), Theme.backcol4)
+	draw.RoundedBox( 8, 1, 1, self:GetWide()-2, self:GetTall()-2, Theme.backcol4)
+	if self.Text then
+		draw.SimpleTextOutlined(self.Text , self.font, self:GetWide() * 0.5 , self:GetTall() * 0.5 , self.colour, 1, 1, 1, self.outcol)	
+	end
+	return true
+end
+vgui.Register( "ThemeTextBox", PANEL, "Panel" )
+
 --Basic Theme TextMultiLine ---------------------------------------------------------------------------------------
 --Currently only has middle aligned text currently ----------------------------------------------------------------
 local PANEL = {}
@@ -466,6 +535,9 @@ function PANEL:SetText(text,font, alignX, alignY, spacing)
 	
 	self:SetX( self:GetX() + self.width)
 	self:SetY( self:GetY() + self.height)
+	
+	self.alignX = alignX or self.alignX
+	self.alignX = 0
 	
 	self.width = 0
 	self.height = 0 
@@ -492,7 +564,7 @@ function PANEL:Paint()
 	if self.Text then
 		for i, tx in ipairs(self.Text) do
 			
-			draw.SimpleTextOutlined(tx , self.font, self:GetWide() * 0.5 , i * self.spacing - self.spacing * 0.5, Theme.fontcol, 1, 1, 1, Theme.fontcolout)
+			draw.SimpleTextOutlined(tx , self.font, self:GetWide() * self.alignX - (self.alignX - 0.5), i * self.spacing - self.spacing * 0.5, Theme.fontcol, self.alignX*2, 1, 1, Theme.fontcolout)
 		end
 	end
 	return true
@@ -513,7 +585,7 @@ function PANEL:Init()
 	self.MaxY = 0
 	self.BarY = 0
 	self.BarSize = 1
-	
+	self.PaintExtra = nil
 end
 
 function PANEL:UpdateMaxY(maxy)
@@ -587,6 +659,9 @@ function PANEL:Paint()
 		draw.RoundedBox( 6, self:GetWide() - ScrH() * 0.03, 0, ScrH() * 0.03, self:GetTall(), Theme.barback )
 		draw.RoundedBox( 6, self:GetWide() - ScrH() * 0.03, self.BarY, ScrH() * 0.03, self.BarSize, Theme.button )
 	end
+	
+	if self.PaintExtra then self.PaintExtra() end
+	
 	return true
 end
 vgui.Register( "ThemeVertScoll", PANEL, "Panel" )
@@ -596,6 +671,14 @@ vgui.Register( "ThemeVertScoll", PANEL, "Panel" )
 ---------------------------------------------------------------------------------------
 function New_ThemeText(parent,xpos,ypos,text,font,xalign,yalign)
 	local element = vgui.Create( "ThemeText" , parent)
+	element:SetPos( xpos, ypos)
+	element:SetText(text,font,xalign,yalign)
+
+	return element
+end
+
+function New_ThemeTextBox(parent,xpos,ypos,text,font,xalign,yalign)
+	local element = vgui.Create( "ThemeTextBox" , parent)
 	element:SetPos( xpos, ypos)
 	element:SetText(text,font,xalign,yalign)
 
@@ -648,3 +731,21 @@ end
 ---------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------
+
+function DrawThickLine(xx,yy,x2,y2, width)
+	local pos1 = Vector( xx, yy, 0 ) 
+	local pos2 = Vector( x2, y2, 0 ) 
+	local angle = Vector(pos1)
+	angle:Sub(pos2)
+	angle:Normalize()
+	angle:Rotate( Angle(0,90,0) )
+	angle:Mul( width)
+	local quad = {
+		{ x = xx - angle[1], y = yy - angle[2]},
+		{ x = xx + angle[1], y = yy + angle[2]},
+		{ x = x2 + angle[1], y = y2 + angle[2]},
+		{ x = x2 - angle[1], y = y2 - angle[2]}
+	}
+	surface.DrawPoly( quad )
+
+end

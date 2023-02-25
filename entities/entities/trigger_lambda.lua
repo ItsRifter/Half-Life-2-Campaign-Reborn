@@ -23,7 +23,8 @@ end
 function ENT:StartTouch(ent)
 
 	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
-		ent:UpdateLambdaLocator(game.GetMap() .. "_" .. self.Index)
+		--ent:UpdateLambdaLocator(game.GetMap() .. "_" .. self.Index)
+		ent:ProgressAchievement("HL2","HL2_Lambda",game.GetMap() .. "_" .. self.Index)
 	end
 	
 	--timer.Simple(2, function()

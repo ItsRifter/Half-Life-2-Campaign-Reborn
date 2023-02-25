@@ -9,14 +9,18 @@ function ENT:Initialize()
 	self:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	self:SetMoveType(0)
 	self:SetTrigger(true)
+	self.plys = {}
 end
 
 function ENT:StartTouch(ent)
-	if ent:IsValid() and ent:IsPlayer() then
-		ent:AddXP(500)
-		BroadcastMessageToAll(HL2CR_PlayerColour, ent:Nick(), HL2CR_StandardColour, translate.Get("Server_Announce_Vortex_Found"))
-		self.Vortex:Remove()
-		self.Vortex = nil
-		self:Remove()
+	if ent:IsValid() and ent:IsPlayer() and !table.HasValue( self.plys, ent ) then
+		if #self.plys == 0 then
+			ent:AddXP(150)
+			BroadcastMessageToAll(HL2CR_PlayerColour, ent:Nick(), HL2CR_StandardColour, translate.Get("Server_Announce_Vortex_Found"))
+		else
+			ent:AddXP(50)
+		end
+		ent:ProgressAchievement("HL2CR","HL2CR_VORTEX",1)
+		table.insert(self.plys,ent)
 	end
 end

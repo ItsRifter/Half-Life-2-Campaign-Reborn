@@ -158,30 +158,32 @@ local chat_cmds = {
 			return 
 		end
 		
-		if ply:HasAchievement("Lambda Locator") then 
+		if ply:HasAchievement("HL2_Lambda") then 
 			ply:BroadcastMessage(HL2CR_GreenColour, translate.Get("Error_CMD_AlreadyAchieved"))
 			return 
 		end
 
-		if ply.hl2cr.AchProgress["lambda_locator"] == nil then 
-			ply.hl2cr.AchProgress["lambda_locator"] = {}
+		if ply.hl2cr.AchProgress["HL2_Lambda"] == nil then 
+			ply.hl2cr.AchProgress["HL2_Lambda"] = {}
 		end
 		
-		local ach = nil 
-        for i, v in ipairs(GAMEMODE.Achievements) do
-            if v.Name == "Lambda Locator" then
-                ach = v
-                break
-            end
-        end
+		--local ach = nil 
+        --for i, v in ipairs(GAMEMODE.Achievements) do
+        --    if v.Name == "Lambda Locator" then
+        --        ach = v
+        --        break
+        --    end
+        --end
 		
-		local achcount = table.Count(ply.hl2cr.AchProgress["lambda_locator"])
+		local ach = HL2CR_GetAchievement("HL2","HL2_Lambda")
+		
+		local achcount = table.Count(ply.hl2cr.AchProgress["HL2_Lambda"])
 		ply:BroadcastMessage(HL2CR_StandardColour, translate.Get("Achievement_Progress") .. achcount.. "/" ..ach.Max)
 		
 		if HL2_LAMBDA_TRIGGERS[mapname] then
 			local found = 0
 			for i, l in ipairs(HL2_LAMBDA_TRIGGERS[mapname]) do
-				if table.HasValue(ply.hl2cr.AchProgress["lambda_locator"], mapname.."_"..i) then found = found+1 end
+				if table.HasValue(ply.hl2cr.AchProgress["HL2_Lambda"], mapname.."_"..i) then found = found+1 end
 			end
 			ply:BroadcastMessage(HL2CR_StandardColour, translate.Get("Achievement_Found")..found.."/"..#HL2_LAMBDA_TRIGGERS[mapname] )
 		else

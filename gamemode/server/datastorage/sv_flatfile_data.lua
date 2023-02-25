@@ -23,20 +23,37 @@ local function InitData(ply)
 	ply.hl2cr.AchProgress = ply.hl2cr.AchProgress or {}
 
 	--Inventory
-	ply.hl2cr.Inventory = ply.hl2cr.Inventory or {}
-	ply.hl2cr.Inventory.Weight = ply.hl2cr.Inventory.Weight or 30.0
-	ply.hl2cr.Inventory.CurWeight = ply.hl2cr.Inventory.CurWeight or 0.0
-	ply.hl2cr.Inventory.Items = ply.hl2cr.Inventory.Items or {}
-	ply.hl2cr.Inventory.Weapons = ply.hl2cr.Inventory.Weapons or {}
-	ply.hl2cr.Inventory.Cosmetics = ply.hl2cr.Inventory.Cosmetics or {}
+	--ply.hl2cr.Inventory = ply.hl2cr.Inventory or {}
+	--ply.hl2cr.Inventory.Weight = ply.hl2cr.Inventory.Weight or 30.0
+	--ply.hl2cr.Inventory.CurWeight = ply.hl2cr.Inventory.CurWeight or 0.0
+	--ply.hl2cr.Inventory.Items = ply.hl2cr.Inventory.Items or {}
+	--ply.hl2cr.Inventory.Weapons = ply.hl2cr.Inventory.Weapons or {}
+	--ply.hl2cr.Inventory.Cosmetics = ply.hl2cr.Inventory.Cosmetics or {}
 	
 	--Cosmetics
 	ply.hl2cr.CurCosmetic = ply.hl2cr.CurCosmetic or ""
 
+
+	--InventoryRewrite
+	ply.hl2cr.Items 		= ply.hl2cr.Items or {}
+	
+	ply.hl2cr.Equipped 				= ply.hl2cr.Equipped or {}
+	ply.hl2cr.Equipped["HATS"] 		= ply.hl2cr.Equipped["HATS"] 	or ""
+	ply.hl2cr.Equipped["MELEE"] 	= ply.hl2cr.Equipped["MELEE"] 	or ""
+	ply.hl2cr.Equipped["PISTOL"] 	= ply.hl2cr.Equipped["PISTOL"] 	or ""
+	ply.hl2cr.Equipped["REV"] 		= ply.hl2cr.Equipped["REV"] 	or ""
+	ply.hl2cr.Equipped["SMG"] 		= ply.hl2cr.Equipped["SMG"] 	or ""
+	ply.hl2cr.Equipped["SHGUN"] 	= ply.hl2cr.Equipped["SHGUN"] 	or ""
+	ply.hl2cr.Equipped["XBOW"] 		= ply.hl2cr.Equipped["XBOW"] 	or ""
+
+	--Make a clone used to hold temp changes to inventory
+	ply.CurrentInv = {}
+	table.CopyFromTo( ply.hl2cr.Equipped, ply.CurrentInv )
+
 	--Pets
 	ply.hl2cr.Pets = ply.hl2cr.Pets or {}
 
-	//ply.loaded = true --data is always init on load
+	ply.loaded = true --data is always init on load
 
 	net.Start("HL2CR_Loaded")
 	net.Send(ply)
@@ -54,7 +71,7 @@ local function CreateData(ply)
 	file.Write("hl2cr_data/" .. PlayerID .. ".txt", util.TableToJSON(ply.hl2cr, true))
 
 	timer.Simple(5, function()
-		ply:GrantAchievement("Rise and Shine")
+		ply:GiveAchievement("HL2CR","HL2CR_RAS")
 	end)
 end
 
@@ -70,6 +87,13 @@ local function LoadData(ply)
 
 	-- Init not set fields of persistent data
 	InitData(ply)
+	
+	
+	if !ply:HasAchievement("HL2CR_RAS") then
+		timer.Simple(3, function()
+			ply:GiveAchievement("HL2CR","HL2CR_RAS")
+		end)
+	end
 		
 	return true -- Return true to signal that the settings could be loaded
 end
@@ -77,7 +101,7 @@ end
 function SavePlayerData(ply)
 	if GetConVar("hl2cr_nosaving"):GetInt() == 1 then return end
 	
-	//if !ply.loaded then return end
+	if !ply.loaded then return end
 	local PlayerID = string.Replace(ply:SteamID(), ":", "!")
 
 	-- Store all persistent data as JSON

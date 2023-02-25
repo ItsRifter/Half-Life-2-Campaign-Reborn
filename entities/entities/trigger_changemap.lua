@@ -9,10 +9,16 @@ local achievement_items = {
 	end,
 
 	["models/roller.mdl"] = function()
+		local mapname = game.GetMap()
+		if game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then mapname = mapname.."_EX" end
+		for _, v in ipairs(player.GetAll()) do
+			v:ProgressAchievement("HL2","HL2_RavenBall",mapname)
+		end
 		if game.GetMap() == "d1_town_04" then
-			for _, v in ipairs(player.GetAll()) do
-				v:GrantAchievement("Ravenholm Ball")
-			end
+			--for _, v in ipairs(player.GetAll()) do
+			--	v:GrantAchievement("Ravenholm Ball")
+			--	ply:ProgressAchievement("HL2","HL2_RavenBall",mapname)
+			--end
 			
 			game.SetGlobalState("hl2cr_bringitem_rollermine", GLOBAL_DEAD)
 			return 

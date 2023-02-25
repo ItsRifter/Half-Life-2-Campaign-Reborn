@@ -18,10 +18,10 @@ HL2CR_Specials = {
 				end
 			end )
 		end,
-		OnHit = function (npc,ply)
+		OnHit = function (npc,ent)
 		
 		end,
-		OnDeath = function (npc)
+		OnDeath = function (npc,ply)
 		
 		end,
 	
@@ -41,10 +41,10 @@ HL2CR_Specials = {
 				end
 			end )
 		end,
-		OnHit = function (npc,ply)
+		OnHit = function (npc,ent)
 		
 		end,
-		OnDeath = function (npc)
+		OnDeath = function (npc,ply)
 		
 		end,
 	
@@ -76,10 +76,10 @@ HL2CR_Specials = {
 		OnHitPlayer = function (npc,ply)
 		
 		end,
-		OnHit = function (npc,ply)
+		OnHit = function (npc,ent)
 		
 		end,
-		OnDeath = function (npc)
+		OnDeath = function (npc,ply)
 		
 		end,
 	
@@ -88,13 +88,14 @@ HL2CR_Specials = {
 		Name = "Camo",
 		OnSpawn = function (npc)
 			npc:SetMaterial( "models/effects/vol_light001" )
+			npc:SetColor( Color(120, 120, 120, 255) )
 			local weap = npc:GetWeapons()[1]
 			if IsValid(weap) then weap:SetMaterial( "models/effects/vol_light001" ) end
 		end,
 		OnHitPlayer = function (npc,ply)
 
 		end,
-		OnHit = function (npc,ply)
+		OnHit = function (npc,ent)
 			npc:SetMaterial("")
 			local weap = npc:GetWeapons()[1]
 			if IsValid(weap) then weap:SetMaterial( "" ) end
@@ -107,7 +108,7 @@ HL2CR_Specials = {
 				
 			end )
 		end,
-		OnDeath = function (npc)
+		OnDeath = function (npc,ply)
 		
 		end,
 	
@@ -123,8 +124,15 @@ function hl2cr_npc:OnHitPlayer(ply)
 	if self.Special then self.Special.OnHitPlayer(self,ply) end
 end
 
-function hl2cr_npc:OnHit(ply)
-	if self.Special then self.Special.OnHit(self,ply) end
+function hl2cr_npc:OnHit(ent)
+	if self.Special then self.Special.OnHit(self,ent) end
+end
+
+function hl2cr_npc:OnDeath(ply)
+	if self.Special then 
+		self.Special.OnHit(self,ply) 
+		ply:ProgressAchievement("HL2CR","HL2CR_SPECIAL",1) 
+	end
 end
 
 local function RollType()	--To do, make a better roll weight system but for now its just for experimenting

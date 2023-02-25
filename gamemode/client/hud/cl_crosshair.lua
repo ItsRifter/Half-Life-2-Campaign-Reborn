@@ -51,22 +51,23 @@ local cross = {
 function Crosshair.Draw()
 	local midx = ScrW() * 0.5
 	local midy = ScrH() * 0.5
-	local size = Crosshair.Size
-	if Client_Config.NewCross then
+	local size = Crosshair.Size 
+	if Client_Config.NewCross and !IsValid(GAMEMODE.qMenuFrame) then
 		if cross[Client_Config.CrossType] then
+			--This code gets the users actual aim spot instead of putting it in middle of screen
+			if Client_Config.DynamicCross and not LocalPlayer():InVehicle() then
+				local pos = util.TraceLine{
+					start = LocalPlayer():GetShootPos(),
+					endpos = LocalPlayer():EyeAngles():Forward() *9e9, 
+					filter = LocalPlayer()
+				}.HitPos:ToScreen()
+				midx = pos.x
+				midy = pos.y
+			end
+			
 			cross[Client_Config.CrossType](midx,midy,size)
 	    end
-		--surface.SetDrawColor( 220, 220, 220, 255 ) 
-		--surface.DrawLine( midx - size, midy, midx- size * 0.2, midy)
-		--surface.DrawLine( midx + size, midy, midx+ size * 0.2, midy)
-		--surface.DrawLine( midx , midy - size, midx, midy - size * 0.2)
-		--surface.DrawLine( midx , midy + size, midx, midy + size * 0.2)
-	    --surface.SetDrawColor( 50, 50, 50, 255 ) 
-		--surface.DrawLine( midx - size, midy+1, midx- size * 0.2, midy+1)
-		--surface.DrawLine( midx + size, midy+1, midx+ size * 0.2, midy+1)
-		--surface.DrawLine( midx +1 , midy - size, midx+1, midy - size * 0.2)
-		--surface.DrawLine( midx +1 , midy + size, midx+1, midy + size * 0.2)
-		--surface.DrawLine( midx, midy, midx, midy)
+
 	end
 end
 hook.Add("HUDPaint", "Crosshair.Draw", Crosshair.Draw)

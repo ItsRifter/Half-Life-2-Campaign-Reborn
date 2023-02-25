@@ -784,7 +784,7 @@ end
 function AchAll(achName)
 	for _, v in ipairs(player.GetAll()) do	
 		if v:Team() == TEAM_AFK then continue end
-		v:GrantAchievement("EP1", achName)
+		--v:GrantAchievement("EP1", achName)
 	end
 end
 

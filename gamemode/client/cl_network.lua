@@ -7,6 +7,7 @@ local gamematch = {
 	[380] = "EP1",
 	[420] = "EP2",
 	[340] = "LST",
+	[251110] = "Infra",
 }
 
 net.Receive("HL2CR_Loaded", function()
@@ -15,16 +16,17 @@ net.Receive("HL2CR_Loaded", function()
 end)
 
 timer.Simple( 1, function()
-	local list = engine.GetGames()
+	local gamelist = engine.GetGames()
 	local send = {
 			[220] = 0,
 		[240] = 0,
 		[380] = 0,
 		[420] = 0,
 		[340] = 0,
+		[251110] = 0,
 	}
-	print("--Getting Games list--")
-	for k, v in pairs( list ) do
+	--print("--Getting Games list--")
+	for k, v in pairs( gamelist ) do
 		if gamematch[v.depot] then
 			if v.mounted then
 				send[v.depot] = 2
@@ -48,12 +50,14 @@ net.Receive( "HL2CR_GamesList", function( length)
 	end
 end )
 
---Refresh/Open HelpMenu
+--Refresh/Open HelpMenu---------------------------------------------------
+
 net.Receive("HL2CR_HelpMenu", function()
 	if ( GAMEMODE.HelpMenu ) then GAMEMODE.HelpMenu:Remove()end
 	GAMEMODE.HelpMenu = vgui.Create( "HelpMenu" )
 	gui.EnableScreenClicker( true ) 
 end)
+
 
 function GM:PlayerBindPress ( Player, Bind, Pressed )
 	if Bind == "impulse 100" then

@@ -309,8 +309,8 @@ HL2_LAMBDA_TRIGGERS = {
 
     ["d3_c17_08"] = {
         [1] = {
-            [1] = Vector(1248, -925, -541),
-            [2] = Vector()
+            [1] = Vector(1212,-900,-544),
+            [2] = Vector(1262,-944,-524)
         },
 
         [2] = {
@@ -389,7 +389,13 @@ local HL2_TRIGGERS = {
         ["changelevels"] = {
             [1] = Vector(-3130, -164, -61),
             [2] = Vector(-3073, -209, 59)
-        }
+        },
+		
+		["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Mal",1)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",1)
+            end
     },
 
     ["d1_trainstation_02"] = {        
@@ -397,6 +403,12 @@ local HL2_TRIGGERS = {
             [1] = Vector(-5293, -4599, 1),
             [2] = Vector(-5364, -4504, 130)
         },
+		
+		["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Mal",2)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",2)
+            end
     },
 
     ["d1_trainstation_03"] = {
@@ -436,7 +448,13 @@ local HL2_TRIGGERS = {
 
         ["pusher_spot"] = {
             [1] = Vector(-5105, -4477, 334)
-        }
+        },
+		
+		["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Mal",3)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",3)
+            end
     },
 
     ["d1_trainstation_04"] = {
@@ -452,36 +470,33 @@ local HL2_TRIGGERS = {
             },
 
             [3] = {
-                [1] = Vector(-7829, -4096, -254),
-                [2] = Vector(-7796, -4156, -136)
+                [1] = Vector(-7614,-3904,-256),
+                [2] = Vector(-7375,-4230,-154)
             }
-        },
-        
-        ["checkpoint_functions"] = {
-            [3] = function()
-                for _, v in ipairs(player.GetAll()) do
-					if v:Team() == TEAM_AFK then continue end
-                    v:GrantAchievement("Malcontent")
-                end
-            end
         },
 
         ["checkpoint_spot"] = {
             [1] = Vector(-4148, -3457, 524),
             [2] = Vector(-7063, -4036, 522),
-            [3] = Vector(-7872, -4126, -246)
+            [3] = Vector(-7455,-4040,-246)
         },
 		
         ["checkpoint_angle"] = {
             [1] = Angle(0, 185, 0),
             [2] = Angle(0, 105, 0),
-            [3] = Angle(0, 180, 0)
+            [3] = Angle(0, 200, 0)
         },
         
         ["changelevels"] = {
             [1] = Vector(-8076, -4157, -253),
             [2] = Vector(-8028, -4095, -122)
-        }
+        },
+		
+		["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Mal",4)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",4)
+            end
     },
 
     ["d1_trainstation_05"] = {
@@ -518,14 +533,23 @@ local HL2_TRIGGERS = {
         ["changelevels"] = {
             [1] = Vector(-10685, -3639, 475),
             [2] = Vector(-10498, -3628, 321)
-        }
+        },
+		
+		["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",5)
+            end
     },
 
     ["d1_trainstation_06"] = {
         ["changelevels"] = {
             [1] = Vector(-8594, -575, -262),
             [2] = Vector(-8703, -513, -382)
-        }
+        },
+		["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",6)
+            end
     },
 
     ["d1_canals_01"] = {
@@ -535,25 +559,25 @@ local HL2_TRIGGERS = {
                 [2] = Vector(129, -3616, 257)
             },
 
-            [2] = {
-                [1] = Vector(763, 2852, -94),
-                [2] = Vector(638, 2785, 9)
-            },            
+            --[2] = {
+            --    [1] = Vector(763, 2852, -94),
+            --    [2] = Vector(638, 2785, 9)
+            --},            
         },
        
         ["checkpoint_spot"] = {
             [1] = Vector(111, -3459, 260),
-            [2] = Vector(623, 2873, -88),
+            --[2] = Vector(623, 2873, -88),
         },
 		
         ["checkpoint_angle"] = {
             [1] = Angle(0, 0, 0),
-            [2] = Angle(0, 20, 0)
+            --[2] = Angle(0, 20, 0)
         },
         
         ["changelevels"] = {
-            [1] = Vector(689, 2859, -98), 
-            [2] = Vector(764, 2977, 18)
+            [1] = Vector(689, 2880, -98), 
+            [2] = Vector(764, 2930, 18)
         },
 
 		["pushers"] = {
@@ -565,7 +589,13 @@ local HL2_TRIGGERS = {
 
 		["pusher_spot"] = {
 			[1] = Vector(-27, -6240, 587)
-		}
+		},
+
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",1)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",7)
+            end
     },
 
     ["d1_canals_01a"] = {
@@ -587,7 +617,13 @@ local HL2_TRIGGERS = {
         ["changelevels"] = {
             [1] = Vector(-5758, 9295, -94), 		
             [2] = Vector(-5570, 9138, 160)
-        }
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",2)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",8)
+            end
     },
 
     ["d1_canals_02"] = {
@@ -610,7 +646,13 @@ local HL2_TRIGGERS = {
         ["pusher_spot"] = {
             [1] = Vector(440, -317, -793),
 			[2] = Vector(2890, -2180, -640)
-        }
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",3)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",9)
+            end
     },
 
     ["d1_canals_03"] = {
@@ -639,7 +681,12 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
             [1] = Angle(0, 270, 0),
             [2] = Angle(0, 180, 0)
-        }
+        },
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",4)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",10)
+            end
     },
 
     ["d1_canals_05"] = {
@@ -668,7 +715,13 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
 		[1] = Angle(0, 310, 0),
 		[2] = Angle(0, 0, 0)
-		}
+		},
+
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",5)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",11)
+            end
     },
 
     ["d1_canals_06"] = {
@@ -688,6 +741,12 @@ local HL2_TRIGGERS = {
         ["pusher_spot"] = {
             [1] = Vector(-467,5036,-250)
         },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",6)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",12)
+            end
     },
 
     ["d1_canals_07"] = {
@@ -726,7 +785,13 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 0, 0),
 			[2] = Angle(0, 180, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",7)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",13)
+            end
     },
 
     ["d1_canals_08"] = {
@@ -755,14 +820,26 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 270, 0),
 			[2] = Angle(0, 180, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",8)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",14)
+            end
     },
 
     ["d1_canals_09"] = {
         ["changelevels"] = {
             [1] = Vector(-1782, -7391, -427), 	
             [2] = Vector(-1382, -7600, -140)
-        }
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",9)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",15)
+            end
     },
 
     ["d1_canals_10"] = {
@@ -770,6 +847,12 @@ local HL2_TRIGGERS = {
             [1] = Vector(-13890, 316, -335),
             [2] = Vector(-13569, 608, -28)
         },
+
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",10)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",16)
+            end
     },
 
     ["d1_canals_11"] = {
@@ -813,7 +896,7 @@ local HL2_TRIGGERS = {
 
                 local tempAirboat = ents.Create(Airboat.Class)
                 tempAirboat:SetModel(Airboat.Model)
-                tempAirboat:SetPos(Vector(6340, 4855, -945))
+                tempAirboat:SetPos(Vector(6430, 4855, -945))
                 tempAirboat:SetAngles(Angle(0, 90, 0))
                 tempAirboat:Activate()
                 tempAirboat:Fire( "addoutput", "targetname airboat" );
@@ -826,6 +909,13 @@ local HL2_TRIGGERS = {
                 BroadcastMessageToAll(HL2CR_GreenColour, translate.Get("Map_Enabled_Vehicles_Airboat_WithGun"))
             end
         },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",11)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",17)
+            end
+
     },
 
     ["d1_canals_12"] = {
@@ -847,7 +937,14 @@ local HL2_TRIGGERS = {
 		
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 270, 0)
-		}
+		},
+		        
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",12)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",18)
+            end
+		
     },
 
     ["d1_canals_13"] = {
@@ -889,6 +986,13 @@ local HL2_TRIGGERS = {
         ["pusher_spot"] = {
             [1] = Vector(579,-2953,-431)
         },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Canals",13)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",19)
+            end
+
     },
 
     ["d1_eli_01"] = {
@@ -931,7 +1035,18 @@ local HL2_TRIGGERS = {
 			[2] = Angle(0, 270, 0),
 			[3] = Angle(0, 90, 0),
 			[4] = Angle(0, 270, 0)
-		}
+		},
+		
+		["checkpoint_functions"] = {
+            [1] = function()	
+				GAMEMODE:DisableVehicles(true)
+			end,
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",20)
+            end
     },
 
     ["d1_eli_02"] = {
@@ -967,7 +1082,12 @@ local HL2_TRIGGERS = {
 			[1] = Angle(0, 260, 0),
 			[2] = Angle(0, 100, 0),
 			[3] = Angle(0, 150, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",21)
+            end
     },
 
     ["d1_town_01"] = {
@@ -989,14 +1109,24 @@ local HL2_TRIGGERS = {
 			
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 90, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",22)
+            end
     },
 
     ["d1_town_01a"] = {
         ["changelevels"] = {
             [1] = Vector(-615, 653, -3310),
             [2] = Vector(-689, 766, -3438)
-        }
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",23)
+            end
     },
 
     ["d1_town_02"] = {
@@ -1034,7 +1164,17 @@ local HL2_TRIGGERS = {
 
         ["pusher_spot"] = {
             [1] = Vector(-2410, 640, -3250)
-        }
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",24)
+            end,
+		
+        ["changelevel_special_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",26)
+            end
     },
 
     ["d1_town_03"] = {
@@ -1052,7 +1192,12 @@ local HL2_TRIGGERS = {
 
         ["pusher_spot"] = {
             [1] = Vector(-1994, -1424, -3645)
-        }
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",25)
+            end
     },
 
     ["d1_town_02a"] = {
@@ -1075,15 +1220,12 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 160, 0)
 		},
-
-        ["checkpoint_functions"] = {
-            [1] = function()
-                for _, v in ipairs(player.GetAll()) do	
-					if v:Team() == TEAM_AFK then continue end
-                    v:GrantAchievement("Hallowed Ground")
-                end
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",27)
             end
-        }
+
     },
 
     ["d1_town_04"] = {
@@ -1095,8 +1237,11 @@ local HL2_TRIGGERS = {
         ["changelevel_func"] = --{
             --[1] = function(ply) 
 			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",28)
                 if not table.HasValue(ply.hl2cr.AchProgress, "ZombieChopperActive") then return end
-                ply:GrantAchievement("Zombie Chopper")
+                --ply:GrantAchievement("Zombie Chopper")
+				ply:GiveAchievement("HL2","HL2_Chopper")
+				
                 table.RemoveByValue(ply.hl2cr.AchProgress, "ZombieChopperActive")
                 SavePlayerData(ply)
             end
@@ -1123,14 +1268,24 @@ local HL2_TRIGGERS = {
 			
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 150, 0)
-		}
+		},
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",29)
+            end
     },
 
     ["d2_coast_01"] = {
         ["changelevels"] = {
             [1] = Vector(-12091, 4070, 1689),		
             [2] = Vector(-11584, 4384, 1540)
-        }
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Coast",1)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",30)
+            end
     },
 
     ["d2_coast_03"] = {
@@ -1156,11 +1311,7 @@ local HL2_TRIGGERS = {
 
         ["checkpoint_functions"] = {
             [1] = function()
-                --disableJeepGlobal = true
 				GAMEMODE:DisableVehicles(true)
-			    --for _, v in ipairs(player.GetAll()) do
-				--	GAMEMODE:RemoveVehicle(v)
-				--end
 			end
         },
 		
@@ -1173,7 +1324,13 @@ local HL2_TRIGGERS = {
 
         ["pusher_spot"] = {
             [1] = Vector(7840, 4450, 430)
-        }
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Coast",2)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",31)
+            end
     },
 
     ["d2_coast_04"] = {
@@ -1195,7 +1352,12 @@ local HL2_TRIGGERS = {
 		
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 270, 0)
-		}
+		},
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Coast",3)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",32)
+            end
     },
 
     ["d2_coast_05"] = {
@@ -1216,7 +1378,13 @@ local HL2_TRIGGERS = {
         },
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 35, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Coast",4)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",33)
+            end
     },
     
     ["d2_coast_07"] = {
@@ -1228,7 +1396,18 @@ local HL2_TRIGGERS = {
         ["changelevels_special"] = {
             [1] = Vector(9438, -9582, 2050),
             [2] = Vector(8961, -9463, 2240)
-        }
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Coast",5)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",34)
+            end,
+        ["changelevels_special_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Coast",7)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",36)
+            end
     },
 
     ["d2_coast_08"] = {
@@ -1248,7 +1427,12 @@ local HL2_TRIGGERS = {
         },
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 280, 0)
-		}
+		},
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Coast",6)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",35)
+            end
     },
 
     ["d2_coast_09"] = {
@@ -1268,7 +1452,24 @@ local HL2_TRIGGERS = {
 		
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 140, 0)
-		}
+		},
+		
+		["pushers"] = {
+            [1] = {
+                [1] = Vector(11360,7316,190),
+                [2] = Vector(8883,7023,-434)
+            }
+        },
+
+        ["pusher_spot"] = {
+            [1] = Vector(10131,9658,-173)
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Coast",8)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",37)
+            end
     },
 	
     ["d2_coast_10"] = {
@@ -1323,6 +1524,12 @@ local HL2_TRIGGERS = {
         ["pusher_spot"] = {
             [1] = Vector(4803,-2078,902)
         },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Coast",9)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",38)
+            end
     },
 
     ["d2_coast_11"] = {
@@ -1380,13 +1587,18 @@ local HL2_TRIGGERS = {
                     
                     for _, v in ipairs(player.GetAll()) do
 						if v:Team() == TEAM_AFK then continue end
-                        v:GrantAchievement("Keep Off the Sand!")
+						v:GiveAchievement("HL2","HL2_Sand")
                     end
                     
                     StayedOffSand = true
                 end
 			end
-        }
+        },
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Coast",10)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",39)
+            end
     },
 
     ["d2_coast_12"] = {
@@ -1415,7 +1627,12 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 90, 0),
 			[2] = Angle(0, 140, 0)
-		}
+		},
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_Coast",11)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",40)
+            end
     },
 
     ["d2_prison_01"] = {
@@ -1423,28 +1640,38 @@ local HL2_TRIGGERS = {
             [1] = Vector(537, -1598, 1601),
             [2] = Vector(705, -1432, 1741)
         },
-
-        ["checkpoints"] = {
-            [1] = {
-                [1] = Vector(1232, -1409, 1601),
-                [2] = Vector(1138, -1597, 1724)
-            }
-        },
-
-        ["checkpoint_spot"] = {
-            [1] = Vector(1005, -1484, 1608)
-        },
 		
-		["checkpoint_angle"] = {
-			[1] = Angle(0, 120, 0)
-		}
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",41)
+            end
+
+        --["checkpoints"] = {
+        --    [1] = {
+        --        [1] = Vector(1232, -1409, 1601),
+        --        [2] = Vector(1138, -1597, 1724)
+        --    }
+        --},
+
+        --["checkpoint_spot"] = {
+        --    [1] = Vector(1005, -1484, 1608)
+        --},
+		
+		--["checkpoint_angle"] = {
+		--	[1] = Angle(0, 120, 0)
+		--}
     },
 
     ["d2_prison_02"] = {
         ["changelevels"] = {
             [1] = Vector(-2558, 1155, 787),
             [2] = Vector(-2797, 1310, 641)
-        }
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",42)
+            end
     },
 
     ["d2_prison_03"] = {
@@ -1466,14 +1693,24 @@ local HL2_TRIGGERS = {
 		
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 40, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",43)
+            end
     },
 
     ["d2_prison_04"] = {
         ["changelevels"] = {
             [1] = Vector(-1250, 3030, 386),
             [2] = Vector(-1437, 2881, 512)
-        }
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",44)
+            end
     },
 
     ["d2_prison_05"] = {
@@ -1509,7 +1746,12 @@ local HL2_TRIGGERS = {
 			[1] = Angle(0, 55, 0),
 			[2] = Angle(0, 180, 0),
 			[3] = Angle(0, 330, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",45)
+            end
     },
 
 	--Alyx level that often derps
@@ -1544,7 +1786,12 @@ local HL2_TRIGGERS = {
 			[1] = Angle(0, 180, 0),
 			[2] = Angle(0, 310, 0),
 			[3] = Angle(0, 310, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",46)
+            end
     },
 
     ["d2_prison_07"] = {
@@ -1580,6 +1827,34 @@ local HL2_TRIGGERS = {
 			[2] = Angle(0, 340, 0),
 			[3] = Angle(0, 200, 0)
 		},
+		
+		["checkpoint_functions"] = {
+            [1] = function()
+                timer.Simple(0.1, function()
+					for k, v in ipairs(player.GetAll()) do
+						if v:Team() != TEAM_ALIVE then continue end
+						if v:HasAchievement("HL2_Warden") then continue end
+						v.NoDeaths = true
+						v:BroadcastMessage(HL2CR_AchNotifyColour, translate.Get("Achievement_HL2_WardenFreeman_Name"), HL2CR_StandardColour, translate.Get("Achievement_NoDeath_Event"))
+						v:BroadcastSound("hl1/fvox/bell.wav")
+					end
+                end)
+			end,
+        },
+
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",47)
+                for _, v in ipairs(player.GetAll()) do
+					if v:Team() == TEAM_AFK then continue end
+					if v.NoDeaths then
+						v.NoDeaths = false
+						v:GiveAchievement("HL2","HL2_Warden")
+					end
+					--v:GrantAchievement("Follow Freeman")
+                end
+            end,
+        
 
         ["pushers"] = {
             [1] = {
@@ -1632,7 +1907,12 @@ local HL2_TRIGGERS = {
 			[2] = Angle(0, 320, 0),
 			[3] = Angle(0, 200, 0),
 			[4] = Angle(0, 90, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",48)
+            end
     },
 
     ["d3_c17_01"] = {
@@ -1660,7 +1940,13 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 330, 0),
 			[2] = Angle(0, 150, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",1)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",49)
+            end
     },
     
     ["d3_c17_02"] = {
@@ -1682,7 +1968,13 @@ local HL2_TRIGGERS = {
 		
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 80, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",2)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",50)
+            end
     },
     
     ["d3_c17_03"] = {
@@ -1690,22 +1982,24 @@ local HL2_TRIGGERS = {
             [1] = Vector(-1084, -3490, 251),
             [2] = Vector(-960, -3583, 128)
         },
-        ["changelevel_func"] = --{
-            --[1] = function(ply)
+        ["changelevel_func"] = 
 			function(ply)
-                for _, v in ipairs(player.GetAll()) do
-					if v:Team() == TEAM_AFK then continue end
-					v:GrantAchievement("Follow Freeman")
-                end
+				ply:ProgressAchievement("HL2","HL2_FollowFree",3)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",51)
             end
-        --}
     },
 
     ["d3_c17_04"] = {
         ["changelevels"] = {
             [1] = Vector(42, -5817, 247),
             [2] = Vector(141, -5879, 130)
-        }
+        },
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",4)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",52)
+            end
     },
 
     ["d3_c17_05"] = {
@@ -1727,7 +2021,12 @@ local HL2_TRIGGERS = {
 		
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 120, 0)
-		}
+		},
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",5)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",53)
+            end
     },
 
 	--level seems to have infinite manhacks spawner? may need limiting on exp
@@ -1737,16 +2036,11 @@ local HL2_TRIGGERS = {
             [2] = Vector(2172, 2975, -126)
         },
 
-        ["changelevel_func"] = --{
-            --[1] = function(ply)
+        ["changelevel_func"] = 
 			function(ply)
-                for _, v in ipairs(player.GetAll()) do
-					if v:Team() == TEAM_AFK then continue end
-                    v:GrantAchievement("Radiation Levels Detected")
-                end
-            end
-        --}
-		,
+				ply:ProgressAchievement("HL2","HL2_FollowFree",6)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",54)
+            end,
 
         ["checkpoints"] = {
             [1] = {
@@ -1790,7 +2084,12 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 0, 0),
 			[2] = Angle(0, 210, 0)
-		}
+		},
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",7)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",55)
+            end
     },
 
     ["d3_c17_07"] = {
@@ -1819,7 +2118,12 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 0, 0),
 			[2] = Angle(0, 0, 0)
-		}
+		},
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",8)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",56)
+            end
     },
 
     ["d3_c17_08"] = {
@@ -1848,7 +2152,12 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 80, 0),
 			[2] = Angle(0, 320, 0)
-		}
+		},
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",9)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",57)
+            end
     },
 
     ["d3_c17_09"] = {
@@ -1870,7 +2179,12 @@ local HL2_TRIGGERS = {
 		
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 30, 0)
-		}
+		},
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",10)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",58)
+            end
     },
 		
     ["d3_c17_10a"] = {
@@ -1906,7 +2220,12 @@ local HL2_TRIGGERS = {
                 --ents.FindByClass("npc_barney")[1]:SetPos(Vector(-3015, 6936, 140))
 				ents.FindByName("barney_vista01_seq")[1]:Fire("beginsequence")
 			end
-        }
+        },
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",11)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",59)
+            end
     },
 
     ["d3_c17_10b"] = {
@@ -1921,10 +2240,10 @@ local HL2_TRIGGERS = {
                 [2] = Vector(2909, -982, 257)
             },
             
-            [2] = {
-                [1] = Vector(2657, 971, 393),
-                [2] = Vector(2719, 1085, 258)
-            }
+            --[2] = {
+            --    [1] = Vector(2657, 971, 393),
+            --    [2] = Vector(2719, 1085, 258)
+            --}
         },
 
         ["checkpoint_spot"] = {
@@ -1935,21 +2254,36 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 50, 0),
 			[2] = Angle(0, 30, 0)
-		}
+		},
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",12)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",60)
+            end
     },
 
     ["d3_c17_11"] = {
         ["changelevels"] = {
             [1] = Vector(1211, 3309, 1086),
             [2] = Vector(1262, 3396, 962)
-        }
+        },
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",13)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",61)
+            end
     },
     
     ["d3_c17_12"] = {
         ["changelevels"] = {
             [1] = Vector(-2569, 9152, -4),
             [2] = Vector(-2687, 9260, -127)
-        }
+        },
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",14)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",62)
+            end
     },
     
     ["d3_c17_12b"] = {
@@ -1958,16 +2292,21 @@ local HL2_TRIGGERS = {
             [2] = Vector(-4518, 1057, -30)
         },
 
-        ["changelevel_func"] = --{
+        --["changelevel_func"] = --{
             --[1] = function(ply)
-			function(ply)
-                for _, v in ipairs(player.GetAll()) do
-					if v:Team() == TEAM_AFK then continue end
-                    v:GrantAchievement("Giant Killer")
-                end
-            end
+			--function(ply)
+            ----    for _, v in ipairs(player.GetAll()) do
+					--if v:Team() == TEAM_AFK then continue end
+                    --v:GrantAchievement("Giant Killer")
+            --    end
+            --end
         --}
-		,
+		--
+		["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",15)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",63)
+            end,
         
         ["checkpoints"] = {
             [1] = {
@@ -2018,7 +2357,12 @@ local HL2_TRIGGERS = {
 			[1] = Angle(0, 300, 0),
 			[2] = Angle(0, 60, 0),
 			[3] = Angle(0, 100, 0)
-		}
+		},
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_FollowFree",16)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",64)
+            end
     },
 
     ["d3_citadel_01"] = {
@@ -2030,6 +2374,7 @@ local HL2_TRIGGERS = {
         ["changelevel_func"] = --{
             --[1] = function(ply)
 			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",65)
                 for k, v in ipairs(player.GetAll()) do
                     if v:InVehicle() then v:ExitVehicle() end
                     v:SetPos(Vector(11539, 5926, -1643))
@@ -2078,7 +2423,12 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 90, 0),
 			[2] = Angle(0, 180, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",66)
+            end
     },
 
     ["d3_citadel_04"] = {
@@ -2121,7 +2471,12 @@ local HL2_TRIGGERS = {
 		["checkpoint_angle"] = {
 			[1] = Angle(0, 320, 0),
 			[2] = Angle(0, 270, 0)
-		}
+		},
+		
+        ["changelevel_func"] = 
+			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",67)
+            end
     },
 
     ["d3_citadel_05"] = {
@@ -2133,6 +2488,7 @@ local HL2_TRIGGERS = {
         ["changelevel_func"] = --{
             --[1] = function(ply)
 			function(ply)
+				ply:ProgressAchievement("HL2","HL2_BeatHL2",68)
                 for k, v in ipairs(player.GetAll()) do 
                     if v:InVehicle() then v:ExitVehicle() end
                     v:SetPos(Vector(14347, -9935, 8741))
@@ -2174,6 +2530,7 @@ local HL2_TRIGGERS = {
         ["checkpoint_functions"] = {
             [1] = function()
                 ents.FindByName("w_physgun")[1]:Fire("AddOutput", "OnPlayerPickup w_physgun:use::0:1" )
+				ents.FindByName("w_physgun")[1]:Fire("AddOutput", "OnPlayerPickup w_physgun:kill::0:1" )
 			end
         },
 
@@ -2265,7 +2622,8 @@ AIRBOAT_MAPS = {
 
 AIRBOAT_GUN_MAPS = {
 	["d1_canals_12"] = true,
-	["d1_canals_13"] = true
+	["d1_canals_13"] = true,
+	["d1_eli_01"] = true
 }
 
 JEEP_MAPS = {
@@ -2321,27 +2679,6 @@ local function SetHL2Checkpoints()
 			local Tfunc = nil
 			if HL2_TRIGGERS[game.GetMap()]["checkpoint_functions"] then Tfunc = HL2_TRIGGERS[game.GetMap()]["checkpoint_functions"][i] end
 			CreateCheckpoint(Vector(t[1]),Vector(t[2]),Tspot,Tangle,Tfunc)
-			
-            --local checkpoint = ents.Create("trigger_checkpoint")
-            --checkpoint.Min = Vector(t[1])
-            --checkpoint.Max = Vector(t[2])
-            --checkpoint.Pos = Vector(t[2]) - ( Vector(t[1]) - Vector(t[1])) / 2
-            --checkpoint.TPPoint = Vector(HL2_TRIGGERS[game.GetMap()]["checkpoint_spot"][i])
-			--if HL2_TRIGGERS[game.GetMap()]["checkpoint_angle"] then checkpoint.TPAngles = Angle(HL2_TRIGGERS[game.GetMap()]["checkpoint_angle"][i]) or checkpoint.TPAngles end	--default to 0,0,0
-            --checkpoint.PointIndex = i
-            --checkpoint:SetPos(checkpoint.Pos)
-            --checkpoint:Spawn()
-            
-            --checkpoint.lambdaModel = ents.Create("prop_dynamic")
-            --checkpoint.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
-            --checkpoint.lambdaModel:SetPos( checkpoint.TPPoint + Vector(0, 0, 75))
-            --checkpoint.lambdaModel:Spawn()
-            --checkpoint.lambdaModel:ResetSequence("idle")
-            --checkpoint.lambdaModel:SetMaterial(checkpoint.Mat)
-
-            --if HL2_TRIGGERS[game.GetMap()]["checkpoint_functions"] then
-            --    checkpoint.Func = HL2_TRIGGERS[game.GetMap()]["checkpoint_functions"][i]
-            --end
         end
     end
 
@@ -2349,59 +2686,17 @@ local function SetHL2Checkpoints()
 		local Tfunc = HL2_TRIGGERS[game.GetMap()]["changelevel_func"] or nil
 		local TVecs = HL2_TRIGGERS[game.GetMap()]["changelevels"]
 		CreateLevelChange(Vector(TVecs[1]),Vector(TVecs[2]),Tfunc)	
-	
-        --local changelevel = ents.Create("trigger_changemap")
-        --changelevel.Min = Vector(HL2_TRIGGERS[game.GetMap()]["changelevels"][1])
-        --changelevel.Max = Vector(HL2_TRIGGERS[game.GetMap()]["changelevels"][2])
-        --changelevel.Pos = Vector(HL2_TRIGGERS[game.GetMap()]["changelevels"][2]) - 
-        --( ( Vector(HL2_TRIGGERS[game.GetMap()]["changelevels"][2]) - Vector(HL2_TRIGGERS[game.GetMap()]["changelevels"][1])) / 2 )
-        
-        --changelevel:SetPos(changelevel.Pos)
-        --changelevel:Spawn()
-
-        --changelevel.lambdaModel = ents.Create("prop_dynamic")
-        --changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
-        --changelevel.lambdaModel:SetPos(changelevel.Pos)
-        --changelevel.lambdaModel:Spawn()
-        --changelevel.lambdaModel:ResetSequence("idle")
-        --changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
-
-        --if HL2_TRIGGERS[game.GetMap()]["changelevel_func"] then
-        --    changelevel.Func = HL2_TRIGGERS[game.GetMap()]["changelevel_func"][1]
-        --end
     end
 
     if HL2_TRIGGERS[game.GetMap()]["changelevels_special"] and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
 		local Tfunc = HL2_TRIGGERS[game.GetMap()]["changelevels_special_func"] or nil
 		local TVecs = HL2_TRIGGERS[game.GetMap()]["changelevels_special"]
 		CreateLevelChange(Vector(TVecs[1]),Vector(TVecs[2]),Tfunc)	
-        --local special_changelevel = ents.Create("trigger_changemap")
-        --special_changelevel.Min = Vector(HL2_TRIGGERS[game.GetMap()]["changelevels_special"][1])
-        --special_changelevel.Max = Vector(HL2_TRIGGERS[game.GetMap()]["changelevels_special"][2])
-        --special_changelevel.Pos = Vector(HL2_TRIGGERS[game.GetMap()]["changelevels_special"][2]) - 
-        --( ( Vector(HL2_TRIGGERS[game.GetMap()]["changelevels_special"][2]) - Vector(HL2_TRIGGERS[game.GetMap()]["changelevels_special"][1])) / 2 )
-        
-        --special_changelevel:SetPos(special_changelevel.Pos)
-        --special_changelevel:Spawn()
-
-        --special_changelevel.lambdaModel = ents.Create("prop_dynamic")
-        --special_changelevel.lambdaModel:SetModel("models/hl2cr_lambda.mdl")
-        --special_changelevel.lambdaModel:SetPos(special_changelevel.Pos)
-        --special_changelevel.lambdaModel:Spawn()
-        --special_changelevel.lambdaModel:ResetSequence("idle")
-        --special_changelevel.lambdaModel:SetMaterial("phoenix_storms/wire/pcb_green")
     end
 
     if HL2_TRIGGERS[game.GetMap()]["pushers"] then
         for i, p in ipairs(HL2_TRIGGERS[game.GetMap()]["pushers"]) do
 			CreatePusher(Vector(p[1]),Vector(p[2]),HL2_TRIGGERS[game.GetMap()]["pusher_spot"][i])
-            --local pusher = ents.Create("trigger_pushback")
-            --pusher.Min = Vector(p[1])
-            --pusher.Max = Vector(p[2])
-            --pusher.Pos = Vector(p[2]) - ( ( Vector(p[2]) - Vector(p[1])) / 2 )
-            --pusher:SetPos(pusher.Pos)
-            --pusher:Spawn()
-            --pusher.TPSpot = HL2_TRIGGERS[game.GetMap()]["pusher_spot"][i]
         end
     end
 
@@ -2547,6 +2842,18 @@ local function SetUpMisc()
         game.SetGlobalState("gordon_precriminal", 0)
     end
 
+    if game.GetMap() == "d1_trainstation_03" then
+        ents.FindByName("ai_breakin_cop3goal3_blockplayer")[1]:Remove()
+		ents.FindByName("ai_breakin_cop3goal3_blockplayer2")[1]:Remove()
+		local clips = ents.FindByName("ai_breakin_cop3goal4_blockplayer")
+		clips[2]:Remove()
+		clips[1]:Remove()
+    end
+	
+	if game.GetMap() == "d1_trainstation_04" then	
+		ents.GetByIndex( 472 ):Remove()	--removes a door close trigger for better movement/checkpointing
+	end
+
 	if game.GetMap() == "d1_trainstation_05" then
         if game.GetGlobalState("hl2cr_bringitem_whatbaby") == GLOBAL_ON then
             ents.FindByName("1_kleiner_teleport_trigger_1")[1]:SetKeyValue("spawnflags", 8)
@@ -2560,6 +2867,10 @@ local function SetUpMisc()
     if game.GetMap() == "d1_trainstation_06" then
         ents.FindByClass("info_player_start")[1]:SetPos(Vector(-9946, -3652, 326))
     end
+
+    if game.GetMap() == "d1_canals_01" then
+		ents.FindByName("boxcar_door_close")[1]:Remove()
+	end
 
     if game.GetMap() == "d1_canals_02" then
 		ents.FindByName("underground_door_basinexit2")[1]:Fire("AddOutput", "OnOpen hl2crlua:RunPassedCode:RemovePushTrigger()")
@@ -2619,6 +2930,10 @@ local function SetUpMisc()
 		ents.FindByName("lcs_gc_briefing1_post")[1]:Fire("AddOutput", "OnCompletion lcs_guncave_goodbye1:start:1:-1")
 	end
 
+    if game.GetMap() == "d1_eli_01" then
+		MoveSpawns(Vector(6008,6754,-1420),Angle(0,-154,0))
+    end
+
     if game.GetMap() == "d1_eli_02" then
 		for k, g in ipairs( ents.FindByName( "trigger_Get_physgun" )) do
 			g:Fire("AddOutput", "OnTrigger hl2crlua:RunPassedCode:GiveGravGun()" )
@@ -2627,6 +2942,29 @@ local function SetUpMisc()
 		for k, basket in ipairs(ents.FindByName("trigger_BBall_score_top")) do
 			basket:Fire("AddOutput", "OnEndTouch hl2crlua:RunPassedCode:GiveBallAch():0:-1" )
 		end
+		
+		hook.Add("GravGunOnPickedUp", "HL2CR_Achievement_BlastPast", function(ply, ent)
+			--if game.GetMap() == "d1_eli_02" then
+				if ent:GetModel() == "models/props_lab/hevplate.mdl" then
+					ply:GiveAchievement("HL2","HL2_HevPlate")
+				end
+			--end
+		end)
+		
+	end
+
+    if game.GetMap() == "d1_town_01a" then	--Remove pusher when lift down button activated
+
+		local blocker_1 = ents.Create("prop_dynamic")
+		blocker_1:SetModel("models/props_c17/furnituredresser001a.mdl")
+		blocker_1:SetPos(Vector(-2,620,-3287))
+		blocker_1:SetAngles(Angle(35,0,0))
+		
+        blocker_1:SetName("blocker_1")
+		blocker_1:PhysicsInit(SOLID_VPHYSICS)
+		blocker_1:Spawn()
+		blocker_1:SetHealth(900)
+
 	end
 
     if game.GetMap() == "d1_town_02" then	--Remove pusher when lift down button activated
@@ -2638,14 +2976,30 @@ local function SetUpMisc()
 	end
 
     if game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON and game.GetMap() == "d1_town_02" then
-		--for i, s in ipairs(ents.FindByClass("info_player_start")) do
-		--	s:SetPos(Vector(-3763, -36, -3439))
-		--	s:SetAngles(Angle(0, 90, 0))
-		--end
 		
 		MoveSpawns(Vector(-3763, -36, -3439),Angle(0, 90, 0))
 		timer.Simple(3, function()RemovePushTrigger() end)	--Removes lift skip Pusher trigger
     end
+	
+    if game.GetMap() == "d1_town_02a" then	--Remove pusher that prevents skipping lever
+		ents.FindByName("g_dead_fade")[1]:Remove()
+		ents.FindByName("g_dead_text")[1]:Remove()
+		timer.Simple(4, function()
+			ents.FindByName("monk")[1]:Fire("AddOutput", "OnDeath hl2crlua:RunPassedCode:FailedMap()")
+		end)
+		
+		CreateCustomTrigger(Vector(-7992,-140,-3342),Vector(-7910,-96,-3442), function(ent)
+			if not ent:GetName() == "monk" then return false end
+				ent:SetHealth(9999)
+				for _, v in ipairs(player.GetAll()) do	
+					if v:Team() == TEAM_AFK then continue end
+					v:GiveAchievement("HL2","HL2_Hallow")
+				end
+
+			return true	
+		end,0.25,true)
+		
+	end
 
     if ( game.GetMap() == "d1_town_02a" or game.GetMap() == "d2_coast_09" ) and game.GetGlobalState("hl2cr_extendedmap") == GLOBAL_ON then
 		game.SetGlobalState("hl2cr_extendedmap", GLOBAL_DEAD)
@@ -2745,6 +3099,20 @@ local function SetUpMisc()
 	
 	if game.GetMap() == "d2_coast_09" then	--Corrects spawn angle being sideways
 		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, -90, 0))
+		
+		--Prevents skipping battery puzzle, and prevents batterys being shot away
+		ents.FindByName("gate_door")[1]:Fire("AddOutput", "OnOpen hl2crlua:RunPassedCode:RemovePushTrigger()")
+		CreateCustomTrigger(Vector(13894,7318,3170),Vector(7118,5882,-751), function(ent)
+			if not string.find(ent:GetName(), "battery") then return false end
+			ent:SetPos(Vector(9159,8761,-971))
+			return true	
+		end,0.2,false)
+		CreateCustomTrigger(Vector(12791,10932,1414),Vector(5303,14455,-1343), function(ent)
+			if not string.find(ent:GetName(), "battery") then return false end
+			ent:SetPos(Vector(9159,8761,-971))
+			return true	
+		end,0.2,false)
+		
 	end
 	
 	if game.GetMap() == "d2_coast_10" then	
@@ -2764,8 +3132,8 @@ local function SetUpMisc()
         ents.FindByName("scene_tutorial_exit")[1]:Fire("AddOutput", "OnCompletion hl2crlua:RunPassedCode:RemovePushTrigger()")
     end
 
-	if game.GetMap() == "d2_prison_06" then	--Corrects spawn angle being sideways
-		ents.FindByClass("info_player_start")[1]:SetAngles(Angle(0, -70, 0))
+	if game.GetMap() == "d2_prison_01" then	
+		ents.GetByIndex( 85 ):Remove()	--removes a ceiling collapose trigger for better movement/checkpointing
 	end
 
 	if game.GetMap() == "d2_prison_06" then	--Corrects spawn angle being sideways
@@ -2783,6 +3151,16 @@ local function SetUpMisc()
 				return true
 			end
 		end,0,true)
+	end
+	
+
+	if game.GetMap() == "d3_c17_06a" then	
+		CreateCustomTrigger(Vector(2683,5201,-91),Vector(2552,5308,-148), function(ent)
+			if ent:IsPlayer() and ent:Team() == TEAM_ALIVE then
+				ent:GiveAchievement("HL2","HL2_RadTunnel")
+				return true
+			end
+		end,0,false)
 	end
 
 	if game.GetMap() == "d3_c17_10a" then	--Has multiple spawns strangly?
@@ -2851,7 +3229,8 @@ function FinishHL2()
 	for k, v in ipairs(player.GetAll()) do
 		v:SetTeam(TEAM_COMPLETED_MAP)
 		if v:Team() == TEAM_AFK then continue end
-		v:GrantAchievement("Singularity Collapse")
+		--v:GrantAchievement("Singularity Collapse")
+		v:ProgressAchievement("HL2","HL2_BeatHL2",69)
 	end
 	
 	BroadcastMessageToAll(HL2CR_LevelupColour, translate.Get("Campaign_Finished_HL2"))
@@ -2878,9 +3257,9 @@ function CanCopAch(isDefiant)
     for _, v in ipairs(player.GetAll()) do
 		if v:Team() == TEAM_AFK then continue end
         if isDefiant then
-            v:GrantAchievement("Defiant")
+			v:GiveAchievement("HL2","HL2_Defi")
         else
-            v:GrantAchievement("Submissive")
+			v:GiveAchievement("HL2","HL2_Subm")
         end
     end
 end
@@ -2896,7 +3275,7 @@ function BabyCheck(ACTIVATOR)
     if ACTIVATOR:GetClass() == "prop_physics" and ACTIVATOR:GetModel() == "models/props_c17/doll01.mdl" then
         for _, v in ipairs(player.GetAll()) do
 			if v:Team() == TEAM_AFK then continue end
-            v:GrantAchievement("What Baby?")
+			v:GiveAchievement("HL2","HL2_WBaby")
         end
 
         game.SetGlobalState("hl2cr_bringitem_whatbaby", GLOBAL_DEAD)
@@ -2935,7 +3314,7 @@ end
 hook.Add("GravGunOnPickedUp", "HL2CR_Achievement_BlastPast", function(ply, ent)
     if game.GetMap() == "d1_eli_02" then
         if ent:GetModel() == "models/props_lab/hevplate.mdl" then
-            ply:GrantAchievement("Blast from the Past")
+			ply:GiveAchievement("HL2","HL2_HevPlate")
         end
     end
 end)
@@ -2944,21 +3323,21 @@ function GiveGravGun()
 	for _, v in ipairs(player.GetAll()) do
 		if v:Team() == TEAM_AFK then continue end
 		v:Give("weapon_physcannon")
-		v:GrantAchievement("Zero-Point Energy")
+		v:GiveAchievement("HL2","HL2_Gravgun")
 	end
 end
 
 function GiveBallAch()
 	for _, v in ipairs(player.GetAll()) do
 		if v:Team() == TEAM_AFK then continue end
-		v:GrantAchievement("Two Points")
+		v:GiveAchievement("HL2","HL2_TwoPoint")
 	end
 end
 
 function GiveWhatCat()
 	for _, v in ipairs(player.GetAll()) do
 		if v:Team() == TEAM_AFK then continue end
-		v:GrantAchievement("What Cat?")
+		v:GiveAchievement("HL2","HL2_WCat")
 	end
 end
 
@@ -2968,11 +3347,10 @@ function OpenGateCoast()
 	end
 
 	RemovePushTrigger()
-	--disableJeepGlobal = false
 	GAMEMODE:DisableVehicles(false)
 	for _, v in ipairs(player.GetAll()) do
 		if v:Team() == TEAM_AFK then continue end
-		v:GrantAchievement("Where Cubbage Fears to Tread")
+		v:GiveAchievement("HL2","HL2_Cubbage")
 	end
 end
 

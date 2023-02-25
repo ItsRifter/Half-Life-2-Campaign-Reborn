@@ -95,8 +95,8 @@ hook.Add( "HUDPaint", "HL2CR_XPBar", function()
 	
 	draw.SimpleTextOutlined(translate.Get("HUD_Stat_XP") .. " " .. percentage, "hl2cr_hud_xp", ScrW() * 0.5, ScrH() / 1.05, Color(255, 200, 100, fadeOut*1.5), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0, fadeOut * 2 ) )
 
-	if LocalPlayer():GetNWInt("hl2cr_stat_skillpoints", -1 ) > 0 then
-		draw.SimpleTextOutlined(LocalPlayer():GetNWInt("hl2cr_stat_skillpoints", -1 ) .. translate.Get("HUD_Notice_UnspentSkills") , "hl2cr_hud_xp", ScrW() * 0.5, ScrH() / 1.105, Color(255, 0, 0, fadeOut*1.5), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1 , Color( 0, 0, 0, fadeOut * 2 ) )
+	if HL2CR_SkillsPoints() > 0 then
+		draw.SimpleTextOutlined(HL2CR_SkillsPoints() .. translate.Get("HUD_Notice_UnspentSkills") , "hl2cr_hud_xp", ScrW() * 0.5, ScrH() / 1.105, Color(255, 0, 0, fadeOut*1.5), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1 , Color( 0, 0, 0, fadeOut * 2 ) )
 	end
 end )
 
@@ -297,3 +297,26 @@ hook.Add("HUDPaint", "HL2CR_DrawPetStats", function()
 		end
 	end
 end)
+
+
+--Stupid fix for SWEP construction kit weapons hiding viewmodel
+hook.Add( "PlayerSwitchWeapon", "WeaponSwitchExample", function( ply, oldWeapon, newWeapon )
+	--local vm = ply:GetViewModel()
+	if ply == LocalPlayer() then VMFix(newWeapon) end
+end )
+
+function VMFix(AW)
+	local vm = LocalPlayer():GetViewModel()
+	--local AW = LocalPlayer():GetActiveWeapon()
+	
+	if IsValid(vm) and IsValid(AW) then
+		
+		if (AW.ShowViewModel == nil or AW.ShowViewModel) then
+			vm:SetColor(Color(255,255,255,255))
+			vm:SetMaterial()		
+		else
+			vm:SetColor(Color(255,255,255,1))
+			vm:SetMaterial("vgui/hsv")		
+		end
+	end
+end

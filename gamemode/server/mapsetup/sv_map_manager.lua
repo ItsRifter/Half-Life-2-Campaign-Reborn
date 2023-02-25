@@ -298,7 +298,7 @@ function StartMapCountdown()
 	BroadcastMessageToAll(HL2CR_StandardColour, translate.Get("Map_Finished"))
 	BroadcastSoundToAll("hl1/fvox/bell.wav")
 
-	timer.Simple(13, function()
+	timer.Simple(18, function()
 		local repsMade = 1
 
 		timer.Create("HL2CR_Countdown_Beep", 1, 5, function()
@@ -308,7 +308,7 @@ function StartMapCountdown()
 		end)
 	end)
 
-	timer.Create("HL2CR_Countdown", 20, 1, function()
+	timer.Create("HL2CR_Countdown", 25, 1, function()
 		ChangeToNextMap()
 	end)
 end
