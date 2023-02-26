@@ -318,7 +318,7 @@ function PANEL:Setup()
 			invy = invy - wide2 * 0.07
 		end
 	end
-	self.InventoryPanel:UpdateMaxY(invy)
+	self.InventoryPanel:UpdateMaxY(invy+32)
 	
 	-------------------------------------------------------------------------------------------------------
 	-------------------------------------------------------------------------------------------------------
@@ -394,7 +394,7 @@ end
 GM.Equipped = GM.Equipped or {}
 
 net.Receive("HL2CR_SendLoadout", function(len)
-	print("recieved loadout on client")
+	--print("recieved loadout on client")
 	GAMEMODE.Equipped["HATS"] = net.ReadString()
 	GAMEMODE.Equipped["MELEE"] = net.ReadString() 
 	GAMEMODE.Equipped["PISTOL"] = net.ReadString()

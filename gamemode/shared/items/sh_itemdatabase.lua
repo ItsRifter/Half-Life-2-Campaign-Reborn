@@ -44,6 +44,7 @@ local Group = {
 			Ref = "hat_monitor",
 			Icon = tempicon,
 			Index = 3,
+			APCOST = 50
 		},
 	}
 }
@@ -75,7 +76,8 @@ local Group = {
 			Desc = translate.Get("PISTOL_Auto_Desc"),
 			Ref = "weapon_hl2cr_autopistol",
 			Icon = tempicon,
-			Index = 1
+			Index = 1,
+			APCOST = 100
 		},
 		
 	}
@@ -100,7 +102,8 @@ local Group = {
 			Desc = translate.Get("SMG_Rampage_Desc"),
 			Ref = "weapon_hl2cr_rampagesmg",
 			Icon = tempicon,
-			Index = 1
+			Index = 1,
+			APCOST = 160
 		},
 		
 	}
@@ -126,7 +129,8 @@ local Group = {
 			Desc = translate.Get("XBOW_Ext_Desc"),
 			Ref = "weapon_hl2cr_crossbow",
 			Icon = tempicon,
-			Index = 1
+			Index = 1,
+			APCOST = 200
 		},
 	
 	
@@ -147,15 +151,18 @@ if CLIENT then	-----------------------------------------------------------------
 
 	net.Receive( "HL2CR_CL_SendItems", function( length)
 		GAMEMODE.ItemsList = net.ReadTable()
-		PrintTable(GAMEMODE.ItemsList)
-		--if IsValid(HL2CR_SkillPanel) then HL2CR_SkillPanel:Refresh() end
 	end )
 	
 	net.Receive( "HL2CR_CL_AddItem", function( length)
 		local id = net.ReadString()
-		if !HL2CR_HaveItem(id) then table.insert(GAMEMODE.ItemsList, id) end
+		if !HL2CR_HaveItem(id) then 
+			surface.PlaySound( "buttons/blip2.wav" )
+			table.insert(GAMEMODE.ItemsList, id) 
+			if IsValid(HL2CR_ShopPanel) then
+				HL2CR_ShopPanel.BuyPanel:Update("","")
+			end
+		end
 
-		--if IsValid(HL2CR_SkillPanel) then HL2CR_SkillPanel:Refresh() end
 	end )
 	
 	function HL2CR_HaveItem(id)

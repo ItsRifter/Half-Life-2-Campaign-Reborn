@@ -30,8 +30,7 @@ util.AddNetworkString("HL2CR_AchievementEarned")	--Send new earned
 util.AddNetworkString("HL2CR_AchievementUpdate")	--Send new update
 
 util.AddNetworkString("HL2CR_Item_Purchase")
-util.AddNetworkString("HL2CR_Item_Use")
-util.AddNetworkString("HL2CR_Item_Sell")
+util.AddNetworkString("HL2CR_CL_SENDAP")
 
 util.AddNetworkString("HL2CR_Loaded")
 util.AddNetworkString("HL2CR_Indicator")			--Indicator notification

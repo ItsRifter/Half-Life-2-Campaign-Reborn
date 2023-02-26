@@ -18,7 +18,7 @@ function PANEL:Init()
 	self.tabs = {}
 	self:AddTab(Create_QMenu_Inventory(self))
 	self:AddTab(Create_QMenu_Skills(self))
-	self:AddTab({})
+	self:AddTab(Create_QMenu_Shop(self))
 	self:AddTab(Create_QMenu_Achievements(self))
 	
 	local Btn = New_ThemeButton(self, tall * 0.01, tall * 0.01,wide* 0.13,tall* 0.06,translate.Get("QMenu_Panels_Main"),"Font_Small")

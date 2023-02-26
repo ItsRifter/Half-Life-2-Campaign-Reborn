@@ -8,6 +8,7 @@ local achgroup = {
 			Desc = translate.Get("Achievement_Misc_RiseShine_Desc"),
 			Rewards = {
 				XP = 200,
+				AP = 5
 				--Items = {}
 			},
 			--IsRare = false,
@@ -21,6 +22,7 @@ local achgroup = {
 			Desc = translate.Get("Achievement_Misc_Vortex_Desc"),
 			Rewards = {
 				XP = 2000,
+				AP = 50
 			},
 			Count = true,
 			Interval = 10,
@@ -33,6 +35,7 @@ local achgroup = {
 			Desc = translate.Get("Achievement_Misc_CivilUnrest_Desc"),
 			Rewards = {
 				XP = 2000,
+				AP = 40
 			},
 			Count = true,
 			Interval = 10,
@@ -45,6 +48,7 @@ local achgroup = {
 			Desc = translate.Get("Achievement_Misc_Special_Desc"),
 			Rewards = {
 				XP = 2000,
+				AP = 60
 			},
 			Count = true,
 			Interval = 10,
@@ -57,6 +61,7 @@ local achgroup = {
 			Desc = translate.Get("Achievement_Misc_Lava_Desc"),
 			Rewards = {
 				XP = 50,
+				AP = 10
 				--Items = {}
 			},
 			Secret = true,

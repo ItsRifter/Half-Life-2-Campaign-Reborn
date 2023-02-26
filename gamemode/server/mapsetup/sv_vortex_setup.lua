@@ -295,6 +295,8 @@ function SetUpVortex()
     VortexBall:SetPos(vortex_map_pos[game.GetMap()][math.random(1, #vortex_map_pos[game.GetMap()])])
     VortexBall:Spawn()
 
+	VortexBall:StartLoopingSound( "weapons/physcannon/superphys_hold_loop.wav" )
+	
     local trigger = ents.Create("trigger_vortex")
     trigger:SetParent(VortexBall)
     trigger.Min, trigger.Max = VortexBall:GetCollisionBounds()

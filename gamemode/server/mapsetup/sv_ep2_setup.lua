@@ -512,7 +512,7 @@ local ep2_triggers = {
 				local alyx = ents.FindByClass("npc_alyx")[1]
 				alyx:SetPos(Vector(3162,-891,-100))
 				
-				PrintTable(alyx:GetSequenceList())
+				--PrintTable(alyx:GetSequenceList())
 				alyx:SetSequence( "cower" )
 				
 				--local jeep = ents.FindByClass("prop_vehicle_jeep")[1]

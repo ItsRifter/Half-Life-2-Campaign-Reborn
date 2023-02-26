@@ -17,10 +17,12 @@ function ENT:StartTouch(ent)
 		if #self.plys == 0 then
 			ent:AddXP(150)
 			BroadcastMessageToAll(HL2CR_PlayerColour, ent:Nick(), HL2CR_StandardColour, translate.Get("Server_Announce_Vortex_Found"))
+			BroadcastSoundToAll("ambient/levels/prison/radio_random11.wav")
 		else
 			ent:AddXP(50)
 		end
 		ent:ProgressAchievement("HL2CR","HL2CR_VORTEX",1)
+		ent:AddAP(1)
 		table.insert(self.plys,ent)
 	end
 end

@@ -164,10 +164,6 @@ function hl2cr_player:UpdateModelNetwork(newMdl)
 end
 
 function hl2cr_player:ChangeModel(newModel)
-	//if !self.loaded then 
-	//	self:SetModel("models/player/kleiner.mdl")
-	//	return 
-	//end
 
 	self:SetModel(newModel)
 end
@@ -190,14 +186,6 @@ function hl2cr_player:SetUpPlayer()
 		self:SetupHands()
 		self:ApplyCosmeticSpawn()
 	end)
-
-	--local cosmetics = {}
-
-	--for _, c in ipairs(self.hl2cr.Inventory.Cosmetics) do
-	--	table.insert(cosmetics, c.Name)
-	--end
-
-	--self:SetNWString("hl2cr_items_cosmetics", table.concat(cosmetics, "  "))
 
 	if not maps_trainstation[game.GetMap()] then 
 		if self.statHP then
@@ -249,8 +237,6 @@ function hl2cr_player:ApplyCosmeticServer(cosmeticToApply)
 	if self.hl2cr.CurCosmetic == self.hl2cr.Equipped["HATS"] then return end
 	self.hl2cr.CurCosmetic = self.hl2cr.Equipped["HATS"]
 	if cosmeticToApply == "" or cosmeticToApply == nil then
-		--self.hl2cr.CurCosmetic = ""
-		--local emptyTbl = {}
 
 		net.Start("HL2CR_Cosmetic_Use")
 			net.WriteTable({})
@@ -260,18 +246,6 @@ function hl2cr_player:ApplyCosmeticServer(cosmeticToApply)
 	end
 	
 	local hat = HL2CR_GetItem("HATS",cosmeticToApply)
-	
-	--local apply = nil 
-	--local tempName = nil
-	--for _, c in ipairs(HL2CR_Cosmetics) do
-	--	if c.Name == cosmeticToApply then
-	--		apply = c.Class
-	--		tempName = c.Name
-	--		break
-	--	end
-	--end
-
-	--self.hl2cr.CurCosmetic = apply
 
 	self:BroadcastMessage(HL2CR_GreenColour, hat.Name .. translate.Get("Player_CosmeticApply"))
 
@@ -585,10 +559,30 @@ function hl2cr_player:CanPickupAmmo(ammoType)
 
 	return true
 end
+------------------------------------------------------------
+------------------------------------------------------------
+function hl2cr_player:GetAP()
+	if self.hl2cr.AP then return self.hl2cr.AP end
+	return 0
+end
 
+function hl2cr_player:AddAP(amount)
+	if !self.hl2cr.AP then self.hl2cr.AP = 0 end
+	self.hl2cr.AP = self.hl2cr.AP + amount
+	self:SendAP()
+end
+
+function hl2cr_player:SendAP()
+	net.Start("HL2CR_CL_SENDAP")
+		net.WriteUInt(self:GetAP(), 12)
+	net.Send(self)
+end
+
+------------------------------------------------------------
+------------------------------------------------------------
 function hl2cr_player:SendItems()
 	if self:IsBot() then return end
-	PrintTable(self.hl2cr.Items)
+	--PrintTable(self.hl2cr.Items)
 	net.Start( "HL2CR_CL_SendItems" )
 		net.WriteTable(self.hl2cr.Items)
 	net.Send(self)
@@ -623,7 +617,8 @@ function hl2cr_player:UpdateEquipped()
 		net.WriteString(self.hl2cr.Equipped["XBOW"])
 	net.Send(self)
 end
-
+------------------------------------------------------------
+------------------------------------------------------------
 function hl2cr_player:GiveNewSkill(skill)
 	if !HL2CR_NewSkills[skill] then return end
 	local newskill = HL2CR_NewSkills[skill]
@@ -858,21 +853,9 @@ function hl2cr_player:UpdateNetworks()
 		net.WriteUInt(self.hl2cr.SkillPoints,12)
 	net.Send(self)
 
-	--local curItems = {}
-
-	--for i, w in ipairs(self.hl2cr.Inventory.Weapons) do
-	--	table.insert(curItems, w.Class)
-	--end
-
-	--self:SetNWString("hl2cr_inv_items", table.concat(curItems, " ") )
-
 	self:SendAchievements()
+	self:SendAP()
 	self:SendItems()
-
-	--self:SetNWString("hl2cr_stat_skills", table.concat(self.hl2cr.Skills, " ") )
-	--self:SetNWString("hl2cr_achievements", table.concat(self.hl2cr.Achievements, " ") )
-	--self:SetNWInt("hl2cr_inv_weight", self.hl2cr.Inventory.Weight)
-	--self:SetNWInt("hl2cr_inv_curweight", self.hl2cr.Inventory.CurWeight)
 
 	if not table.IsEmpty(self.hl2cr.Pets) then
 		local activePet = nil
@@ -1085,18 +1068,19 @@ end)
 net.Receive("HL2CR_Item_Purchase", function(len, ply)
 	if not ply then return end
 
-	local bought = net.ReadString()
-	--local item = nil
-
-	--for _, i in ipairs(GAMEMODE.ShopItems) do
-	--	if i.Class == bought then
-	--		item = i
-	--		break 
-	--	end
-	--end
+	local itemgroup = net.ReadString()
+	local itemid = net.ReadString()
 	
-	--if item == nil then return end
-	--ply:StoreItemInv(item)
+	local item = HL2CR_GetItem(itemgroup,itemid)
+	
+	if item then
+		if ply:GetAP() >= item.APCOST then
+			ply:GiveItem(itemid)
+			ply:AddAP(-item.APCOST)
+		end
+	
+	end
+
 end)
 
 

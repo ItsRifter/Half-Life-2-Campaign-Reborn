@@ -132,7 +132,7 @@ end
 
 function PANEL:OnMousePressed( keyCode )
 	if keyCode == MOUSE_LEFT then
-		self.Func()
+		if self.Func then self.Func() end
 	end
 end
 

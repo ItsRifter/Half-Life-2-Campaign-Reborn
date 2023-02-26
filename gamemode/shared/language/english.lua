@@ -309,7 +309,8 @@ LANGUAGE.HelpMenu_Info =
 "enemies to gain exp, you can level up and unlock",
 "skills to help you survive longer","",
 "If vehicles are unlocked you can spawn one with ",
-"F3 and remove it with F4"}
+"F3 and remove it with F4","",
+"Complete Achievements to earn AP for the shop"}
 
 LANGUAGE.HelpMenu_Commands = 
 {"Useful commands you can type into chat","",
@@ -337,6 +338,12 @@ LANGUAGE.InvMenu_Default = "Default"
 
 LANGUAGE.InvMenu_SelectM = "Select Model"
 LANGUAGE.InvMenu_SetLoad = "Confirm Loadout"
+
+LANGUAGE.ShopMenu_Name = "Shop"
+LANGUAGE.ShopMenu_Cost = "Cost: "
+LANGUAGE.ShopMenu_Cart = "Cart"
+LANGUAGE.ShopMenu_Buy = "Purchase"
+LANGUAGE.ShopMenu_AP = "Current AP: "
 
 LANGUAGE.ItemGroup_HAT = "Hat"
 LANGUAGE.ItemGroup_MELEE = "Melee"

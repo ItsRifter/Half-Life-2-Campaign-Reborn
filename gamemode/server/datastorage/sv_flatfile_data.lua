@@ -13,7 +13,7 @@ local function InitData(ply)
 	ply.hl2cr.Skills = ply.hl2cr.Skills or {}
 
 	--Money/Experience
-	ply.hl2cr.Resin = ply.hl2cr.Resin or 0
+	ply.hl2cr.AP = ply.hl2cr.AP or 0	--AP achievement points currency
 	ply.hl2cr.Exp = ply.hl2cr.Exp or 0
 	ply.hl2cr.ReqExp = ply.hl2cr.ReqExp or 500
 	ply.hl2cr.SkillPoints = ply.hl2cr.SkillPoints or 0
