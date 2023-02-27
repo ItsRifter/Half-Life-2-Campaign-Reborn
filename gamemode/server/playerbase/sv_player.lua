@@ -1074,6 +1074,7 @@ net.Receive("HL2CR_Item_Purchase", function(len, ply)
 	local item = HL2CR_GetItem(itemgroup,itemid)
 	
 	if item then
+		if !item.APCOST then return end
 		if ply:GetAP() >= item.APCOST then
 			ply:GiveItem(itemid)
 			ply:AddAP(-item.APCOST)
