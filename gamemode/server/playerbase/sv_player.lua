@@ -179,7 +179,7 @@ function hl2cr_player:SetUpPlayer()
 	self:ChangeModel(self.hl2cr.PMModel)
 	
 	self:UpdateEquipped()
-	table.CopyFromTo( self.hl2cr.Inv, self.CurrentInv )
+	table.CopyFromTo( self.hl2cr.Equipped, self.CurrentInv )
 	
 	timer.Simple(0.5, function()
 		if !IsValid(self) or !self:Alive() then return end
