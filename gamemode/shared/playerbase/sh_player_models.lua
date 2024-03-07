@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if SERVER then
-	resource.AddWorkshop( "493076395" )		--Gabumon player model
+	resource.AddWorkshop( "3026330292" )	--Gabumon player model
 	resource.AddWorkshop( "1546376500" )	--3 detective player models
 end
 

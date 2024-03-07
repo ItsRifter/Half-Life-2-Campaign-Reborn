@@ -170,7 +170,7 @@ end
 
 function hl2cr_player:SetUpPlayer()
 
-	//if !self.loaded then return end
+	if !self.loaded then return end
 	self:SetTeam(TEAM_ALIVE)
 
 	self:SetCustomCollisionCheck(true)
@@ -346,7 +346,7 @@ function hl2cr_player:SetUpRespawn()
 end
 
 function hl2cr_player:LoadSkills()
-	//if !self.loaded then return end
+	if !self.loaded then return end
 	for _, gS in ipairs(HL2CR_Skills) do
 		for i, s in ipairs(self.hl2cr.Skills) do
 			if gS.Class == s then
@@ -388,6 +388,7 @@ end
 --end
 
 function hl2cr_player:GiveWeaponsSpawn()
+	if !self.loaded then return end
 	table.CopyFromTo( self.hl2cr.Equipped, self.CurrentInv )
 	for _, weapon in ipairs(SPAWNING_WEAPONS) do
 		local given = self:Give(weapon)
@@ -1008,7 +1009,7 @@ end )
 
 function hl2cr_player:AdmireSuitHands()
 	self:Give("Admire_Hands")
-	self:SetActiveWeapon(self:GetWeapon("Admire_Hands"))
+	self:SetActiveWeapon(self:GetWeapon("admire_hands"))
 	timer.Create(self:Nick() .. "_admiring", 4, 1, function()
 		self:StripWeapons()
 		self:GiveEquipment()
