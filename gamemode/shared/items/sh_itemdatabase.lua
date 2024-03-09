@@ -159,7 +159,7 @@ if CLIENT then	-----------------------------------------------------------------
 			surface.PlaySound( "buttons/blip2.wav" )
 			table.insert(GAMEMODE.ItemsList, id) 
 			if IsValid(HL2CR_ShopPanel) then
-				HL2CR_ShopPanel.BuyPanel:Update("","")
+				HL2CR_ShopPanel:Refresh()
 			end
 		end
 

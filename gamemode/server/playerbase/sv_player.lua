@@ -955,7 +955,7 @@ function hl2cr_player:FindSurface()
 		start = tr.HitPos,
 		endpos = tr.HitPos - Vector(0,0,512),
 		collisiongroup = COLLISION_GROUP_DEBRIS,
-		mask = MASK_WATER || MASK_SOLID
+		mask = (MASK_WATER + MASK_SOLID)
 	} )
 
 	return tr.HitPos
